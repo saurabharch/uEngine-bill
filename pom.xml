@@ -14,6 +14,7 @@
 
         <module>uengine-bill-common</module>
         <module>uengine-bill-web</module>
+        <module>uengine-email-notification-plugin</module>
     </modules>
 
     <properties>

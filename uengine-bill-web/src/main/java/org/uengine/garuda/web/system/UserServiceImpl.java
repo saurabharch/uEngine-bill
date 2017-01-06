@@ -16,14 +16,10 @@
  */
 package org.uengine.garuda.web.system;
 
-import org.opencloudengine.garuda.client.AccessTokenRequest;
 import org.opencloudengine.garuda.client.IamClient;
 import org.opencloudengine.garuda.client.ResourceOwnerPasswordCredentials;
 import org.opencloudengine.garuda.client.model.OauthUser;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.mail.MailService;
-import org.uengine.garuda.model.User;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.registe.Registe;
 import org.uengine.garuda.web.registe.RegisteRepository;

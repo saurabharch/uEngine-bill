@@ -19,7 +19,6 @@ package org.uengine.garuda.web.registe;
 import org.apache.commons.codec.binary.Base64;
 import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.common.rest.Response;
-import org.uengine.garuda.model.User;
 import org.uengine.garuda.util.DateUtils;
 import org.uengine.garuda.util.EscapeUtils;
 import org.uengine.garuda.util.ExceptionUtils;

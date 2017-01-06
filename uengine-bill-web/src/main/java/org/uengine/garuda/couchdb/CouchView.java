@@ -68,40 +68,6 @@ public class CouchView implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        String property = config.getProperty("couch.db.autoview");
-        if(property.equals("false")){
-            return;
-        }
-
-        URL url = getClass().getResource("/views");
-        File views = ResourceUtils.getFile(url);
-        if (!views.exists()) {
-            throw new ServiceException("class folder views not exist");
-        }
-
-        File[] files = views.listFiles();
-        for (File file : files) {
-            String json = new String(Files.readAllBytes(file.toPath()));
-            Map map = JsonUtils.unmarshal(json);
-
-            Database db = serviceFactory.getDb();
-
-            AllDocsResponse viewResponse = db.getAllDocsRequestBuilder().keys((String) map.get("_id")).includeDocs(true).build().getResponse();
-            List<Map> docsAs = viewResponse.getDocsAs(Map.class);
-            if (docsAs.isEmpty()) {
-                db.save(map);
-            } else {
-                Map viewDoc = docsAs.get(0);
-                Map<String, Object> copy = JsonUtils.convertClassToMap(viewDoc);
-                copy.remove("_rev");
-                if (!copy.equals(map)) {
-                    db.remove(viewDoc);
-                    db.save(map);
-                }
-            }
-        }
-
-
         //기본 유저 등록
         if(userService.selectByUserName(config.getProperty("system.admin.username")) == null){
             OauthUser user = new OauthUser();
