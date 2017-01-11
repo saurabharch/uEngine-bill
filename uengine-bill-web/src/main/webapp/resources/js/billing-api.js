@@ -6,6 +6,8 @@ var uBilling = function (host, port) {
     this.port = port;
     this.schema = 'http';
     this.baseUrl = this.schema + '://' + this.host + ':' + this.port;
+    this.user = undefined;
+    this.organization = undefined;
 
     $(document).ajaxSend(function (e, xhr, options) {
         var token = localStorage.getItem('uengine-billing-access_token');
@@ -47,7 +49,8 @@ uBilling.prototype = {
                 console.log('login success');
                 var token = response['access_token'];
                 localStorage.setItem("uengine-billing-access_token", token);
-                deferred.resolve(token);
+                me.user = response;
+                deferred.resolve(response);
             } else {
                 console.log('login failed');
                 localStorage.removeItem("access_token");

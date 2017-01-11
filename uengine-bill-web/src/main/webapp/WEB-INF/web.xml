@@ -63,6 +63,7 @@
                 /WEB-INF/applicationContext-security.xml
                 /WEB-INF/applicationContext-reactor.xml
                 /WEB-INF/applicationContext-mail.xml
+                /WEB-INF/applicationContext-repository.xml
             </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>

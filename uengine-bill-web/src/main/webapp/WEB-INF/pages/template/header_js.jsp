@@ -91,7 +91,7 @@
 <!-- billing Api -->
 <script type="text/javascript" src="/resources/js/billing-api.js"></script>
 <script type="text/javascript">
-    var uBilling = new uBilling('localhost', 8080);
+    var uBilling = new uBilling('localhost', 18080);
 
     //로그인,회원가입 관련 페이지가 아닌 경우 토큰 밸리데이팅을 수행한다.
     var pathname = window.location.pathname;
@@ -100,6 +100,9 @@
                 .fail(function () {
                     uBilling.logout();
                     window.location.href = '/auth/login';
+                }).done(function (user) {
+                   //organization
+                    console.log(user);
                 });
     }
 </script>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.organization.OrganizationRepository">
+
+    <insert id="insert" parameterType="org.uengine.garuda.model.Organization">
+        INSERT INTO organization (
+        id,
+        name,
+        tenant_id,
+        tenant_external_key,
+        tenant_api_key,
+        tenant_api_secret,
+        tenant_api_salt,
+        fax,
+        website,
+        language_code,
+        time_zone,
+        date_format,
+        currency,
+        is_active,
+        address1,
+        address2,
+        company_name,
+        city,
+        state_or_province,
+        country,
+        postal_code,
+        phone,
+        notes
+        )
+        VALUES (
+        #{id},
+        #{name},
+        #{tenant_id},
+        #{tenant_external_key},
+        #{tenant_api_key},
+        #{tenant_api_secret},
+        #{tenant_api_salt},
+        #{fax},
+        #{website},
+        #{language_code},
+        #{time_zone},
+        #{date_format},
+        #{currency},
+        #{is_active},
+        #{address1},
+        #{address2},
+        #{company_name},
+        #{city},
+        #{state_or_province},
+        #{country},
+        #{postal_code},
+        #{phone},
+        #{notes}
+        )
+    </insert>
+
+    <insert id="insertAuthority" parameterType="org.uengine.garuda.model.Authority">
+        INSERT INTO authority (
+        id,
+        organization_id,
+        user_id,
+        user_name,
+        role
+        )
+        VALUES (
+        #{id},
+        #{organization_id},
+        #{user_id},
+        #{user_name},
+        #{role}
+        )
+    </insert>
+
+    <insert id="insertOrganizationEmail" parameterType="org.uengine.garuda.model.OrganizationEmail">
+        INSERT INTO authority (
+        id,
+        organization_id,
+        email,
+        is_active
+        )
+        VALUES (
+        #{id},
+        #{organization_id},
+        #{email},
+        #{is_active}
+        )
+    </insert>
+
+    <update id="update" parameterType="org.uengine.garuda.model.Organization">
+        UPDATE organization
+        SET
+        name = #{name},
+        fax = #{fax},
+        website = #{website},
+        language_code = #{language_code},
+        date_format = #{date_format},
+        is_active = #{is_active},
+        address1 = #{address1},
+        address2 = #{address2},
+        company_name = #{company_name},
+        city = #{city},
+        state_or_province = #{state_or_province},
+        country = #{country},
+        postal_code = #{postal_code},
+        phone = #{phone},
+        notes = #{notes}
+        WHERE id = #{id}
+    </update>
+
+    <update id="update" parameterType="org.uengine.garuda.model.OrganizationEmail">
+        UPDATE organization
+        SET
+        organization_id = #{organization_id},
+        email = #{email},
+        is_active = #{is_active}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Organization">
+        SELECT * FROM organization
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByName" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Organization">
+        SELECT * FROM organization
+        WHERE name = #{name}
+    </select>
+
+    <select id="selectByApiKeyAndSecret" parameterType="map" resultType="org.uengine.garuda.model.Organization">
+        SELECT * FROM organization
+        WHERE tenant_api_key = #{tenant_api_key}
+        AND tenant_api_secret = #{tenant_api_secret}
+    </select>
+
+    <select id="selectByUserId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Organization">
+        SELECT A.* FROM
+        (SELECT * FROM organization)A
+        LEFT OUTER JOIN
+        (SELECT * FROM authority
+         WHERE user_id = #{user_id}
+        )B
+        ON B.organization_id = A.id
+    </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM organization
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectAuthorityByUserIdAndOrganizationId" parameterType="map" resultType="org.uengine.garuda.model.Authority">
+        SELECT * FROM authority
+        WHERE user_id = #{user_id}
+        AND organization_id = #{organization_id}
+    </select>
+
+    <select id="selectAuthorityById" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Authority">
+        SELECT * FROM authority
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteAuthority" parameterType="java.lang.String">
+        DELETE FROM authority
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectAuthorityByOrganizationId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Authority">
+        SELECT * FROM authority
+        WHERE organization_id = #{organization_id}
+    </select>
+
+    <select id="selectOrganizationEmailByOrganizationId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OrganizationEmail">
+        SELECT * FROM organization_email
+        WHERE organization_id = #{organization_id}
+    </select>
+
+    <select id="selectOrganizationEmailById" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OrganizationEmail">
+        SELECT * FROM organization_email
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteOrganizationEmail" parameterType="java.lang.String">
+        DELETE FROM organization_email
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
