@@ -91,7 +91,7 @@ public class OrganizationRepositoryImpl extends PersistentRepositoryImpl<String,
         Map map = new HashMap();
         map.put("user_id", user_id);
         map.put("organization_id", organization_id);
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectAuthorityByUserIdAndOrganizationId", organization_id);
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectAuthorityByUserIdAndOrganizationId", map);
     }
 
     @Override

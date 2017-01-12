@@ -1,5 +1,6 @@
 package org.uengine.garuda.web.organization;
 
+import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface OrganizationService {
 
-    Organization createOrganization(Organization organization);
+    Organization createOrganization(Organization organization, OauthUser oauthUser);
 
     Organization updateOrganization(Organization organization);
 
@@ -44,4 +45,6 @@ public interface OrganizationService {
     int deleteOrganizationEmail(String id);
 
     OrganizationRole getOrganizationRole(HttpServletRequest request, String role);
+
+    OauthUser getUserFromRequest(HttpServletRequest request);
 }

@@ -1,5 +1,6 @@
 package org.uengine.garuda.web.organization;
 
+import org.opencloudengine.garuda.client.model.OauthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,13 +37,13 @@ public class OrganizationRestController {
     @RequestMapping(value = "/organization", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Organization>> listOrganization(HttpServletRequest request) {
 
-        OrganizationRole organizationRole = organizationService.getOrganizationRole(request, OrganizationRole.ANY);
-        if(!organizationRole.getAccept()){
+        OauthUser oauthUser = organizationService.getUserFromRequest(request);
+        if(oauthUser == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         try {
-            List<Organization> organizations = organizationService.selectByUserId(organizationRole.getOauthUser().get_id());
+            List<Organization> organizations = organizationService.selectByUserId(oauthUser.get_id());
             if (organizations.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -54,8 +56,12 @@ public class OrganizationRestController {
 
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Organization> getOrganization(HttpServletRequest request, @PathVariable("id") String id) {
-        OrganizationRole organizationRole = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
-        if(!organizationRole.getAccept()){
+        OauthUser oauthUser = organizationService.getUserFromRequest(request);
+        if(oauthUser == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(oauthUser.get_id(), id);
+        if(authority == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -73,11 +79,10 @@ public class OrganizationRestController {
 
     @RequestMapping(value = "/organization", method = RequestMethod.POST)
     public ResponseEntity<Void> createOrganization(HttpServletRequest request, @RequestBody Organization organization, UriComponentsBuilder ucBuilder) {
-        OrganizationRole organizationRole = organizationService.getOrganizationRole(request, OrganizationRole.ANY);
-        if(!organizationRole.getAccept()){
+        OauthUser oauthUser = organizationService.getUserFromRequest(request);
+        if(oauthUser == null){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
         try {
             //TODO 사용자가 ADMIN 권한이 있는 조직 중 같은 이름을 사용불가.
 //            Organization existOrganization = organizationService.selectByName(organization.getName());
@@ -85,7 +90,7 @@ public class OrganizationRestController {
 //                return new ResponseEntity<>(HttpStatus.CONFLICT);
 //            }
 
-            Organization createdOrganization = organizationService.createOrganization(organization);
+            Organization createdOrganization = organizationService.createOrganization(organization, oauthUser);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/organization/{_id}").buildAndExpand(createdOrganization.getId()).toUri());
@@ -96,48 +101,53 @@ public class OrganizationRestController {
         }
     }
 
-//    @RequestMapping(value = "/client/{_id}", method = RequestMethod.PUT)
-//    public ResponseEntity<OauthClient> updateClient(HttpServletRequest request, @PathVariable("_id") String _id, @RequestBody OauthClient oauthClient) {
-//
-//        Management management = restAuthService.managementParser(request);
-//        if (management == null) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-//
-//        try {
-//            OauthClient currentClient = oauthClientService.selectByManagementIdAndId(management.get_id(), _id);
-//
-//            if (currentClient == null) {
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//            oauthClient.set_id(currentClient.get_id());
-//            oauthClientService.updateById(oauthClient);
-//
-//            currentClient = oauthClientService.selectByManagementIdAndId(management.get_id(), _id);
-//            return new ResponseEntity<>(currentClient, HttpStatus.OK);
-//        } catch (Exception ex) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @RequestMapping(value = "/client/{_id}", method = RequestMethod.DELETE)
-//    public ResponseEntity<OauthClient> deleteClient(HttpServletRequest request, @PathVariable("_id") String _id) {
-//
-//        Management management = restAuthService.managementParser(request);
-//        if (management == null) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-//        try {
-//            OauthClient currentClient = oauthClientService.selectByManagementIdAndId(management.get_id(), _id);
-//
-//            if (currentClient == null) {
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//
-//            oauthClientService.deleteById(currentClient.get_id());
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (Exception ex) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @RequestMapping(value = "/organization/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Organization> updateOrganization(HttpServletRequest request, @PathVariable("id") String id, @RequestBody Organization organization) {
+
+        OauthUser oauthUser = organizationService.getUserFromRequest(request);
+        if(oauthUser == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(oauthUser.get_id(), id);
+        if(authority == null || !OrganizationRole.ADMIN.equals(authority.getRole())){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Organization currentOrganization = organizationService.selectById(id);
+            if (currentOrganization == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            organization.setId(currentOrganization.getId());
+            currentOrganization = organizationService.updateOrganization(organization);
+
+            return new ResponseEntity<>(currentOrganization, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/organization/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Organization> deleteOrganization(HttpServletRequest request, @PathVariable("id") String id) {
+
+        OauthUser oauthUser = organizationService.getUserFromRequest(request);
+        if(oauthUser == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(oauthUser.get_id(), id);
+        if(authority == null || !OrganizationRole.ADMIN.equals(authority.getRole())){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        try {
+            Organization currentOrganization = organizationService.selectById(id);
+            if (currentOrganization == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            organizationService.deleteOrganization(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

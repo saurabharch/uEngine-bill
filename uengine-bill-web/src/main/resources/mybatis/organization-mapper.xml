@@ -74,7 +74,7 @@
     </insert>
 
     <insert id="insertOrganizationEmail" parameterType="org.uengine.garuda.model.OrganizationEmail">
-        INSERT INTO authority (
+        INSERT INTO organization_email (
         id,
         organization_id,
         email,
@@ -110,7 +110,7 @@
     </update>
 
     <update id="updateOrganizationEmail" parameterType="org.uengine.garuda.model.OrganizationEmail">
-        UPDATE organization
+        UPDATE organization_email
         SET
         organization_id = #{organization_id},
         email = #{email},

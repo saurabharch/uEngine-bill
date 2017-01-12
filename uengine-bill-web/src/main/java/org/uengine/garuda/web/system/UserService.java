@@ -83,6 +83,4 @@ public interface UserService {
     void sendPasswdMail(String userName);
 
     boolean reqPasswdExist(String id, String token);
-
-
 }
