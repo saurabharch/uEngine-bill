@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
         passwordCredentials.setUsername(userName);
         passwordCredentials.setPassword(password);
         passwordCredentials.setScope(scope);
+        passwordCredentials.setToken_type("JWT");
         try{
             return iamClient.accessToken(passwordCredentials);
         }catch (Exception ex){

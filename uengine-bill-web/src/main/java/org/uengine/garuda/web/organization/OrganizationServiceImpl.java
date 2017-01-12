@@ -5,6 +5,9 @@ import org.opencloudengine.garuda.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.uengine.garuda.common.exception.ServiceException;
+import org.uengine.garuda.killbill.KBServiceFactory;
+import org.uengine.garuda.killbill.api.model.Tenant;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
@@ -26,6 +29,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private KBServiceFactory killbillServiceFactory;
+
     /**
      * 조직을 생성한다.
      * @param organization Organization
@@ -35,9 +41,20 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Organization createOrganization(Organization organization) {
         String name = organization.getName();
         if(StringUtils.isEmpty(name)){
-            throw new SecurityException("organization name is required");
+            throw new ServiceException("organization name is required");
         }
+        Tenant tenant = new Tenant();
+        String key = UUID.randomUUID().toString();
+        tenant.setApiSecret(key);
+        tenant.setApiKey(key);
+        tenant.setExternalKey(key);
 
+        Tenant created = killbillServiceFactory.apiClient().tenantApi().createTenant(tenant);
+
+        organization.setTenant_id(created.getTenantId());
+        organization.setTenant_api_key(created.getApiKey());
+        organization.setTenant_api_secret(created.getApiSecret());
+        organization.setTenant_external_key(created.getExternalKey());
 
         return organizationRepository.insert(organization);
     }
@@ -143,8 +160,8 @@ public class OrganizationServiceImpl implements OrganizationService {
         OrganizationRole orgRole = new OrganizationRole();
 
         Map<String, String> headers = this.getHeaders(request);
-        String token = headers.get("'Authorization'");
-        String organization_id = headers.get("'X-organization-id'");
+        String token = headers.get("authorization");
+        String organization_id = headers.get("x-organization-id");
 
         orgRole.setRole(role);
 

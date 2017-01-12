@@ -13,9 +13,9 @@
     <modules>
 
         <module>uengine-bill-common</module>
+        <module>uengine-killbill-java-client</module>
         <module>uengine-bill-web</module>
         <module>uengine-email-notification-plugin</module>
-        <module>uengine-killbill-java-client</module>
     </modules>
 
     <properties>

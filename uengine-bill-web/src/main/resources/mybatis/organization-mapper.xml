@@ -109,7 +109,7 @@
         WHERE id = #{id}
     </update>
 
-    <update id="update" parameterType="org.uengine.garuda.model.OrganizationEmail">
+    <update id="updateOrganizationEmail" parameterType="org.uengine.garuda.model.OrganizationEmail">
         UPDATE organization
         SET
         organization_id = #{organization_id},

@@ -47,6 +47,7 @@ public class OrganizationRestController {
             }
             return new ResponseEntity<>(organizations, HttpStatus.OK);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -65,6 +66,7 @@ public class OrganizationRestController {
             }
             return new ResponseEntity<>(organization, HttpStatus.OK);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -77,10 +79,11 @@ public class OrganizationRestController {
         }
 
         try {
-            Organization existOrganization = organizationService.selectByName(organization.getName());
-            if (existOrganization != null) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
+            //TODO 사용자가 ADMIN 권한이 있는 조직 중 같은 이름을 사용불가.
+//            Organization existOrganization = organizationService.selectByName(organization.getName());
+//            if (existOrganization != null) {
+//                return new ResponseEntity<>(HttpStatus.CONFLICT);
+//            }
 
             Organization createdOrganization = organizationService.createOrganization(organization);
 
@@ -88,6 +91,7 @@ public class OrganizationRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/organization/{_id}").buildAndExpand(createdOrganization.getId()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
