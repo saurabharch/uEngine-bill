@@ -106,6 +106,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>KBRestFilter</filter-name>
+        <filter-class>org.uengine.garuda.killbill.KBRestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>KBRestFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
 	<!-- =================== -->
     <!--  Welcome File List  -->
