@@ -210,6 +210,7 @@
 
     <bean id="jacksonObjectMapper" class="org.uengine.garuda.util.ObjectMapperFactoryBean">
         <property name="indentOutput" value="true"/>
+        <property name="failOnUnknownProperties" value="false"/>
     </bean>
 
 </beans>
