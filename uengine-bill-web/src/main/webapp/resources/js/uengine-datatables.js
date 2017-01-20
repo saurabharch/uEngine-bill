@@ -79,12 +79,14 @@ uengineDT.prototype = {
                 panel.find('tbody').find('td').each(function () {
                     var td = $(this);
                     var index = me.dt.cell(this).index();
-                    var rowIdx = index.row;
-                    var columnIdx = index.column;
-                    var column = greedOptions.columns[columnIdx];
-                    if (column['event']) {
-                        for (var eventKey in column['event']) {
-                            me.bindTdEvent(rowIdx, columnIdx, td, eventKey, column);
+                    if(index){
+                        var rowIdx = index.row;
+                        var columnIdx = index.column;
+                        var column = greedOptions.columns[columnIdx];
+                        if (column['event']) {
+                            for (var eventKey in column['event']) {
+                                me.bindTdEvent(rowIdx, columnIdx, td, eventKey, column);
+                            }
                         }
                     }
                 });
@@ -106,9 +108,10 @@ uengineDT.prototype = {
         var callback = column['event'][eventKey];
         var key = column['data'];
         var value = me.gridData[rowIdx][key];
+        var rowValue = me.gridData[rowIdx];
         td.unbind(eventKey);
         td.bind(eventKey, function () {
-            callback(key, value, rowIdx, td);
+            callback(key, value, JSON.parse(JSON.stringify(rowValue)), rowIdx, td);
         })
     }
 }

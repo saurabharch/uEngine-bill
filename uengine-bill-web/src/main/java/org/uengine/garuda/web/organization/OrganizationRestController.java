@@ -230,7 +230,7 @@ public class OrganizationRestController {
             boolean isConflict = false;
             List<OrganizationEmail> emails = organizationService.selectOrganizationEmailByOrganizationId(organization.getId());
             for (OrganizationEmail organizationEmail : emails) {
-                if (organizationEmail.getEmail().equals(email.getEmail())) {
+                if (organizationEmail.getEmail().equals(email.getEmail()) && !organizationEmail.getId().equals(id)) {
                     isConflict = true;
                 }
             }

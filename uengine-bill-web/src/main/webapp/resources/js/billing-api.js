@@ -132,7 +132,7 @@ uBilling.prototype = {
         var deferred = $.Deferred();
         var promise = $.ajax({
             type: "PUT",
-            url: me.baseUrl + '/rest/v1/organization/'+ me.getDefaultOrganization(),
+            url: me.baseUrl + '/rest/v1/organization/' + me.getDefaultOrganization(),
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: "json"
@@ -147,6 +147,68 @@ uBilling.prototype = {
         });
         return deferred.promise();
     },
+    getOrganizationEmails: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/organizationEmail',
+            dataType: "json"
+        };
+        return this.send(options);
+    },
+    updateOrganizationEmail: function (data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/organizationEmail/' + data.id,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "json"
+        };
+        return this.send(options);
+    },
+    deleteOrganizationEmail: function (id) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/organizationEmail/' + id
+        };
+        return this.send(options);
+    },
+    send: function (options) {
+        console.log(options.text);
+        var me = this;
+        var deferred = $.Deferred();
+        var ajaxOptions = {
+            type: options.type,
+            url: me.baseUrl + options.url,
+        };
+        if (options.dataType) {
+            ajaxOptions.dataType = options.dataType;
+        }
+        if (options.contentType) {
+            ajaxOptions.contentType = options.contentType;
+        }
+        if (options.async) {
+            ajaxOptions.async = options.async;
+        }
+        if (options.data) {
+            ajaxOptions.data = options.data;
+        }
+        var promise = $.ajax(ajaxOptions);
+        promise.done(function (response) {
+            console.log('getOrganizationEmails success');
+            if (options.resolve) {
+                response = options.resolve(response);
+            }
+            deferred.resolve(response);
+        });
+        promise.fail(function (response, status, errorThrown) {
+            console.log('getOrganizationEmails failed', errorThrown, response.responseText);
+            if (options.reject) {
+                response = options.reject(response);
+            }
+            deferred.reject(response);
+        });
+        return deferred.promise();
+    }
 }
 ;
 uBilling.prototype.constructor = uBilling;

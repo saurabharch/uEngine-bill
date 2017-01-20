@@ -192,68 +192,105 @@
                 })
         });
 
+        var newEmailModal = $('#contact-email-new-modal');
         var dt = new uengineDT($('#contact-email-table'),
             {
                 columns: [
                     {
-                        data: 'label',
+                        data: 'email',
                         title: 'Email',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'mark',
+                        title: 'Primary',
                         defaultContent: '',
                         event: {
-                            click: function (key, value, rowIdx, td) {
-                                console.log(key, value, rowIdx, td);
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                if (rowValue['is_default'] != 'Y') {
+                                    rowValue['is_default'] = 'Y';
+                                    uBilling.updateOrganizationEmail(rowValue)
+                                        .done(function () {
+                                            toastr.success("Primary email changed.");
+                                            drawEmails();
+                                        })
+                                        .fail(function () {
+                                            toastr.error("Can't change primary email.");
+                                        });
+                                }
                             }
                         }
                     },
                     {
                         data: 'edit',
                         title: 'Edit',
-                        defaultContent: ''
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                newEmailModal.find('[name=email]').val(rowValue.email);
+                                newEmailModal.find('[name=send]')
+                                    .unbind('click')
+                                    .bind('click', function () {
+                                        rowValue['email'] = newEmailModal.find('[name=email]').val();
+                                        uBilling.updateOrganizationEmails(rowValue)
+                                            .done(function () {
+                                                toastr.success("Email updated.");
+                                                drawEmails();
+                                            })
+                                            .fail(function () {
+                                                toastr.error("Can't update email.");
+                                            })
+                                            .always(function(){
+                                                newEmailModal.modal('hide')
+                                            })
+                                    });
+                                newEmailModal.modal('show');
+                            }
+                        }
                     },
                     {
                         data: 'delete',
                         title: 'Delete',
-                        defaultContent: ''
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                if (rowValue['is_default'] != 'Y') {
+                                    uBilling.deleteOrganizationEmail(rowValue.id)
+                                        .done(function () {
+                                            toastr.success("Email deleted.");
+                                            drawEmails();
+                                        })
+                                        .fail(function () {
+                                            toastr.error("Can't delete email.");
+                                        });
+                                }else{
+                                    toastr.error("Can't delete primary email.");
+                                }
+                            }
+                        }
                     }
                 ],
-                pageLength: 2,
+                pageLength: 25,
                 lengthChange: false,
                 info: false
             });
-        dt.renderGrid([
-            {
-                'label': 1,
-                'edit': 2,
-                'delete': 3
-            },
-            {
-                'label': 1,
-                'edit': 2,
-                'delete': 3
-            },
-            {
-                'label': 1,
-                'edit': 2,
-                'delete': 3
-            }
-        ]);
-        dt.redrawData([
-            {
-                'label': 1,
-                'edit': 2,
-                'delete': 3
-            },
-            {
-                'label': 1,
-                'edit': 2,
-                'delete': 3
-            },
-            {
-                'label': 1,
-                'edit': 2,
-                'delete': 3
-            }
-        ]);
+
+        var drawEmails = function () {
+            uBilling.getOrganizationEmails()
+                .then(function (emails) {
+                    for (var i = 0; i < emails.length; i++) {
+                        if (emails[i]['is_default'] == 'Y') {
+                            emails[i].mark = '<span class="label label-primary">Primary</span>';
+                        } else {
+                            emails[i].mark = '<a>Mark as Primary</a>';
+                        }
+                        emails[i].edit = '<a><i class="fa fa-pencil"></i></a>';
+                        emails[i].delete = '<a><i class="fa fa-trash"></i></a>';
+                    }
+                    dt.renderGrid(emails);
+                });
+        };
+        drawEmails();
 
         $('#contact-email-modal').modal({
             show: true
