@@ -71,7 +71,7 @@
     $(function () {
         $('#login_form').submit(function (event) {
             event.preventDefault();
-            var data = uBilling.getFormData($(this));
+            var data = $(this).serializeObject();
             uBilling.login(data)
                     .done(function () {
                         window.location.href = '/';

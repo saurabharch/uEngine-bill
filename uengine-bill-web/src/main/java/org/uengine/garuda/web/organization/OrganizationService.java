@@ -38,9 +38,11 @@ public interface OrganizationService {
 
     OrganizationEmail selectOrganizationEmailById(String id);
 
-    OrganizationEmail insertOrganizationEmail(OrganizationEmail organizationEmail);
+    OrganizationEmail createOrganizationEmail(OrganizationEmail organizationEmail);
 
     OrganizationEmail updateOrganizationEmail(OrganizationEmail organizationEmail);
+
+    int clearDefaultOrganizationEmail(String organization_id);
 
     int deleteOrganizationEmail(String id);
 

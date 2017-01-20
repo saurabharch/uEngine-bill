@@ -69,6 +69,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         organization.setTenant_api_key(tenant.getApiKey());
         organization.setTenant_api_secret(tenant.getApiSecret());
         organization.setTenant_external_key(tenant.getExternalKey());
+        organization.setIs_active("Y");
         Organization createdOrganization = organizationRepository.insert(organization);
 
         //요청자를 ADMIN 으로 Authority 를 생성한다.
@@ -85,6 +86,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationEmail.setOrganization_id(createdOrganization.getId());
             organizationEmail.setEmail(oauthUser.get("email").toString());
             organizationEmail.setIs_active("Y");
+            organizationEmail.setIs_default("Y");
             organizationRepository.insertOrganizationEmail(organizationEmail);
         }
 
@@ -166,14 +168,52 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRepository.selectOrganizationEmailById(id);
     }
 
+    /**
+     * 조직 이메일을 생성한다.
+     *
+     * @param organizationEmail
+     * @return
+     */
     @Override
-    public OrganizationEmail insertOrganizationEmail(OrganizationEmail organizationEmail) {
+    public OrganizationEmail createOrganizationEmail(OrganizationEmail organizationEmail) {
+        if ("Y".equals(organizationEmail.getIs_default())) {
+            this.clearDefaultOrganizationEmail(organizationEmail.getOrganization_id());
+        } else {
+            organizationEmail.setIs_default("N");
+        }
+
+        //TODO 조직 이메일 등록 이전에, 고의적 타인의 이메일 등록방지를 위해 이메일 컨펌 절차를 수행할 것.
+        if (StringUtils.isEmpty(organizationEmail.getIs_active())) {
+            organizationEmail.setIs_active("Y");
+        }
         return organizationRepository.insertOrganizationEmail(organizationEmail);
     }
 
+    /**
+     * 조직 이메일을 업데이트 한다.
+     *
+     * @param organizationEmail
+     * @return
+     */
     @Override
     public OrganizationEmail updateOrganizationEmail(OrganizationEmail organizationEmail) {
+        if ("Y".equals(organizationEmail.getIs_default())) {
+            this.clearDefaultOrganizationEmail(organizationEmail.getOrganization_id());
+        } else {
+            organizationEmail.setIs_default("N");
+        }
         return organizationRepository.updateOrganizationEmail(organizationEmail);
+    }
+
+    /**
+     * 디폴트 조직 이메일을 초기화한다.
+     *
+     * @param organization_id
+     * @return
+     */
+    @Override
+    public int clearDefaultOrganizationEmail(String organization_id) {
+        return organizationRepository.clearDefaultOrganizationEmail(organization_id);
     }
 
     @Override

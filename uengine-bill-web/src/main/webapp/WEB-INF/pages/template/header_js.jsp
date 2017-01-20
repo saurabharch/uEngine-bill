@@ -75,8 +75,65 @@
 </script>
 <script type="text/javascript" src="/resources/js/bundle.js"></script>
 
-<!-- 더블 서브밋 방지 -->
+<script src="/resources/js/plugins/deserialize/jquery.serializeObject.js"></script>
+<script src="/resources/js/plugins/deserialize/jquery.deserialize.js"></script>
+
+<!-- billing Api -->
+<script type="text/javascript" src="/resources/js/billing-api.js"></script>
 <script type="text/javascript">
+    var msgBox = function (message) {
+        $('#messageBox').find('[name=content]').html(message);
+        $('#messageBox').modal({
+            show: true
+        });
+    };
+
+    var currentUser;
+    var currentOrg;
+    var uBilling = new uBilling('localhost', 18080);
+
+    //로그인,회원가입 관련 페이지가 아닌 경우 토큰 밸리데이팅을 수행한다.
+    var pathname = window.location.pathname;
+    if (pathname.indexOf('/auth') != 0 && pathname.indexOf('/registe') != 0) {
+        uBilling.validateToken()
+            .fail(function () {
+                uBilling.logout();
+                window.location.href = '/auth/login';
+            })
+            .done(function (user) {
+                currentUser = user;
+
+                //사용자 소유의 organization 리스트를 받아온다.
+                uBilling.getOrganizations()
+                    .then(function (response) {
+                        //리스트가 없고 organization 생성 페이지가 아닌경우 organization 생성 페이지로 이동한다.
+                        if ((!response || !response.length) && pathname.indexOf('/organization/create') != 0) {
+                            window.location.href = '/organization/create';
+                            return;
+                        }
+
+                        //토큰에 organization 아이디가 없다면 첫 organization 토큰에 저장한다.
+                        //토큰의 organization 아이디가 불러온 organization 중에 없다면 첫 organization 을 토큰에 저장한다.
+                        var defaultOrgId = uBilling.getDefaultOrganization();
+                        var isCorrect = false;
+                        for (var i in response) {
+                            if (response[i].id == defaultOrgId) {
+                                isCorrect = true;
+                                currentOrg = response[i];
+                            }
+                        }
+                        if (!isCorrect) {
+                            uBilling.setDefaultOrganization(response[0].id);
+                            currentOrg = response[0];
+                        }
+
+                        //TODO organization,user 정보로 헤더를 꾸민다.
+                        console.log(currentOrg,currentUser);
+                    });
+            });
+    }
+
+
     $(function () {
         $('form').each(function () {
             var form = $(this);
@@ -86,23 +143,12 @@
                 });
             }
         });
+        $('#logoutbtn').click(function () {
+            uBilling.logout();
+            window.location.href = '/auth/login';
+        });
+        $('#messageBox').find('[name=close]').click(function () {
+            $('#messageBox').find('.close').click();
+        });
     });
-</script>
-<!-- billing Api -->
-<script type="text/javascript" src="/resources/js/billing-api.js"></script>
-<script type="text/javascript">
-    var uBilling = new uBilling('localhost', 18080);
-
-    //로그인,회원가입 관련 페이지가 아닌 경우 토큰 밸리데이팅을 수행한다.
-    var pathname = window.location.pathname;
-    if (pathname.indexOf('/auth') != 0 && pathname.indexOf('/registe') != 0) {
-        uBilling.validateToken()
-                .fail(function () {
-                    uBilling.logout();
-                    window.location.href = '/auth/login';
-                }).done(function (user) {
-                   //organization
-                    console.log(user);
-                });
-    }
 </script>

@@ -48,6 +48,7 @@ CREATE TABLE organization_email (
     organization_id VARCHAR(36) NOT NULL,
     email varchar(128) NOT NULL,
     is_active CHAR(1) DEFAULT 'Y',
+    is_default CHAR(1) DEFAULT 'N',
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )

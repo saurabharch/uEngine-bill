@@ -11,6 +11,7 @@ public class OrganizationEmail {
     private String organization_id;
     private String email;
     private String is_active;
+    private String is_default;
     private Date reg_dt;
 
     public String getId() {
@@ -43,6 +44,14 @@ public class OrganizationEmail {
 
     public void setIs_active(String is_active) {
         this.is_active = is_active;
+    }
+
+    public String getIs_default() {
+        return is_default;
+    }
+
+    public void setIs_default(String is_default) {
+        this.is_default = is_default;
     }
 
     public Date getReg_dt() {

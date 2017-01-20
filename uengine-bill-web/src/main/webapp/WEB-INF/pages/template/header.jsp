@@ -148,21 +148,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    var msgBox = function (message) {
-        $('#messageBox').find('[name=content]').html(message);
-        $('#messageBox').modal({
-            show: true
-        });
-    };
-    $(function () {
-        $('#logoutbtn').click(function () {
-            uBilling.logout();
-            window.location.href = '/auth/login';
-        });
-        $('#messageBox').find('[name=close]').click(function () {
-            $('#messageBox').find('.close').click();
-        });
-    });
-</script>
 

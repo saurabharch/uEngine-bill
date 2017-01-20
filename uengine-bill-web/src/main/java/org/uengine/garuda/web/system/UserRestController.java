@@ -17,6 +17,7 @@
 package org.uengine.garuda.web.system;
 
 import org.apache.commons.codec.binary.Base64;
+import org.opencloudengine.garuda.client.model.OauthUser;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,9 @@ public class UserRestController extends DefaultController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private IamServiceFactory iamServiceFactory;
+
     public static String scope = "uEngineSubscriptions/subscriptionsapi";
 
     /**
@@ -85,7 +89,7 @@ public class UserRestController extends DefaultController {
     }
 
     @RequestMapping(value = "/token_info", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> tokenInfo(HttpServletRequest request, HttpServletResponse response
+    public ResponseEntity<OauthUser> tokenInfo(HttpServletRequest request, HttpServletResponse response
     ) throws IOException {
 
         try {
@@ -98,7 +102,14 @@ public class UserRestController extends DefaultController {
             if ((int) map.get("status") != 200) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(map, HttpStatus.OK);
+
+            OauthUser oauthUser = userService.selectByUserId(((Map) map.get("context")).get("userId").toString());
+            if(oauthUser != null){
+                oauthUser.remove("userPassword");
+                return new ResponseEntity<>(oauthUser, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
 
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

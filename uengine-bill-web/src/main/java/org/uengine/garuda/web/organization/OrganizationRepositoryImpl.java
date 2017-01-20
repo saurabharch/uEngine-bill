@@ -143,4 +143,9 @@ public class OrganizationRepositoryImpl extends PersistentRepositoryImpl<String,
     public int deleteOrganizationEmail(String id) {
         return this.getSqlSessionTemplate().delete(this.getNamespace() + ".deleteOrganizationEmail", id);
     }
+
+    @Override
+    public int clearDefaultOrganizationEmail(String organization_id) {
+        return this.getSqlSessionTemplate().update(this.getNamespace() + ".clearDefaultOrganizationEmail", organization_id);
+    }
 }

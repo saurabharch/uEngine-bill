@@ -64,13 +64,13 @@
 
 <script>
     $(document).ready(function () {
-        $('.i-checks').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green'
-        });
-
-        $('.chosen-select').chosen({width: "100%"});
-
-        $('.summernote').summernote();
+//        $('.i-checks').iCheck({
+//            checkboxClass: 'icheckbox_square-green',
+//            radioClass: 'iradio_square-green'
+//        });
+//
+//        $('.chosen-select').chosen({width: "100%"});
+//
+//        $('.summernote').summernote();
     });
 </script>

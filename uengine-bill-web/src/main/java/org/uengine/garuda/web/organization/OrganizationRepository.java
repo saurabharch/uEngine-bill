@@ -64,4 +64,6 @@ public interface OrganizationRepository {
     OrganizationEmail updateOrganizationEmail(OrganizationEmail organizationEmail);
 
     int deleteOrganizationEmail(String id);
+
+    int clearDefaultOrganizationEmail(String organization_id);
 }
