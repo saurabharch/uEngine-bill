@@ -72,6 +72,14 @@
                                 </div>
                             </div>
 
+                            <div class="form-group"><label class="col-sm-2 control-label">Primary Contact</label>
+
+                                <div class="col-sm-10">
+                                    <span id="primary-email"></span><br>
+                                    <a id="configure-email">Configure Emails <i class="fa fa-info-circle"></i></a>
+                                </div>
+                            </div>
+
                             <div class="hr-line-dashed"></div>
 
                             <h3 class="m-t-none m-b">Company Address</h3>
@@ -192,6 +200,8 @@
                 })
         });
 
+        //TODO 이메일 생성 창 만들기.
+
         var newEmailModal = $('#contact-email-new-modal');
         var dt = new uengineDT($('#contact-email-table'),
             {
@@ -240,7 +250,7 @@
                                             .fail(function () {
                                                 toastr.error("Can't update email.");
                                             })
-                                            .always(function(){
+                                            .always(function () {
                                                 newEmailModal.modal('hide')
                                             })
                                     });
@@ -263,7 +273,7 @@
                                         .fail(function () {
                                             toastr.error("Can't delete email.");
                                         });
-                                }else{
+                                } else {
                                     toastr.error("Can't delete primary email.");
                                 }
                             }
@@ -275,11 +285,35 @@
                 info: false
             });
 
+        $('#new-contact').click(function () {
+            newEmailModal.find('[name=email]').val('');
+            newEmailModal.find('[name=send]')
+                .unbind('click')
+                .bind('click', function () {
+                    var data = {
+                        email: newEmailModal.find('[name=email]').val()
+                    };
+                    uBilling.createOrganizationEmail(data)
+                        .done(function () {
+                            toastr.success("Email created.");
+                            drawEmails();
+                        })
+                        .fail(function () {
+                            toastr.error("Can't create email.");
+                        })
+                        .always(function () {
+                            newEmailModal.modal('hide')
+                        })
+                });
+            newEmailModal.modal('show');
+        });
+
         var drawEmails = function () {
             uBilling.getOrganizationEmails()
                 .then(function (emails) {
                     for (var i = 0; i < emails.length; i++) {
                         if (emails[i]['is_default'] == 'Y') {
+                            $('#primary-email').html(emails[i].email);
                             emails[i].mark = '<span class="label label-primary">Primary</span>';
                         } else {
                             emails[i].mark = '<a>Mark as Primary</a>';
@@ -292,9 +326,9 @@
         };
         drawEmails();
 
-        $('#contact-email-modal').modal({
-            show: true
-        })
+        $('#configure-email').click(function(){
+            $('#contact-email-modal').modal('show');
+        });
     });
 </script>
 </body>

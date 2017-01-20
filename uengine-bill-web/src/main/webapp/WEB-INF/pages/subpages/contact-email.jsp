@@ -14,12 +14,12 @@
                                    class="table table-hover" style="width: 100%">
                             </table>
                         </div>
+                        <a id="new-contact">+ Add Additional Contact</a>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <i class="fa fa-file-pdf-o"> CN-00010.pdf</i>
                 <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary">Send</button>
             </div>
@@ -47,7 +47,6 @@
             </div>
 
             <div class="modal-footer">
-                <i class="fa fa-file-pdf-o"> CN-00010.pdf</i>
                 <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
                 <button name="send" type="button" class="btn btn-primary">Send</button>
             </div>

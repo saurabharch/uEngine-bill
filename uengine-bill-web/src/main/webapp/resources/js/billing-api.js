@@ -155,6 +155,15 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    createOrganizationEmail: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/organizationEmail',
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        };
+        return this.send(options);
+    },
     updateOrganizationEmail: function (data) {
         var options = {
             type: "PUT",
