@@ -85,28 +85,28 @@
                                     class="col-sm-2 control-label">Street</label>
 
                                 <div class="col-sm-10"><textarea rows="3" class="form-control"
-                                                                name="address1"></textarea>
+                                                                 name="address1"></textarea>
                                 </div>
                             </div>
                             <div class="form-group"><label
                                     class="col-sm-2 control-label">City</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
-                                                             name="city">
+                                                              name="city">
                                 </div>
                             </div>
                             <div class="form-group"><label
                                     class="col-sm-2 control-label">State or Province</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
-                                                             name="state_or_province">
+                                                              name="state_or_province">
                                 </div>
                             </div>
                             <div class="form-group"><label class="col-sm-2 control-label">ZIP
                                 Code</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
-                                                             name="postal_code">
+                                                              name="postal_code">
                                 </div>
                             </div>
 
@@ -124,7 +124,7 @@
                                     class="col-sm-2 control-label">Phone</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
-                                                             name="phone">
+                                                              name="phone">
                                 </div>
                             </div>
 
@@ -132,7 +132,7 @@
                                     class="col-sm-2 control-label">Fax</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
-                                                             name="fax">
+                                                              name="fax">
                                 </div>
                             </div>
 
@@ -162,7 +162,7 @@
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
-
+<%@include file="../subpages/contact-email.jsp" %>
 
 <script>
     $(document).ready(function () {
@@ -191,6 +191,73 @@
                     blockStop();
                 })
         });
+
+        var dt = new uengineDT($('#contact-email-table'),
+            {
+                columns: [
+                    {
+                        data: 'label',
+                        title: 'Email',
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowIdx, td) {
+                                console.log(key, value, rowIdx, td);
+                            }
+                        }
+                    },
+                    {
+                        data: 'edit',
+                        title: 'Edit',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'delete',
+                        title: 'Delete',
+                        defaultContent: ''
+                    }
+                ],
+                pageLength: 2,
+                lengthChange: false,
+                info: false
+            });
+        dt.renderGrid([
+            {
+                'label': 1,
+                'edit': 2,
+                'delete': 3
+            },
+            {
+                'label': 1,
+                'edit': 2,
+                'delete': 3
+            },
+            {
+                'label': 1,
+                'edit': 2,
+                'delete': 3
+            }
+        ]);
+        dt.redrawData([
+            {
+                'label': 1,
+                'edit': 2,
+                'delete': 3
+            },
+            {
+                'label': 1,
+                'edit': 2,
+                'delete': 3
+            },
+            {
+                'label': 1,
+                'edit': 2,
+                'delete': 3
+            }
+        ]);
+
+        $('#contact-email-modal').modal({
+            show: true
+        })
     });
 </script>
 </body>

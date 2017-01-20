@@ -7,6 +7,7 @@
 <script src="/resources/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="/resources/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="/resources/js/plugins/dataTables/datatables.min.js"></script>
+<script src="/resources/js/uengine-datatables.js"></script>
 
 <!-- Chosen -->
 <script src="/resources/js/plugins/chosen/chosen.jquery.js"></script>
