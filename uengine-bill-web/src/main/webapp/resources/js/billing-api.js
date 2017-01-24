@@ -213,6 +213,35 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getAccountSearch: function (searchKey, offset, limit) {
+        var data = {
+            offset: offset ? offset : 0,
+            limit: limit ? limit : 100,
+            accountWithBalance: true,
+            accountWithBalanceAndCBA: true,
+            audit: 'NONE'
+        };
+        var url = searchKey ? '/rest/v1/accounts/search/' + searchKey : '/rest/v1/accounts/pagination';
+        var options = {
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: data,
+            resolve: function (response, status, xhr) {
+                //x-killbill-pagination-maxnbrecords
+                var total = parseInt(xhr.getResponseHeader('x-killbill-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-killbill-pagination-maxnbrecords'));
+                return {
+                    data: response,
+                    total: total,
+                    filtered: filtered,
+                    offset: data.offset,
+                    limit: data.limit
+                };
+            }
+        };
+        return this.send(options);
+    },
     createAccountCustomFields: function (accountId, data) {
         var options = {
             type: "POST",

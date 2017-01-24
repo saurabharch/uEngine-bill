@@ -63,93 +63,8 @@
                     <div class="ibox-content">
 
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover dataTables-example">
-                                <thead>
-                                <tr>
-                                    <th>NAME</th>
-                                    <th>COMPANY NAME</th>
-                                    <th>EMAIL</th>
-                                    <th>WORK PHONE</th>
-                                    <th>RECEIVABLES</th>
-                                    <th>UNUSED CREDITS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td><a href="./customer/detail">darkgodarkgo</a></td>
-                                    <td>uEngine</td>
-                                    <td>darkgodarkgo@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>$0.0</td>
-                                    <td>$0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>China Customer</td>
-                                    <td>China xx</td>
-                                    <td>chyxxx@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>CNY0.0</td>
-                                    <td>CNY0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>darkgodarkgo</td>
-                                    <td>uEngine</td>
-                                    <td>darkgodarkgo@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>$0.0</td>
-                                    <td>$0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>China Customer</td>
-                                    <td>China xx</td>
-                                    <td>chyxxx@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>CNY0.0</td>
-                                    <td>CNY0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>darkgodarkgo</td>
-                                    <td>uEngine</td>
-                                    <td>darkgodarkgo@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>$0.0</td>
-                                    <td>$0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>China Customer</td>
-                                    <td>China xx</td>
-                                    <td>chyxxx@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>CNY0.0</td>
-                                    <td>CNY0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>darkgodarkgo</td>
-                                    <td>uEngine</td>
-                                    <td>darkgodarkgo@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>$0.0</td>
-                                    <td>$0.0</td>
-                                </tr>
-                                <tr>
-                                    <td>China Customer</td>
-                                    <td>China xx</td>
-                                    <td>chyxxx@gmail.com</td>
-                                    <td>+8201040341807</td>
-                                    <td>CNY0.0</td>
-                                    <td>CNY0.0</td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>NAME</th>
-                                    <th>COMPANY NAME</th>
-                                    <th>EMAIL</th>
-                                    <th>WORK PHONE</th>
-                                    <th>RECEIVABLES</th>
-                                    <th>UNUSED CREDITS</th>
-                                </tr>
-                                </tfoot>
+                            <table id="customer-table" class="table table-striped table-bordered table-hover">
+
                             </table>
                         </div>
                     </div>
@@ -166,8 +81,46 @@
 
 <script>
     $(document).ready(function () {
-        $('.dataTables-example').DataTable({
-            pageLength: 25,
+        var dt = new uengineDT($('#customer-table'), {
+            columns: [
+                {
+                    data: 'name',
+                    title: 'NAME',
+                    defaultContent: ''
+                },
+                {
+                    data: 'company',
+                    title: 'COMPANY NAME',
+                    defaultContent: '',
+                    event: {
+                        click: function (key, value, rowValue, rowIdx, td) {
+                            console.log(rowValue);
+                        }
+                    }
+                },
+                {
+                    data: 'email',
+                    title: 'EMAIL',
+                    defaultContent: ''
+                },
+                {
+                    data: 'phone',
+                    title: 'PHONE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'accountBalance',
+                    title: 'BALANCE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'accountCBA',
+                    title: 'CREDIT',
+                    defaultContent: ''
+                }
+            ],
+            pageLength: 3,
+            info: true,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [
@@ -183,13 +136,33 @@
                         $(win.document.body).css('font-size', '10px');
 
                         $(win.document.body).find('table')
-                                .addClass('compact')
-                                .css('font-size', 'inherit');
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
                     }
                 }
-            ]
-
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, callback, settings) {
+                var offset = data.start;
+                var limit = data.length;
+                var searchKey = data.search.value;
+                searchKey = searchKey.length > 0 ? searchKey : null;
+                uBilling.getAccountSearch(searchKey, offset, limit)
+                    .done(function (response) {
+                        dt.gridData = response.data;
+                        callback({
+                            recordsTotal: response.total,
+                            recordsFiltered: response.filtered,
+                            data: response.data
+                        });
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find customer list.");
+                    });
+            }
         });
+        dt.renderGrid();
     });
 </script>
 </body>
