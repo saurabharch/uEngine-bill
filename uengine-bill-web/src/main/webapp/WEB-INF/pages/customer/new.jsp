@@ -255,6 +255,11 @@
                     response['first_name'] = response['name'].substring(0, response.firstNameLength);
                     response['last_name'] = response['name'].substring(response.firstNameLength + 1);
                     $('form').deserialize(response);
+
+                    $('[name=timeZone]').prop('disabled', true);
+                    $('[name=currency]').prop('disabled', true);
+                    $('[name=billCycleDayLocal]').prop('disabled', true);
+
                     uBilling.getAccountCustomFields(id)
                         .then(function (response) {
                             originalCustomFields = response;
