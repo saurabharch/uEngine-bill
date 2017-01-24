@@ -114,6 +114,40 @@ CREATE TABLE subscription_events_ext (
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS product_provider;
+CREATE TABLE product_provider (
+    id VARCHAR(36) NOT NULL,
+    product_id VARCHAR(36) NOT NULL,
+    account_id VARCHAR(36) NOT NULL,
+    account_record_id BIGINT(20),
+    tenant_record_id BIGINT(20),
+    distribution INT(11) DEFAULT 0,
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS product_distribution_history;
+CREATE TABLE product_distribution_history (
+    id VARCHAR(36) NOT NULL,
+    product_id VARCHAR(36) NOT NULL,
+    account_id VARCHAR(36) NOT NULL,
+    account_record_id BIGINT(20),
+    tenant_record_id BIGINT(20),
+    distribution INT(11) DEFAULT 0,
+    amount DECIMAL(15,9),
+    original_amount DECIMAL(15,9),
+    currenct VARCHAR(3),
+    invoice_id VARCHAR(36),
+    payment_id VARCHAR(36),
+    transaction_type VARCHAR(32),
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
 
 
 
