@@ -219,7 +219,7 @@
                             click: function (key, value, rowValue, rowIdx, td) {
                                 if (rowValue['is_default'] != 'Y') {
                                     rowValue['is_default'] = 'Y';
-                                    uBilling.updateOrganizationEmail(rowValue)
+                                    uBilling.updateOrganizationEmail(rowValue.id, rowValue)
                                         .done(function () {
                                             toastr.success("Primary email changed.");
                                             drawEmails();
@@ -242,7 +242,7 @@
                                     .unbind('click')
                                     .bind('click', function () {
                                         rowValue['email'] = newEmailModal.find('[name=email]').val();
-                                        uBilling.updateOrganizationEmails(rowValue)
+                                        uBilling.updateOrganizationEmail(rowValue.id, rowValue)
                                             .done(function () {
                                                 toastr.success("Email updated.");
                                                 drawEmails();

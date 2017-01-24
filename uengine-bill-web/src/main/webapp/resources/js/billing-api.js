@@ -164,10 +164,10 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
-    updateOrganizationEmail: function (data) {
+    updateOrganizationEmail: function (id, data) {
         var options = {
             type: "PUT",
-            url: '/rest/v1/organizationEmail/' + data.id,
+            url: '/rest/v1/organizationEmail/' + id,
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: "json"
@@ -188,10 +188,56 @@ uBilling.prototype = {
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: 'text',
-            resolve: function(response, status, xhr){
+            resolve: function (response, status, xhr) {
                 var locationHeader = xhr.getResponseHeader('Location');
                 return locationHeader.substring(locationHeader.lastIndexOf('/') + 1);
             }
+        };
+        return this.send(options);
+    },
+    updateAccount: function (accountId, data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/accounts/' + accountId,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    getAccount: function (accountId) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + accountId,
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createAccountCustomFields: function (accountId, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accounts/' + accountId + '/customFields',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    getAccountCustomFields: function (accountId) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + accountId + '/customFields',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    deleteAccountCustomFields: function (accountId, data) {
+        console.log(accountId, data);
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/accounts/' + accountId + '/customFields',
+            data: data,
+            dataType: 'text'
         };
         return this.send(options);
     },

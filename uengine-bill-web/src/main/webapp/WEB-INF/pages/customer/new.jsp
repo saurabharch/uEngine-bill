@@ -32,7 +32,7 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>New Customer</h5>
+                        <h5>Edit Customer</h5>
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal">
@@ -224,7 +224,7 @@
                             <div class="form-group">
                                 <div class="col-sm-4">
                                     <a class="btn btn-white">Cancel</a>
-                                    <button class="btn btn-primary" type="submit">Save changes</button>
+                                    <button class="btn btn-primary" type="submit">Edit</button>
                                 </div>
                             </div>
                         </form>
@@ -242,14 +242,52 @@
 
 <script>
     $(document).ready(function () {
-        $('#add-key-value').click(function () {
+        var id = "${id}";
+        var mode = 'new';
+        if (id && id.length) {
+            mode = 'edit';
+        }
+
+        var originalCustomFields;
+        if (mode == 'edit') {
+            uBilling.getAccount(id)
+                .done(function (response) {
+                    response['first_name'] = response['name'].substring(0, response.firstNameLength);
+                    response['last_name'] = response['name'].substring(response.firstNameLength + 1);
+                    $('form').deserialize(response);
+                    uBilling.getAccountCustomFields(id)
+                        .then(function (response) {
+                            originalCustomFields = response;
+                            for (var i in response) {
+                                addCustomField(response[i].name, response[i].value);
+                            }
+                        });
+
+                    $('.chosen-select').chosen({width: "100%"});
+                })
+                .fail(function () {
+                    toastr.error("Not found customer.");
+                });
+        }
+
+        var addCustomField = function (key, value) {
             var clone = $('#key-value-template').clone();
             clone.attr('name', 'key-value-template');
             clone.css('display', 'block');
+            if (key) {
+                clone.find('.key-space').val(key);
+            }
+            if (value) {
+                clone.find('.value-space').val(value);
+            }
             clone.find('.delete-space').click(function () {
                 $(this).parent().parent().remove();
             });
             $('#key-value-template-before').before(clone);
+        };
+
+        $('#add-key-value').click(function () {
+            addCustomField();
         });
 
         $('form').submit(function (event) {
@@ -262,43 +300,67 @@
             delete data['last_name'];
 
             var customFileds = [];
-            $('[name=key-value-template]').each(function(){
+            $('[name=key-value-template]').each(function () {
                 var key = $(this).find('.key-space').val();
                 var value = $(this).find('.value-space').val();
+                customFileds.push({
+                    name: key,
+                    value: value
+                })
             });
 
-            uBilling.createAccount(data)
-                .done(function (accountId) {
-                    window.location.href = '/account/' + accountId + '/edit';
-                    toastr.success("account created.")
-                })
-                .fail(function (response) {
-                    toastr.error("Failed to create account.")
-                })
-                .always(function () {
-                    blockStop();
-                });
-//            var data = $(this).serializeObject();
-//            uBilling.updateOrganization(data)
-//                .done(function (organization) {
-//                    toastr.success("Organization updated.")
-//                })
-//                .fail(function (response) {
-//                    //중복 실패
-//                    if (response && response.status == 409) {
-//                        toastr.error("Organization name already exist.")
-//                    }
-//                    //실패
-//                    else {
-//                        toastr.error("Failed to update organization.")
-//                    }
-//                })
-//                .always(function () {
-//                    blockStop();
-//                })
+            if (mode == 'edit') {
+                uBilling.updateAccount(id, data)
+                    .done(function (response) {
+                        var deleteCustomFieldList = [];
+                        if (originalCustomFields && originalCustomFields.length) {
+                            for (var i in originalCustomFields) {
+                                deleteCustomFieldList.push(originalCustomFields[i]['customFieldId']);
+                            }
+                            deleteCustomFieldList = deleteCustomFieldList.join();
+                        }
+                        if (deleteCustomFieldList.length) {
+                            uBilling.deleteAccountCustomFields(id, {
+                                customFileds: deleteCustomFieldList
+                            })
+                                .then(function () {
+                                    uBilling.createAccountCustomFields(id, customFileds)
+                                        .then(function () {
+                                            toastr.success("Customer updated.");
+                                            blockStop();
+                                        })
+                                })
+                        } else {
+                            uBilling.createAccountCustomFields(id, customFileds)
+                                .then(function () {
+                                    toastr.success("Customer updated.");
+                                    blockStop();
+                                })
+                        }
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to update customer.");
+                        blockStop();
+                    });
+            } else {
+                uBilling.createAccount(data)
+                    .done(function (accountId) {
+                        if (customFileds.length) {
+                            uBilling.createAccountCustomFields(accountId, customFileds)
+                                .always(function () {
+                                    window.location.href = '/customer/' + accountId + '/edit';
+                                });
+                        } else {
+                            window.location.href = '/customer/' + accountId + '/edit';
+                        }
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to create customer.");
+                        blockStop();
+                    });
+            }
         });
 
-        $('.chosen-select').chosen({width: "100%"});
     });
 </script>
 </body>
