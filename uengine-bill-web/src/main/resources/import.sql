@@ -1,3 +1,5 @@
+alter table killbill.accounts add column billing_cycle_day_local_ext int(11) DEFAULT NULL after billing_cycle_day_local;
+
 DROP TABLE IF EXISTS organization;
 CREATE TABLE organization (
     id VARCHAR(36) NOT NULL,
@@ -49,6 +51,63 @@ CREATE TABLE organization_email (
     email varchar(128) NOT NULL,
     is_active CHAR(1) DEFAULT 'Y',
     is_default CHAR(1) DEFAULT 'N',
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS product;
+CREATE TABLE product (
+    id VARCHAR(36) NOT NULL,
+    name VARCHAR(256) NOT NULL,
+    category VARCHAR(12) DEFAULT 'BASE',
+    owner_account_id VARCHAR(36),
+    description VARCHAR(4096),
+    redirect_url varchar(256),
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS product_version;
+CREATE TABLE product_version (
+    id VARCHAR(36) NOT NULL,
+    product_id VARCHAR(36) NOT NULL,
+    version INT(11) DEFAULT 1 NOT NULL,
+    effective_date TIMESTAMP NOT NULL,
+    is_active CHAR(1) DEFAULT 'Y',
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS plan;
+CREATE TABLE plan (
+    id VARCHAR(36) NOT NULL,
+    product_id VARCHAR(36) NOT NULL,
+    version INT(11) DEFAULT 1 NOT NULL,
+    name VARCHAR(36),
+    is_onetime CHAR(1) DEFAULT 'Y',
+    is_active CHAR(1) DEFAULT 'Y',
+    phases LONGTEXT,
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS subscription_events_ext;
+CREATE TABLE subscription_events_ext (
+    id VARCHAR(36) NOT NULL,
+    event_type VARCHAR(15) NOT NULL,
+    user_type VARCHAR(25) NOT NULL,
+    plan_id VARCHAR(36) NOT NULL,
+    account_id VARCHAR(36) NOT NULL,
+    account_record_id BIGINT(20),
+    tenant_record_id BIGINT(20),
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )
