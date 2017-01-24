@@ -181,13 +181,26 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    createAccount: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accounts',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function(response, status, xhr){
+                var locationHeader = xhr.getResponseHeader('Location');
+                return locationHeader.substring(locationHeader.lastIndexOf('/') + 1);
+            }
+        };
+        return this.send(options);
+    },
     send: function (options) {
-        console.log(options.text);
         var me = this;
         var deferred = $.Deferred();
         var ajaxOptions = {
             type: options.type,
-            url: me.baseUrl + options.url,
+            url: me.baseUrl + options.url
         };
         if (options.dataType) {
             ajaxOptions.dataType = options.dataType;
@@ -202,17 +215,18 @@ uBilling.prototype = {
             ajaxOptions.data = options.data;
         }
         var promise = $.ajax(ajaxOptions);
-        promise.done(function (response) {
+        promise.done(function (response, status, xhr) {
             console.log('getOrganizationEmails success');
             if (options.resolve) {
-                response = options.resolve(response);
+                response = options.resolve(response, status, xhr);
             }
             deferred.resolve(response);
         });
         promise.fail(function (response, status, errorThrown) {
-            console.log('getOrganizationEmails failed', errorThrown, response.responseText);
+            console.log(response, status, errorThrown);
+            //console.log('getOrganizationEmails failed', errorThrown, response.responseText);
             if (options.reject) {
-                response = options.reject(response);
+                response = options.reject(response, status, errorThrown);
             }
             deferred.reject(response);
         });

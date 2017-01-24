@@ -155,7 +155,7 @@
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button class="btn btn-white" type="submit">Cancel</button>
+                                    <a class="btn btn-white">Cancel</a>
                                     <button class="btn btn-primary" type="submit">Save changes</button>
                                 </div>
                             </div>
