@@ -20,6 +20,9 @@ uengineDT.prototype = {
     getOptions: function () {
         return this.gridOptions;
     },
+    getApi: function () {
+        return this.panel.dataTable().api();
+    },
 
     redrawData: function (gridData) {
         this.gridData = gridData;
@@ -45,8 +48,7 @@ uengineDT.prototype = {
     },
 
     /**
-     * 우측 메뉴의 그리드 테이블을 생성한다.
-     * @param model 테이블/트리 모델명
+     * 그리드 테이블을 생성한다.
      */
     renderGrid: function (gridData) {
         var me = this;
@@ -54,32 +56,63 @@ uengineDT.prototype = {
         var panelId = panel.attr('id');
         me.gridData = gridData;
         var greedOptions = {
-            data: gridData,
             columns: [],
             searching: true,
             pageLength: 25,
-            lengthChange: false,
             info: true
         };
+        if (gridData) {
+            greedOptions.data = gridData;
+        }
         for (var key in me.gridOptions) {
             greedOptions[key] = me.gridOptions[key];
         }
 
         var dt;
-        var renderGridAction = function (gridData) {
-            if (!panel.data('table')) {
-                panel.data('table', true);
-                me.dt = panel.DataTable(greedOptions);
-                me.modifyDataTablesStyle(panelId);
-            }
+        if (!panel.data('table')) {
+            panel.data('table', true);
+            me.dt = panel.DataTable(greedOptions);
+            me.modifyDataTablesStyle(panelId);
+            $(".dataTables_paginate").find('a').css("font-size", "11px");
+        }
 
-            // page event
+        if(!greedOptions.ajax){
+            var renderGridAction = function (gridData) {
+                // page event
+                panel.unbind('draw.dt');
+                panel.on('draw.dt', function () {
+                    panel.find('tbody').find('td').each(function () {
+                        var td = $(this);
+                        var index = me.dt.cell(this).index();
+                        if (index) {
+                            var rowIdx = index.row;
+                            var columnIdx = index.column;
+                            var column = greedOptions.columns[columnIdx];
+                            if (column['event']) {
+                                for (var eventKey in column['event']) {
+                                    me.bindTdEvent(rowIdx, columnIdx, td, eventKey, column);
+                                }
+                            }
+                        }
+                    });
+                });
+
+                var dataTable = panel.dataTable().api();
+                dataTable.clear();
+                dataTable.rows.add(gridData);
+                dataTable.draw();
+                panel.on('draw.dt', function () {
+                    $(".dataTables_paginate").find('a').css("font-size", "11px");
+                });
+            };
+            renderGridAction(gridData);
+        }else{
             panel.unbind('draw.dt');
             panel.on('draw.dt', function () {
                 panel.find('tbody').find('td').each(function () {
                     var td = $(this);
                     var index = me.dt.cell(this).index();
-                    if(index){
+                    if (index) {
                         var rowIdx = index.row;
                         var columnIdx = index.column;
                         var column = greedOptions.columns[columnIdx];
@@ -91,17 +124,10 @@ uengineDT.prototype = {
                     }
                 });
             });
-
-            var dataTable = panel.dataTable().api();
-            dataTable.clear();
-            dataTable.rows.add(gridData);
-            dataTable.draw();
-            $(".dataTables_paginate").find('a').css("font-size", "11px");
             panel.on('draw.dt', function () {
                 $(".dataTables_paginate").find('a').css("font-size", "11px");
             });
-        };
-        renderGridAction(gridData);
+        }
     },
     bindTdEvent: function (rowIdx, columnIdx, td, eventKey, column) {
         var me = this;
