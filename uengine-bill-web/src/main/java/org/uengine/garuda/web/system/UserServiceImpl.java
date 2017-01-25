@@ -18,7 +18,10 @@ package org.uengine.garuda.web.system;
 
 import org.opencloudengine.garuda.client.IamClient;
 import org.opencloudengine.garuda.client.ResourceOwnerPasswordCredentials;
+import org.opencloudengine.garuda.client.model.OauthClient;
 import org.opencloudengine.garuda.client.model.OauthUser;
+import org.uengine.garuda.authentication.AuthInformation;
+import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.mail.MailService;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.registe.Registe;
@@ -28,6 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Properties;
 
@@ -169,6 +173,17 @@ public class UserServiceImpl implements UserService {
         IamClient iamClient = serviceFactory.trustClient();
         try {
             return iamClient.getUserByName(userName);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public OauthClient selectClientById(String id) {
+        IamClient iamClient = serviceFactory.trustClient();
+        try {
+            return iamClient.getClient(id);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

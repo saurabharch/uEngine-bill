@@ -47,6 +47,4 @@ public interface OrganizationService {
     int deleteOrganizationEmail(String id);
 
     OrganizationRole getOrganizationRole(HttpServletRequest request, String role);
-
-    OauthUser getUserFromRequest(HttpServletRequest request);
 }

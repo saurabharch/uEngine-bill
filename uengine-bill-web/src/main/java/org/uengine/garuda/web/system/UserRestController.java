@@ -32,7 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.uengine.garuda.authentication.AuthInformation;
+import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.util.DateUtils;
+import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.configuration.DefaultController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +62,11 @@ public class UserRestController extends DefaultController {
     @Autowired
     private IamServiceFactory iamServiceFactory;
 
-    public static String scope = "uEngineSubscriptions/subscriptionsapi";
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    ConfigurationHelper configurationHelper;
 
     /**
      * SLF4J Logging
@@ -74,7 +81,7 @@ public class UserRestController extends DefaultController {
             String password = request.getParameter("password");
             String scope = request.getParameter("scope");
 
-            if (!this.scope.equals(scope)) {
+            if (!configurationHelper.get("authorization.scope").equals(scope)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             Map map = userService.accessToken(username, password, scope);
@@ -93,23 +100,19 @@ public class UserRestController extends DefaultController {
     ) throws IOException {
 
         try {
-            String token = request.getParameter("access_token");
+            AuthInformation authInformation = authenticationService.validateRequest(
+                    request,
+                    configurationHelper.get("tokeninfo.authorization"),
+                    AuthInformation.LOCATION_PARAM,
+                    AuthInformation.TOKEN_TYPE_JWT);
 
-            if (StringUtils.isEmpty(token)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            Map map = userService.tokenInfo(token);
-            if ((int) map.get("status") != 200) {
+            if (authInformation.getError() != null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            OauthUser oauthUser = userService.selectByUserId(((Map) map.get("context")).get("userId").toString());
-            if(oauthUser != null){
-                oauthUser.remove("userPassword");
-                return new ResponseEntity<>(oauthUser, HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+            authInformation.getOauthUser().remove("userPassword");
+            return new ResponseEntity<>(authInformation.getOauthUser(), HttpStatus.OK);
+
 
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

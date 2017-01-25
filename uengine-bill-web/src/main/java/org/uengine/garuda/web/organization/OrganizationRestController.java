@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.uengine.garuda.authentication.AuthInformation;
+import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -35,15 +38,26 @@ public class OrganizationRestController {
     @Autowired
     private OrganizationService organizationService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    AuthenticationService authenticationService;
+
     @RequestMapping(value = "/organization", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Organization>> listOrganization(HttpServletRequest request) {
 
         try {
-            OauthUser oauthUser = organizationService.getUserFromRequest(request);
-            if (oauthUser == null) {
+            AuthInformation authInformation = authenticationService.validateRequest(
+                    request,
+                    config.getProperty("header.authorization"),
+                    AuthInformation.LOCATION_HEADER,
+                    AuthInformation.TOKEN_TYPE_JWT);
+
+            if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            List<Organization> organizations = organizationService.selectByUserId(oauthUser.get_id());
+            List<Organization> organizations = organizationService.selectByUserId(authInformation.getOauthUser().get_id());
             if (organizations.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -57,11 +71,15 @@ public class OrganizationRestController {
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Organization> getOrganization(HttpServletRequest request, @PathVariable("id") String id) {
         try {
-            OauthUser oauthUser = organizationService.getUserFromRequest(request);
-            if (oauthUser == null) {
+            AuthInformation authInformation = authenticationService.validateRequest(
+                    request,
+                    config.getProperty("header.authorization"),
+                    AuthInformation.LOCATION_HEADER,
+                    AuthInformation.TOKEN_TYPE_JWT);
+            if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(oauthUser.get_id(), id);
+            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), id);
             if (authority == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
@@ -81,8 +99,12 @@ public class OrganizationRestController {
     public ResponseEntity<Void> createOrganization(HttpServletRequest request, @RequestBody Organization organization, UriComponentsBuilder ucBuilder) {
 
         try {
-            OauthUser oauthUser = organizationService.getUserFromRequest(request);
-            if (oauthUser == null) {
+            AuthInformation authInformation = authenticationService.validateRequest(
+                    request,
+                    config.getProperty("header.authorization"),
+                    AuthInformation.LOCATION_HEADER,
+                    AuthInformation.TOKEN_TYPE_JWT);
+            if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
             //TODO 사용자가 ADMIN 권한이 있는 조직 중 같은 이름을 사용불가.
@@ -91,7 +113,7 @@ public class OrganizationRestController {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
 
-            Organization createdOrganization = organizationService.createOrganization(organization, oauthUser);
+            Organization createdOrganization = organizationService.createOrganization(organization, authInformation.getOauthUser());
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/organization/{_id}").buildAndExpand(createdOrganization.getId()).toUri());
@@ -106,11 +128,15 @@ public class OrganizationRestController {
     public ResponseEntity<Organization> updateOrganization(HttpServletRequest request, @PathVariable("id") String id, @RequestBody Organization organization) {
 
         try {
-            OauthUser oauthUser = organizationService.getUserFromRequest(request);
-            if (oauthUser == null) {
+            AuthInformation authInformation = authenticationService.validateRequest(
+                    request,
+                    config.getProperty("header.authorization"),
+                    AuthInformation.LOCATION_HEADER,
+                    AuthInformation.TOKEN_TYPE_JWT);
+            if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(oauthUser.get_id(), id);
+            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), id);
             if (authority == null || !OrganizationRole.ADMIN.equals(authority.getRole())) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
@@ -138,11 +164,15 @@ public class OrganizationRestController {
     public ResponseEntity<Organization> deleteOrganization(HttpServletRequest request, @PathVariable("id") String id) {
 
         try {
-            OauthUser oauthUser = organizationService.getUserFromRequest(request);
-            if (oauthUser == null) {
+            AuthInformation authInformation = authenticationService.validateRequest(
+                    request,
+                    config.getProperty("header.authorization"),
+                    AuthInformation.LOCATION_HEADER,
+                    AuthInformation.TOKEN_TYPE_JWT);
+            if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(oauthUser.get_id(), id);
+            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), id);
             if (authority == null || !OrganizationRole.ADMIN.equals(authority.getRole())) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }

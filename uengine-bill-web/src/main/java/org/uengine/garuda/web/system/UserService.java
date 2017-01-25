@@ -17,8 +17,11 @@
  */
 package org.uengine.garuda.web.system;
 
+import org.opencloudengine.garuda.client.model.OauthClient;
 import org.opencloudengine.garuda.client.model.OauthUser;
+import org.uengine.garuda.authentication.AuthInformation;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -58,6 +61,7 @@ public interface UserService {
 
     OauthUser selectByUserName(String userName);
 
+    OauthClient selectClientById(String id);
 
     /**
      * 사용자가 이메일 확인 대기중일 경우 true

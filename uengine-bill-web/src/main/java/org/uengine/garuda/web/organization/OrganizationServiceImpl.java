@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.uengine.garuda.authentication.AuthInformation;
+import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.killbill.KBRepository;
 import org.uengine.garuda.killbill.KBServiceFactory;
@@ -33,7 +35,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private KBRepository kbRepository;
 
     @Autowired
-    private UserService userService;
+    private AuthenticationService authenticationService;
 
     @Autowired
     private KBServiceFactory killbillServiceFactory;
@@ -243,38 +245,25 @@ public class OrganizationServiceImpl implements OrganizationService {
         OrganizationRole orgRole = new OrganizationRole();
 
         Map<String, String> headers = this.getHeaders(request);
-        String token = headers.get("authorization");
-        String organization_id = headers.get("x-organization-id");
+        String organization_id = headers.get(config.getProperty("header.organization"));
+
+        AuthInformation authInformation = authenticationService.validateRequest(
+                request,
+                config.getProperty("header.authorization"),
+                AuthInformation.LOCATION_HEADER,
+                AuthInformation.TOKEN_TYPE_JWT);
 
         orgRole.setRole(role);
 
         try {
-            //토큰값이 없다면 fail
-            if (StringUtils.isEmpty(token)) {
+            //oauthUser 가 없으면 fail
+            if (authInformation.getOauthUser() == null) {
                 orgRole.setAccept(false);
                 return orgRole;
             } else {
-                orgRole.setToken(token);
+                orgRole.setToken(authInformation.getToken());
             }
 
-            //토큰 정보가 없다면 fail
-            Map tokenInfo = userService.tokenInfo(token);
-            if (tokenInfo == null) {
-                orgRole.setAccept(false);
-                return orgRole;
-            } else {
-                orgRole.setToken(token);
-            }
-
-            //유저 정보를 얻어오지 못하면 fail
-            String user_id = ((Map) tokenInfo.get("context")).get("userId").toString();
-            OauthUser user = userService.selectByUserId(user_id);
-            if (user == null) {
-                orgRole.setAccept(false);
-                return orgRole;
-            } else {
-                orgRole.setOauthUser(user);
-            }
 
             //organization_id 가 없고 ANY 일 경우 success 리턴
             //organization_id 가 없고 그 외의 경우 fail
@@ -297,7 +286,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 orgRole.setOrganization(organization);
             }
 
-            Authority authority = organizationRepository.selectAuthorityByUserIdAndOrganizationId(user_id, organization_id);
+            Authority authority = organizationRepository.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), organization_id);
             //authority 가 없을 경우 fail
             if (authority == null) {
                 orgRole.setAccept(false);
@@ -329,25 +318,5 @@ public class OrganizationServiceImpl implements OrganizationService {
             orgRole.setAccept(false);
             return orgRole;
         }
-    }
-
-    @Override
-    public OauthUser getUserFromRequest(HttpServletRequest request) {
-        Map<String, String> headers = this.getHeaders(request);
-        String token = headers.get("authorization");
-
-        if (StringUtils.isEmpty(token)) {
-            return null;
-        }
-
-        Map tokenInfo = userService.tokenInfo(token);
-        if (tokenInfo == null) {
-            return null;
-        }
-
-        //유저 정보를 얻어오지 못하면 fail
-        String user_id = ((Map) tokenInfo.get("context")).get("userId").toString();
-        OauthUser user = userService.selectByUserId(user_id);
-        return user;
     }
 }
