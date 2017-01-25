@@ -57,6 +57,7 @@ CREATE TABLE organization_email (
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 
+
 DROP TABLE IF EXISTS product;
 CREATE TABLE product (
     id VARCHAR(36) NOT NULL,
@@ -65,6 +66,8 @@ CREATE TABLE product (
     owner_account_id VARCHAR(36),
     description VARCHAR(4096),
     redirect_url varchar(256),
+    organization_id VARCHAR(36),
+    tenant_id VARCHAR(36),
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )
@@ -78,6 +81,8 @@ CREATE TABLE product_version (
     version INT(11) DEFAULT 1 NOT NULL,
     effective_date TIMESTAMP NOT NULL,
     is_active CHAR(1) DEFAULT 'Y',
+    organization_id VARCHAR(36),
+    tenant_id VARCHAR(36),
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )
@@ -93,6 +98,8 @@ CREATE TABLE plan (
     is_onetime CHAR(1) DEFAULT 'Y',
     is_active CHAR(1) DEFAULT 'Y',
     phases LONGTEXT,
+    organization_id VARCHAR(36),
+    tenant_id VARCHAR(36),
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )
@@ -106,6 +113,8 @@ CREATE TABLE subscription_events_ext (
     user_type VARCHAR(25) NOT NULL,
     plan_id VARCHAR(36) NOT NULL,
     account_id VARCHAR(36) NOT NULL,
+    organization_id VARCHAR(36),
+    tenant_id VARCHAR(36),
     account_record_id BIGINT(20),
     tenant_record_id BIGINT(20),
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -119,9 +128,11 @@ CREATE TABLE product_provider (
     id VARCHAR(36) NOT NULL,
     product_id VARCHAR(36) NOT NULL,
     account_id VARCHAR(36) NOT NULL,
+    organization_id VARCHAR(36),
+    tenant_id VARCHAR(36),
     account_record_id BIGINT(20),
     tenant_record_id BIGINT(20),
-    distribution INT(11) DEFAULT 0,
+    distribution DECIMAL(15,9) DEFAULT 0,
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )
@@ -133,12 +144,14 @@ CREATE TABLE product_distribution_history (
     id VARCHAR(36) NOT NULL,
     product_id VARCHAR(36) NOT NULL,
     account_id VARCHAR(36) NOT NULL,
+    organization_id VARCHAR(36),
+    tenant_id VARCHAR(36),
     account_record_id BIGINT(20),
     tenant_record_id BIGINT(20),
-    distribution INT(11) DEFAULT 0,
+    distribution DECIMAL(15,9) DEFAULT 0,
     amount DECIMAL(15,9),
     original_amount DECIMAL(15,9),
-    currenct VARCHAR(3),
+    currency VARCHAR(3),
     invoice_id VARCHAR(36),
     payment_id VARCHAR(36),
     transaction_type VARCHAR(32),
