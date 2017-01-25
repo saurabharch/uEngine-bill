@@ -91,7 +91,7 @@
         <!-- JDBC -->
         <mysql.version>5.1.34</mysql.version>
         <log4jdbc.remix.version>0.2.7</log4jdbc.remix.version>
-        <hikaricp.version>2.3.2</hikaricp.version>
+        <hikaricp.version>2.4.6</hikaricp.version>
 
         <!-- Ehcache -->
         <ehcache.version>2.6.10</ehcache.version>
