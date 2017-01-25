@@ -242,6 +242,14 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    deleteAccount: function (accountId) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/accounts/' + accountId,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
     createAccountCustomFields: function (accountId, data) {
         var options = {
             type: "POST",

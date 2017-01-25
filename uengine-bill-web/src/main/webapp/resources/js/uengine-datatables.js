@@ -8,8 +8,8 @@ var uengineDT = function (panel, gridOptions) {
     this.gridData = null;
 };
 uengineDT.prototype = {
-    getDb: function () {
-        return dt;
+    getDt: function () {
+        return this.dt;
     },
     getPanel: function () {
         return this.panel;

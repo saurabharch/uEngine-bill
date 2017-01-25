@@ -53,6 +53,7 @@
 
 <!-- Data Table -->
 <link href="/resources/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+<link href="/resources/css/plugins/dataTables/select.dataTables.min.css" rel="stylesheet">
 
 <link href="/resources/css/animate.css" rel="stylesheet">
 <link href="/resources/css/style.css" rel="stylesheet">

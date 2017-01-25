@@ -82,21 +82,22 @@
 <script>
     $(document).ready(function () {
         var dt = new uengineDT($('#customer-table'), {
+            select: true,
             columns: [
                 {
                     data: 'name',
                     title: 'NAME',
-                    defaultContent: ''
+                    defaultContent: '',
+                    event: {
+                        click: function (key, value, rowValue, rowIdx, td) {
+                            window.location.href = '/customer/' + rowValue['accountId'] + '/detail';
+                        }
+                    }
                 },
                 {
                     data: 'company',
                     title: 'COMPANY NAME',
-                    defaultContent: '',
-                    event: {
-                        click: function (key, value, rowValue, rowIdx, td) {
-                            console.log(rowValue);
-                        }
-                    }
+                    defaultContent: ''
                 },
                 {
                     data: 'email',
@@ -119,11 +120,28 @@
                     defaultContent: ''
                 }
             ],
-            pageLength: 3,
+            pageLength: 10,
             info: true,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [
+                {
+                    text: 'Delete',
+                    action: function () {
+                        var selected = dt.getDt().rows({selected: true}).data();
+                        for(var i =0; i < selected.length; i++){
+                            var accountId = selected[i]['accountId'];
+                            uBilling.deleteAccount(accountId)
+                                .done(function(){
+                                    toastr.success("Customer deleted.");
+                                    dt.getDt().ajax.reload();
+                                })
+                                .fail(function(){
+                                    toastr.error("Can't remove customer cause by subscription of payment transaction exist");
+                                });
+                        }
+                    }
+                },
                 {extend: 'copy'},
                 {extend: 'csv'},
                 {extend: 'excel', title: 'ExampleFile'},
@@ -163,6 +181,12 @@
             }
         });
         dt.renderGrid();
+        dt.getDt()
+            .on('user-select', function (e, dt, type, cell, originalEvent) {
+                if ($(originalEvent.target).index() === 0) {
+                    e.preventDefault();
+                }
+            });
     });
 </script>
 </body>
