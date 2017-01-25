@@ -82,6 +82,10 @@
 <script>
     $(document).ready(function () {
         var dt = new uengineDT($('#customer-table'), {
+//            싱글 처리 가능
+//            select: {
+//                style: 'single'
+//            },
             select: true,
             columns: [
                 {
@@ -129,16 +133,31 @@
                     text: 'Delete',
                     action: function () {
                         var selected = dt.getDt().rows({selected: true}).data();
-                        for(var i =0; i < selected.length; i++){
+                        for (var i = 0; i < selected.length; i++) {
                             var accountId = selected[i]['accountId'];
                             uBilling.deleteAccount(accountId)
-                                .done(function(){
+                                .done(function () {
                                     toastr.success("Customer deleted.");
                                     dt.getDt().ajax.reload();
                                 })
-                                .fail(function(){
+                                .fail(function () {
                                     toastr.error("Can't remove customer cause by subscription of payment transaction exist");
                                 });
+                        }
+                    }
+                },
+                {
+                    text: 'Edit',
+                    action: function () {
+                        var selected = dt.getDt().rows({selected: true}).data();
+                        if(!selected.length){
+                            return;
+                        }
+                        if(selected.length > 1){
+                            toastr.warning("Choice one customer to edit.");
+                        }else{
+                            var accountId = selected[0]['accountId'];
+                            window.location.href = '/customer/' + accountId + '/edit';
                         }
                     }
                 },
@@ -168,6 +187,9 @@
                 searchKey = searchKey.length > 0 ? searchKey : null;
                 uBilling.getAccountSearch(searchKey, offset, limit)
                     .done(function (response) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            response.data[i].name = '<a>' + response.data[i].name + '</a>'
+                        }
                         dt.gridData = response.data;
                         callback({
                             recordsTotal: response.total,
@@ -186,7 +208,25 @@
                 if ($(originalEvent.target).index() === 0) {
                     e.preventDefault();
                 }
+            })
+            .on('select', function (e, dt, type, indexes) {
+                tableButtonCss();
+            })
+            .on('deselect', function (e, dt, type, indexes) {
+                tableButtonCss();
             });
+        var tableButtonCss = function () {
+            var buttons = dt.getPanel().parent().find('.html5buttons').find('a');
+            var count = dt.getDt().rows({selected: true}).count();
+            if (count > 0) {
+                buttons.eq(0).css('opacity', '1');
+                buttons.eq(1).css('opacity', '1');
+            } else {
+                buttons.eq(0).css('opacity', '0.5');
+                buttons.eq(1).css('opacity', '0.5');
+            }
+        };
+        tableButtonCss();
     });
 </script>
 </body>
