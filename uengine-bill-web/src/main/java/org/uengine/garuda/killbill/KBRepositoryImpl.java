@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.uengine.garuda.common.repository.PersistentRepositoryImpl;
 
+import java.util.Map;
+
 /**
  * @author Seungpil PARK
  */
@@ -40,5 +42,25 @@ public class KBRepositoryImpl extends PersistentRepositoryImpl<String, Object> i
     @Override
     public Long subscriptionCountByTenantId(String id) {
         return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".subscriptionCountByTenantId", id);
+    }
+
+    @Override
+    public Map getAccountById(String id) {
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".getAccountById", id);
+    }
+
+    @Override
+    public int deleteAccountById(String id) {
+        return this.getSqlSessionTemplate().delete(this.getNamespace() + ".deleteAccountById", id);
+    }
+
+    @Override
+    public Long getBundleCountByAccountId(String id) {
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".getBundleCountByAccountRecordId", id);
+    }
+
+    @Override
+    public Long getPaymentCountByAccountId(String id) {
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".getPaymentCountByAccountRecordId", id);
     }
 }

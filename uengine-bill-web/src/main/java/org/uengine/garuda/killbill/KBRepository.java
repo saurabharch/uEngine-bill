@@ -21,6 +21,7 @@ import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 킬빌의 데이터베이스 레파지토리
@@ -32,4 +33,12 @@ public interface KBRepository {
     String NAMESPACE = KBRepository.class.getName();
 
     Long subscriptionCountByTenantId(String id);
+
+    Map getAccountById(String id);
+
+    int deleteAccountById(String id);
+
+    Long getBundleCountByAccountId(String id);
+
+    Long getPaymentCountByAccountId(String id);
 }

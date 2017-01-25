@@ -17,6 +17,7 @@ import javax.servlet.jsp.jstl.core.Config;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by uengine on 2016. 4. 22..
@@ -59,6 +60,16 @@ public class KBRestFilter implements Filter {
             }
         }
 
+
+        //인터셉터가 필요한 레스트 일람
+        int occurance = org.apache.commons.lang.StringUtils.countMatches(requestURI, "/");
+
+        //사용자 삭제
+        if(requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("delete") && occurance == 4){
+            is_proxy = false;
+        }
+
+
         //킬빌 rest uri 일 경우 프락시 통신을 한다.
         if (is_proxy) {
             ApplicationContext context = ApplicationContextRegistry.getApplicationContext();
@@ -95,10 +106,10 @@ public class KBRestFilter implements Filter {
             proxyRequest.setPath(request.getRequestURI().replace("/rest/v1", "/1.0/kb"));
             proxyRequest.setHeaders(requiredHeaders);
 
-            try{
+            try {
                 proxyService.doProxy(proxyRequest);
                 return;
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 response.setStatus(500);
                 return;
             }

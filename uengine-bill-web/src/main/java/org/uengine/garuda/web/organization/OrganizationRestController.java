@@ -161,7 +161,7 @@ public class OrganizationRestController {
     }
 
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Organization> deleteOrganization(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteOrganization(HttpServletRequest request, @PathVariable("id") String id) {
 
         try {
             AuthInformation authInformation = authenticationService.validateRequest(
@@ -280,7 +280,7 @@ public class OrganizationRestController {
     }
 
     @RequestMapping(value = "/organizationEmail/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<OrganizationEmail> deleteOrganizationEmail(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteOrganizationEmail(HttpServletRequest request, @PathVariable("id") String id) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);

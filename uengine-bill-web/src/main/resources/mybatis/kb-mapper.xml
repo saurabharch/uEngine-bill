@@ -11,4 +11,20 @@
         ON B.tenant_record_id = A.record_id;
     </select>
 
+    <select id="getAccountById" parameterType="java.lang.String" resultType="map">
+        SELECT * FROM accounts WHERE id = #{id}
+    </select>
+
+    <delete id="deleteAccountById" parameterType="java.lang.String">
+        DELETE FROM accounts WHERE id = #{id}
+    </delete>
+
+    <select id="getBundleCountByAccountRecordId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT count(*) as count FROM killbill.bundles WHERE account_id = #{account_id};
+    </select>
+
+    <select id="getPaymentCountByAccountRecordId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT count(*) as count FROM killbill.payments WHERE account_id = #{account_id};
+    </select>
+
 </mapper>
