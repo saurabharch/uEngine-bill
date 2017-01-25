@@ -72,7 +72,7 @@ uBilling.prototype = {
         var deferred = $.Deferred();
         var promise = $.ajax({
             type: "GET",
-            url: me.baseUrl + '/rest/v1/token_info?access_token=' + token,
+            url: me.baseUrl + '/rest/v1/token_info?authorization=' + token,
             dataType: "json",
             async: false
         });
