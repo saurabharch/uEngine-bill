@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.rule.BillingRuleRepository">
+
+    <insert id="insertRule" parameterType="org.uengine.garuda.model.BillingRule">
+        INSERT INTO billing_rule (
+        organization_id,
+        tenant_id,
+        rule
+        )
+        VALUES (
+        #{organization_id},
+        #{tenant_id},
+        #{rule}
+        )
+    </insert>
+
+    <update id="updateRule" parameterType="org.uengine.garuda.model.BillingRule">
+        UPDATE billing_rule
+        SET
+        rule = #{rule}
+        WHERE organization_id = #{organization_id}
+    </update>
+
+    <select id="selectRuleByOrgId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.BillingRule">
+        SELECT * FROM billing_rule
+        WHERE organization_id = #{organization_id}
+    </select>
+
+    <delete id="deleteRuleByOrgId" parameterType="java.lang.String">
+        DELETE FROM billing_rule
+        WHERE organization_id = #{organization_id}
+    </delete>
+
+</mapper>

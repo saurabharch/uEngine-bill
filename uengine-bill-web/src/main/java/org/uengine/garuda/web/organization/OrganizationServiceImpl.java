@@ -13,9 +13,12 @@ import org.uengine.garuda.killbill.KBRepository;
 import org.uengine.garuda.killbill.KBServiceFactory;
 import org.uengine.garuda.killbill.api.model.Tenant;
 import org.uengine.garuda.model.Authority;
+import org.uengine.garuda.model.BillingRule;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.garuda.util.JsonUtils;
 import org.uengine.garuda.util.StringUtils;
+import org.uengine.garuda.web.rule.BillingRuleRepository;
 import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +39,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private BillingRuleRepository billingRuleRepository;
 
     @Autowired
     private KBServiceFactory killbillServiceFactory;
@@ -91,6 +97,13 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationEmail.setIs_default("Y");
             organizationRepository.insertOrganizationEmail(organizationEmail);
         }
+
+        //디폴트 결제 규칙을 생성한다.
+        BillingRule billingRule = new BillingRule();
+        billingRule.setOrganization_id(createdOrganization.getId());
+        billingRule.setTenant_id(createdOrganization.getTenant_id());
+        billingRule.setRule(billingRuleRepository.getDefaultBillingRule());
+        billingRuleRepository.insertRule(billingRule);
 
         logger.info("Success to create organization {}", organization.getName());
 

@@ -1,0 +1,47 @@
+{
+  "billingAlignment": [
+    {
+      "productCategory" : "BASE",
+      "billingAlignment": "ACCOUNT"
+    },
+    {
+      "productCategory" : "ADD_ON",
+      "billingAlignment": "BUNDLE"
+    },
+    {
+      "billingAlignment": "ACCOUNT"
+    }
+  ],
+  "createAlignment": [
+    {
+      "planAlignmentCreate": "START_OF_BUNDLE"
+    }
+  ],
+  "cancelPolicy": [
+    {
+      "phaseType": "TRIAL",
+      "billingActionPolicy": "IMMEDIATE"
+    },
+    {
+      "billingActionPolicy": "END_OF_TERM"
+    }
+  ],
+  "changePolicy" : [
+    {
+      "phaseType": "TRIAL",
+      "billingActionPolicy": "IMMEDIATE"
+    },
+    {
+      "billingActionPolicy": "END_OF_TERM"
+    }
+  ],
+  "changeAlignment" : [
+    {
+      "toProductCategory": "ADD_ON",
+      "planAlignmentChange": "START_OF_BUNDLE"
+    },
+    {
+      "planAlignmentChange": "START_OF_SUBSCRIPTION"
+    }
+  ]
+}

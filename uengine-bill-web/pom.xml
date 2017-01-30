@@ -71,6 +71,7 @@
 
     <dependencies>
 
+        <!--uengine-->
         <dependency>
             <groupId>org.uengine.garuda</groupId>
             <artifactId>iam-java-client</artifactId>

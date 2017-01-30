@@ -57,6 +57,17 @@ CREATE TABLE organization_email (
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS billing_rule;
+CREATE TABLE billing_rule (
+    organization_id VARCHAR(36) NOT NULL,
+    tenant_id VARCHAR(36) NOT NULL,
+    rule LONGTEXT DEFAULT NULL,
+    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(organization_id)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS product;
 CREATE TABLE product (
