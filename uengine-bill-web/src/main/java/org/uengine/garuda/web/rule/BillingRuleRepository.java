@@ -37,4 +37,6 @@ public interface BillingRuleRepository {
     int deleteRuleByOrgId(String organization_id);
 
     String getDefaultBillingRule();
+
+    String getDefaultOverdueRule();
 }

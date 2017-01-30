@@ -88,6 +88,10 @@ public class KillbillApi {
         return (TenantApi) this.copyOptions(new TenantApi());
     }
 
+    public OverdueApi overdueApi() {
+        return (OverdueApi) this.copyOptions(new OverdueApi());
+    }
+
     private KillbillApi copyOptions(KillbillApi killbillApi) {
         killbillApi.setHost(host);
         killbillApi.setPort(port);

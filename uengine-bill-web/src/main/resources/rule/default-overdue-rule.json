@@ -1,0 +1,47 @@
+{
+  "initialReevaluationInterval": 0,
+  "overdueStates": [
+    {
+      "name": "OD3",
+      "isClearState": false,
+      "condition": {
+        "timeSinceEarliestUnpaidInvoiceEqualsOrExceeds": {
+          "unit": "DAYS",
+          "number": "50"
+        }
+      },
+      "externalMessage": "Reached OD3",
+      "blockChanges": "true",
+      "disableEntitlement": "true",
+      "autoReevaluationIntervalDays": 5
+    },
+    {
+      "name": "OD2",
+      "isClearState": false,
+      "condition": {
+        "timeSinceEarliestUnpaidInvoiceEqualsOrExceeds": {
+          "unit": "DAYS",
+          "number": "40"
+        }
+      },
+      "externalMessage": "Reached OD2",
+      "blockChanges": "true",
+      "disableEntitlement": "true",
+      "autoReevaluationIntervalDays": 5
+    },
+    {
+      "name": "OD1",
+      "isClearState": false,
+      "condition": {
+        "timeSinceEarliestUnpaidInvoiceEqualsOrExceeds": {
+          "unit": "DAYS",
+          "number": "30"
+        }
+      },
+      "externalMessage": "Reached OD1",
+      "blockChanges": "true",
+      "disableEntitlement": "false",
+      "autoReevaluationIntervalDays": 5
+    }
+  ]
+}

@@ -86,4 +86,16 @@ public class BillingRuleRepositoryImpl extends PersistentRepositoryImpl<String, 
             throw new ServiceException("Failed to read default billing rule");
         }
     }
+
+    @Override
+    public String getDefaultOverdueRule() {
+        try {
+            URL url = getClass().getResource("/rule/default-overdue-rule.json");
+            File ruleFile = ResourceUtils.getFile(url);
+            String json = new String(Files.readAllBytes(ruleFile.toPath()));
+            return json;
+        } catch (IOException e) {
+            throw new ServiceException("Failed to read default billing rule");
+        }
+    }
 }
