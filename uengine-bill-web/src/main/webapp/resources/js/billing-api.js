@@ -314,6 +314,24 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getRetry: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/retry',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    uploadRetry: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/retry',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();
