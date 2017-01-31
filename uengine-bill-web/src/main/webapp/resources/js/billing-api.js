@@ -296,6 +296,24 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getOverdueRule: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/overdue',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    uploadOverdueRule: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/overdue',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();
