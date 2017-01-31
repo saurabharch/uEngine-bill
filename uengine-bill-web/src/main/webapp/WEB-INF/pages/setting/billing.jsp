@@ -38,7 +38,7 @@
                         <h5>Billing Settings</h5>
                     </div>
                     <div class="ibox-content">
-                        <form method="get" class="form-horizontal" id="billing-rule-form">
+                        <form method="get" class="form-horizontal" id="billing-rule-form" novalidate>
 
                             <div id="box-before"></div>
 
@@ -379,18 +379,22 @@
                 var caseType = caseDivBox.data('caseType');
                 var actionKey = caseMap.rules[caseType].action;
                 var actionValue = caseDivBox.find('[name=action]').val();
-                caseDivBox.find('.condition-template').each(function () {
-                    var conditionBox = $(this);
-                    var conditionKey = conditionBox.find('[name=condition-key]').val();
-                    var conditionValue = conditionBox.find('[name=condition-value]').val();
-                    caseData[conditionKey] = conditionValue;
-                });
-                caseData[actionKey] = actionValue;
+                if(actionValue){
+                    caseDivBox.find('.condition-template').each(function () {
+                        var conditionBox = $(this);
+                        var conditionKey = conditionBox.find('[name=condition-key]').val();
+                        var conditionValue = conditionBox.find('[name=condition-value]').val();
+                        if(conditionKey && conditionValue){
+                            caseData[conditionKey] = conditionValue;
+                        }
+                    });
+                    caseData[actionKey] = actionValue;
 
-                if (!data[caseType]) {
-                    data[caseType] = [];
+                    if (!data[caseType]) {
+                        data[caseType] = [];
+                    }
+                    data[caseType].push(caseData);
                 }
-                data[caseType].push(caseData);
             });
 
             uBilling.uploadBillingRule(data)
