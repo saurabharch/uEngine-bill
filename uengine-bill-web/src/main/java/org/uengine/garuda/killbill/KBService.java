@@ -8,7 +8,11 @@ import org.uengine.garuda.web.organization.OrganizationRole;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 public interface KBService {
 
+    void uploadRetry(String apiKey, String apiSecret, String retryJson);
+
+    Map getRetry(String apiKey, String apiSecret);
 }

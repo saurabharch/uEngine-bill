@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.uengine.garuda.authentication.AuthInformation;
 import org.uengine.garuda.authentication.AuthenticationService;
+import org.uengine.garuda.killbill.KBService;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.BillingRule;
 import org.uengine.garuda.model.Organization;
@@ -44,6 +45,9 @@ public class BillingRuleRestController {
 
     @Autowired
     private BillingRuleRepository billingRuleRepository;
+
+    @Autowired
+    private KBService kbService;
 
     @Autowired
     AuthenticationService authenticationService;
@@ -82,6 +86,46 @@ public class BillingRuleRestController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/rest/v1/rule").buildAndExpand().toUri());
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/retry", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Map> getRetry(HttpServletRequest request) {
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            Map retry = kbService.getRetry(role.getOrganization().getTenant_api_key(),
+                    role.getOrganization().getTenant_api_secret());
+
+            return new ResponseEntity<>(retry, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/retry", method = RequestMethod.POST)
+    public ResponseEntity<Void> uploadRetry(HttpServletRequest request, @RequestBody Map map, UriComponentsBuilder ucBuilder) {
+
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            kbService.uploadRetry(role.getOrganization().getTenant_api_key(),
+                    role.getOrganization().getTenant_api_secret(),
+                    JsonUtils.marshal(map));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/rest/v1/retry").buildAndExpand().toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
             ex.printStackTrace();

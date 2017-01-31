@@ -98,4 +98,16 @@ public class BillingRuleRepositoryImpl extends PersistentRepositoryImpl<String, 
             throw new ServiceException("Failed to read default billing rule");
         }
     }
+
+    @Override
+    public String getDefaultRetryRule() {
+        try {
+            URL url = getClass().getResource("/rule/default-retry-rule.json");
+            File ruleFile = ResourceUtils.getFile(url);
+            String json = new String(Files.readAllBytes(ruleFile.toPath()));
+            return json;
+        } catch (IOException e) {
+            throw new ServiceException("Failed to read default retry rule");
+        }
+    }
 }

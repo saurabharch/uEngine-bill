@@ -17,9 +17,6 @@
 package org.uengine.garuda.web.rule;
 
 import org.uengine.garuda.model.BillingRule;
-import org.uengine.garuda.model.Product;
-
-import java.util.Map;
 
 /**
  * @author Seungpil PARK
@@ -39,4 +36,6 @@ public interface BillingRuleRepository {
     String getDefaultBillingRule();
 
     String getDefaultOverdueRule();
+
+    String getDefaultRetryRule();
 }

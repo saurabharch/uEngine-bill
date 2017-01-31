@@ -13,6 +13,7 @@ import sun.misc.BASE64Encoder;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,6 +68,44 @@ public class TenantApi extends KillbillApi {
             }
         } catch (IOException ex) {
             throw new ServiceException("Failed to get tenant", ex);
+        }
+    }
+
+    public void uploadPerTenantConfig(String configJson) {
+        String method = "POST";
+        String path = "/1.0/kb/tenants/uploadPerTenantConfig";
+
+        try {
+            Map headers = new HashMap();
+            headers.put("Content-Type", "text/plain");
+            HttpResponse httpResponse = this.apiRequest(method, path, configJson, headers);
+            if (httpResponse.getStatusLine().getStatusCode() != 201) {
+                logger.error("Failed to upload uploadPerTenantConfig {}", configJson);
+                throw new ServiceException("Failed to upload uploadPerTenantConfig");
+            }
+
+        } catch (IOException ex) {
+            throw new ServiceException("Failed to upload uploadPerTenantConfig", ex);
+        }
+    }
+
+    public List<Map> searchPerTenantConfig(String searchKey) {
+        String method = "GET";
+        String path = "/1.0/kb/tenants/uploadPerTenantConfig/" + searchKey + "/search";
+
+        try {
+            Map headers = new HashMap();
+            HttpResponse httpResponse = this.apiRequest(method, path, null, headers);
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                String s = EntityUtils.toString(httpResponse.getEntity());
+                return JsonUtils.unmarshalToList(s);
+            } else {
+                logger.error("Failed to get searchPerTenantConfig {}", searchKey);
+                throw new ServiceException("Failed to get searchPerTenantConfig");
+            }
+
+        } catch (IOException ex) {
+            throw new ServiceException("Failed to get searchPerTenantConfig", ex);
         }
     }
 }

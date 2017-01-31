@@ -10,7 +10,9 @@ import org.uengine.garuda.authentication.AuthInformation;
 import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.killbill.KBRepository;
+import org.uengine.garuda.killbill.KBService;
 import org.uengine.garuda.killbill.KBServiceFactory;
+import org.uengine.garuda.killbill.KBServiceImpl;
 import org.uengine.garuda.killbill.api.model.Tenant;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.BillingRule;
@@ -45,6 +47,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     private KBServiceFactory killbillServiceFactory;
+
+    @Autowired
+    private KBService kbService;
 
     private Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
@@ -106,8 +111,12 @@ public class OrganizationServiceImpl implements OrganizationService {
         billingRuleRepository.insertRule(billingRule);
 
         //디폴트 overdue 규칙을 생성한다.
-        killbillServiceFactory.apiClient(createdOrganization.getTenant_api_key(),createdOrganization.getTenant_api_secret())
+        killbillServiceFactory.apiClient(createdOrganization.getTenant_api_key(), createdOrganization.getTenant_api_secret())
                 .overdueApi().createOverdue(billingRuleRepository.getDefaultOverdueRule());
+
+        //디폴트 retry 규칙을 생성한다.
+        kbService.uploadRetry(createdOrganization.getTenant_api_key(), createdOrganization.getTenant_api_secret(),
+                billingRuleRepository.getDefaultRetryRule());
 
         logger.info("Success to create organization {}", organization.getName());
 
