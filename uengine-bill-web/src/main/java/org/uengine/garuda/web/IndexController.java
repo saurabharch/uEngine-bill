@@ -172,6 +172,18 @@ public class IndexController {
         return new ModelAndView("/setting/preference");
     }
 
+    @RequestMapping(value = "setting/billing", method = RequestMethod.GET)
+    public ModelAndView billing(HttpSession session, final Locale locale) {
+        session.setAttribute("lang", locale.toString());
+
+        return new ModelAndView("/setting/billing");
+    }
+    @RequestMapping(value = "setting/overdue", method = RequestMethod.GET)
+    public ModelAndView overdue(HttpSession session, final Locale locale) {
+        session.setAttribute("lang", locale.toString());
+
+        return new ModelAndView("/setting/overdue");
+    }
     @RequestMapping(value = "setting/retry", method = RequestMethod.GET)
     public ModelAndView retry(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());

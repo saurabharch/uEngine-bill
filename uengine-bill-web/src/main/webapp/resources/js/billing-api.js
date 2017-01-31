@@ -278,6 +278,14 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getBillingRule: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/rule',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();

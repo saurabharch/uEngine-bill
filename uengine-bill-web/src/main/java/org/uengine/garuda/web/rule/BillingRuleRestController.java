@@ -53,7 +53,7 @@ public class BillingRuleRestController {
     AuthenticationService authenticationService;
 
     @RequestMapping(value = "/rule", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getOrganizationEmails(HttpServletRequest request) {
+    public ResponseEntity<Map> getRule(HttpServletRequest request) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -70,8 +70,24 @@ public class BillingRuleRestController {
         }
     }
 
+    @RequestMapping(value = "/rule/default", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Map> getDefaultRule(HttpServletRequest request) {
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            Map map = JsonUtils.marshal(billingRuleRepository.getDefaultBillingRule());
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(value = "/rule", method = RequestMethod.POST)
-    public ResponseEntity<Void> createOrganizationEmails(HttpServletRequest request, @RequestBody Map map, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> uploadRule(HttpServletRequest request, @RequestBody Map map, UriComponentsBuilder ucBuilder) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);

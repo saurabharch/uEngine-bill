@@ -44,6 +44,8 @@
                     <li name="list-menu-setting-organization"><a href="/setting/organization">Organization Profile</a></li>
                     <li name="list-menu-setting-user"><a href="/setting/user">Users</a></li>
                     <li name="list-menu-setting-preference"><a href="/setting/preference">Preferences</a></li>
+                    <li name="list-menu-setting-billing"><a href="/setting/billing">Billing Settings</a></li>
+                    <li name="list-menu-setting-overdue"><a href="/setting/overdue">Overdue Settings</a></li>
                     <li name="list-menu-setting-retry"><a href="/setting/retry">Retry Settings</a></li>
                     <li name="list-menu-setting-currencie"><a href="/setting/currencie">Currencies</a></li>
                     <li name="list-menu-setting-template"><a href="/setting/template">Templates</a></li>
