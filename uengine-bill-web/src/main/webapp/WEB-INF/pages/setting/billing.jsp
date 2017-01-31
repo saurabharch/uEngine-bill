@@ -276,9 +276,9 @@
                 caseBox.find('select').append('<option value="' + options[i] + '">' + options[i] + '</option>');
             }
 
-            if(ruleBoxDiv.find('.case-default-template').length > 0){
+            if (ruleBoxDiv.find('.case-default-template').length > 0) {
                 ruleBoxDiv.find('.case-default-template').before(caseBox);
-            }else{
+            } else {
                 ruleBoxDiv.find('[name=case-before]').before(caseBox);
             }
             caseBox.find('select').val(caseActionValue);
@@ -286,7 +286,7 @@
             caseBox.find('[name=add-condition]').click(function () {
                 drawCondition(caseBox, ruleType, null, null);
             });
-            caseBox.find('[name=case-delete]').click(function(){
+            caseBox.find('[name=case-delete]').click(function () {
                 if (ruleBoxDiv.find('.case-template').length < 2) {
                     toastr.warning('At least one more case required');
                 } else {
@@ -364,7 +364,6 @@
 
         uBilling.getBillingRule()
             .done(function (rule) {
-                console.log(rule);
                 drawRules(rule);
             })
             .fail(function () {
@@ -373,7 +372,38 @@
 
         form.submit(function (event) {
             event.preventDefault();
+            var data = {};
+            $('.case-template').each(function () {
+                var caseData = {};
+                var caseDivBox = $(this);
+                var caseType = caseDivBox.data('caseType');
+                var actionKey = caseMap.rules[caseType].action;
+                var actionValue = caseDivBox.find('[name=action]').val();
+                caseDivBox.find('.condition-template').each(function () {
+                    var conditionBox = $(this);
+                    var conditionKey = conditionBox.find('[name=condition-key]').val();
+                    var conditionValue = conditionBox.find('[name=condition-value]').val();
+                    caseData[conditionKey] = conditionValue;
+                });
+                caseData[actionKey] = actionValue;
 
+                if (!data[caseType]) {
+                    data[caseType] = [];
+                }
+                data[caseType].push(caseData);
+            });
+
+            uBilling.uploadBillingRule(data)
+                .done(function () {
+                    toastr.success("Billing rule updated.")
+                })
+                .fail(function (response) {
+                    //실패
+                    toastr.error("Failed to update billing rule.")
+                })
+                .always(function () {
+                    blockStop();
+                })
         });
     });
 </script>

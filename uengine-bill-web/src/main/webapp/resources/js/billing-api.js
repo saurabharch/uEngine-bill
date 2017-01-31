@@ -286,6 +286,16 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    uploadBillingRule: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/rule',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();
