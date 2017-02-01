@@ -71,7 +71,8 @@ CREATE TABLE billing_rule (
 
 DROP TABLE IF EXISTS product;
 CREATE TABLE product (
-    id VARCHAR(36) NOT NULL,
+    record_id INT(11) NOT NULL AUTO_INCREMENT,
+    id VARCHAR(36),
     name VARCHAR(256) NOT NULL,
     category VARCHAR(12) DEFAULT 'BASE',
     owner_account_id VARCHAR(36),
@@ -80,7 +81,7 @@ CREATE TABLE product (
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id)
+    PRIMARY KEY(record_id)
 )
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
@@ -94,28 +95,13 @@ CREATE TABLE product_version (
     is_active CHAR(1) DEFAULT 'Y',
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
+    plans LONGTEXT,
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS plan;
-CREATE TABLE plan (
-    id VARCHAR(36) NOT NULL,
-    product_id VARCHAR(36) NOT NULL,
-    version INT(11) DEFAULT 1 NOT NULL,
-    name VARCHAR(36),
-    is_onetime CHAR(1) DEFAULT 'Y',
-    is_active CHAR(1) DEFAULT 'Y',
-    phases LONGTEXT,
-    organization_id VARCHAR(36),
-    tenant_id VARCHAR(36),
-    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id)
-)
-  ENGINE=InnoDB
-  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS subscription_events_ext;
 CREATE TABLE subscription_events_ext (
@@ -123,6 +109,8 @@ CREATE TABLE subscription_events_ext (
     event_type VARCHAR(15) NOT NULL,
     user_type VARCHAR(25) NOT NULL,
     plan_id VARCHAR(36) NOT NULL,
+    product_id VARCHAR(36) NOT NULL,
+    version INT(11) DEFAULT 1 NOT NULL,
     account_id VARCHAR(36) NOT NULL,
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
@@ -153,7 +141,10 @@ CREATE TABLE product_provider (
 DROP TABLE IF EXISTS product_distribution_history;
 CREATE TABLE product_distribution_history (
     id VARCHAR(36) NOT NULL,
+    plan_id VARCHAR(36) NOT NULL,
     product_id VARCHAR(36) NOT NULL,
+    version INT(11) DEFAULT 1 NOT NULL,
+    usage_id VARCHAR(36) NOT NULL,
     account_id VARCHAR(36) NOT NULL,
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),

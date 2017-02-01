@@ -11,6 +11,8 @@ public class SubscriptionEventsExt {
     private String event_type;
     private String user_type;
     private String plan_id;
+    private String product_id;
+    private Long version;
     private String account_id;
     private String organization_id;
     private String tenant_id;
@@ -48,6 +50,22 @@ public class SubscriptionEventsExt {
 
     public void setPlan_id(String plan_id) {
         this.plan_id = plan_id;
+    }
+
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getAccount_id() {

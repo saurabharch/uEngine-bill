@@ -30,13 +30,15 @@ public interface ProductRepository {
 
     String NAMESPACE = ProductRepository.class.getName();
 
-    Product selectProductByCondition(String searchKey, Long offset, Long limit);
+    List<Product> selectProductByCondition(String searchKey, Long offset, Long limit);
 
     Product selectProductById(String id);
 
     Product insertProduct(Product product);
 
-    Product updateProduct(Product product);
+    Product updateProductById(Product product);
+
+    int updateProductId(Long record_id, String id);
 
     int deleteProductById(String id);
 }

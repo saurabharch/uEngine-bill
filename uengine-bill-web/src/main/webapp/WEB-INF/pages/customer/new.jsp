@@ -273,6 +273,8 @@
                 .fail(function () {
                     toastr.error("Not found customer.");
                 });
+        }else{
+            $('.chosen-select').chosen({width: "100%"});
         }
 
         var addCustomField = function (key, value) {

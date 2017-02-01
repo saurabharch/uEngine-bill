@@ -8,7 +8,10 @@ import java.sql.Date;
  */
 public class ProductDistributionHistory {
     private String id;
+    private String plan_id;
     private String product_id;
+    private Long version;
+    private String usage_id;
     private String account_id;
     private String organization_id;
     private String tenant_id;
@@ -31,12 +34,36 @@ public class ProductDistributionHistory {
         this.id = id;
     }
 
+    public String getPlan_id() {
+        return plan_id;
+    }
+
+    public void setPlan_id(String plan_id) {
+        this.plan_id = plan_id;
+    }
+
     public String getProduct_id() {
         return product_id;
     }
 
     public void setProduct_id(String product_id) {
         this.product_id = product_id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public String getUsage_id() {
+        return usage_id;
+    }
+
+    public void setUsage_id(String usage_id) {
+        this.usage_id = usage_id;
     }
 
     public String getAccount_id() {

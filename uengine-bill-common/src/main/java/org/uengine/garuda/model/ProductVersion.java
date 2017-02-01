@@ -14,6 +14,7 @@ public class ProductVersion {
     private String is_active;
     private String organization_id;
     private String tenant_id;
+    private String plans;
     private Date reg_dt;
 
     public String getId() {
@@ -70,6 +71,14 @@ public class ProductVersion {
 
     public void setTenant_id(String tenant_id) {
         this.tenant_id = tenant_id;
+    }
+
+    public String getPlans() {
+        return plans;
+    }
+
+    public void setPlans(String plans) {
+        this.plans = plans;
     }
 
     public Date getReg_dt() {

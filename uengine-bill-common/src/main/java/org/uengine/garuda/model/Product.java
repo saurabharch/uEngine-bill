@@ -7,6 +7,7 @@ import java.sql.Date;
  */
 public class Product {
 
+    private Long record_id;
     private String id;
     private String name;
     private String category;
@@ -16,6 +17,14 @@ public class Product {
     private String organization_id;
     private String tenant_id;
     private Date reg_dt;
+
+    public Long getRecord_id() {
+        return record_id;
+    }
+
+    public void setRecord_id(Long record_id) {
+        this.record_id = record_id;
+    }
 
     public String getId() {
         return id;
