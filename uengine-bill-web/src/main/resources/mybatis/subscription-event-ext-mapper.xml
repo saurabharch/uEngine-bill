@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.product.event.SubscriptionEventRepository">
+    <insert id="insert" parameterType="org.uengine.garuda.model.SubscriptionEventsExt"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO subscription_events_ext (
+        id,
+        event_type,
+        user_type,
+        plan_id,
+        product_id,
+        version,
+        account_id,
+        organization_id,
+        tenant_id,
+        account_record_id,
+        tenant_record_id
+        )
+        VALUES (
+        #{id},
+        #{event_type},
+        #{user_type},
+        #{plan_id},
+        #{product_id},
+        #{version},
+        #{account_id},
+        #{organization_id},
+        #{tenant_id},
+        #{account_record_id},
+        #{tenant_record_id}
+        )
+    </insert>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="org.uengine.garuda.model.SubscriptionEventsExt">
+        SELECT * FROM subscription_events_ext
+        WHERE id = #{id}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM subscription_events_ext
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectPlanCountByProductVersion" parameterType="map" resultType="map">
+        SELECT count(*) as count, B.plan_id from
+        (
+        SELECT plan_id,product_id,version,subscription_id from
+        (SELECT * from subscription_events_ext
+        WHERE organization_id = #{organization_id}
+        AND subscription_id is not null
+        AND (user_type = 'CHANGE' OR user_type = 'CREATE')
+        ORDER BY id DESC) A
+        GROUP BY A.subscription_id
+        )B
+        WHERE B.product_id = #{product_id}
+        AND B.version = #{version}
+        GROUP BY B.plan_id;
+    </select>
+</mapper>

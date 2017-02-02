@@ -106,17 +106,18 @@ CREATE TABLE product_version (
 
 DROP TABLE IF EXISTS subscription_events_ext;
 CREATE TABLE subscription_events_ext (
-    id VARCHAR(36) NOT NULL,
-    event_type VARCHAR(15) NOT NULL,
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    subscription_id VARCHAR(36) NOT NULL,
+    event_type VARCHAR(15),
     user_type VARCHAR(25) NOT NULL,
     plan_id VARCHAR(36) NOT NULL,
     product_id VARCHAR(36) NOT NULL,
     version INT(11) DEFAULT 1 NOT NULL,
     account_id VARCHAR(36) NOT NULL,
-    organization_id VARCHAR(36),
-    tenant_id VARCHAR(36),
-    account_record_id BIGINT(20),
-    tenant_record_id BIGINT(20),
+    organization_id VARCHAR(36) NOT NULL,
+    tenant_id VARCHAR(36) NOT NULL,
+    account_record_id BIGINT(20) NOT NULL,
+    tenant_record_id BIGINT(20) NOT NULL,
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 )

@@ -7,7 +7,7 @@ import java.sql.Date;
  */
 public class SubscriptionEventsExt {
 
-    private String id;
+    private Long id;
     private String event_type;
     private String user_type;
     private String plan_id;
@@ -20,11 +20,11 @@ public class SubscriptionEventsExt {
     private Long tenant_record_id;
     private Date reg_dt;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
