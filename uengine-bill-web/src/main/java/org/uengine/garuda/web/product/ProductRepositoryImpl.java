@@ -48,32 +48,47 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
     }
 
     @Override
-    public List<Product> selectProductByCondition(String searchKey, Long offset, Long limit) {
+    public Map selectProductByCondition(String organization_id, String searchKey, Long offset, Long limit) {
         Map map = new HashMap();
         map.put("searchKey", searchKey);
         map.put("offset", offset);
         map.put("limit", limit);
-        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectProductByCondition", map);
+        map.put("organization_id", organization_id);
+        List<Product> list = this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectProductByCondition", map);
+
+        Long total = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductByConditionCount", map);
+        Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductCount", map);
+
+        Map result = new HashMap();
+        result.put("list",list);
+        result.put("total",total + "");
+        result.put("max",max + "");
+        result.put("offset",offset + "");
+        return result;
     }
 
     @Override
-    public Product selectProductById(String id) {
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductById", id);
+    public Product selectProductById(String organization_id, String id) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("id", id);
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductById", map);
     }
 
     @Override
     public Product insertProduct(Product product) {
-        int record_id = this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertProduct", product);
-        String id = String.format("%010d", record_id);
-        this.updateProductId(Long.parseLong("" + record_id), id);
+        this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertProduct", product);
+        Long record_id = product.getRecord_id();
+        String id = "PRD-" + String.format("%010d", record_id);
 
-        return this.selectProductById(id);
+        this.updateProductId(record_id, id);
+        return this.selectProductById(product.getOrganization_id(), id);
     }
 
     @Override
     public Product updateProductById(Product product) {
         this.getSqlSessionTemplate().update(this.getNamespace() + ".updateProductById", product);
-        return this.selectProductById(product.getId());
+        return this.selectProductById(product.getOrganization_id(), product.getId());
     }
 
     @Override
@@ -85,7 +100,10 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
     }
 
     @Override
-    public int deleteProductById(String id) {
-        return this.getSqlSessionTemplate().delete(this.getNamespace() + ".deleteProductById", id);
+    public int deleteProductById(String organization_id, String id) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("id", id);
+        return this.getSqlSessionTemplate().delete(this.getNamespace() + ".deleteProductById", map);
     }
 }

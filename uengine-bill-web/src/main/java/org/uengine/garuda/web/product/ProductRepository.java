@@ -22,6 +22,7 @@ import org.uengine.garuda.model.OrganizationEmail;
 import org.uengine.garuda.model.Product;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Seungpil PARK
@@ -30,9 +31,9 @@ public interface ProductRepository {
 
     String NAMESPACE = ProductRepository.class.getName();
 
-    List<Product> selectProductByCondition(String searchKey, Long offset, Long limit);
+    Map selectProductByCondition(String organization_id, String searchKey, Long offset, Long limit);
 
-    Product selectProductById(String id);
+    Product selectProductById(String organization_id, String id);
 
     Product insertProduct(Product product);
 
@@ -40,5 +41,5 @@ public interface ProductRepository {
 
     int updateProductId(Long record_id, String id);
 
-    int deleteProductById(String id);
+    int deleteProductById(String organization_id, String id);
 }

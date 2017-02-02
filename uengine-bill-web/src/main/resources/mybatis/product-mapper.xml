@@ -3,7 +3,8 @@
 
 <mapper namespace="org.uengine.garuda.web.product.ProductRepository">
 
-    <insert id="insertProduct" parameterType="org.uengine.garuda.model.Product" useGeneratedKeys="true" keyProperty="record_id" keyColumn="record_id">
+    <insert id="insertProduct" parameterType="org.uengine.garuda.model.Product"
+            useGeneratedKeys="true" keyProperty="record_id" keyColumn="record_id">
         INSERT INTO product (
         name,
         category,
@@ -32,6 +33,7 @@
         description = #{description},
         redirect_url = #{redirect_url}
         WHERE id = #{id}
+        AND organization_id = #{organization_id}
     </update>
 
     <update id="updateProductId" parameterType="map">
@@ -44,23 +46,45 @@
     <select id="selectProductByCondition" parameterType="map" resultType="org.uengine.garuda.model.Product">
         SELECT * FROM product
         WHERE 1=1
+        AND organization_id = #{organization_id}
         <if test="searchKey != '' and searchKey != null">
             AND (
             name LIKE CONCAT('%',#{searchKey},'%') OR
             category LIKE CONCAT('%',#{searchKey},'%') OR
-            redirect_url LIKE CONCAT('%',#{searchKey},'%') OR
+            redirect_url LIKE CONCAT('%',#{searchKey},'%')
             )
         </if>
         LIMIT #{offset},#{limit}
     </select>
 
-    <select id="selectProductById" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Product">
-        SELECT * FROM product
-        WHERE id = #{id}
+    <select id="selectProductByConditionCount" parameterType="map" resultType="java.lang.Long">
+        SELECT count(*) AS count FROM product
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="searchKey != '' and searchKey != null">
+            AND (
+            name LIKE CONCAT('%',#{searchKey},'%') OR
+            category LIKE CONCAT('%',#{searchKey},'%') OR
+            redirect_url LIKE CONCAT('%',#{searchKey},'%')
+            )
+        </if>
     </select>
 
-    <delete id="deleteProductById" parameterType="java.lang.String">
+    <select id="selectProductCount" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT count(*) AS count FROM product
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+    </select>
+
+    <select id="selectProductById" parameterType="map" resultType="org.uengine.garuda.model.Product">
+        SELECT * FROM product
+        WHERE id = #{id}
+        AND organization_id = #{organization_id}
+    </select>
+
+    <delete id="deleteProductById" parameterType="map">
         DELETE FROM product
         WHERE id = #{id}
+        AND organization_id = #{organization_id}
     </delete>
 </mapper>
