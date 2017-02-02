@@ -11,7 +11,7 @@ public class ProductVersion {
     private String product_id;
     private Long version;
     private Date effective_date;
-    private String is_active;
+    private String is_current;
     private String organization_id;
     private String tenant_id;
     private String plans;
@@ -49,12 +49,12 @@ public class ProductVersion {
         this.effective_date = effective_date;
     }
 
-    public String getIs_active() {
-        return is_active;
+    public String getIs_current() {
+        return is_current;
     }
 
-    public void setIs_active(String is_active) {
-        this.is_active = is_active;
+    public void setIs_current(String is_current) {
+        this.is_current = is_current;
     }
 
     public String getOrganization_id() {

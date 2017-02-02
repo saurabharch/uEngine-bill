@@ -48,22 +48,23 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
     }
 
     @Override
-    public Map selectProductByCondition(String organization_id, String searchKey, Long offset, Long limit) {
+    public Map selectProductByCondition(String organization_id, String is_active, String searchKey, Long offset, Long limit) {
         Map map = new HashMap();
         map.put("searchKey", searchKey);
         map.put("offset", offset);
         map.put("limit", limit);
         map.put("organization_id", organization_id);
+        map.put("is_active", is_active);
         List<Product> list = this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectProductByCondition", map);
 
         Long total = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductByConditionCount", map);
         Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductCount", map);
 
         Map result = new HashMap();
-        result.put("list",list);
-        result.put("total",total + "");
-        result.put("max",max + "");
-        result.put("offset",offset + "");
+        result.put("list", list);
+        result.put("total", total + "");
+        result.put("max", max + "");
+        result.put("offset", offset + "");
         return result;
     }
 
@@ -97,6 +98,16 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
         map.put("record_id", record_id);
         map.put("id", id);
         return this.getSqlSessionTemplate().update(this.getNamespace() + ".updateProductId", map);
+    }
+
+    @Override
+    public Product updateProductActiveById(String organization_id, String id, String is_active) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("id", id);
+        map.put("is_active", is_active);
+        this.getSqlSessionTemplate().update(this.getNamespace() + ".updateProductActiveById", map);
+        return this.selectProductById(organization_id, id);
     }
 
     @Override

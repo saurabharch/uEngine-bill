@@ -36,6 +36,14 @@
         AND organization_id = #{organization_id}
     </update>
 
+    <update id="updateProductActiveById" parameterType="map">
+        UPDATE product
+        SET
+        is_active = #{is_active}
+        WHERE id = #{id}
+        AND organization_id = #{organization_id}
+    </update>
+
     <update id="updateProductId" parameterType="map">
         UPDATE product
         SET
@@ -54,6 +62,9 @@
             redirect_url LIKE CONCAT('%',#{searchKey},'%')
             )
         </if>
+        <if test="is_active != '' and is_active != null">
+            AND is_active = #{is_active}
+        </if>
         LIMIT #{offset},#{limit}
     </select>
 
@@ -67,6 +78,9 @@
             category LIKE CONCAT('%',#{searchKey},'%') OR
             redirect_url LIKE CONCAT('%',#{searchKey},'%')
             )
+        </if>
+        <if test="is_active != '' and is_active != null">
+            AND is_active = #{is_active}
         </if>
     </select>
 

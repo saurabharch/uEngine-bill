@@ -80,6 +80,7 @@ CREATE TABLE product (
     redirect_url varchar(256),
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
+    is_active CHAR(1) DEFAULT 'Y',
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(record_id)
 )
@@ -92,7 +93,7 @@ CREATE TABLE product_version (
     product_id VARCHAR(36) NOT NULL,
     version INT(11) DEFAULT 1 NOT NULL,
     effective_date TIMESTAMP NOT NULL,
-    is_active CHAR(1) DEFAULT 'Y',
+    is_current CHAR(1) DEFAULT 'Y',
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
     plans LONGTEXT,

@@ -31,13 +31,15 @@ public interface ProductRepository {
 
     String NAMESPACE = ProductRepository.class.getName();
 
-    Map selectProductByCondition(String organization_id, String searchKey, Long offset, Long limit);
+    Map selectProductByCondition(String organization_id, String is_active, String searchKey, Long offset, Long limit);
 
     Product selectProductById(String organization_id, String id);
 
     Product insertProduct(Product product);
 
     Product updateProductById(Product product);
+
+    Product updateProductActiveById(String organization_id, String id, String is_active);
 
     int updateProductId(Long record_id, String id);
 

@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface ProductService {
 
-    Map selectProductByCondition(String organization_id, String searchKey, Long offset, Long limit);
+    Map selectProductByCondition(String organization_id, String is_active,String searchKey,Long offset, Long limit);
 
     Product selectProductById(String organization_id, String id);
 
@@ -23,4 +23,5 @@ public interface ProductService {
 
     int deleteProductById(String organization_id, String id);
 
+    Product updateProductActiveById(Product product, String is_active);
 }

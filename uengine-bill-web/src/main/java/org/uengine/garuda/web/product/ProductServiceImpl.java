@@ -37,8 +37,8 @@ public class ProductServiceImpl implements ProductService {
     private Logger logger = LoggerFactory.getLogger(ProductRepository.class);
 
     @Override
-    public Map selectProductByCondition(String organization_id, String searchKey, Long offset, Long limit) {
-        return productRepository.selectProductByCondition(organization_id, searchKey, offset, limit);
+    public Map selectProductByCondition(String organization_id, String is_active, String searchKey, Long offset, Long limit) {
+        return productRepository.selectProductByCondition(organization_id, is_active, searchKey, offset, limit);
     }
 
     @Override
@@ -50,8 +50,8 @@ public class ProductServiceImpl implements ProductService {
     public Product insertProduct(Organization organization, Product product) {
         product.setOrganization_id(organization.getId());
         product.setTenant_id(organization.getTenant_id());
-        if(!ProductCategory.ADD_ON.toString().equals(product.getCategory()) &&
-                !ProductCategory.BASE.toString().equals(product.getCategory())){
+        if (!ProductCategory.ADD_ON.toString().equals(product.getCategory()) &&
+                !ProductCategory.BASE.toString().equals(product.getCategory())) {
             product.setCategory(ProductCategory.BASE.toString());
         }
         return productRepository.insertProduct(product);
@@ -68,5 +68,10 @@ public class ProductServiceImpl implements ProductService {
         //TODO 프로덕트 관련 서브스크립션이 있다면 삭제 불가.
 
         return productRepository.deleteProductById(organization_id, id);
+    }
+
+    @Override
+    public Product updateProductActiveById(Product product, String is_active) {
+        return productRepository.updateProductActiveById(product.getOrganization_id(), product.getId(), is_active);
     }
 }

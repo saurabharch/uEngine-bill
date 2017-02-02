@@ -16,6 +16,7 @@ public class Product {
     private String redirect_url;
     private String organization_id;
     private String tenant_id;
+    private String is_active;
     private Date reg_dt;
 
     public Long getRecord_id() {
@@ -88,6 +89,14 @@ public class Product {
 
     public void setTenant_id(String tenant_id) {
         this.tenant_id = tenant_id;
+    }
+
+    public String getIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(String is_active) {
+        this.is_active = is_active;
     }
 
     public Date getReg_dt() {

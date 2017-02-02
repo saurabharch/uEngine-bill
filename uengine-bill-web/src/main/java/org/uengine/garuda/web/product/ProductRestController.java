@@ -48,14 +48,17 @@ public class ProductRestController {
     private ProductService productService;
 
     @RequestMapping(value = "/product/pagination", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<Product>> getProducts(HttpServletRequest request, @RequestParam(defaultValue = "0") Long offset, @RequestParam(defaultValue = "100") Long limit) {
+    public ResponseEntity<List<Product>> getProducts(HttpServletRequest request,
+                                                     @RequestParam(defaultValue = "") String is_active,
+                                                     @RequestParam(defaultValue = "0") Long offset,
+                                                     @RequestParam(defaultValue = "100") Long limit) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            Map map = productService.selectProductByCondition(role.getOrganization().getId(), null, offset, limit);
+            Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active, null, offset, limit);
             List<Product> products = (List<Product>) map.get("list");
             if (products == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -74,14 +77,18 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/product/search/{searchKey}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<Product>> getProductsSearch(HttpServletRequest request, @PathVariable("searchKey") String searchKey, @RequestParam(defaultValue = "0") Long offset, @RequestParam(defaultValue = "100") Long limit) {
+    public ResponseEntity<List<Product>> getProductsSearch(HttpServletRequest request,
+                                                           @RequestParam(defaultValue = "") String is_active,
+                                                           @PathVariable("searchKey") String searchKey,
+                                                           @RequestParam(defaultValue = "0") Long offset,
+                                                           @RequestParam(defaultValue = "100") Long limit) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            Map map = productService.selectProductByCondition(role.getOrganization().getId(), searchKey, offset, limit);
+            Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active, searchKey, offset, limit);
             List<Product> products = (List<Product>) map.get("list");
             if (products == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -136,6 +143,33 @@ public class ProductRestController {
 
             product.setId(id);
             currentProduct = productService.updateProductById(organization, product);
+            return new ResponseEntity<>(currentProduct, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/product/{id}/active", method = RequestMethod.PUT)
+    public ResponseEntity<Product> updateProduct(HttpServletRequest request, @PathVariable("id") String id, @RequestBody Map map) {
+
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            Organization organization = role.getOrganization();
+
+            Product currentProduct = productService.selectProductById(organization.getId(), id);
+            if (currentProduct == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            if (!"Y".equals(map.get("is_active").toString()) && "!N".equals(map.get("is_active").toString())) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            currentProduct = productService.updateProductActiveById(currentProduct, map.get("is_active").toString());
+
             return new ResponseEntity<>(currentProduct, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
