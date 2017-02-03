@@ -7,7 +7,7 @@ import java.sql.Date;
  */
 public class ProductVersion {
 
-    private String id;
+    private Long id;
     private String product_id;
     private Long version;
     private Date effective_date;
@@ -17,11 +17,11 @@ public class ProductVersion {
     private String plans;
     private Date reg_dt;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

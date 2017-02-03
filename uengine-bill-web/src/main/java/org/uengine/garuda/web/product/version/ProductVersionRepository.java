@@ -33,5 +33,15 @@ public interface ProductVersionRepository {
 
     ProductVersion selectByVersion(String organization_id, String product_id, Long version);
 
+    ProductVersion selectByCurrentVersion(String organization_id, String product_id);
 
+    ProductVersion selectById(Long id);
+
+    ProductVersion insertVersion(ProductVersion productVersion);
+
+    ProductVersion updateVersion(ProductVersion productVersion);
+
+    int updateVersionAsCurrent(String organization_id, String product_id, Long version);
+
+    int deleteVersion(String organization_id, String product_id, Long version);
 }

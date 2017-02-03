@@ -89,7 +89,7 @@ CREATE TABLE product (
 
 DROP TABLE IF EXISTS product_version;
 CREATE TABLE product_version (
-    id VARCHAR(36) NOT NULL,
+    id INT(11) NOT NULL AUTO_INCREMENT,
     product_id VARCHAR(36) NOT NULL,
     version INT(11) DEFAULT 1 NOT NULL,
     effective_date TIMESTAMP NOT NULL,

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.product.version.ProductVersionRepository">
+    <insert id="insertVersion" parameterType="org.uengine.garuda.model.ProductVersion"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO product_version (
+        product_id,
+        version,
+        effective_date,
+        is_current,
+        organization_id,
+        tenant_id,
+        plans
+        )
+        VALUES (
+        #{product_id},
+        (SELECT ifnull(max(r.version),0)
+        FROM product_version r
+        WHERE
+        r.product_id = #{product_id}
+        AND r.organization_id = #{organization_id}) + 1,
+        now(),
+        #{effective_date},
+        #{is_current},
+        #{organization_id},
+        #{tenant_id},
+        #{plans}
+        )
+    </insert>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="org.uengine.garuda.model.ProductVersion">
+        SELECT * FROM product_version
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByProductId" parameterType="map" resultType="org.uengine.garuda.model.ProductVersion">
+        SELECT * FROM product_version
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+    </select>
+
+    <select id="selectByVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductVersion">
+        SELECT * FROM product_version
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        AND version = #{version}
+    </select>
+
+    <select id="selectByCurrentVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductVersion">
+        SELECT * FROM product_version
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        AND is_current = 'Y'
+    </select>
+
+    <update id="updateVersion" parameterType="org.uengine.garuda.model.ProductVersion">
+        UPDATE product_version
+        SET
+        effective_date = #{effective_date},
+        plans = #{plans}
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        AND version = #{version}
+    </update>
+
+    <update id="updateVersionAsCurrent" parameterType="map">
+        UPDATE product_version
+        SET
+        is_current = 'Y'
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        AND version = #{version}
+    </update>
+
+    <update id="updateVersionAsInCurrent" parameterType="map">
+        UPDATE product_version
+        SET
+        is_current = 'N'
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        AND is_current = 'Y'
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM product_version
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        AND version = #{version}
+    </delete>
+</mapper>
