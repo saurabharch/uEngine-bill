@@ -1,7 +1,11 @@
 package org.uengine.garuda.model;
 
 import net.minidev.json.JSONUtil;
+import org.killbill.billing.catalog.DefaultPlan;
+import org.killbill.billing.catalog.DefaultPlanPhase;
+import org.killbill.billing.catalog.DefaultPrice;
 import org.killbill.billing.catalog.StandaloneCatalog;
+import org.killbill.billing.catalog.api.Plan;
 import org.killbill.billing.catalog.rules.DefaultCaseBillingAlignment;
 import org.killbill.billing.catalog.rules.DefaultPlanRules;
 import org.uengine.garuda.util.JsonUtils;
@@ -21,6 +25,10 @@ public class StandAloneProduct {
         String marshal = JsonUtils.marshal(planRules);
         System.out.println(marshal);
 
-        DefaultCaseBillingAlignment billingAlignment = new DefaultCaseBillingAlignment();
+
+        DefaultPlan plan = new DefaultPlan();
+
+        DefaultPlanPhase planPhase = new DefaultPlanPhase();
+        //new DefaultPrice()
     }
 }
