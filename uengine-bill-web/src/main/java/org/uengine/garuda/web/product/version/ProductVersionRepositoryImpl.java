@@ -53,6 +53,9 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     private ProductDaoVersion convertToDao(ProductVersion productVersion) {
         try {
+            if(productVersion == null){
+                return null;
+            }
             String plans = JsonUtils.marshal(productVersion.getPlans());
             Map<String, Object> map = JsonUtils.convertClassToMap(productVersion);
             map.put("plans", plans);
@@ -65,6 +68,9 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     private ProductVersion convertToVersion(ProductDaoVersion productDaoVersion) {
         try {
+            if(productDaoVersion == null){
+                return null;
+            }
             List<Plan> plans = JsonUtils.unmarshalToList(productDaoVersion.getPlans());
             Map<String, Object> map = JsonUtils.convertClassToMap(productDaoVersion);
             map.put("plans", plans);
@@ -77,6 +83,9 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     private List<ProductVersion> convertToVersionList(List<ProductDaoVersion> productDaoVersions) {
         List<ProductVersion> list = new ArrayList<>();
+        if(productDaoVersions == null){
+            return list;
+        }
         for (ProductDaoVersion daoVersion : productDaoVersions) {
             list.add(convertToVersion(daoVersion));
         }
@@ -129,8 +138,9 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     @Override
     public ProductVersion insertVersion(ProductVersion productVersion) {
-        this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertVersion", convertToDao(productVersion));
-        return this.selectById(productVersion.getId());
+        ProductDaoVersion daoVersion = convertToDao(productVersion);
+        this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertVersion", daoVersion);
+        return this.selectById(daoVersion.getId());
     }
 
     @Override

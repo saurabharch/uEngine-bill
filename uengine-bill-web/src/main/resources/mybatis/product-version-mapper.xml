@@ -20,7 +20,6 @@
         WHERE
         r.product_id = #{product_id}
         AND r.organization_id = #{organization_id}) + 1,
-        now(),
         #{effective_date},
         'N',
         #{organization_id},

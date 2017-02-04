@@ -55,18 +55,15 @@ public class ProductVersionServiceImpl implements ProductVersionService {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-    @Autowired
-    private KBRepository kbRepository;
-
-    @Autowired
-    private KBServiceFactory killbillServiceFactory;
-
-    @Autowired
-    private KBService kbService;
-
     private Logger logger = LoggerFactory.getLogger(ProductVersionService.class);
 
-
+    /**
+     * 플랜을 제외한 버젼 리스트를 반환한다.
+     * @param organization_id
+     * @param product_id
+     * @return
+     * @throws IOException
+     */
     @Override
     public List<Map> listVersionExcludePlans(String organization_id, String product_id) throws IOException {
         List<ProductVersion> productVersions = this.listVersion(organization_id, product_id);
@@ -79,23 +76,49 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         return mapList;
     }
 
+    /**
+     * 버젼 리스트를 반환한다.
+     * @param organization_id
+     * @param product_id
+     * @return
+     */
     @Override
     public List<ProductVersion> listVersion(String organization_id, String product_id) {
         return productVersionRepository.selectByProductId(organization_id, product_id);
     }
 
+    /**
+     * 주어진 버젼을 반환한다.
+     * @param organization_id
+     * @param product_id
+     * @param version
+     * @return
+     */
     @Override
     public ProductVersion getVersion(String organization_id, String product_id, Long version) {
         ProductVersion productVersion = productVersionRepository.selectByVersion(organization_id, product_id, version);
         return versionWithPlanCount(productVersion);
     }
 
+    /**
+     * 현재 버젼을 반환한다.
+     * @param organization_id
+     * @param product_id
+     * @return
+     */
     @Override
     public ProductVersion getCurrentVersion(String organization_id, String product_id) {
         ProductVersion productVersion = productVersionRepository.selectByCurrentVersion(organization_id, product_id);
         return versionWithPlanCount(productVersion);
     }
 
+    /**
+     * 신규 버젼을 생성한다.
+     * @param organization_id
+     * @param product_id
+     * @param productVersion
+     * @return
+     */
     @Override
     public ProductVersion createVersion(String organization_id, String product_id, ProductVersion productVersion) {
         //기본 정보 설정
@@ -118,7 +141,16 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //플랜 벨리데이션
         validatePlans(productVersion.getPlans());
 
-        //플랜 아이디와 유서지 아이디가 없다면 신규 생성
+        //TODO 플랜 아이디 밸리데이션
+        //앞 형식이 프로덕트 아이디인지 체크.
+        //뒤 형식이 플랜 아이디인지 체크.
+        //버젼안에 두가지 이상 중복 아이디가 있는지 체크
+        //프로덕트의 seq 보다 큰 값이 있는지 체크
+        //이전 버젼들의 모든 플랜들을 불러와서, 아이디가 존재하는지 체크
+
+
+
+        //플랜 아이디와 유서지 신규 생성
         productVersion = createPlanAndUsageId(organization_id, product_id, productVersion);
 
         //버젼 저장
@@ -132,19 +164,101 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         return versionWithPlanCount(createdVersion);
     }
 
+    /**
+     * 버젼을 업데이트 한다.
+     * @param organization_id
+     * @param product_id
+     * @param version
+     * @param productVersion
+     * @return
+     */
     @Override
     public ProductVersion updateVersion(String organization_id, String product_id, Long version, ProductVersion productVersion) {
-        return null;
+        //기본 정보 설정
+        Organization organization = organizationRepository.selectById(organization_id);
+        productVersion.setOrganization_id(organization_id);
+        productVersion.setProduct_id(product_id);
+        productVersion.setTenant_id(organization.getTenant_id());
+
+        ProductVersion existVersion = this.getVersion(organization_id, product_id, version);
+        if (existVersion == null) {
+            throw new ServiceException("Not found version : " + product_id + " , " + version);
+        }
+        productVersion.setVersion(version);
+
+        //effective date 이전버젼과 이후버젼 사이여야 한다.
+        Date effective_date = productVersion.getEffective_date();
+        ProductVersion nextVersion = this.getVersion(organization_id, product_id, version + 1);
+        ProductVersion prevVersion = this.getVersion(organization_id, product_id, version - 1);
+
+        if (nextVersion != null) {
+            java.sql.Date effective_next_date = nextVersion.getEffective_date();
+            if (effective_date.getTime() >= effective_next_date.getTime()) {
+                throw new ServiceException("The effective date can not be later than next version.");
+            }
+        }
+
+        if (prevVersion != null) {
+            java.sql.Date effective_prev_date = prevVersion.getEffective_date();
+            if (effective_date.getTime() <= effective_prev_date.getTime()) {
+                throw new ServiceException("The effective date can not be earlier than the date of the previous version.");
+            }
+        }
+
+        //플랜 벨리데이션
+        validatePlans(productVersion.getPlans());
+
+        //플랜 아이디와 유서지 신규 생성
+        productVersion = createPlanAndUsageId(organization_id, product_id, productVersion);
+
+        //버젼 업데이트
+        ProductVersion updatedVersion = productVersionRepository.updateVersion(productVersion);
+
+        //is_current 가 Y 일경우 current 업데이트
+        if ("Y".equals(productVersion.getIs_current())) {
+            productVersionRepository.updateVersionAsCurrent(organization_id, product_id, updatedVersion.getVersion());
+        }
+
+        return versionWithPlanCount(updatedVersion);
     }
 
+
+    /**
+     * 주어진 버젼을 current version 으로 변경한다.
+     * @param organization_id
+     * @param product_id
+     * @param version
+     * @return
+     */
     @Override
     public int updateVersionAsCurrent(String organization_id, String product_id, Long version) {
-        return 0;
+        return productVersionRepository.updateVersionAsCurrent(organization_id, product_id, version);
     }
 
+
+    /**
+     * 주어진 버젼을 삭제한다.
+     * @param organization_id
+     * @param product_id
+     * @param version
+     * @return
+     */
     @Override
     public int deleteVersion(String organization_id, String product_id, Long version) {
-        return 0;
+        ProductVersion existVersion = this.getVersion(organization_id, product_id, version);
+        if (existVersion == null) {
+            throw new ServiceException("Not found version : " + product_id + " , " + version);
+        }
+        Long total_number = new Long(0);
+        for (Plan plan : existVersion.getPlans()) {
+            Long number = plan.getNumber_of_subscriptions_referenced_by_version();
+            number = number == null ? 0 : number;
+            total_number = total_number + number;
+        }
+        if (total_number > 0) {
+            throw new ServiceException("Failed to delete cause by number_of_subscriptions_referenced_by_version is not zero.");
+        }
+        return productVersionRepository.deleteVersion(organization_id, product_id, version);
     }
 
     /**
@@ -154,21 +268,23 @@ public class ProductVersionServiceImpl implements ProductVersionService {
      * @return
      */
     private ProductVersion versionWithPlanCount(ProductVersion productVersion) {
-        List<Map> planCounts = subscriptionEventRepository.selectSubscriptionCountByProductVersion(
-                productVersion.getOrganization_id(),
-                productVersion.getProduct_id(),
-                productVersion.getVersion());
+        if (productVersion != null) {
+            List<Map> planCounts = subscriptionEventRepository.selectSubscriptionCountByProductVersion(
+                    productVersion.getOrganization_id(),
+                    productVersion.getProduct_id(),
+                    productVersion.getVersion());
 
-        for (Plan plan : productVersion.getPlans()) {
-            for (Map planCount : planCounts) {
-                Long number_of_subscriptions_referenced_by_version = (Long) planCount.get("number_of_subscriptions_referenced_by_version");
-                Long number_of_subscriptions = (Long) planCount.get("number_of_subscriptions");
-                String plan_id = (String) planCount.get("plan_id");
+            for (Plan plan : productVersion.getPlans()) {
+                for (Map planCount : planCounts) {
+                    Long number_of_subscriptions_referenced_by_version = (Long) planCount.get("number_of_subscriptions_referenced_by_version");
+                    Long number_of_subscriptions = (Long) planCount.get("number_of_subscriptions");
+                    String plan_id = (String) planCount.get("plan_id");
 
-                if (!StringUtils.isEmpty(plan.getId())) {
-                    if (plan.getId().equals(plan_id)) {
-                        plan.setNumber_of_subscriptions_referenced_by_version(number_of_subscriptions_referenced_by_version);
-                        plan.setNumber_of_subscriptions(number_of_subscriptions);
+                    if (!StringUtils.isEmpty(plan.getId())) {
+                        if (plan.getId().equals(plan_id)) {
+                            plan.setNumber_of_subscriptions_referenced_by_version(number_of_subscriptions_referenced_by_version);
+                            plan.setNumber_of_subscriptions(number_of_subscriptions);
+                        }
                     }
                 }
             }
@@ -200,12 +316,14 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             }
 
             List<Phase> initialPhases = plan.getInitialPhases();
-            for (Phase initialPhase : initialPhases) {
-                List<Usage> usages = initialPhase.getUsages();
-                for (Usage usage : usages) {
-                    if (StringUtils.isEmpty(usage.getId())) {
-                        usage_seq++;
-                        usage.setId(createPlanUsageId(product_id, usage_seq, "USG"));
+            if(initialPhases != null && !initialPhases.isEmpty()){
+                for (Phase initialPhase : initialPhases) {
+                    List<Usage> usages = initialPhase.getUsages();
+                    for (Usage usage : usages) {
+                        if (StringUtils.isEmpty(usage.getId())) {
+                            usage_seq++;
+                            usage.setId(createPlanUsageId(product_id, usage_seq, "USG"));
+                        }
                     }
                 }
             }
@@ -224,6 +342,13 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         return productVersion;
     }
 
+    /**
+     * 플랜 또는 유서지 아이디를 생성해 리턴한다.
+     * @param product_id
+     * @param seq
+     * @param prefix
+     * @return
+     */
     private String createPlanUsageId(String product_id, Long seq, String prefix) {
         String id = prefix + "-" + String.format("%06d", seq);
         return product_id + "-" + id;
@@ -245,12 +370,19 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             }
             validatePhase(plan.getFinalPhase(), plan);
 
-            for (Phase phase : plan.getInitialPhases()) {
-                validatePhase(phase, plan);
+            if(plan.getInitialPhases() != null && !plan.getInitialPhases().isEmpty()){
+                for (Phase phase : plan.getInitialPhases()) {
+                    validatePhase(phase, plan);
+                }
             }
         }
     }
 
+    /**
+     * Phase 를 체크한다.
+     * @param phase
+     * @param plan
+     */
     private void validatePhase(Phase phase, Plan plan) {
 
         //name check
@@ -269,7 +401,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         }
 
         //duration number
-        if (!TimeUnit.UNLIMITED.equals(phase.getDuration().getUnit()) && phase.getDuration().getNumber() == null) {
+        if (!TimeUnit.UNLIMITED.toString().equals(phase.getDuration().getUnit()) && phase.getDuration().getNumber() == null) {
             throw new ServiceException(phase.getDuration().getUnit() + " need duration number  : " + plan.getName());
         }
 
@@ -345,6 +477,11 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         }
     }
 
+    /**
+     * 프라이스 리스트를 체크한다.
+     * @param priceList
+     * @param plan
+     */
     private void validatePriceList(List<Price> priceList, Plan plan) {
         if (priceList.isEmpty()) {
             throw new ServiceException("There is a phase using no price entry : " + plan.getName());

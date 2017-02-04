@@ -95,7 +95,7 @@ CREATE TABLE product_version (
     product_id VARCHAR(36) NOT NULL,
     version INT(11) DEFAULT 1 NOT NULL,
     effective_date TIMESTAMP NOT NULL,
-    is_current CHAR(1) DEFAULT 'Y',
+    is_current CHAR(1) DEFAULT 'N',
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
     plans LONGTEXT,
