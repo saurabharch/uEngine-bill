@@ -51,6 +51,15 @@
         WHERE record_id = #{record_id}
     </update>
 
+    <update id="updatePlanUsageSeq" parameterType="map">
+        UPDATE product
+        SET
+        plan_seq = #{plan_seq},
+        usage_seq = #{usage_seq}
+        WHERE id = #{id}
+        AND organization_id = #{organization_id}
+    </update>
+
     <select id="selectProductByCondition" parameterType="map" resultType="org.uengine.garuda.model.Product">
         SELECT * FROM product
         WHERE 1=1

@@ -35,6 +35,8 @@ public interface ProductVersionRepository {
 
     ProductVersion selectByCurrentVersion(String organization_id, String product_id);
 
+    ProductVersion selectMaxVersion(String organization_id, String product_id);
+
     ProductVersion selectById(Long id);
 
     ProductVersion insertVersion(ProductVersion productVersion);

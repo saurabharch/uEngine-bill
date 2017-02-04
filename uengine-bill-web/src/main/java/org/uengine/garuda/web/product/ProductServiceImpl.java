@@ -74,4 +74,9 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProductActiveById(Product product, String is_active) {
         return productRepository.updateProductActiveById(product.getOrganization_id(), product.getId(), is_active);
     }
+
+    @Override
+    public int updatePlanUsageSeq(String organization_id, String id, Long plan_seq, Long usage_seq) {
+        return productRepository.updatePlanUsageSeq(organization_id, id, plan_seq, usage_seq);
+    }
 }

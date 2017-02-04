@@ -43,5 +43,7 @@ public interface ProductRepository {
 
     int updateProductId(Long record_id, String id);
 
+    int updatePlanUsageSeq(String organization_id, String id, Long plan_seq, Long usage_seq);
+
     int deleteProductById(String organization_id, String id);
 }

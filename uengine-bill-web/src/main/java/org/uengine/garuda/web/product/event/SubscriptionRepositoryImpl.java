@@ -48,12 +48,12 @@ public class SubscriptionRepositoryImpl extends PersistentRepositoryImpl<String,
     }
 
     @Override
-    public List<Map> selectPlanCountByProductVersion(String organization_id, String product_id, Long version) {
+    public List<Map> selectSubscriptionCountByProductVersion(String organization_id, String product_id, Long version) {
         Map map = new HashMap();
         map.put("organization_id", organization_id);
         map.put("product_id", product_id);
         map.put("version", version);
-        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectPlanCountByProductVersion", map);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectSubscriptionCountByProductVersion", map);
     }
 
     @Override

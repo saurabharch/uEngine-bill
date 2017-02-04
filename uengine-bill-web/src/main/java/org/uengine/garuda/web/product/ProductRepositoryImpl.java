@@ -111,6 +111,16 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
     }
 
     @Override
+    public int updatePlanUsageSeq(String organization_id, String id, Long plan_seq, Long usage_seq) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("id", id);
+        map.put("plan_seq", plan_seq);
+        map.put("usage_seq", usage_seq);
+        return this.getSqlSessionTemplate().update(this.getNamespace() + ".updatePlanUsageSeq", map);
+    }
+
+    @Override
     public int deleteProductById(String organization_id, String id) {
         Map map = new HashMap();
         map.put("organization_id", organization_id);

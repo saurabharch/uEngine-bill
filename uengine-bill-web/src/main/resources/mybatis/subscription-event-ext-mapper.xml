@@ -42,19 +42,34 @@
         WHERE id = #{id}
     </delete>
 
-    <select id="selectPlanCountByProductVersion" parameterType="map" resultType="map">
-        SELECT count(*) as count, B.plan_id from
-        (
-        SELECT plan_id,product_id,version,subscription_id from
-        (SELECT * from subscription_events_ext
-        WHERE organization_id = #{organization_id}
-        AND subscription_id is not null
-        AND (user_type = 'CHANGE' OR user_type = 'CREATE')
-        ORDER BY id DESC) A
-        GROUP BY A.subscription_id
-        )B
-        WHERE B.product_id = #{product_id}
-        AND B.version = #{version}
-        GROUP BY B.plan_id;
+    <select id="selectSubscriptionCountByProductVersion" parameterType="map" resultType="map">
+        select C.*,D.count_total from
+        (SELECT B.plan_id,B.version,count(*) as count_by_version from
+                (
+                SELECT plan_id,product_id,version,subscription_id from
+                (SELECT * from subscription_events_ext
+                WHERE organization_id = #{organization_id}
+                AND subscription_id is not null
+                AND product_id = #{product_id}
+                AND version = #{version}
+                AND (user_type = 'CHANGE' OR user_type = 'CREATE')
+                ORDER BY id DESC) A
+                GROUP BY A.subscription_id
+                )B
+                GROUP BY B.plan_id)C
+        join
+        (SELECT count(*) as count_total, B.plan_id from
+                (
+                SELECT plan_id,product_id,version,subscription_id from
+                (SELECT * from subscription_events_ext
+                WHERE organization_id = #{organization_id}
+                AND subscription_id is not null
+                AND product_id = #{product_id}
+                AND (user_type = 'CHANGE' OR user_type = 'CREATE')
+                ORDER BY id DESC) A
+                GROUP BY A.subscription_id
+                )B
+                GROUP BY B.plan_id)D
+        on D.plan_id = C.plan_id
     </select>
 </mapper>

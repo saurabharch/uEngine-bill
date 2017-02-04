@@ -24,4 +24,6 @@ public interface ProductService {
     int deleteProductById(String organization_id, String id);
 
     Product updateProductActiveById(Product product, String is_active);
+
+    int updatePlanUsageSeq(String organization_id, String id, Long plan_seq, Long usage_seq);
 }

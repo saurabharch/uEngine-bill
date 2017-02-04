@@ -17,6 +17,8 @@ public class Product {
     private String organization_id;
     private String tenant_id;
     private String is_active;
+    private Long plan_seq;
+    private Long usage_seq;
     private Date reg_dt;
 
     public Long getRecord_id() {
@@ -97,6 +99,22 @@ public class Product {
 
     public void setIs_active(String is_active) {
         this.is_active = is_active;
+    }
+
+    public Long getPlan_seq() {
+        return plan_seq;
+    }
+
+    public void setPlan_seq(Long plan_seq) {
+        this.plan_seq = plan_seq;
+    }
+
+    public Long getUsage_seq() {
+        return usage_seq;
+    }
+
+    public void setUsage_seq(Long usage_seq) {
+        this.usage_seq = usage_seq;
     }
 
     public Date getReg_dt() {

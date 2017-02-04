@@ -30,7 +30,7 @@ public interface SubscriptionEventRepository {
 
     String NAMESPACE = SubscriptionEventRepository.class.getName();
 
-    List<Map> selectPlanCountByProductVersion(String organization_id, String product_id, Long version);
+    List<Map> selectSubscriptionCountByProductVersion(String organization_id, String product_id, Long version);
 
     SubscriptionEventsExt selectById(Long id);
 

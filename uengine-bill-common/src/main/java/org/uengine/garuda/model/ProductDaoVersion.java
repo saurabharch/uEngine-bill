@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by uengine on 2017. 1. 25..
  */
-public class ProductVersion {
+public class ProductDaoVersion {
 
     private Long id;
     private String product_id;
@@ -17,7 +17,7 @@ public class ProductVersion {
     private String is_current;
     private String organization_id;
     private String tenant_id;
-    private List<Plan> plans;
+    private String plans;
     private Date reg_dt;
 
     public Long getId() {
@@ -76,11 +76,11 @@ public class ProductVersion {
         this.tenant_id = tenant_id;
     }
 
-    public List<Plan> getPlans() {
+    public String getPlans() {
         return plans;
     }
 
-    public void setPlans(List<Plan> plans) {
+    public void setPlans(String plans) {
         this.plans = plans;
     }
 

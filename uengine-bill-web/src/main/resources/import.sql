@@ -81,6 +81,8 @@ CREATE TABLE product (
     organization_id VARCHAR(36),
     tenant_id VARCHAR(36),
     is_active CHAR(1) DEFAULT 'Y',
+    plan_seq INT(11) DEFAULT 0,
+    usage_seq INT(11) DEFAULT 0,
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(record_id)
 )

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.uengine.garuda.web.product.version.ProductVersionRepository">
-    <insert id="insertVersion" parameterType="org.uengine.garuda.model.ProductVersion"
+    <insert id="insertVersion" parameterType="org.uengine.garuda.model.ProductDaoVersion"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO product_version (
         product_id,
@@ -22,39 +22,46 @@
         AND r.organization_id = #{organization_id}) + 1,
         now(),
         #{effective_date},
-        #{is_current},
+        'N',
         #{organization_id},
         #{tenant_id},
         #{plans}
         )
     </insert>
 
-    <select id="selectById" parameterType="java.lang.Long" resultType="org.uengine.garuda.model.ProductVersion">
+    <select id="selectById" parameterType="java.lang.Long" resultType="org.uengine.garuda.model.ProductDaoVersion">
         SELECT * FROM product_version
         WHERE id = #{id}
     </select>
 
-    <select id="selectByProductId" parameterType="map" resultType="org.uengine.garuda.model.ProductVersion">
+    <select id="selectByProductId" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">
         SELECT * FROM product_version
         WHERE product_id = #{product_id}
         AND organization_id = #{organization_id}
     </select>
 
-    <select id="selectByVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductVersion">
+    <select id="selectByVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">
         SELECT * FROM product_version
         WHERE product_id = #{product_id}
         AND organization_id = #{organization_id}
         AND version = #{version}
     </select>
 
-    <select id="selectByCurrentVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductVersion">
+    <select id="selectByCurrentVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">
         SELECT * FROM product_version
         WHERE product_id = #{product_id}
         AND organization_id = #{organization_id}
         AND is_current = 'Y'
     </select>
 
-    <update id="updateVersion" parameterType="org.uengine.garuda.model.ProductVersion">
+    <select id="selectMaxVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">
+        SELECT * FROM product_version
+        WHERE product_id = #{product_id}
+        AND organization_id = #{organization_id}
+        ORDER BY version DESC LIMIT 1;
+    </select>
+
+    <update id="updateVersion" parameterType="org.uengine.garuda.model.ProductDaoVersion">
         UPDATE product_version
         SET
         effective_date = #{effective_date},
