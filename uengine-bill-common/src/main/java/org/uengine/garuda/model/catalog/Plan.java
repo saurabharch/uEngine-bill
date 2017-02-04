@@ -11,8 +11,8 @@ public class Plan {
     private String name;
     private List<Phase> initialPhases;
     private Phase finalPhase;
-    private Long subscription_count_for_version;
-    private Long subscription_count_total;
+    private Long number_of_subscriptions_referenced_by_version;
+    private Long number_of_subscriptions;
 
     public String getId() {
         return id;
@@ -46,19 +46,19 @@ public class Plan {
         this.finalPhase = finalPhase;
     }
 
-    public Long getSubscription_count_for_version() {
-        return subscription_count_for_version;
+    public Long getNumber_of_subscriptions_referenced_by_version() {
+        return number_of_subscriptions_referenced_by_version;
     }
 
-    public void setSubscription_count_for_version(Long subscription_count_for_version) {
-        this.subscription_count_for_version = subscription_count_for_version;
+    public void setNumber_of_subscriptions_referenced_by_version(Long number_of_subscriptions_referenced_by_version) {
+        this.number_of_subscriptions_referenced_by_version = number_of_subscriptions_referenced_by_version;
     }
 
-    public Long getSubscription_count_total() {
-        return subscription_count_total;
+    public Long getNumber_of_subscriptions() {
+        return number_of_subscriptions;
     }
 
-    public void setSubscription_count_total(Long subscription_count_total) {
-        this.subscription_count_total = subscription_count_total;
+    public void setNumber_of_subscriptions(Long number_of_subscriptions) {
+        this.number_of_subscriptions = number_of_subscriptions;
     }
 }
