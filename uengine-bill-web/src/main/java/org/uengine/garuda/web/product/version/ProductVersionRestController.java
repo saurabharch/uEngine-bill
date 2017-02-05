@@ -191,8 +191,7 @@ public class ProductVersionRestController {
     @RequestMapping(value = "/product/{id}/version/{version}/current", method = RequestMethod.PUT)
     public ResponseEntity<ProductVersion> updateProductVersionCurrent(HttpServletRequest request,
                                                                       @PathVariable("id") String id,
-                                                                      @PathVariable("version") Long version,
-                                                                      @RequestBody ProductVersion productVersion) {
+                                                                      @PathVariable("version") Long version) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -222,7 +221,7 @@ public class ProductVersionRestController {
     @RequestMapping(value = "/product/{id}/version/{version}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteProduct(HttpServletRequest request,
                                               @PathVariable("id") String id,
-                                              @PathVariable("id") Long version) {
+                                              @PathVariable("version") Long version) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);

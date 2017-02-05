@@ -88,7 +88,7 @@
         AND is_current = 'Y'
     </update>
 
-    <delete id="delete" parameterType="map">
+    <delete id="deleteVersion" parameterType="map">
         DELETE FROM product_version
         WHERE product_id = #{product_id}
         AND organization_id = #{organization_id}
