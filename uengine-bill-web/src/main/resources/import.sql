@@ -112,7 +112,7 @@ CREATE TABLE subscription_events_ext (
     subscription_id VARCHAR(36) NOT NULL,
     event_type VARCHAR(15),
     user_type VARCHAR(25) NOT NULL,
-    plan_id VARCHAR(36) NOT NULL,
+    plan_name VARCHAR(36) NOT NULL,
     product_id VARCHAR(36) NOT NULL,
     version INT(11) DEFAULT 1 NOT NULL,
     account_id VARCHAR(36) NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE product_provider (
 DROP TABLE IF EXISTS product_distribution_history;
 CREATE TABLE product_distribution_history (
     id VARCHAR(36) NOT NULL,
-    plan_id VARCHAR(36) NOT NULL,
+    plan_name VARCHAR(36) NOT NULL,
     product_id VARCHAR(36) NOT NULL,
     version INT(11) DEFAULT 1 NOT NULL,
     usage_id VARCHAR(36) NOT NULL,

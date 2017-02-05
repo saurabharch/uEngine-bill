@@ -8,7 +8,7 @@
         subscription_id,
         event_type,
         user_type,
-        plan_id,
+        plan_name,
         product_id,
         version,
         account_id,
@@ -21,7 +21,7 @@
         #{subscription_id},
         #{event_type},
         #{user_type},
-        #{plan_id},
+        #{plan_name},
         #{product_id},
         #{version},
         #{account_id},
@@ -44,13 +44,13 @@
 
     <select id="selectSubscriptionCountByProductVersion" parameterType="map" resultType="map">
         select
-        C.plan_id,
+        C.plan_name,
         sum(C.referenced) as number_of_subscriptions_referenced_by_version,
         sum(C.subscriptions) as number_of_subscriptions
         from
 
         (select
-        A.plan_id,
+        A.plan_name,
         count(*) as referenced,
         0 as subscriptions
         FROM
@@ -60,18 +60,18 @@
                 AND product_id = #{product_id}
                 AND version = #{version}
                 AND (user_type = 'CHANGE' OR user_type = 'CREATE')
-                group by subscription_id,plan_id)A
-                GROUP BY A.plan_id
+                group by subscription_id,plan_name)A
+                GROUP BY A.plan_name
 
         union all
 
         SELECT
-        B.plan_id,
+        B.plan_name,
         0 as referenced,
         count(*) as subscriptions
         from
                 (
-                SELECT plan_id,product_id,version,subscription_id from
+                SELECT plan_name,product_id,version,subscription_id from
                 (SELECT * from subscription_events_ext
                 WHERE organization_id = #{organization_id}
                 AND subscription_id is not null
@@ -80,7 +80,7 @@
                 ORDER BY id DESC) A
                 GROUP BY A.subscription_id
                 )B
-                GROUP BY B.plan_id)C
-        group by C.plan_id
+                GROUP BY B.plan_name)C
+        group by C.plan_name
     </select>
 </mapper>

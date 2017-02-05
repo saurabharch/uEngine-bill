@@ -7,20 +7,13 @@ import java.util.List;
  */
 public class Plan {
 
-    private String id;
     private String name;
+    private String display_name;
+    private String is_active;
     private List<Phase> initialPhases;
     private Phase finalPhase;
     private Long number_of_subscriptions_referenced_by_version;
     private Long number_of_subscriptions;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -28,6 +21,22 @@ public class Plan {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplay_name() {
+        return display_name;
+    }
+
+    public void setDisplay_name(String display_name) {
+        this.display_name = display_name;
+    }
+
+    public String getIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(String is_active) {
+        this.is_active = is_active;
     }
 
     public List<Phase> getInitialPhases() {

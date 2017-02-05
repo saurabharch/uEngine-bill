@@ -6,20 +6,12 @@ import java.util.List;
  * Created by uengine on 2017. 2. 3..
  */
 public class Usage {
-    private String id;
     private String name;
+    private String display_name;
     private String billingMode;
     private String usageType;
     private String billingPeriod;
     private List<Tier> tiers;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -27,6 +19,14 @@ public class Usage {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplay_name() {
+        return display_name;
+    }
+
+    public void setDisplay_name(String display_name) {
+        this.display_name = display_name;
     }
 
     public String getBillingMode() {

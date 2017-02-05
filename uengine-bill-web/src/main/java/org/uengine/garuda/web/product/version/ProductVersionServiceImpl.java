@@ -59,6 +59,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 플랜을 제외한 버젼 리스트를 반환한다.
+     *
      * @param organization_id
      * @param product_id
      * @return
@@ -78,6 +79,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 버젼 리스트를 반환한다.
+     *
      * @param organization_id
      * @param product_id
      * @return
@@ -89,6 +91,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 주어진 버젼을 반환한다.
+     *
      * @param organization_id
      * @param product_id
      * @param version
@@ -102,6 +105,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 현재 버젼을 반환한다.
+     *
      * @param organization_id
      * @param product_id
      * @return
@@ -114,6 +118,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 신규 버젼을 생성한다.
+     *
      * @param organization_id
      * @param product_id
      * @param productVersion
@@ -141,17 +146,8 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //플랜 벨리데이션
         validatePlans(productVersion.getPlans());
 
-        //TODO 플랜 아이디 밸리데이션
-        //앞 형식이 프로덕트 아이디인지 체크.
-        //뒤 형식이 플랜 아이디인지 체크.
-        //버젼안에 두가지 이상 중복 아이디가 있는지 체크
-        //프로덕트의 seq 보다 큰 값이 있는지 체크
-        //이전 버젼들의 모든 플랜들을 불러와서, 아이디가 존재하는지 체크
-
-
-
-        //플랜 아이디와 유서지 신규 생성
-        productVersion = createPlanAndUsageId(organization_id, product_id, productVersion);
+        //플랜 아이디와 유서지 신규 생성 및 밸리데이션
+        productVersion = createAndValidatePlanAndUsageId(organization_id, product_id, productVersion);
 
         //버젼 저장
         ProductVersion createdVersion = productVersionRepository.insertVersion(productVersion);
@@ -166,6 +162,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 버젼을 업데이트 한다.
+     *
      * @param organization_id
      * @param product_id
      * @param version
@@ -209,7 +206,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         validatePlans(productVersion.getPlans());
 
         //플랜 아이디와 유서지 신규 생성
-        productVersion = createPlanAndUsageId(organization_id, product_id, productVersion);
+        productVersion = createAndValidatePlanAndUsageId(organization_id, product_id, productVersion);
 
         //버젼 업데이트
         ProductVersion updatedVersion = productVersionRepository.updateVersion(productVersion);
@@ -225,6 +222,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 주어진 버젼을 current version 으로 변경한다.
+     *
      * @param organization_id
      * @param product_id
      * @param version
@@ -238,6 +236,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 주어진 버젼을 삭제한다.
+     *
      * @param organization_id
      * @param product_id
      * @param version
@@ -278,10 +277,10 @@ public class ProductVersionServiceImpl implements ProductVersionService {
                 for (Map planCount : planCounts) {
                     Long number_of_subscriptions_referenced_by_version = (Long) planCount.get("number_of_subscriptions_referenced_by_version");
                     Long number_of_subscriptions = (Long) planCount.get("number_of_subscriptions");
-                    String plan_id = (String) planCount.get("plan_id");
+                    String plan_name = (String) planCount.get("plan_name");
 
-                    if (!StringUtils.isEmpty(plan.getId())) {
-                        if (plan.getId().equals(plan_id)) {
+                    if (!StringUtils.isEmpty(plan.getName())) {
+                        if (plan.getName().equals(plan_name)) {
                             plan.setNumber_of_subscriptions_referenced_by_version(number_of_subscriptions_referenced_by_version);
                             plan.setNumber_of_subscriptions(number_of_subscriptions);
                         }
@@ -300,30 +299,45 @@ public class ProductVersionServiceImpl implements ProductVersionService {
      * @param productVersion
      * @return
      */
-    private ProductVersion createPlanAndUsageId(String organization_id, String product_id, ProductVersion productVersion) {
-        //plan 아이디들과 usage 아이디들이 없다면 아이디를 신규로 생성
+    private ProductVersion createAndValidatePlanAndUsageId(String organization_id, String product_id, ProductVersion productVersion) {
+
         Product product = productRepository.selectProductById(organization_id, product_id);
         if (product == null) {
             throw new ServiceException("Not found product : " + product_id);
         }
         Long plan_seq = product.getPlan_seq();
         Long usage_seq = product.getUsage_seq();
+        Long plan_org_seq = product.getPlan_seq();
+        Long usage_org_seq = product.getUsage_seq();
         List<Plan> plans = productVersion.getPlans();
+
+        List<String> planNameList = new ArrayList<>();
+        List<String> usageNameList = new ArrayList<>();
+
         for (Plan plan : plans) {
-            if (StringUtils.isEmpty(plan.getId())) {
+            //plan 아이디들과 usage 아이디들이 없다면 아이디를 신규로 생성
+            if (StringUtils.isEmpty(plan.getName())) {
                 plan_seq++;
-                plan.setId(createPlanUsageId(product_id, plan_seq, "PL"));
+                plan.setName(createPlanUsageName(product_id, plan_seq, "PL"));
             }
+            //있다면 Id 체크
+            else {
+                validPlanUsageName(plan.getName(), product_id, plan_org_seq, "PL");
+            }
+            planNameList.add(plan.getName());
 
             List<Phase> initialPhases = plan.getInitialPhases();
-            if(initialPhases != null && !initialPhases.isEmpty()){
+            if (initialPhases != null && !initialPhases.isEmpty()) {
                 for (Phase initialPhase : initialPhases) {
                     List<Usage> usages = initialPhase.getUsages();
                     for (Usage usage : usages) {
-                        if (StringUtils.isEmpty(usage.getId())) {
+                        if (StringUtils.isEmpty(usage.getName())) {
                             usage_seq++;
-                            usage.setId(createPlanUsageId(product_id, usage_seq, "USG"));
+                            usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
+                        } else {
+                            validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
                         }
+                        usageNameList.add(usage.getName());
                     }
                 }
             }
@@ -331,27 +345,89 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             Phase finalPhase = plan.getFinalPhase();
             List<Usage> usages = finalPhase.getUsages();
             for (Usage usage : usages) {
-                if (StringUtils.isEmpty(usage.getId())) {
+                if (StringUtils.isEmpty(usage.getName())) {
                     usage_seq++;
-                    usage.setId(createPlanUsageId(product_id, usage_seq, "USG"));
+                    usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
+                } else {
+                    validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
                 }
+                usageNameList.add(usage.getName());
             }
         }
+
+        //중복된 플랜 아이디가 있는지 체크
+        if (hsaDuplicate(planNameList)) {
+            throw new ServiceException("Duplicated plan id founded in : " + product_id);
+        }
+
+        //중복 유서지 아이디 체크
+        if (hsaDuplicate(usageNameList)) {
+            throw new ServiceException("Duplicated usage id founded in : " + product_id);
+        }
+
         //변경된 plan_seq 와 usage_seq 를 업데이트
         productRepository.updatePlanUsageSeq(organization_id, product_id, plan_seq, usage_seq);
         return productVersion;
     }
 
+    private boolean hsaDuplicate(List<String> list) {
+        List<String> temp = new ArrayList<>();
+        boolean duplicate = false;
+        for (String s : list) {
+            if (temp.contains(s)) {
+                duplicate = true;
+                break;
+            } else {
+                temp.add(s);
+            }
+        }
+        return duplicate;
+    }
+
     /**
      * 플랜 또는 유서지 아이디를 생성해 리턴한다.
+     *
      * @param product_id
      * @param seq
      * @param prefix
      * @return
      */
-    private String createPlanUsageId(String product_id, Long seq, String prefix) {
+    private String createPlanUsageName(String product_id, Long seq, String prefix) {
         String id = prefix + "-" + String.format("%06d", seq);
         return product_id + "-" + id;
+    }
+
+    private void validPlanUsageName(String plan_name, String product_id, Long currentSeq, String prefix) {
+        //TODO 플랜 아이디 밸리데이션
+        //앞 형식이 프로덕트 아이디인지 체크.
+        //뒤 형식이 플랜 아이디인지 체크.
+        //버젼안에 두가지 이상 중복 아이디가 있는지 체크
+        //프로덕트의 seq 보다 큰 값이 있는지 체크
+
+        try {
+            boolean isValid = true;
+            if (plan_name == null || plan_name.length() != (22 + prefix.length())) {
+                isValid = false;
+            }
+            String subProductId = plan_name.substring(0, 14);
+            String subPlanId = plan_name.substring(14);
+            if (!subProductId.equals(product_id)) {
+                isValid = false;
+            }
+            if (!subPlanId.startsWith("-" + prefix + "-")) {
+                isValid = false;
+            }
+            String subPlanId2 = subPlanId.substring(2 + prefix.length());
+            Long seq = Long.parseLong(subPlanId2);
+            if (seq == null || currentSeq < seq || seq == 0) {
+                isValid = false;
+            }
+            if (!isValid) {
+                throw new ServiceException("Invalid " + prefix + " : " + plan_name);
+            }
+        } catch (Exception ex) {
+            throw new ServiceException("Invalid " + prefix + " : " + plan_name);
+        }
     }
 
     /**
@@ -361,16 +437,21 @@ public class ProductVersionServiceImpl implements ProductVersionService {
      */
     private void validatePlans(List<Plan> plans) {
         for (Plan plan : plans) {
-            if (StringUtils.isEmpty(plan.getName())) {
-                throw new ServiceException("There is no named plan.");
+            if (StringUtils.isEmpty(plan.getDisplay_name())) {
+                throw new ServiceException("Field display_name is required for plan.");
+            }
+
+            if (StringUtils.isEmpty(plan.getIs_active()) ||
+                    (!"Y".equals(plan.getIs_active()) && !"N".equals(plan.getIs_active()))) {
+                throw new ServiceException("Field  is_active name is required for plan. (Y or N)");
             }
 
             if (plan.getFinalPhase() == null) {
-                throw new ServiceException("Final phase is required in plan name : " + plan.getName());
+                throw new ServiceException("Final phase is required in plan : " + plan.getDisplay_name());
             }
             validatePhase(plan.getFinalPhase(), plan);
 
-            if(plan.getInitialPhases() != null && !plan.getInitialPhases().isEmpty()){
+            if (plan.getInitialPhases() != null && !plan.getInitialPhases().isEmpty()) {
                 for (Phase phase : plan.getInitialPhases()) {
                     validatePhase(phase, plan);
                 }
@@ -380,35 +461,36 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * Phase 를 체크한다.
+     *
      * @param phase
      * @param plan
      */
     private void validatePhase(Phase phase, Plan plan) {
 
-        //name check
+        //phase type check
         if (!Enums.getIfPresent(PhaseType.class, phase.getType()).isPresent()) {
-            throw new ServiceException(phase.getType() + " is invalid phase type : " + plan.getName());
+            throw new ServiceException(phase.getType() + " is invalid phase type : " + plan.getDisplay_name());
         }
 
         //duration check
         if (phase.getDuration() == null) {
-            throw new ServiceException("There is no phase duration : " + plan.getName());
+            throw new ServiceException("There is no phase duration : " + plan.getDisplay_name());
         }
 
         //TimeUnit
         if (!Enums.getIfPresent(TimeUnit.class, phase.getDuration().getUnit()).isPresent()) {
-            throw new ServiceException(phase.getDuration().getUnit() + " is invalid duration time unit : " + plan.getName());
+            throw new ServiceException(phase.getDuration().getUnit() + " is invalid duration time unit : " + plan.getDisplay_name());
         }
 
         //duration number
         if (!TimeUnit.UNLIMITED.toString().equals(phase.getDuration().getUnit()) && phase.getDuration().getNumber() == null) {
-            throw new ServiceException(phase.getDuration().getUnit() + " need duration number  : " + plan.getName());
+            throw new ServiceException(phase.getDuration().getUnit() + " need duration number  : " + plan.getDisplay_name());
         }
 
         if (phase.getFixed() == null && phase.getRecurring() == null && phase.getUsages() == null) {
-            throw new ServiceException("Some phase has no fixed,recurring,usages in : " + plan.getName());
+            throw new ServiceException("Some phase has no fixed,recurring,usages in : " + plan.getDisplay_name());
         } else if (phase.getUsages().size() == 0) {
-            throw new ServiceException("Some phase has no fixed,recurring,usages in : " + plan.getName());
+            throw new ServiceException("Some phase has no fixed,recurring,usages in : " + plan.getDisplay_name());
         }
 
         Fixed fixed = phase.getFixed();
@@ -424,52 +506,52 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //recurring
         if (recurring != null) {
             if (!Enums.getIfPresent(BillingPeriod.class, recurring.getBillingPeriod()).isPresent()) {
-                throw new ServiceException(recurring.getBillingPeriod() + " is invalid billing period : " + plan.getName());
+                throw new ServiceException(recurring.getBillingPeriod() + " is invalid billing period : " + plan.getDisplay_name());
             }
             validatePriceList(recurring.getRecurringPrice(), plan);
         }
 
         //usage
         for (Usage usage : usages) {
-            if (StringUtils.isEmpty(usage.getName())) {
-                throw new ServiceException("Usage name is required : " + plan.getName());
+            if (StringUtils.isEmpty(usage.getDisplay_name())) {
+                throw new ServiceException("Usage display name is required : " + plan.getDisplay_name());
             }
 
             if (!Enums.getIfPresent(BillingMode.class, usage.getBillingMode()).isPresent()) {
-                throw new ServiceException(usage.getBillingMode() + " is invalid usage billing mode : " + plan.getName());
+                throw new ServiceException(usage.getBillingMode() + " is invalid usage billing mode : " + plan.getDisplay_name());
             }
 
             if (!Enums.getIfPresent(UsageType.class, usage.getUsageType()).isPresent()) {
-                throw new ServiceException(usage.getUsageType() + " is invalid usage type : " + plan.getName());
+                throw new ServiceException(usage.getUsageType() + " is invalid usage type : " + plan.getDisplay_name());
             }
 
             if (!Enums.getIfPresent(BillingPeriod.class, usage.getBillingPeriod()).isPresent()) {
-                throw new ServiceException(usage.getBillingPeriod() + " is invalid usage billing period : " + plan.getName());
+                throw new ServiceException(usage.getBillingPeriod() + " is invalid usage billing period : " + plan.getDisplay_name());
             }
 
             if (usage.getTiers() == null || usage.getTiers().isEmpty()) {
-                throw new ServiceException("Tiers are required : " + plan.getName());
+                throw new ServiceException("Tiers are required : " + plan.getDisplay_name());
             }
 
             //Tier check
             for (Tier tier : usage.getTiers()) {
                 if (StringUtils.isEmpty(tier.getUnit())) {
-                    throw new ServiceException("Some usage has empty unit name : " + plan.getName());
+                    throw new ServiceException("Some usage has empty unit name : " + plan.getDisplay_name());
                 }
 
                 Pattern pattern = Pattern.compile("\\s");
                 Matcher matcher = pattern.matcher(tier.getUnit());
                 boolean found = matcher.find();
                 if (found) {
-                    throw new ServiceException("Some usage has white space unit name : " + plan.getName());
+                    throw new ServiceException("Some usage has white space unit name : " + plan.getDisplay_name());
                 }
 
                 if (tier.getSize() == null || tier.getSize() < 0) {
-                    throw new ServiceException("There is invalid tier size value : " + plan.getName());
+                    throw new ServiceException("There is invalid tier size value : " + plan.getDisplay_name());
                 }
 
                 if (tier.getMax() == null || tier.getMax() < 0) {
-                    throw new ServiceException("There is invalid tier max value : " + plan.getName());
+                    throw new ServiceException("There is invalid tier max value : " + plan.getDisplay_name());
                 }
 
                 validatePriceList(tier.getPrices(), plan);
@@ -479,19 +561,20 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     /**
      * 프라이스 리스트를 체크한다.
+     *
      * @param priceList
      * @param plan
      */
     private void validatePriceList(List<Price> priceList, Plan plan) {
         if (priceList.isEmpty()) {
-            throw new ServiceException("There is a phase using no price entry : " + plan.getName());
+            throw new ServiceException("There is a phase using no price entry : " + plan.getDisplay_name());
         }
         for (Price price : priceList) {
             if (StringUtils.isEmpty(price.getCurrency())) {
-                throw new ServiceException("There is empty currency in price entry : " + plan.getName());
+                throw new ServiceException("There is empty currency in price entry : " + plan.getDisplay_name());
             }
             if (price.getValue() == null || price.getValue().compareTo(BigDecimal.ZERO) == -1) {
-                throw new ServiceException("There is invalid currency value in price entry : " + plan.getName());
+                throw new ServiceException("There is invalid currency value in price entry : " + plan.getDisplay_name());
             }
         }
     }
