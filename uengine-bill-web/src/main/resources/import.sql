@@ -109,7 +109,7 @@ CREATE TABLE product_version (
 DROP TABLE IF EXISTS subscription_events_ext;
 CREATE TABLE subscription_events_ext (
     id INT(11) NOT NULL AUTO_INCREMENT,
-    subscription_id VARCHAR(36) NOT NULL,
+    subscription_id VARCHAR(36) NULL,
     event_type VARCHAR(15),
     user_type VARCHAR(25) NOT NULL,
     plan_name VARCHAR(36) NOT NULL,

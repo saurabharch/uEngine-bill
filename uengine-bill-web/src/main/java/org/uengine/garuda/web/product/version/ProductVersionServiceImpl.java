@@ -275,8 +275,8 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
             for (Plan plan : productVersion.getPlans()) {
                 for (Map planCount : planCounts) {
-                    Long number_of_subscriptions_referenced_by_version = (Long) planCount.get("number_of_subscriptions_referenced_by_version");
-                    Long number_of_subscriptions = (Long) planCount.get("number_of_subscriptions");
+                    Long number_of_subscriptions_referenced_by_version = ((BigDecimal) planCount.get("number_of_subscriptions_referenced_by_version")).longValue();
+                    Long number_of_subscriptions = ((BigDecimal) planCount.get("number_of_subscriptions")).longValue();
                     String plan_name = (String) planCount.get("plan_name");
 
                     if (!StringUtils.isEmpty(plan.getName())) {

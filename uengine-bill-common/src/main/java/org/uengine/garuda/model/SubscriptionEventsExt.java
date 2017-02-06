@@ -10,7 +10,7 @@ public class SubscriptionEventsExt {
     private Long id;
     private String event_type;
     private String user_type;
-    private String plan_id;
+    private String plan_name;
     private String product_id;
     private Long version;
     private String account_id;
@@ -44,12 +44,12 @@ public class SubscriptionEventsExt {
         this.user_type = user_type;
     }
 
-    public String getPlan_id() {
-        return plan_id;
+    public String getPlan_name() {
+        return plan_name;
     }
 
-    public void setPlan_id(String plan_id) {
-        this.plan_id = plan_id;
+    public void setPlan_name(String plan_name) {
+        this.plan_name = plan_name;
     }
 
     public String getProduct_id() {
