@@ -80,7 +80,7 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
     public Product insertProduct(Product product) {
         this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertProduct", product);
         Long record_id = product.getRecord_id();
-        String id = "PRD-" + String.format("%010d", record_id);
+        String id = "PRD_" + String.format("%010d", record_id);
 
         this.updateProductId(record_id, id);
         return this.selectProductById(product.getOrganization_id(), id);

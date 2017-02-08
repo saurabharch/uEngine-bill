@@ -215,8 +215,10 @@ public class ProxyAction {
 
         } finally {
             // entity 를 컨섬 처리를 해야 커넥션이 이어짐
-            if (proxyResponse != null)
+            if (proxyResponse != null){
                 consumeQuietly(proxyResponse.getEntity());
+            }
+            //return proxyResponse;
             //Note: 여기서 아웃풋 스트림을 종료할 필요는 없음
             // http://stackoverflow.com/questions/1159168/should-one-call-close-on-httpservletresponse-getoutputstream-getwriter
         }

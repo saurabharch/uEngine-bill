@@ -50,6 +50,11 @@ public class KBRepositoryImpl extends PersistentRepositoryImpl<String, Object> i
     }
 
     @Override
+    public Map getTenantById(String id) {
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".getTenantById", id);
+    }
+
+    @Override
     public int deleteAccountById(String id) {
         return this.getSqlSessionTemplate().delete(this.getNamespace() + ".deleteAccountById", id);
     }

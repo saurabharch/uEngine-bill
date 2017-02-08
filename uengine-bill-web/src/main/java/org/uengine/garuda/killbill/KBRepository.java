@@ -36,6 +36,8 @@ public interface KBRepository {
 
     Map getAccountById(String id);
 
+    Map getTenantById(String id);
+
     int deleteAccountById(String id);
 
     Long getBundleCountByAccountId(String id);

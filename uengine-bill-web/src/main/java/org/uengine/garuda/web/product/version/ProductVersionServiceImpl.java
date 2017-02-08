@@ -393,12 +393,12 @@ public class ProductVersionServiceImpl implements ProductVersionService {
      * @return
      */
     private String createPlanUsageName(String product_id, Long seq, String prefix) {
-        String id = prefix + "-" + String.format("%06d", seq);
-        return product_id + "-" + id;
+        String id = prefix + "_" + String.format("%06d", seq);
+        return product_id + "_" + id;
     }
 
     private void validPlanUsageName(String plan_name, String product_id, Long currentSeq, String prefix) {
-        //TODO 플랜 아이디 밸리데이션
+        //플랜 아이디 밸리데이션
         //앞 형식이 프로덕트 아이디인지 체크.
         //뒤 형식이 플랜 아이디인지 체크.
         //버젼안에 두가지 이상 중복 아이디가 있는지 체크
@@ -414,7 +414,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             if (!subProductId.equals(product_id)) {
                 isValid = false;
             }
-            if (!subPlanId.startsWith("-" + prefix + "-")) {
+            if (!subPlanId.startsWith("_" + prefix + "_")) {
                 isValid = false;
             }
             String subPlanId2 = subPlanId.substring(2 + prefix.length());
