@@ -332,6 +332,81 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    createProduct: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/product',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                var locationHeader = xhr.getResponseHeader('Location');
+                return locationHeader.substring(locationHeader.lastIndexOf('/') + 1);
+            }
+        };
+        return this.send(options);
+    },
+    updateProduct: function (product_id, data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/product/' + product_id,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    updateProductActive: function (product_id, data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/product/' + product_id + '/active',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    getProduct: function (product_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/product/' + product_id,
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    getProductSearch: function (searchKey, offset, limit) {
+        var data = {
+            offset: offset ? offset : 0,
+            limit: limit ? limit : 100
+        };
+        var url = searchKey ? '/rest/v1/product/search/' + searchKey : '/rest/v1/product/pagination';
+        var options = {
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: data,
+            resolve: function (response, status, xhr) {
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
+                return {
+                    data: response,
+                    total: total,
+                    filtered: filtered,
+                    offset: data.offset,
+                    limit: data.limit
+                };
+            }
+        };
+        return this.send(options);
+    },
+    deleteProduct: function (product_id) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/product/' + product_id,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();

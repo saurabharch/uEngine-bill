@@ -27,334 +27,211 @@
     <div id="page-wrapper" class="gray-bg dashbard-1">
 
         <%@include file="../template/header.jsp" %>
+
         <div class="row">
-            <div class="col-md-4 padding-1">
+            <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>All Products</h5>
+                        <h5>Products</h5>
+
                         <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
+                            <a id="createNewProduct" href="#" type="button" class="btn btn-primary btn-sm">New +</a>
+                            <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#"><i
+                                    class="fa fa-bars"></i></a>
                             <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">All Products</a>
+                                <li><a href="#">All</a>
                                 </li>
-                                <li><a href="#">Active Products</a>
+                                <li><a href="#">Active</a>
                                 </li>
-                                <li><a href="#">Inactive Products</a>
+                                <li><a href="#">Inactive</a>
+                                </li>
+                                <li><a href="#">None subscriptions</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#">Import Plans</a>
+                                <li><a href="#">Import Products</a>
                                 </li>
-                                <li><a href="#">Import Addons</a>
-                                </li>
-                                <li><a href="#">Import Coupons</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#">Export Plans</a>
+                                <li><a href="#">Export Products</a>
                                 </li>
-                                <li><a href="#">Export Addons</a>
-                                </li>
-                                <li><a href="#">Export Coupons</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div>
-                            <div class="feed-activity-list">
-
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">14 active</small>
-                                        <strong>FORCS BASIC</strong><br>
-                                        <small class="text-muted">Created 4:21 pm - 12.06.2016</small>
-                                        <div class="actions">
-                                            <button type="button" class="btn btn-default btn-xs">3 Plans</button>
-                                            <button type="button" class="btn btn-default btn-xs">6 Addons</button>
-                                            <button type="button" class="btn btn-default btn-xs">1 Coupons</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">14 active</small>
-                                        <strong>FORCS PRO</strong><br>
-                                        <small class="text-muted">Created 4:21 pm - 12.06.2016</small>
-                                        <div class="actions">
-                                            <button type="button" class="btn btn-default btn-xs">3 Plans</button>
-                                            <button type="button" class="btn btn-default btn-xs">6 Addons</button>
-                                            <button type="button" class="btn btn-default btn-xs">1 Coupons</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">14 active</small>
-                                        <strong>FORCS ENTERPRISE</strong><br>
-                                        <small class="text-muted">Created 4:21 pm - 12.06.2016</small>
-                                        <div class="actions">
-                                            <button type="button" class="btn btn-default btn-xs">3 Plans</button>
-                                            <button type="button" class="btn btn-default btn-xs">6 Addons</button>
-                                            <button type="button" class="btn btn-default btn-xs">1 Coupons</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">14 active</small>
-                                        <strong>FORCS ENTERPRISE</strong><br>
-                                        <small class="text-muted">Created 4:21 pm - 12.06.2016</small>
-                                        <div class="actions">
-                                            <button type="button" class="btn btn-default btn-xs">3 Plans</button>
-                                            <button type="button" class="btn btn-default btn-xs">6 Addons</button>
-                                            <button type="button" class="btn btn-default btn-xs">1 Coupons</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">14 active</small>
-                                        <strong>FORCS ENTERPRISE</strong><br>
-                                        <small class="text-muted">Created 4:21 pm - 12.06.2016</small>
-                                        <div class="actions">
-                                            <button type="button" class="btn btn-default btn-xs">3 Plans</button>
-                                            <button type="button" class="btn btn-default btn-xs">6 Addons</button>
-                                            <button type="button" class="btn btn-default btn-xs">1 Coupons</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8 padding-1">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>FORCS BASIC</h5>
-                        <div class="ibox-tools">
-                            <button type="button" class="btn btn-default btn-sm">Edit</button>
-                            <button type="button" class="btn btn-default btn-sm">Add plan</button>
-                            <button type="button" class="btn btn-default btn-sm">Add Addon</button>
-                            <button type="button" class="btn btn-default btn-sm">Add Coupon</button>
-                            <button type="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">MORE</button>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">Associate Templates</a>
-                                </li>
-                                <li><a href="#">Mark as Inactive</a>
-                                </li>
-                                <li><a href="#">Delete</a>
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-refresh"> Refresh list</i></a>
                                 </li>
                             </ul>
-
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div>
-                            <div class="feed-activity-list">
 
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <div class="actions">
-                                            <button type="button" class="btn btn-default btn-xs">3 Plans</button>
-                                            <button type="button" class="btn btn-default btn-xs">6 Addons</button>
-                                            <button type="button" class="btn btn-default btn-xs">1 Coupons</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <div class="table-responsive">
+                            <table id="product-table" class="table table-striped table-bordered table-hover">
 
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>Plans</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div>
-                            <div class="feed-activity-list">
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <div class="col-md-10">
-                                            <small class="pull-right text-navy">3 activate</small>
-                                            <strong>basic-monthly</strong><br>
-                                            <p class="text-muted">Plan Code: basic-monthly</p>
-                                            <br>
-                                            <span>Associated Addons : <span class="text-navy">account-usage , storage-usage</span></span>
-                                            <div class="actions">
-                                                <button type="button" class="btn btn-default btn-xs">Edit</button>
-                                                <button type="button" class="btn btn-default btn-xs">Mark as Inactive</button>
-                                                <button type="button" class="btn btn-default btn-xs">Delete</button>
-                                                <button type="button" class="btn btn-default btn-xs">View Plan URL</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <strong class="pull-right">$16.00</strong>
-                                            <br>
-                                            <p class="pull-right">per month</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <div class="col-md-10">
-                                            <small class="pull-right text-navy">3 activate</small>
-                                            <strong>basic-monthly</strong><br>
-                                            <p class="text-muted">Plan Code: basic-monthly</p>
-                                            <br>
-                                            <span>Associated Addons : <span class="text-navy">account-usage , storage-usage</span></span>
-                                            <div class="actions">
-                                                <button type="button" class="btn btn-default btn-xs">Edit</button>
-                                                <button type="button" class="btn btn-default btn-xs">Mark as Inactive</button>
-                                                <button type="button" class="btn btn-default btn-xs">Delete</button>
-                                                <button type="button" class="btn btn-default btn-xs">View Plan URL</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <strong class="pull-right">$16.00</strong>
-                                            <br>
-                                            <p class="pull-right">per month</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>ADDONS</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div>
-                            <div class="feed-activity-list">
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <div class="col-md-9">
-                                            <strong>account-usage</strong><br>
-                                            <p class="text-muted">Addon Code: account-usage</p>
-                                            <br>
-                                            <span>Associated Plans : <span class="text-navy">basic-monthly</span></span>
-                                            <div class="actions">
-                                                <button type="button" class="btn btn-default btn-xs">Edit</button>
-                                                <button type="button" class="btn btn-default btn-xs">Mark as Inactive</button>
-                                                <button type="button" class="btn btn-default btn-xs">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong class="pull-right">Price varies by <a class="text-navy">tier</a></strong>
-                                            <br>
-                                            <p class="pull-right">per month</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <div class="col-md-9">
-                                            <strong>account-usage</strong><br>
-                                            <p class="text-muted">Addon Code: account-usage</p>
-                                            <br>
-                                            <span>Associated Plans : <span class="text-navy">basic-monthly</span></span>
-                                            <div class="actions">
-                                                <button type="button" class="btn btn-default btn-xs">Edit</button>
-                                                <button type="button" class="btn btn-default btn-xs">Mark as Inactive</button>
-                                                <button type="button" class="btn btn-default btn-xs">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong class="pull-right">Price varies by <a class="text-navy">tier</a></strong>
-                                            <br>
-                                            <p class="pull-right">per month</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>COUPONS</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div>
-                            <div class="feed-activity-list">
-                                <div class="feed-element">
-                                    <div class="media-body ">
-                                        <div class="col-md-9">
-                                            <strong>basic-discount-coupon</strong><br>
-                                            <p class="text-muted">Code: basic-discount-coupon</p>
-                                            <br>
-                                            <span>Valid Upto : <span class="text-navy">07 Jan 2017</span></span>
-                                            <p>5 redemptions</p>
-                                            <div class="actions">
-                                                <button type="button" class="btn btn-default btn-xs">Show details</button>
-                                                <button type="button" class="btn btn-default btn-xs">Mark as Inactive</button>
-                                                <button type="button" class="btn btn-default btn-xs">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong class="pull-right">30%</strong>
-                                            <br>
-                                            <p class="pull-right">One Time</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-
         <%@include file="../template/footer.jsp" %>
 
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
+<%@include file="../subpages/product-new.jsp" %>
 
 
 <script>
     $(document).ready(function () {
+        var dt = new uengineDT($('#product-table'), {
+            select: true,
+            columns: [
+                {
+                    data: 'name',
+                    title: 'NAME',
+                    defaultContent: '',
+                    event: {
+                        click: function (key, value, rowValue, rowIdx, td) {
+                            window.location.href = '/product/' + rowValue['id'] + '/detail';
+                        }
+                    }
+                },
+                {
+                    data: 'id',
+                    title: 'PRODUCT ID',
+                    defaultContent: ''
+                },
+                {
+                    data: 'category',
+                    title: 'CATEGORY',
+                    defaultContent: ''
+                },
+                {
+                    data: 'is_active',
+                    title: 'ACTIVE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'owner',
+                    title: 'OWNER ACCOUNT',
+                    defaultContent: ''
+                }
+            ],
+            pageLength: 10,
+            info: true,
+            responsive: true,
+            dom: '<"html5buttons"B>lTfgitp',
+            buttons: [
+                {
+                    text: 'Delete',
+                    action: function () {
+                        var selected = dt.getDt().rows({selected: true}).data();
+                        for (var i = 0; i < selected.length; i++) {
+                            var product_id = selected[i]['id'];
+                            uBilling.deleteProduct(product_id)
+                                .done(function () {
+                                    toastr.success("Product deleted.");
+                                    dt.getDt().ajax.reload();
+                                })
+                                .fail(function () {
+                                    toastr.error("Can't remove product cause by subscriptions are exist");
+                                });
+                        }
+                    }
+                },
+                {
+                    text: 'Edit',
+                    action: function () {
+                        var selected = dt.getDt().rows({selected: true}).data();
+                        if(!selected.length){
+                            return;
+                        }
+                        if(selected.length > 1){
+                            toastr.warning("Choice one product to edit.");
+                        }else{
+                            var product_id = selected[0]['id'];
+                            productController.open(product_id, $('#product-table'));
+                        }
+                    }
+                },
+                {extend: 'copy'},
+                {extend: 'csv'},
+                {extend: 'excel', title: 'ExampleFile'},
+                {extend: 'pdf', title: 'ExampleFile'},
 
+                {
+                    extend: 'print',
+                    customize: function (win) {
+                        $(win.document.body).addClass('white-bg');
+                        $(win.document.body).css('font-size', '10px');
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, callback, settings) {
+                var offset = data.start;
+                var limit = data.length;
+                var searchKey = data.search.value;
+                searchKey = searchKey.length > 0 ? searchKey : null;
+                uBilling.getProductSearch(searchKey, offset, limit)
+                    .done(function (response) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            response.data[i].name = '<a>' + response.data[i].name + '</a>';
+                            var isActive = response.data[i]['is_active'];
+                            if(isActive == 'Y'){
+                                response.data[i]['is_active'] = '<span class="label label-primary">Active</span>'
+                            }else{
+                                response.data[i]['is_active'] = '<span class="label label-warning">Inactive</span>'
+                            }
+                        }
+                        dt.gridData = response.data;
+                        callback({
+                            recordsTotal: response.total,
+                            recordsFiltered: response.filtered,
+                            data: response.data
+                        });
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find product list.");
+                    });
+            }
+        });
+        dt.renderGrid();
+        dt.getDt()
+            .on('user-select', function (e, dt, type, cell, originalEvent) {
+                if ($(originalEvent.target).index() === 0) {
+                    e.preventDefault();
+                }
+            })
+            .on('select', function (e, dt, type, indexes) {
+                tableButtonCss();
+            })
+            .on('deselect', function (e, dt, type, indexes) {
+                tableButtonCss();
+            });
+        var tableButtonCss = function () {
+            var buttons = dt.getPanel().parent().find('.html5buttons').find('a');
+            var count = dt.getDt().rows({selected: true}).count();
+            if (count > 0) {
+                buttons.eq(0).css('opacity', '1');
+                buttons.eq(1).css('opacity', '1');
+            } else {
+                buttons.eq(0).css('opacity', '0.5');
+                buttons.eq(1).css('opacity', '0.5');
+            }
+        };
+        tableButtonCss();
+
+        $('#createNewProduct').click(function(){
+            productController.open(null , $('#product-table'));
+        });
+        $('#product-table').on('updated',function(){
+            dt.getDt().ajax.reload();
+        });
     });
 </script>
 </body>
