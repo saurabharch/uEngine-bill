@@ -22,24 +22,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.common.repository.PersistentRepositoryImpl;
+import org.uengine.garuda.killbill.KBService;
+import org.uengine.garuda.killbill.api.model.Clock;
+import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.ProductDaoVersion;
 import org.uengine.garuda.model.ProductVersion;
 import org.uengine.garuda.model.SubscriptionEventsExt;
 import org.uengine.garuda.model.catalog.Plan;
 import org.uengine.garuda.util.JsonUtils;
+import org.uengine.garuda.web.organization.OrganizationService;
 import org.uengine.garuda.web.product.event.SubscriptionEventRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Seungpil PARK
  */
 @Repository
 public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<String, Object> implements ProductVersionRepository {
+
+    @Autowired
+    private OrganizationService organizationService;
+
+    @Autowired
+    private KBService kbService;
 
     @Override
     public String getNamespace() {
@@ -53,7 +60,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     private ProductDaoVersion convertToDao(ProductVersion productVersion) {
         try {
-            if(productVersion == null){
+            if (productVersion == null) {
                 return null;
             }
             String plans = JsonUtils.marshal(productVersion.getPlans());
@@ -66,14 +73,44 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         }
     }
 
-    private ProductVersion convertToVersion(ProductDaoVersion productDaoVersion) {
+    private ProductVersion convertToVersion(ProductDaoVersion productDaoVersion, List<ProductDaoVersion> versions) {
         try {
-            if(productDaoVersion == null){
+            if (productDaoVersion == null) {
                 return null;
             }
+            //비교 군이 넘어오지 않았다면 비교군을 구해주도록 한다.
+            if (versions == null) {
+                versions = this.selectDaoByProductId(productDaoVersion.getOrganization_id(), productDaoVersion.getProduct_id());
+            }
+
+            //킬빌 서버의 현재 시각을 구한다.
+            Organization organization = organizationService.selectById(productDaoVersion.getOrganization_id());
+            Clock clock = kbService.getTime(organization.getTenant_api_key(), organization.getTenant_api_secret());
+            Date currentUtcTime = clock.getCurrentUtcTime();
+
+            //비교군과 주어진 버젼의 effective 날짜를 비교하여 is_current 를 구한다.
+            //버젼이 시간이 currentUtcTime 보다 이전인 그룹중 가장 시간 값이 큰 것.
+            String is_current = "N";
+            ProductDaoVersion maxTimeVersion = null;
+            for (ProductDaoVersion version : versions) {
+                if (version.getEffective_date().getTime() < currentUtcTime.getTime()) {
+                    if (maxTimeVersion == null) {
+                        maxTimeVersion = version;
+                    } else {
+                        if (maxTimeVersion.getEffective_date().getTime() < version.getEffective_date().getTime()) {
+                            maxTimeVersion = version;
+                        }
+                    }
+                }
+            }
+            if (productDaoVersion.getId() == maxTimeVersion.getId()) {
+                is_current = "Y";
+            }
+
             List<Plan> plans = JsonUtils.unmarshalToList(productDaoVersion.getPlans());
             Map<String, Object> map = JsonUtils.convertClassToMap(productDaoVersion);
             map.put("plans", plans);
+            map.put("is_current", is_current);
             return new ObjectMapper().convertValue(map, ProductVersion.class);
 
         } catch (IOException ex) {
@@ -83,15 +120,21 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     private List<ProductVersion> convertToVersionList(List<ProductDaoVersion> productDaoVersions) {
         List<ProductVersion> list = new ArrayList<>();
-        if(productDaoVersions == null){
+        if (productDaoVersions == null) {
             return list;
         }
         for (ProductDaoVersion daoVersion : productDaoVersions) {
-            list.add(convertToVersion(daoVersion));
+            list.add(convertToVersion(daoVersion, productDaoVersions));
         }
         return list;
     }
 
+    private List<ProductDaoVersion> selectDaoByProductId(String organization_id, String product_id) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("product_id", product_id);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByProductId", map);
+    }
 
     @Override
     public List<ProductVersion> selectByProductId(String organization_id, String product_id) {
@@ -109,16 +152,22 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         map.put("product_id", product_id);
         map.put("version", version);
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByVersion", map);
-        return convertToVersion(daoVersion);
+        return convertToVersion(daoVersion, null);
     }
 
     @Override
     public ProductVersion selectByCurrentVersion(String organization_id, String product_id) {
-        Map map = new HashMap();
-        map.put("organization_id", organization_id);
-        map.put("product_id", product_id);
-        ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByCurrentVersion", map);
-        return convertToVersion(daoVersion);
+        List<ProductVersion> productVersions = this.selectByProductId(organization_id, product_id);
+        if (productVersions == null) {
+            return null;
+        } else {
+            for (ProductVersion productVersion : productVersions) {
+                if ("Y".equals(productVersion.getIs_current())) {
+                    return productVersion;
+                }
+            }
+            return null;
+        }
     }
 
     @Override
@@ -127,13 +176,13 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         map.put("organization_id", organization_id);
         map.put("product_id", product_id);
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectMaxVersion", map);
-        return convertToVersion(daoVersion);
+        return convertToVersion(daoVersion, null);
     }
 
     @Override
     public ProductVersion selectById(Long id) {
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", id);
-        return convertToVersion(daoVersion);
+        return convertToVersion(daoVersion, null);
     }
 
     @Override
@@ -147,16 +196,6 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
     public ProductVersion updateVersion(ProductVersion productVersion) {
         this.getSqlSessionTemplate().update(this.getNamespace() + ".updateVersion", convertToDao(productVersion));
         return this.selectByVersion(productVersion.getOrganization_id(), productVersion.getProduct_id(), productVersion.getVersion());
-    }
-
-    @Override
-    public int updateVersionAsCurrent(String organization_id, String product_id, Long version) {
-        Map map = new HashMap();
-        map.put("organization_id", organization_id);
-        map.put("product_id", product_id);
-        map.put("version", version);
-        this.getSqlSessionTemplate().update(this.getNamespace() + ".updateVersionAsInCurrent", map);
-        return this.getSqlSessionTemplate().update(this.getNamespace() + ".updateVersionAsCurrent", map);
     }
 
     @Override

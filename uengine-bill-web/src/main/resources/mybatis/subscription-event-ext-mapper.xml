@@ -83,4 +83,14 @@
                 GROUP BY B.plan_name)C
         group by C.plan_name
     </select>
+
+    <select id="selectSubscriptionCountByProduct" parameterType="map" resultType="java.lang.Long">
+        select ifnull(count(*),0) as count from
+        (SELECT * from subscription_events_ext
+            WHERE organization_id = #{organization_id}
+            AND subscription_id is not null
+            AND product_id = #{product_id}
+            AND (user_type = 'CHANGE' OR user_type = 'CREATE')
+            GROUP BY subscription_id) A;
+    </select>
 </mapper>

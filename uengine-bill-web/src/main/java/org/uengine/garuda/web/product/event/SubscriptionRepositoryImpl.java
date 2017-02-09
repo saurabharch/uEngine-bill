@@ -57,6 +57,14 @@ public class SubscriptionRepositoryImpl extends PersistentRepositoryImpl<String,
     }
 
     @Override
+    public Long selectSubscriptionCountByProduct(String organization_id, String product_id) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("product_id", product_id);
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectSubscriptionCountByProduct", map);
+    }
+
+    @Override
     public SubscriptionEventsExt selectById(Long id) {
         return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", id);
     }

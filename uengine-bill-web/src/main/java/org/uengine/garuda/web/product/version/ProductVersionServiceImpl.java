@@ -152,11 +152,6 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //버젼 저장
         ProductVersion createdVersion = productVersionRepository.insertVersion(productVersion);
 
-        //is_current 가 Y 일경우 current 업데이트
-        if ("Y".equals(productVersion.getIs_current())) {
-            productVersionRepository.updateVersionAsCurrent(organization_id, product_id, createdVersion.getVersion());
-        }
-
         return versionWithPlanCount(createdVersion);
     }
 
@@ -211,26 +206,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //버젼 업데이트
         ProductVersion updatedVersion = productVersionRepository.updateVersion(productVersion);
 
-        //is_current 가 Y 일경우 current 업데이트
-        if ("Y".equals(productVersion.getIs_current())) {
-            productVersionRepository.updateVersionAsCurrent(organization_id, product_id, updatedVersion.getVersion());
-        }
-
         return versionWithPlanCount(updatedVersion);
-    }
-
-
-    /**
-     * 주어진 버젼을 current version 으로 변경한다.
-     *
-     * @param organization_id
-     * @param product_id
-     * @param version
-     * @return
-     */
-    @Override
-    public int updateVersionAsCurrent(String organization_id, String product_id, Long version) {
-        return productVersionRepository.updateVersionAsCurrent(organization_id, product_id, version);
     }
 
 

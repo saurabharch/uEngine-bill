@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.common.exception.ServiceException;
+import org.uengine.garuda.killbill.api.model.Clock;
 import org.uengine.garuda.util.JsonUtils;
 import org.uengine.garuda.web.organization.OrganizationRepository;
 
@@ -73,5 +74,15 @@ public class KBServiceImpl implements KBService {
         } catch (IOException ex) {
             throw new ServiceException(ex);
         }
+    }
+
+    @Override
+    public Clock getTime(String apiKey, String apiSecret) {
+        return killbillServiceFactory.apiClient(apiKey, apiSecret).testApi().getTime();
+    }
+
+    @Override
+    public Clock updateTime(String apiKey, String apiSecret, String requestedDate) {
+        return killbillServiceFactory.apiClient(apiKey, apiSecret).testApi().updateTime(requestedDate, null, null);
     }
 }

@@ -68,7 +68,8 @@
             AND (
             name LIKE CONCAT('%',#{searchKey},'%') OR
             category LIKE CONCAT('%',#{searchKey},'%') OR
-            redirect_url LIKE CONCAT('%',#{searchKey},'%')
+            redirect_url LIKE CONCAT('%',#{searchKey},'%') OR
+            owner_account_id LIKE CONCAT('%',#{searchKey},'%')
             )
         </if>
         <if test="is_active != '' and is_active != null">
@@ -85,7 +86,8 @@
             AND (
             name LIKE CONCAT('%',#{searchKey},'%') OR
             category LIKE CONCAT('%',#{searchKey},'%') OR
-            redirect_url LIKE CONCAT('%',#{searchKey},'%')
+            redirect_url LIKE CONCAT('%',#{searchKey},'%') OR
+            owner_account_id LIKE CONCAT('%',#{searchKey},'%')
             )
         </if>
         <if test="is_active != '' and is_active != null">

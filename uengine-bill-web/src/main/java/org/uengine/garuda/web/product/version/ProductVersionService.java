@@ -22,7 +22,5 @@ public interface ProductVersionService {
 
     ProductVersion updateVersion(String organization_id, String product_id, Long version, ProductVersion productVersion);
 
-    int updateVersionAsCurrent(String organization_id, String product_id, Long version);
-
     int deleteVersion(String organization_id, String product_id, Long version);
 }

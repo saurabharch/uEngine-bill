@@ -188,36 +188,6 @@ public class ProductVersionRestController {
         }
     }
 
-    @RequestMapping(value = "/product/{id}/version/{version}/current", method = RequestMethod.PUT)
-    public ResponseEntity<ProductVersion> updateProductVersionCurrent(HttpServletRequest request,
-                                                                      @PathVariable("id") String id,
-                                                                      @PathVariable("version") Long version) {
-
-        try {
-            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
-            if (!role.getAccept()) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-            Organization organization = role.getOrganization();
-            ProductVersion currentVersion = productVersionService.getVersion(organization.getId(), id, version);
-            if (currentVersion == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-
-            productVersionService.updateVersionAsCurrent(organization.getId(), id, version);
-            currentVersion.setIs_current("Y");
-            return new ResponseEntity<>(currentVersion, HttpStatus.OK);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @RequestMapping(value = "/product/{id}/version/{version}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteProduct(HttpServletRequest request,
                                               @PathVariable("id") String id,

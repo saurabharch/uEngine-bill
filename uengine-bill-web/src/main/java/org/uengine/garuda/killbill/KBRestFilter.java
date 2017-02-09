@@ -353,6 +353,8 @@ public class KBRestFilter implements Filter {
             if (statusCode == 0) {
                 statusCode = 400;
             }
+
+            //transfer-encoding 을 제외한 헤더값을 카피한다.
             if (headers != null) {
                 for (int i = 0; i < headers.length; i++) {
                     if(!"transfer-encoding".equals(headers[i].getName().toLowerCase())){
@@ -364,7 +366,6 @@ public class KBRestFilter implements Filter {
             try {
                 if (resultBody != null) {
                     response.getWriter().write(resultBody);
-                    //consumeQuietly(proxyResponse.getEntity());
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -372,6 +373,13 @@ public class KBRestFilter implements Filter {
         }
     }
 
+    /**
+     * 서브스크립션 생성, 업데이트 후 변경 정보를 킬빌서버로부터 가져온다.
+     * @param organization
+     * @param endPoint
+     * @return
+     * @throws Exception
+     */
     private String getSubscriptionsAfterIntercept(Organization organization, String endPoint) throws Exception {
         ApplicationContext context = ApplicationContextRegistry.getApplicationContext();
         ConfigurationHelper configurationHelper = context.getBean(ConfigurationHelper.class);
@@ -404,6 +412,14 @@ public class KBRestFilter implements Filter {
         }
     }
 
+    /**
+     * 킬빌 서버로 서브스크립션 생성 요청을 보낸다.
+     * @param request
+     * @param organization
+     * @param body
+     * @return
+     * @throws IOException
+     */
     private HttpResponse sendSubscriptionsRequest(HttpServletRequest request, Organization organization, String body) throws IOException {
         ApplicationContext context = ApplicationContextRegistry.getApplicationContext();
         ConfigurationHelper configurationHelper = context.getBean(ConfigurationHelper.class);

@@ -8,7 +8,6 @@
         product_id,
         version,
         effective_date,
-        is_current,
         organization_id,
         tenant_id,
         plans
@@ -21,7 +20,6 @@
         r.product_id = #{product_id}
         AND r.organization_id = #{organization_id}) + 1,
         #{effective_date},
-        'N',
         #{organization_id},
         #{tenant_id},
         #{plans}
@@ -46,13 +44,6 @@
         AND version = #{version}
     </select>
 
-    <select id="selectByCurrentVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">
-        SELECT * FROM product_version
-        WHERE product_id = #{product_id}
-        AND organization_id = #{organization_id}
-        AND is_current = 'Y'
-    </select>
-
     <select id="selectMaxVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">
         SELECT * FROM product_version
         WHERE product_id = #{product_id}
@@ -68,24 +59,6 @@
         WHERE product_id = #{product_id}
         AND organization_id = #{organization_id}
         AND version = #{version}
-    </update>
-
-    <update id="updateVersionAsCurrent" parameterType="map">
-        UPDATE product_version
-        SET
-        is_current = 'Y'
-        WHERE product_id = #{product_id}
-        AND organization_id = #{organization_id}
-        AND version = #{version}
-    </update>
-
-    <update id="updateVersionAsInCurrent" parameterType="map">
-        UPDATE product_version
-        SET
-        is_current = 'N'
-        WHERE product_id = #{product_id}
-        AND organization_id = #{organization_id}
-        AND is_current = 'Y'
     </update>
 
     <delete id="deleteVersion" parameterType="map">

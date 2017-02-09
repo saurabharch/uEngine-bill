@@ -19,6 +19,7 @@ import org.uengine.garuda.util.StringUtils;
 import org.uengine.garuda.web.organization.OrganizationRepository;
 import org.uengine.garuda.web.organization.OrganizationRole;
 import org.uengine.garuda.web.organization.OrganizationService;
+import org.uengine.garuda.web.product.event.SubscriptionEventRepository;
 import org.uengine.garuda.web.rule.BillingRuleRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private SubscriptionEventRepository subscriptionEventRepository;
 
     private Logger logger = LoggerFactory.getLogger(ProductRepository.class);
 
@@ -66,8 +70,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int deleteProductById(String organization_id, String id) {
         //TODO 프로덕트 관련 서브스크립션이 있다면 삭제 불가.
-
-        return productRepository.deleteProductById(organization_id, id);
+        Long countByProduct = subscriptionEventRepository.selectSubscriptionCountByProduct(organization_id, id);
+        if(countByProduct > 0){
+            return 0;
+        }else{
+            return productRepository.deleteProductById(organization_id, id);
+        }
     }
 
     @Override

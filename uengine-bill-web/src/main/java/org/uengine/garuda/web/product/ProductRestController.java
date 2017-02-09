@@ -106,6 +106,28 @@ public class ProductRestController {
         }
     }
 
+    @RequestMapping(value = "/product/{id}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Product> getProduct(HttpServletRequest request,
+                                              @PathVariable("id") String id) {
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            Organization organization = role.getOrganization();
+            Product product = productService.selectProductById(organization.getId(), id);
+            if (product == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(value = "/product", method = RequestMethod.POST)
     public ResponseEntity<Void> createProduct(HttpServletRequest request, @RequestBody Product product, UriComponentsBuilder ucBuilder) {
 
@@ -191,8 +213,12 @@ public class ProductRestController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            productService.deleteProductById(organization.getId(), id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            int deleted = productService.deleteProductById(organization.getId(), id);
+            if (deleted == 0) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

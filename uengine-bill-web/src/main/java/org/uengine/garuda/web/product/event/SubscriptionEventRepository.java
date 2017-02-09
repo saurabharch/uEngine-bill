@@ -32,6 +32,8 @@ public interface SubscriptionEventRepository {
 
     List<Map> selectSubscriptionCountByProductVersion(String organization_id, String product_id, Long version);
 
+    Long selectSubscriptionCountByProduct(String organization_id, String product_id);
+
     SubscriptionEventsExt selectById(Long id);
 
     SubscriptionEventsExt insert(SubscriptionEventsExt subscriptionEventsExt);

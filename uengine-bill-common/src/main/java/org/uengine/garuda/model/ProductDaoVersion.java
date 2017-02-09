@@ -14,7 +14,6 @@ public class ProductDaoVersion {
     private String product_id;
     private Long version;
     private Date effective_date;
-    private String is_current;
     private String organization_id;
     private String tenant_id;
     private String plans;
@@ -50,14 +49,6 @@ public class ProductDaoVersion {
 
     public void setEffective_date(Date effective_date) {
         this.effective_date = effective_date;
-    }
-
-    public String getIs_current() {
-        return is_current;
-    }
-
-    public void setIs_current(String is_current) {
-        this.is_current = is_current;
     }
 
     public String getOrganization_id() {

@@ -43,7 +43,5 @@ public interface ProductVersionRepository {
 
     ProductVersion updateVersion(ProductVersion productVersion);
 
-    int updateVersionAsCurrent(String organization_id, String product_id, Long version);
-
     int deleteVersion(String organization_id, String product_id, Long version);
 }
