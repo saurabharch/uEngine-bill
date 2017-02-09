@@ -92,6 +92,10 @@ public class KillbillApi {
         return (OverdueApi) this.copyOptions(new OverdueApi());
     }
 
+    public TestApi testApi() {
+        return (TestApi) this.copyOptions(new TestApi());
+    }
+
     private KillbillApi copyOptions(KillbillApi killbillApi) {
         killbillApi.setHost(host);
         killbillApi.setPort(port);
