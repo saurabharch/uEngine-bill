@@ -22,15 +22,6 @@ public class KBServiceImpl implements KBService {
     private Properties config;
 
     @Autowired
-    private OrganizationRepository organizationRepository;
-
-    @Autowired
-    private KBRepository kbRepository;
-
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
     private KBServiceFactory killbillServiceFactory;
 
     private Logger logger = LoggerFactory.getLogger(KBService.class);

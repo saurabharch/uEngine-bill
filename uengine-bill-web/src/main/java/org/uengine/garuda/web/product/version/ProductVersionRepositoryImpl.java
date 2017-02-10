@@ -66,6 +66,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
             String plans = JsonUtils.marshal(productVersion.getPlans());
             Map<String, Object> map = JsonUtils.convertClassToMap(productVersion);
             map.put("plans", plans);
+            map.remove("is_current");
             return new ObjectMapper().convertValue(map, ProductDaoVersion.class);
 
         } catch (IOException ex) {
@@ -73,7 +74,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         }
     }
 
-    private ProductVersion convertToVersion(ProductDaoVersion productDaoVersion, List<ProductDaoVersion> versions) {
+    private ProductVersion convertToVersion(ProductDaoVersion productDaoVersion, List<ProductDaoVersion> versions, Clock clock) {
         try {
             if (productDaoVersion == null) {
                 return null;
@@ -84,8 +85,10 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
             }
 
             //킬빌 서버의 현재 시각을 구한다.
-            Organization organization = organizationService.selectById(productDaoVersion.getOrganization_id());
-            Clock clock = kbService.getTime(organization.getTenant_api_key(), organization.getTenant_api_secret());
+            if (clock == null) {
+                Organization organization = organizationService.selectById(productDaoVersion.getOrganization_id());
+                clock = kbService.getTime(organization.getTenant_api_key(), organization.getTenant_api_secret());
+            }
             Date currentUtcTime = clock.getCurrentUtcTime();
 
             //비교군과 주어진 버젼의 effective 날짜를 비교하여 is_current 를 구한다.
@@ -123,8 +126,11 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         if (productDaoVersions == null) {
             return list;
         }
+        Organization organization = organizationService.selectById(productDaoVersions.get(0).getOrganization_id());
+        Clock clock = kbService.getTime(organization.getTenant_api_key(), organization.getTenant_api_secret());
+
         for (ProductDaoVersion daoVersion : productDaoVersions) {
-            list.add(convertToVersion(daoVersion, productDaoVersions));
+            list.add(convertToVersion(daoVersion, productDaoVersions, clock));
         }
         return list;
     }
@@ -152,7 +158,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         map.put("product_id", product_id);
         map.put("version", version);
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByVersion", map);
-        return convertToVersion(daoVersion, null);
+        return convertToVersion(daoVersion, null,null);
     }
 
     @Override
@@ -176,13 +182,13 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         map.put("organization_id", organization_id);
         map.put("product_id", product_id);
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectMaxVersion", map);
-        return convertToVersion(daoVersion, null);
+        return convertToVersion(daoVersion, null,null);
     }
 
     @Override
     public ProductVersion selectById(Long id) {
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", id);
-        return convertToVersion(daoVersion, null);
+        return convertToVersion(daoVersion, null,null);
     }
 
     @Override

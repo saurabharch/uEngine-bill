@@ -250,6 +250,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
                     productVersion.getVersion());
 
             for (Plan plan : productVersion.getPlans()) {
+                boolean planCountExist = false;
                 for (Map planCount : planCounts) {
                     Long number_of_subscriptions_referenced_by_version = ((BigDecimal) planCount.get("number_of_subscriptions_referenced_by_version")).longValue();
                     Long number_of_subscriptions = ((BigDecimal) planCount.get("number_of_subscriptions")).longValue();
@@ -257,10 +258,15 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
                     if (!StringUtils.isEmpty(plan.getName())) {
                         if (plan.getName().equals(plan_name)) {
+                            planCountExist = true;
                             plan.setNumber_of_subscriptions_referenced_by_version(number_of_subscriptions_referenced_by_version);
                             plan.setNumber_of_subscriptions(number_of_subscriptions);
                         }
                     }
+                }
+                if (!planCountExist) {
+                    plan.setNumber_of_subscriptions_referenced_by_version(new Long(0));
+                    plan.setNumber_of_subscriptions(new Long(0));
                 }
             }
         }
@@ -306,28 +312,32 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             if (initialPhases != null && !initialPhases.isEmpty()) {
                 for (Phase initialPhase : initialPhases) {
                     List<Usage> usages = initialPhase.getUsages();
-                    for (Usage usage : usages) {
-                        if (StringUtils.isEmpty(usage.getName())) {
-                            usage_seq++;
-                            usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
-                        } else {
-                            validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+                    if (usages != null) {
+                        for (Usage usage : usages) {
+                            if (StringUtils.isEmpty(usage.getName())) {
+                                usage_seq++;
+                                usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
+                            } else {
+                                validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+                            }
+                            usageNameList.add(usage.getName());
                         }
-                        usageNameList.add(usage.getName());
                     }
                 }
             }
 
             Phase finalPhase = plan.getFinalPhase();
             List<Usage> usages = finalPhase.getUsages();
-            for (Usage usage : usages) {
-                if (StringUtils.isEmpty(usage.getName())) {
-                    usage_seq++;
-                    usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
-                } else {
-                    validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+            if (usages != null) {
+                for (Usage usage : usages) {
+                    if (StringUtils.isEmpty(usage.getName())) {
+                        usage_seq++;
+                        usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
+                    } else {
+                        validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+                    }
+                    usageNameList.add(usage.getName());
                 }
-                usageNameList.add(usage.getName());
             }
         }
 
@@ -465,7 +475,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
         if (phase.getFixed() == null && phase.getRecurring() == null && phase.getUsages() == null) {
             throw new ServiceException("Some phase has no fixed,recurring,usages in : " + plan.getDisplay_name());
-        } else if (phase.getUsages().size() == 0) {
+        } else if (phase.getUsages() != null && phase.getUsages().size() == 0) {
             throw new ServiceException("Some phase has no fixed,recurring,usages in : " + plan.getDisplay_name());
         }
 
@@ -488,49 +498,51 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         }
 
         //usage
-        for (Usage usage : usages) {
-            if (StringUtils.isEmpty(usage.getDisplay_name())) {
-                throw new ServiceException("Usage display name is required : " + plan.getDisplay_name());
-            }
-
-            if (!Enums.getIfPresent(BillingMode.class, usage.getBillingMode()).isPresent()) {
-                throw new ServiceException(usage.getBillingMode() + " is invalid usage billing mode : " + plan.getDisplay_name());
-            }
-
-            if (!Enums.getIfPresent(UsageType.class, usage.getUsageType()).isPresent()) {
-                throw new ServiceException(usage.getUsageType() + " is invalid usage type : " + plan.getDisplay_name());
-            }
-
-            if (!Enums.getIfPresent(BillingPeriod.class, usage.getBillingPeriod()).isPresent()) {
-                throw new ServiceException(usage.getBillingPeriod() + " is invalid usage billing period : " + plan.getDisplay_name());
-            }
-
-            if (usage.getTiers() == null || usage.getTiers().isEmpty()) {
-                throw new ServiceException("Tiers are required : " + plan.getDisplay_name());
-            }
-
-            //Tier check
-            for (Tier tier : usage.getTiers()) {
-                if (StringUtils.isEmpty(tier.getUnit())) {
-                    throw new ServiceException("Some usage has empty unit name : " + plan.getDisplay_name());
+        if (usages != null) {
+            for (Usage usage : usages) {
+                if (StringUtils.isEmpty(usage.getDisplay_name())) {
+                    throw new ServiceException("Usage display name is required : " + plan.getDisplay_name());
                 }
 
-                Pattern pattern = Pattern.compile("\\s");
-                Matcher matcher = pattern.matcher(tier.getUnit());
-                boolean found = matcher.find();
-                if (found) {
-                    throw new ServiceException("Some usage has white space unit name : " + plan.getDisplay_name());
+                if (!Enums.getIfPresent(BillingMode.class, usage.getBillingMode()).isPresent()) {
+                    throw new ServiceException(usage.getBillingMode() + " is invalid usage billing mode : " + plan.getDisplay_name());
                 }
 
-                if (tier.getSize() == null || tier.getSize() < 0) {
-                    throw new ServiceException("There is invalid tier size value : " + plan.getDisplay_name());
+                if (!Enums.getIfPresent(UsageType.class, usage.getUsageType()).isPresent()) {
+                    throw new ServiceException(usage.getUsageType() + " is invalid usage type : " + plan.getDisplay_name());
                 }
 
-                if (tier.getMax() == null || tier.getMax() < 0) {
-                    throw new ServiceException("There is invalid tier max value : " + plan.getDisplay_name());
+                if (!Enums.getIfPresent(BillingPeriod.class, usage.getBillingPeriod()).isPresent()) {
+                    throw new ServiceException(usage.getBillingPeriod() + " is invalid usage billing period : " + plan.getDisplay_name());
                 }
 
-                validatePriceList(tier.getPrices(), plan);
+                if (usage.getTiers() == null || usage.getTiers().isEmpty()) {
+                    throw new ServiceException("Tiers are required : " + plan.getDisplay_name());
+                }
+
+                //Tier check
+                for (Tier tier : usage.getTiers()) {
+                    if (StringUtils.isEmpty(tier.getUnit())) {
+                        throw new ServiceException("Some usage has empty unit name : " + plan.getDisplay_name());
+                    }
+
+                    Pattern pattern = Pattern.compile("\\s");
+                    Matcher matcher = pattern.matcher(tier.getUnit());
+                    boolean found = matcher.find();
+                    if (found) {
+                        throw new ServiceException("Some usage has white space unit name : " + plan.getDisplay_name());
+                    }
+
+                    if (tier.getSize() == null || tier.getSize() < 0) {
+                        throw new ServiceException("There is invalid tier size value : " + plan.getDisplay_name());
+                    }
+
+                    if (tier.getMax() == null || tier.getMax() < 0) {
+                        throw new ServiceException("There is invalid tier max value : " + plan.getDisplay_name());
+                    }
+
+                    validatePriceList(tier.getPrices(), plan);
+                }
             }
         }
     }

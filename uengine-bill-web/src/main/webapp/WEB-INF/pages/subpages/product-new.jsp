@@ -131,7 +131,7 @@
                 var data = me.form.serializeObject();
                 uBilling.createProduct(data)
                     .done(function (product_id) {
-                        window.location.href = '/product/' + product_id + '/detail';
+                        window.location.href = '/product/' + product_id + '/version/current/detail';
                     })
                     .fail(function () {
                         toastr.error("Failed to create product.");

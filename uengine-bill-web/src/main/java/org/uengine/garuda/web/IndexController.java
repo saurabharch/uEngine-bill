@@ -73,6 +73,13 @@ public class IndexController {
 
         return new ModelAndView("/product/index");
     }
+    @RequestMapping(value = "product/{id}/version/{version}/detail", method = RequestMethod.GET)
+    public ModelAndView customerEdit(HttpSession session, @PathVariable("id") String id,@PathVariable("version") String version) {
+        ModelAndView view = new ModelAndView("/product/detail");
+        view.addObject("id", id);
+        view.addObject("version", version);
+        return view;
+    }
 
     @RequestMapping(value = "customer", method = RequestMethod.GET)
     public ModelAndView customer(HttpSession session, final Locale locale) {

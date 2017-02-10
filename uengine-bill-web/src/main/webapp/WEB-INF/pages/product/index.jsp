@@ -91,7 +91,7 @@
                     defaultContent: '',
                     event: {
                         click: function (key, value, rowValue, rowIdx, td) {
-                            window.location.href = '/product/' + rowValue['id'] + '/detail';
+                            window.location.href = '/product/' + rowValue['id'] + '/version/current/detail';
                         }
                     }
                 },
