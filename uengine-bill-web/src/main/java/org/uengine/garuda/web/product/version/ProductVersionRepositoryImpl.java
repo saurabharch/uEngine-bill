@@ -123,7 +123,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
 
     private List<ProductVersion> convertToVersionList(List<ProductDaoVersion> productDaoVersions) {
         List<ProductVersion> list = new ArrayList<>();
-        if (productDaoVersions == null) {
+        if (productDaoVersions == null || productDaoVersions.isEmpty()) {
             return list;
         }
         Organization organization = organizationService.selectById(productDaoVersions.get(0).getOrganization_id());

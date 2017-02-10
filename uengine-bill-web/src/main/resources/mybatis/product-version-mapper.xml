@@ -35,6 +35,7 @@
         SELECT * FROM product_version
         WHERE product_id = #{product_id}
         AND organization_id = #{organization_id}
+        ORDER BY version
     </select>
 
     <select id="selectByVersion" parameterType="map" resultType="org.uengine.garuda.model.ProductDaoVersion">

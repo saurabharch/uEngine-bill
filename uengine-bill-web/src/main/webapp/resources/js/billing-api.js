@@ -407,6 +407,32 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getProductVersions: function (product_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/product/' + product_id + '/version',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    getProductVersion: function (product_id, version) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/product/' + product_id + '/version/' + version,
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    updateProductVersion: function (product_id, version, data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/product/' + product_id + '/version/' + version,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();
