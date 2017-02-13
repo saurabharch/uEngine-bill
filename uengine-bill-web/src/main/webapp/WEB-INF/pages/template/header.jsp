@@ -99,3 +99,23 @@
     </div>
 </div>
 
+<!-- 컨펌 Modal -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title" name="title"></h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center" name="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

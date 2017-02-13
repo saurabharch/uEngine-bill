@@ -254,14 +254,19 @@
                     me.savePlan();
                 });
 
+                //plan-delete 버튼
+                $('#plan-delete').click(function () {
+                    me.deletePlan();
+                });
+
                 //change-effective-date
                 $('[name=change-effective-date]').click(function () {
                     me.changeEffectiveDate();
-                })
+                });
 
                 $('[name=create-new-version]').click(function () {
                     me.createNewVersion();
-                })
+                });
             },
             changeEffectiveDate: function () {
 
@@ -556,6 +561,10 @@
                     me.openPlan(plan);
                 });
 
+                card.find('[name=delete]').click(function () {
+                    me.deletePlan(plan);
+                });
+
                 $('#plan-list').append(card);
             },
             updateActive: function (plan, is_active) {
@@ -605,6 +614,9 @@
                 $('#version-panel').hide();
                 $('#plan-panel').show();
 
+                //delete remain phase
+                $('#plan-panel').find('[name=phase-card]').remove();
+
                 //Edit or New
                 var planPanelTitle = $('#plan-panel-title');
                 if (me.currentPlan['name']) {
@@ -635,6 +647,7 @@
                 }
 
                 //phase-new
+                $('[name=add-phase]').unbind('click');
                 $('[name=add-phase]').click(function () {
                     var phaseType = $(this).data('phase');
                     var data = {
@@ -652,6 +665,67 @@
                 }
                 me.drawPhase(plan['finalPhase'], false);
 
+            },
+            goBack: function () {
+                $('#version-panel').show();
+                $('#plan-panel').hide();
+            },
+            deletePlan: function (plan) {
+                var me = this;
+
+                //버젼정보가 없다면
+                if (!me.version) {
+                    me.goBack();
+                    return;
+                }
+
+                var currentPlan;
+                if (plan) {
+                    currentPlan = plan;
+                } else {
+                    currentPlan = me.currentPlan;
+                }
+                if (!currentPlan || !currentPlan['name']) {
+                    me.goBack();
+                    return;
+                }
+
+                if (currentPlan['number_of_subscriptions_referenced_by_version'] > 0) {
+                    toastr.error("Can't delete plan cause by number of subscriptions referenced by this version is not 0");
+                    return;
+                }
+                if (me.version['plans'].length < 2) {
+                    toastr.error("At least one plan required in version");
+                    return;
+                }
+                var modal = $('#confirmBox');
+                modal.find('[name=title]').html('Delete plan');
+                modal.find('[name=content]').html('Are you sure delete?');
+                modal.find('[name=save]').unbind('click');
+                modal.find('[name=save]').bind('click', function () {
+                    var plans = [];
+                    for (var i = 0; i < me.version['plans'].length; i++) {
+                        if (me.version['plans'][i]['name'] != currentPlan['name']) {
+                            plans.push(JSON.parse(JSON.stringify(me.version['plans'][i])));
+                        }
+                    }
+                    var versionData = JSON.parse(JSON.stringify(me.version));
+                    versionData['plans'] = plans;
+                    blockSubmitStart();
+                    uBilling.updateProductVersion(me.product_id, me.version_count, versionData)
+                        .done(function () {
+                            window.location.href = '/product/' + me.product_id + '/version/' + me.version_count + '/detail'
+                        })
+                        .fail(function () {
+                            toastr.error("Failed to delete plan")
+                        })
+                        .always(function () {
+                            blockStop();
+                        })
+                });
+                modal.modal('show');
+
+                //var currentPlan = me.currentPlan;
             },
             savePlan: function () {
                 var planData = {
@@ -798,11 +872,15 @@
                 //버젼 정보가 있을경우 버젼에 업데이트한다.
                 else {
                     var versionData = JSON.parse(JSON.stringify(me.version));
-                    for (var i = 0; i < versionData['plans'].length; i++) {
-                        var existPlan = versionData['plans'][i];
-                        if (existPlan['name'] == planData['name']) {
-                            versionData['plans'][i] = planData;
+                    if(planData['name']){
+                        for (var i = 0; i < versionData['plans'].length; i++) {
+                            var existPlan = versionData['plans'][i];
+                            if (existPlan['name'] == planData['name']) {
+                                versionData['plans'][i] = planData;
+                            }
                         }
+                    }else{
+                        versionData['plans'].push(planData);
                     }
                     blockSubmitStart();
                     uBilling.updateProductVersion(me.product_id, me.version_count, versionData)
