@@ -145,7 +145,7 @@ public class ProductVersionRestController {
             ProductVersion createdVersion = productVersionService.createVersion(organization.getId(), id, productVersion);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/rest/v1/product/{id}/version/{version}").buildAndExpand(id, createdVersion.getId()).toUri());
+            headers.setLocation(ucBuilder.path("/rest/v1/product/{id}/version/{version}").buildAndExpand(id, createdVersion.getVersion()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -189,7 +189,7 @@ public class ProductVersionRestController {
     }
 
     @RequestMapping(value = "/product/{id}/version/{version}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteProduct(HttpServletRequest request,
+    public ResponseEntity<Void> deleteProductVersion(HttpServletRequest request,
                                               @PathVariable("id") String id,
                                               @PathVariable("version") Long version) {
 

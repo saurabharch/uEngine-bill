@@ -433,6 +433,20 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    createProductVersion: function (product_id, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/product/' + product_id + '/version',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                var locationHeader = xhr.getResponseHeader('Location');
+                return locationHeader.substring(locationHeader.lastIndexOf('/') + 1);
+            }
+        };
+        return this.send(options);
+    },
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();

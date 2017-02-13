@@ -12,6 +12,7 @@ import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.killbill.KBRepository;
 import org.uengine.garuda.killbill.KBService;
 import org.uengine.garuda.killbill.KBServiceFactory;
+import org.uengine.garuda.killbill.api.model.Clock;
 import org.uengine.garuda.model.*;
 import org.uengine.garuda.model.Product;
 import org.uengine.garuda.model.catalog.*;
@@ -54,6 +55,9 @@ public class ProductVersionServiceImpl implements ProductVersionService {
 
     @Autowired
     private OrganizationRepository organizationRepository;
+
+    @Autowired
+    private KBService kbService;
 
     private Logger logger = LoggerFactory.getLogger(ProductVersionService.class);
 
@@ -132,6 +136,12 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         productVersion.setProduct_id(product_id);
         productVersion.setTenant_id(organization.getTenant_id());
 
+        //effective date 가 없다면 킬빌 서버의 타임 지정
+        if (productVersion.getEffective_date() == null) {
+            Clock clock = kbService.getTime(organization.getTenant_api_key(), organization.getTenant_api_secret());
+            productVersion.setEffective_date(new Date(clock.getCurrentUtcTime().getTime()));
+        }
+
         //effective date 가 최신버젼보다 이전이면 등록불가.
         ProductVersion maxVersion = productVersionRepository.selectMaxVersion(organization_id, product_id);
         if (maxVersion != null) {
@@ -177,6 +187,11 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             throw new ServiceException("Not found version : " + product_id + " , " + version);
         }
         productVersion.setVersion(version);
+
+        //effective date 가 없다면 존재하는 버젼의 effective date 사용
+        if(productVersion.getEffective_date() == null){
+            productVersion.setEffective_date(existVersion.getEffective_date());
+        }
 
         //effective date 이전버젼과 이후버젼 사이여야 한다.
         Date effective_date = productVersion.getEffective_date();

@@ -92,6 +92,7 @@
         });
     };
 
+    var organizations;
     var currentUser;
     var currentOrg;
     var uBilling = new uBilling('localhost', 18080);
@@ -130,15 +131,30 @@
                             uBilling.setDefaultOrganization(response[0].id);
                             currentOrg = response[0];
                         }
-
-                        //TODO organization,user 정보로 헤더를 꾸민다.
-                        console.log(currentOrg,currentUser);
+                        organizations = response;
+                        console.log(currentOrg, currentUser);
                     });
             });
     }
 
 
     $(function () {
+        if(organizations && organizations.length){
+            for (var i in organizations) {
+                var org = organizations[i];
+                var li = $('<li><a href="#" name="organization-item">' + org.name + '</a></li>');
+                $('[name=organization-list]').append(li);
+                li.find('a').data('organization_id', org.id);
+                li.find('a').click(function () {
+                    var selectedId = $(this).data('organization_id');
+                    uBilling.setDefaultOrganization(selectedId);
+                    window.location.href = '/';
+                });
+            }
+
+            $('#organization-current').html(currentOrg.name);
+        }
+
         $('form').each(function () {
             var form = $(this);
             if (form.find('[type=submit]').length > 0) {
