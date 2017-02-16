@@ -74,39 +74,39 @@ public class IndexController {
         return new ModelAndView("/product/index");
     }
     @RequestMapping(value = "product/{id}/version/{version}/detail", method = RequestMethod.GET)
-    public ModelAndView customerEdit(HttpSession session, @PathVariable("id") String id,@PathVariable("version") String version) {
+    public ModelAndView accountEdit(HttpSession session, @PathVariable("id") String id,@PathVariable("version") String version) {
         ModelAndView view = new ModelAndView("/product/detail");
         view.addObject("id", id);
         view.addObject("version", version);
         return view;
     }
 
-    @RequestMapping(value = "customer", method = RequestMethod.GET)
-    public ModelAndView customer(HttpSession session, final Locale locale) {
+    @RequestMapping(value = "account", method = RequestMethod.GET)
+    public ModelAndView account(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());
 
-        return new ModelAndView("/customer/index");
+        return new ModelAndView("/account/index");
     }
 
-    @RequestMapping(value = "customer/new", method = RequestMethod.GET)
-    public ModelAndView customerNew(HttpSession session, final Locale locale) {
+    @RequestMapping(value = "account/new", method = RequestMethod.GET)
+    public ModelAndView accountNew(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());
 
-        return new ModelAndView("/customer/new");
+        return new ModelAndView("/account/new");
     }
 
-    @RequestMapping(value = "customer/{id}/edit", method = RequestMethod.GET)
-    public ModelAndView customerEdit(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/customer/new");
+    @RequestMapping(value = "account/{id}/edit", method = RequestMethod.GET)
+    public ModelAndView accountEdit(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/new");
         view.addObject("id", id);
         return view;
     }
 
-    @RequestMapping(value = "customer/detail", method = RequestMethod.GET)
-    public ModelAndView customerDetail(HttpSession session, final Locale locale) {
-        session.setAttribute("lang", locale.toString());
-
-        return new ModelAndView("/customer/detail");
+    @RequestMapping(value = "account/{id}/detail", method = RequestMethod.GET)
+    public ModelAndView accountDetail(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/detail");
+        view.addObject("id", id);
+        return view;
     }
 
     @RequestMapping(value = "subscription", method = RequestMethod.GET)

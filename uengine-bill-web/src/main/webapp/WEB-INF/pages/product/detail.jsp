@@ -268,6 +268,9 @@
                     me.createNewVersion();
                 });
             },
+            /**
+             * 버젼의 이펙티브 데이트를 변경한다.
+             */
             changeEffectiveDate: function () {
 
                 var me = this;
@@ -316,6 +319,9 @@
                 modal.modal('show');
 
             },
+            /**
+             * 새로운 버젼을 생성한다.
+             */
             createNewVersion: function () {
                 var me = this;
                 var modal = $('#effective-date-modal');
@@ -567,6 +573,9 @@
 
                 $('#plan-list').append(card);
             },
+            /**
+             * 플랜의 액티브를 업데이트한다.
+             */
             updateActive: function (plan, is_active) {
                 var me = this;
                 var copy = JSON.parse(JSON.stringify(plan));
@@ -586,6 +595,9 @@
                         toastr.error("Plan update failed.");
                     });
             },
+            /**
+             * 버젼 정보를 리프레쉬한다.
+             */
             refreshVersion: function () {
                 var me = this;
                 $('#plan-list').html('');
@@ -604,6 +616,9 @@
                 //copy-with-plan-code-to-another-version
 
             },
+            /**
+             * 플랜 에디터 화면을 연다.
+             */
             openPlan: function (plan) {
                 var me = this;
                 if (!plan) {
@@ -666,10 +681,17 @@
                 me.drawPhase(plan['finalPhase'], false);
 
             },
+            /**
+             * 버젼 화면으로 돌아간다.
+             */
             goBack: function () {
                 $('#version-panel').show();
                 $('#plan-panel').hide();
             },
+            /**
+             * 주어진 플랜을 삭제한다.
+             * @param plan
+             */
             deletePlan: function (plan) {
                 var me = this;
 
@@ -724,9 +746,10 @@
                         })
                 });
                 modal.modal('show');
-
-                //var currentPlan = me.currentPlan;
             },
+            /**
+             * 플랜을 저장한다.
+             */
             savePlan: function () {
                 var planData = {
                     finalPhase: {}
@@ -899,10 +922,18 @@
                 //currentPlan
                 //final-phase-space
             },
+            /**
+             * 플랜 화면을 종료한다.
+             */
             closePlan: function () {
                 $('#version-panel').show();
                 $('#plan-panel').hide();
             },
+            /**
+             * 플랜 단계를 표현한다.
+             * @param phase
+             * @param is_initial
+             */
             drawPhase: function (phase, is_initial) {
                 var me = this;
                 var type = phase['type'];
@@ -1169,6 +1200,10 @@
                     $('#final-phase-space').append(card);
                 }
             },
+            /**
+             * guid 생성
+             * @returns {string}
+             */
             guidGenerator: function () {
                 var S4 = function () {
                     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);

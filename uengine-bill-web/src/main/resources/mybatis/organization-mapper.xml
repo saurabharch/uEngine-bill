@@ -140,7 +140,7 @@
     <select id="selectByUserId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Organization">
         SELECT A.* FROM
         (SELECT * FROM organization)A
-        LEFT OUTER JOIN
+        JOIN
         (SELECT * FROM authority
          WHERE user_id = #{user_id}
         )B

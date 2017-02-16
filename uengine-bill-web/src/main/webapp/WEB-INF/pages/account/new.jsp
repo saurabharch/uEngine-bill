@@ -22,7 +22,7 @@
 <body>
 <div id="wrapper">
     <%@include file="../template/nav.jsp" %>
-    <script type="text/javascript">$('[name=list-menu-customer]').addClass('active');</script>
+    <script type="text/javascript">$('[name=list-menu-account]').addClass('active');</script>
 
     <div id="page-wrapper" class="gray-bg dashbard-1">
 
@@ -32,7 +32,7 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Edit Customer</h5>
+                        <h5>Edit account</h5>
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">Customer Phone</label>
+                            <div class="form-group"><label class="col-sm-2 control-label">account Phone</label>
 
                                 <div class="col-sm-5"><input type="text" class="form-control" name="phone"
                                                              placeholder="Mobile or Work Phone">
@@ -271,7 +271,7 @@
                     $('.chosen-select').chosen({width: "100%"});
                 })
                 .fail(function () {
-                    toastr.error("Not found customer.");
+                    toastr.error("Not found account.");
                 });
         }else{
             $('.chosen-select').chosen({width: "100%"});
@@ -333,20 +333,20 @@
                                 .then(function () {
                                     uBilling.createAccountCustomFields(id, customFileds)
                                         .then(function () {
-                                            toastr.success("Customer updated.");
+                                            toastr.success("account updated.");
                                             blockStop();
                                         })
                                 })
                         } else {
                             uBilling.createAccountCustomFields(id, customFileds)
                                 .then(function () {
-                                    toastr.success("Customer updated.");
+                                    toastr.success("account updated.");
                                     blockStop();
                                 })
                         }
                     })
                     .fail(function (response) {
-                        toastr.error("Failed to update customer.");
+                        toastr.error("Failed to update account.");
                         blockStop();
                     });
             } else {
@@ -355,14 +355,14 @@
                         if (customFileds.length) {
                             uBilling.createAccountCustomFields(accountId, customFileds)
                                 .always(function () {
-                                    window.location.href = '/customer/' + accountId + '/edit';
+                                    window.location.href = '/account/' + accountId + '/edit';
                                 });
                         } else {
-                            window.location.href = '/customer/' + accountId + '/edit';
+                            window.location.href = '/account/' + accountId + '/edit';
                         }
                     })
                     .fail(function (response) {
-                        toastr.error("Failed to create customer.");
+                        toastr.error("Failed to create account.");
                         blockStop();
                     });
             }

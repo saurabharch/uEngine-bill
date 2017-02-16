@@ -1,5 +1,6 @@
 package org.uengine.garuda.web.product;
 
+import com.google.common.io.CharStreams;
 import org.opencloudengine.garuda.client.model.OauthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,6 +47,21 @@ public class ProductRestController {
 
     @Autowired
     private ProductService productService;
+
+    @RequestMapping(value = "/sample", method = RequestMethod.POST)
+    public ResponseEntity<Void> createProduct(HttpServletRequest request) {
+
+        try {
+            String queryString = request.getQueryString();
+            String s = CharStreams.toString(request.getReader());
+
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @RequestMapping(value = "/product/pagination", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Product>> getProducts(HttpServletRequest request,

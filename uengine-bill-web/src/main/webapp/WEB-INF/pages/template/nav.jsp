@@ -21,8 +21,8 @@
             <li name="list-menu-product">
                 <a href="/product"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Products</span></a>
             </li>
-            <li name="list-menu-customer">
-                <a href="/customer"><i class="fa fa-user"></i> <span class="nav-label">Customers</span></a>
+            <li name="list-menu-account">
+                <a href="/account"><i class="fa fa-user"></i> <span class="nav-label">Accounts</span></a>
             </li>
             <li name="list-menu-subscription">
                 <a href="/subscription"><i class="fa fa-clock-o"></i> <span

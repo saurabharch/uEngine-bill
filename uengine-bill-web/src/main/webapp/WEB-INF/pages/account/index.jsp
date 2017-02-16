@@ -22,7 +22,7 @@
 <body>
 <div id="wrapper">
     <%@include file="../template/nav.jsp" %>
-    <script type="text/javascript">$('[name=list-menu-customer]').addClass('active');</script>
+    <script type="text/javascript">$('[name=list-menu-account]').addClass('active');</script>
 
     <div id="page-wrapper" class="gray-bg dashbard-1">
 
@@ -32,10 +32,10 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Customers</h5>
+                        <h5>accounts</h5>
 
                         <div class="ibox-tools">
-                            <a href="./customer/new" type="button" class="btn btn-primary btn-sm">New +</a>
+                            <a href="./account/new" type="button" class="btn btn-primary btn-sm">New +</a>
                             <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#"><i
                                     class="fa fa-bars"></i></a>
                             <ul class="dropdown-menu dropdown-user">
@@ -48,11 +48,11 @@
                                 <li><a href="#">None subscribers</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#">Import Customers</a>
+                                <li><a href="#">Import accounts</a>
                                 </li>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#">Export Customers</a>
+                                <li><a href="#">Export accounts</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li><a href="#"><i class="fa fa-refresh"> Refresh list</i></a>
@@ -63,7 +63,7 @@
                     <div class="ibox-content">
 
                         <div class="table-responsive">
-                            <table id="customer-table" class="table table-striped table-bordered table-hover">
+                            <table id="account-table" class="table table-striped table-bordered table-hover">
 
                             </table>
                         </div>
@@ -81,11 +81,7 @@
 
 <script>
     $(document).ready(function () {
-        var dt = new uengineDT($('#customer-table'), {
-//            싱글 처리 가능
-//            select: {
-//                style: 'single'
-//            },
+        var dt = new uengineDT($('#account-table'), {
             select: true,
             columns: [
                 {
@@ -94,7 +90,7 @@
                     defaultContent: '',
                     event: {
                         click: function (key, value, rowValue, rowIdx, td) {
-                            window.location.href = '/customer/' + rowValue['accountId'] + '/detail';
+                            window.location.href = '/account/' + rowValue['accountId'] + '/detail';
                         }
                     }
                 },
@@ -137,11 +133,11 @@
                             var accountId = selected[i]['accountId'];
                             uBilling.deleteAccount(accountId)
                                 .done(function () {
-                                    toastr.success("Customer deleted.");
+                                    toastr.success("account deleted.");
                                     dt.getDt().ajax.reload();
                                 })
                                 .fail(function () {
-                                    toastr.error("Can't remove customer cause by subscription of payment transaction exist");
+                                    toastr.error("Can't remove account cause by subscription of payment transaction exist");
                                 });
                         }
                     }
@@ -154,10 +150,10 @@
                             return;
                         }
                         if(selected.length > 1){
-                            toastr.warning("Choice one customer to edit.");
+                            toastr.warning("Choice one account to edit.");
                         }else{
                             var accountId = selected[0]['accountId'];
-                            window.location.href = '/customer/' + accountId + '/edit';
+                            window.location.href = '/account/' + accountId + '/edit';
                         }
                     }
                 },
@@ -198,7 +194,7 @@
                         });
                     })
                     .fail(function () {
-                        toastr.error("Can't find customer list.");
+                        toastr.error("Can't find account list.");
                     });
             }
         });
