@@ -208,7 +208,7 @@ uBilling.prototype = {
     getAccount: function (accountId) {
         var options = {
             type: "GET",
-            url: '/rest/v1/accounts/' + accountId,
+            url: '/rest/v1/accounts/' + accountId + '?accountWithBalance=true&accountWithBalanceAndCBA=true&audit=NONE',
             dataType: 'json'
         };
         return this.send(options);
@@ -447,6 +447,123 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+
+    getAccountOverdue: function (accountId) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + accountId + '/overdue',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    invoiceDryRun: function (accountId, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/invoices/dryRun?accountId=' + accountId,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    updateAccountEmailNotifications: function (accountId, notifications) {
+        var data = {
+            isNotifiedForInvoices: notifications
+        };
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/accounts/' + accountId + '/emailNotifications',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    getTagDefinitions: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/tagDefinitions?audit=NONE',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    getAccountTags: function (account_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/tags?audit=NONE&includedDeleted=false',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createAccountTags: function (accountId, tags) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accounts/' + accountId + '/tags?tagList=' + tags.join(),
+            //data: null,
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    deleteAccountTags: function (accountId, tags) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/accounts/' + accountId + '/tags?tagList=' + tags.join(),
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
+    getAccountEmails: function (account_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/emails',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createAccountEmails: function (accountId, email) {
+        var data = {
+            "accountId": accountId,
+            "email": email
+        };
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accounts/' + accountId + '/emails',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    deleteAccountEmails: function (accountId, email) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/accounts/' + accountId + '/emails/' + email,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    getAccountPaymentMethods: function (account_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/paymentMethods?withPluginInfo=true&audit=NONE',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createAccountPaymentMethod: function (account_id, data, isDefault) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accounts/' + account_id + '/paymentMethods?isDefault=' + isDefault + '&payAllUnpaidInvoices=false',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
     send: function (options) {
         var me = this;
         var deferred = $.Deferred();

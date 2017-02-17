@@ -44,13 +44,15 @@
             <div class="col-lg-12 padding-1 detailPage" name="accountDetail">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <span><h5>darkgodarkgo</h5>
-                            <span class="label label-success">USD</span>
-                            <span class="label label-info">UTC</span>
+                        <div name="account-title-info">
+                            <span><h5 name="name">darkgodarkgo</h5>
+                            <span class="label label-success" name="currency">USD</span>
+                            <span class="label label-info" name="timeZone">UTC</span>
                         </span>
+                        </div>
 
                         <div class="ibox-tools">
-                            <button type="button" class="btn btn-default btn-sm">Edit</button>
+                            <button type="button" class="btn btn-default btn-sm" id="account-edit">Edit</button>
                             <a href="../subscription/new" type="button" class="btn btn-success btn-sm">New
                                 Subscription</a>
                             <button type="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown"
@@ -90,408 +92,17 @@
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
-                                    <div class="panel-body">
-                                        <div class="col-md-4">
-                                            <div class="feed-activity-list">
-                                                <div class="feed-element">
-                                                    <div class="media-body ">
-                                                        <span><i class="fa fa-user"></i> darkgodarkgo</span><br>
-                                                        <a><i class="fa fa-envelope-o"></i>sppark@uengine.org</a><br>
-                                                        <br>
-                                                        <span>ID :
-                                                            <span class="text-muted">1920ce42-367a-4b7f-877d-b81df54c2432</span>
-                                                        </span><br>
-                                                        <span>External Key :
-                                                            <span class="text-muted">1920ce42-367a-4b7f-877d-b81df54c2432</span>
-                                                        </span><br><br>
+                                    <div class="panel-body" id="overview-append">
 
-                                                        <span>Tag as :</span><br>
-
-                                                        <form class="form-horizontal">
-                                                            <div class="form-group">
-                                                                <div class="col-sm-12">
-                                                                    <label> <input type="checkbox" value="true"> AUTO_INVOICING_OFF </label>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <label> <input type="checkbox" value="true"> AUTO_PAY_OFF </label>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <label> <input type="checkbox" value="true"> MANUAL_PAY </label>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <label> <input type="checkbox" value="true"> OVERDUE_ENFORCEMENT_OFF </label>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <label> <input type="checkbox" value="true"> PARTNER </label>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <label> <input type="checkbox" value="true"> TEST </label>
-                                                                </div>
-                                                                <div class="col-sm-12">
-                                                                    <button type="button" class="btn btn-default btn-xs" name="mark">Save Tags</button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                        <br>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="feed-element">
-                                                    <div class="media-body ">
-                                                        <div class="col-md-1">
-                                                            <i style="font-size: 20px;" class="fa fa-map-marker"></i>
-                                                        </div>
-                                                        <div class="col-md-10">
-                                                            <strong>Billing Address</strong>
-                                                            <br>
-                                                            <span>inovally C dong</span><br>
-                                                            <span>sungnam</span><br>
-                                                            <span>AL 000-000</span><br>
-                                                            <span>South Korea</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="feed-element">
-                                                    <div class="media-body ">
-                                                        <div class="col-md-1">
-                                                            <i style="font-size: 20px;" class="fa fa-user"></i>
-                                                        </div>
-                                                        <div class="col-md-10">
-                                                            <strong>Contact Persons</strong>
-                                                            <br>
-                                                            <span>There are no additional contact persons found.</span><br>
-                                                            <a>+ Add Contact Person</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="feed-element">
-                                                    <div class="media-body ">
-                                                        <div class="col-md-1">
-                                                            <i style="font-size: 20px;" class="fa fa-credit-card"></i>
-                                                        </div>
-                                                        <div class="col-md-10">
-                                                            <strong>PayPal Account Details</strong>
-                                                            <br>
-                                                            <span>darkgodarkgo-buyer@gmail.com</span><br>
-                                                            <span class="text-muted">Gateway : Payments Pro</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-info">
-                                                    <div class="panel-heading">
-                                                        <i class="fa fa-info-circle"></i> Info Panel
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <span>Client Portal allows your accounts to keep track of all the transactions between them and your business.<a
-                                                                href="#">Learn More</a></span>
-                                                        <button type="button" class="btn btn-default btn-sm">Enable
-                                                            Portal
-                                                        </button>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div>
-                                                <h3>Billing Info</h3>
-                                                <button type="button" class="btn btn-default btn-xs" name="mark">Add Credit</button>
-                                                <button type="button" class="btn btn-default btn-xs" name="mark">Create Charge
-                                                </button>
-
-                                                <div class="feed-activity-list">
-                                                    <div class="feed-element">
-                                                        <div class="media-body ">
-                                                            <div class="col-md-12 row">
-                                                                <div class="col-md-6">
-                                                                    <span class="text-muted">Account balance</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <h4 class="text-success">$16.80</h4>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 row">
-                                                                <div class="col-md-6">
-                                                                    <span class="text-muted">Account credit</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <h4 class="text-success">$16.80</h4>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 row">
-                                                                <div class="col-md-6">
-                                                                    <span class="text-muted">Overdue status</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <span class="label label-primary">Good</span>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-12 row" style="margin-top: 10px;">
-                                                                <div class="col-md-6">
-                                                                    <span class="text-muted">Bill cycle day</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <span>17 (user timezone)</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 row">
-                                                                <div class="col-md-6">
-                                                                    <span class="text-muted">Next Invoice Date</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <span>2017-05-17</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 row" style="margin-top: 10px;">
-                                                                <div class="col-md-6">
-                                                                    <span class="text-muted">Notified For Invoice</span><br>
-                                                                    <button type="button" class="btn btn-default btn-xs" name="mark">Mark as Notifiy
-                                                                    </button>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <span class="label label-primary">True</span>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <br><br>
-
-                                            <div>
-                                                <h3>Payment Methods</h3>
-                                                <button type="button" class="btn btn-default btn-xs" name="mark">Add Payment Method</button>
-
-                                                <div class="ibox float-e-margins" name="phase-card">
-                                                    <div class="ibox-title">
-                                                        <div>
-                                                            <h5 style="float:left;">killbill-payment-test</h5>
-                                                            <span class="label label-primary">Default</span>
-                                                        </div>
-                                                        <div class="ibox-tools">
-                                                            <button type="button" class="dropdown-toggle btn btn-default btn-sm"
-                                                                    data-toggle="dropdown"
-                                                                    href="Javascript:void(0)">Payment
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-user" name="change-phase-list">
-                                                                <li><a href="Javascript:void(0)" data-phase="AUTHORIZE" name="change-phase">AUTHORIZE</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="PURCHASE" name="change-phase">PURCHASE</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="CREDIT" name="change-phase">CREDIT</a>
-                                                                </li>
-                                                            </ul>
-                                                            <button type="button" class="btn btn-default btn-sm" name="phase-delete">Delete</button>
-                                                            <a class="collapse-link">
-                                                                <i class="fa fa-chevron-down"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ibox-content" style="display: none">
-                                                        <table class="table">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td>Name</td>
-                                                                <td>killbill-stripe</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ID</td>
-                                                                <td>db55b42d-eeab-45b7-825f-187d19df8418</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccExpirationMonth</td>
-                                                                <td>11</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccExpirationYear</td>
-                                                                <td>2022</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccLast4</td>
-                                                                <td>4242</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccType</td>
-                                                                <td>Visa</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>token</td>
-                                                                <td>card_19n23wBWDrG4AoVbQ8JInjvb</td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
-                                                <div class="ibox float-e-margins" name="phase-card">
-                                                    <div class="ibox-title">
-                                                        <div>
-                                                            <h5 style="float:left;">killbill-payment-test</h5>
-                                                            <span class="label label-primary">Default</span>
-                                                        </div>
-                                                        <div class="ibox-tools">
-                                                            <button type="button" class="dropdown-toggle btn btn-default btn-sm"
-                                                                    data-toggle="dropdown"
-                                                                    href="Javascript:void(0)">Payment
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-user" name="change-phase-list">
-                                                                <li><a href="Javascript:void(0)" data-phase="AUTHORIZE" name="change-phase">AUTHORIZE</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="PURCHASE" name="change-phase">PURCHASE</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="CREDIT" name="change-phase">CREDIT</a>
-                                                                </li>
-                                                            </ul>
-                                                            <button type="button" class="btn btn-default btn-sm" name="phase-delete">Delete</button>
-                                                            <a class="collapse-link">
-                                                                <i class="fa fa-chevron-down"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ibox-content" style="display: none">
-                                                        <table class="table">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td>Name</td>
-                                                                <td>killbill-stripe</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ID</td>
-                                                                <td>db55b42d-eeab-45b7-825f-187d19df8418</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccExpirationMonth</td>
-                                                                <td>11</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccExpirationYear</td>
-                                                                <td>2022</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccLast4</td>
-                                                                <td>4242</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>ccType</td>
-                                                                <td>Visa</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>token</td>
-                                                                <td>card_19n23wBWDrG4AoVbQ8JInjvb</td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div id="tab-2" class="tab-pane">
-                                    <div class="panel-body">
-                                        <div class="ibox float-e-margins">
-                                            <div class="ibox-title">
-                                                <h5>Subscription Bundles</h5>
+                                    <div class="panel-body" id="subscription-append">
 
-                                                <div class="ibox-tools">
-                                                    <button type="button" class="btn btn-default btn-sm" name="change-effective-date">
-                                                        Add Subscription Bundle
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="ibox-content">
-                                                <div class="ibox float-e-margins" name="phase-card" id="phase-card">
-                                                    <div class="ibox-title">
-                                                        <h5 name="phase-title">Subscription 1</h5>
-                                                        <div class="ibox-tools">
-                                                            <button type="button" class="dropdown-toggle btn btn-default btn-sm"
-                                                                    data-toggle="dropdown"
-                                                                    href="Javascript:void(0)">Change Phase type
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-user" name="change-phase-list">
-                                                                <li><a href="Javascript:void(0)" data-phase="TRIAL" name="change-phase">TRIAL</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="DISCOUNT" name="change-phase">DISCOUNT</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="FIXEDTERM" name="change-phase">FIXEDTERM</a>
-                                                                </li>
-                                                                <li><a href="Javascript:void(0)" data-phase="EVERGREEN" name="change-phase">EVERGREEN</a>
-                                                                </li>
-                                                            </ul>
-                                                            <button type="button" class="btn btn-default btn-sm" name="phase-delete">Delete</button>
-                                                            <a class="collapse-link">
-                                                                <i class="fa fa-chevron-up"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ibox-content">
-
-                                                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>DATE</th>
-                                                                <th>TYPE</th>
-                                                                <th>REF-ID</th>
-                                                                <th>AMOUNT</th>
-                                                                <th>STATUS</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr name="transactionItem" data-type="refund">
-                                                                <td>20 Dec 2016</td>
-                                                                <td>Refund</td>
-                                                                <td>CN-00007</td>
-                                                                <td>$29.40</td>
-                                                                <td class="text-info">Success</td>
-                                                            </tr>
-                                                            <tr name="transactionItem" data-type="credit">
-                                                                <td>20 Dec 2016</td>
-                                                                <td>Credit</td>
-                                                                <td>CN-00007</td>
-                                                                <td>$29.40</td>
-                                                                <td class="text-info">Closed</td>
-                                                            </tr>
-                                                            <tr name="transactionItem" data-type="payment">
-                                                                <td>20 Dec 2016</td>
-                                                                <td>Payment</td>
-                                                                <td>INV-000043</td>
-                                                                <td>$203.40</td>
-                                                                <td class="text-info">Success</td>
-                                                            </tr>
-                                                            <tr name="transactionItem" data-type="invoice">
-                                                                <td>20 Dec 2016</td>
-                                                                <td>Invoice</td>
-                                                                <td>INV-000043</td>
-                                                                <td>$203.40</td>
-                                                                <td class="text-info">Paid</td>
-                                                            </tr>
-                                                            </tbody>
-                                                            <tfoot>
-                                                            <tr>
-                                                                <th>DATE</th>
-                                                                <th>TYPE</th>
-                                                                <th>REF-ID</th>
-                                                                <th>AMOUNT</th>
-                                                                <th>STATUS</th>
-                                                            </tr>
-                                                            </tfoot>
-                                                        </table>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <div id="tab-6" class="tab-pane">
+                                <div id="tab-6" class="tab-pane" name="detail-panel" data-page="transactions">
                                     <div class="panel-body">
                                         <div class="ibox float-e-margins">
                                             <div class="ibox-title">
@@ -578,19 +189,23 @@
         </div>
 
         <%@include file="../template/footer.jsp" %>
-
+        <%@include file="./sub/overview.jsp" %>
+        <%@include file="./sub/subscription.jsp" %>
+        <%@include file="../subpages/credit-email.jsp" %>
+        <%@include file="../subpages/invoice-email.jsp" %>
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
 
-<%@include file="../subpages/credit-email.jsp" %>
-<%@include file="../subpages/invoice-email.jsp" %>
-
 <script>
     $(document).ready(function () {
-
         var id = "${id}";
+        var overviewController = new OverviewController(id, $('#overview-append'));
+        var subscriptionController = new SubscriptionController(id, $('#subscription-append'));
 
+        $('#account-edit').click(function(){
+            window.location.href = './edit';
+        });
 
         var detailPages = $('.detailPage');
         var refundDetail = $('[name=refundDetail]');
