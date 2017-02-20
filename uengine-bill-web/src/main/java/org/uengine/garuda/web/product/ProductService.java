@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface ProductService {
 
-    Map selectProductByCondition(String organization_id, String is_active,String searchKey,Long offset, Long limit);
+    Map selectProductByCondition(String organization_id, String is_active,String category,String searchKey,Long offset, Long limit);
 
     Product selectProductById(String organization_id, String id);
 

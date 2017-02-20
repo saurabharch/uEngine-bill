@@ -66,6 +66,7 @@
         AND organization_id = #{organization_id}
         <if test="searchKey != '' and searchKey != null">
             AND (
+            id LIKE CONCAT('%',#{searchKey},'%') OR
             name LIKE CONCAT('%',#{searchKey},'%') OR
             category LIKE CONCAT('%',#{searchKey},'%') OR
             redirect_url LIKE CONCAT('%',#{searchKey},'%') OR
@@ -74,6 +75,9 @@
         </if>
         <if test="is_active != '' and is_active != null">
             AND is_active = #{is_active}
+        </if>
+        <if test="category != '' and category != null">
+            AND category = #{category}
         </if>
         LIMIT #{offset},#{limit}
     </select>
@@ -84,6 +88,7 @@
         AND organization_id = #{organization_id}
         <if test="searchKey != '' and searchKey != null">
             AND (
+            id LIKE CONCAT('%',#{searchKey},'%') OR
             name LIKE CONCAT('%',#{searchKey},'%') OR
             category LIKE CONCAT('%',#{searchKey},'%') OR
             redirect_url LIKE CONCAT('%',#{searchKey},'%') OR
@@ -92,6 +97,9 @@
         </if>
         <if test="is_active != '' and is_active != null">
             AND is_active = #{is_active}
+        </if>
+        <if test="category != '' and category != null">
+            AND category = #{category}
         </if>
     </select>
 

@@ -374,11 +374,14 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
-    getProductSearch: function (searchKey, offset, limit) {
+    getProductSearch: function (searchKey, offset, limit, category) {
         var data = {
             offset: offset ? offset : 0,
             limit: limit ? limit : 100
         };
+        if (category) {
+            data['category'] = category;
+        }
         var url = searchKey ? '/rest/v1/product/search/' + searchKey : '/rest/v1/product/pagination';
         var options = {
             type: "GET",
@@ -756,7 +759,7 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
-    getAccountBundles: function(account_id){
+    getAccountBundles: function (account_id) {
         var options = {
             type: "GET",
             url: '/rest/v1/accounts/' + account_id + '/bundles',

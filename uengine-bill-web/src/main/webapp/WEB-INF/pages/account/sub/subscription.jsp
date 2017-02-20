@@ -48,22 +48,20 @@
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
-                        <form method="get" class="form-horizontal">
-                            <div class="form-group"><label class="col-sm-3 control-label">New Product</label>
+                        <form method="get" class="form-horizontal" name="plan-search-form">
+
+                            <input type="hidden" name="category" value="BASE">
+
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           name="product-label">Product</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="product" required>
-                                        <option value="AUTHORIZE">AUTHORIZE</option>
-                                        <option value="CAPTURE">CAPTURE</option>
-                                        <option value="CHARGEBACK">CHARGEBACK</option>
-                                        <option value="CREDIT">CREDIT</option>
-                                        <option value="PURCHASE">PURCHASE</option>
-                                        <option value="REFUND">REFUND</option>
-                                        <option value="VOID">VOID</option>
+                                        <option value=""></option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">New Plan</label>
+                            <div class="form-group"><label class="col-sm-3 control-label">Plan</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="plan" required>
@@ -82,17 +80,18 @@
                                 <div class="col-sm-9">
                                     <div>
                                         <label>
-                                            <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediate Change
+                                            <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediate
+                                            Change
                                         </label>
                                     </div>
                                     <div>
                                         <label>
-                                            <input type="radio" checked="" value="POLICY" name="type"> Specify Policy
+                                            <input type="radio" value="POLICY" name="type"> Specify Policy
                                         </label>
                                     </div>
                                     <div>
                                         <label>
-                                            <input type="radio" checked="" value="DATE" name="type"> Specify a date
+                                            <input type="radio" value="DATE" name="type"> Specify a date
                                         </label>
                                     </div>
                                 </div>
@@ -146,18 +145,172 @@
             me.appendTo.html('');
             me.appendTo.append(me.panel);
             me.drawBundles();
+            me.activatePlanSearch();
+        },
+        /**
+         * ajax 플랜 선택창을 카테고리에 맞추어 초기화한다.
+         **/
+        clearPlanSearch: function (category) {
+            $('[name=plan-search-form]').each(function () {
+                var form = $(this);
+                var productSelect = form.find('[name=product]');
+                productSelect.find('option').remove();
+                productSelect.append('<option></option>');
+                productSelect.trigger("chosen:updated");
+
+                var planSelect = form.find('[name=plan]');
+                planSelect.find('option').remove();
+                planSelect.append('<option></option>');
+                planSelect.trigger("chosen:updated");
+
+                form.find('[name=category]').val(category);
+                form.find('[name=product-label]').html('Product (' + category + ')');
+            });
+        },
+        /**
+         * ajax 플랜 선택창을 활성화시킨다.
+         **/
+        activatePlanSearch: function () {
+            var activate = function (form) {
+                if (form.data('activated')) {
+                    return;
+                }
+                form.data('activated', true);
+                var category = form.find('[name=category]').val();
+                var productSelect = form.find('[name=product]');
+                productSelect.chosen({width: "100%"});
+                productSelect.parent().find('input').autocomplete({
+                    source: function (request, response) {
+                        productSelect.find('option').remove();
+                        productSelect.append('<option></option>');
+                        uBilling.getProductSearch(request.term, 0, 10, category)
+                            .done(function (products) {
+                                for (var i = 0; i < products['data'].length; i++) {
+                                    var product = products['data'][i];
+                                    productSelect.append('<option value="' + product['id'] + '">' + product['name'] + '</option>');
+                                }
+                            })
+                            .always(function () {
+                                productSelect.trigger("chosen:updated");
+                                productSelect.parent().find('input').val(request.term);
+                            })
+                    }
+                });
+
+                productSelect.bind('change', function () {
+                    updatePlanSearch(productSelect.val());
+                });
+
+                var planSelect = form.find('[name=plan]');
+                planSelect.chosen({width: "100%"});
+                var updatePlanSearch = function (product_id) {
+                    planSelect.find('option').remove();
+                    planSelect.append('<option></option>');
+                    if (!product_id) {
+                        planSelect.trigger("chosen:updated");
+                        return;
+                    }
+                    uBilling.getProductVersion(product_id, 'current')
+                        .done(function (version) {
+                            $.each(version['plans'], function (idx, plan) {
+                                planSelect.append('<option value="' + plan['name'] + '">' + plan['display_name'] + '</option>');
+                            });
+                        })
+                        .always(function () {
+                            planSelect.trigger("chosen:updated");
+                        });
+                };
+            };
+            $('[name=plan-search-form]').each(function () {
+                activate($(this));
+            });
         },
         /**
          * 서브스크립션을 변경하는 팝업을 띄운다.
          * @param subscription
          */
         changeSubscription: function (subscription) {
+            var me = this;
             if (!subscription || subscription['state'] == 'CANCELLED') {
                 return;
             }
             var modal = $('#change-subscription-modal');
+            var form = modal.find('form');
+            var productCategory = subscription['productCategory'];
+            me.clearPlanSearch(productCategory);
+
+            var policyField = form.find('[name=policy]');
+            var dateField = form.find('[name=date]');
+            var typeRadio = form.find('[name=type]');
+            var type;
+            var setType = function () {
+                type = form.find('[name=type]:checked').val();
+                if (type == 'IMMEDIATE') {
+                    policyField.closest('.form-group').hide();
+                    dateField.closest('.form-group').hide();
+                }
+                else if (type == 'POLICY') {
+                    policyField.closest('.form-group').show();
+                    dateField.closest('.form-group').hide();
+                } else if (type == 'DATE') {
+                    policyField.closest('.form-group').hide();
+                    dateField.closest('.form-group').show();
+                }
+            };
+            typeRadio.unbind('change');
+            typeRadio.bind('change', function () {
+                setType();
+            });
+
+
+            //켈린더, 폴리시 인티에이트 는 액티베이트 메소드에서...(공통쓰임)
+
+//            <div class="form-group"><label class="col-sm-3 control-label"></label>
+//
+//                <div class="col-sm-9">
+//                <div>
+//                <label>
+//                <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediate
+//            Change
+//            </label>
+//            </div>
+//            <div>
+//            <label>
+//            <input type="radio" checked="" value="POLICY" name="type"> Specify Policy
+//            </label>
+//            </div>
+//            <div>
+//            <label>
+//            <input type="radio" checked="" value="DATE" name="type"> Specify a date
+//            </label>
+//            </div>
+//            </div>
+//            </div>
+//            <div class="form-group"><label class="col-sm-3 control-label">Policy</label>
+//
+//                <div class="col-sm-9">
+//                <select class="chosen-select" tabindex="2" name="policy" required>
+//            <option value="IMMEDIATE">IMMEDIATE</option>
+//                <option value="END_OF_TERM">END_OF_TERM</option>
+//                </select>
+//                </div>
+//                </div>
+//                <div class="form-group"><label class="col-sm-3 control-label">Change Date</label>
+//
+//            <div class="col-sm-9">
+//                <div class="input-group date">
+//                <span class="input-group-addon">
+//                <i class="fa fa-calendar"></i>
+//                </span>
+//                <input name="date" type="text" class="form-control" value="01/02/2017">
+//                </div>
+//                </div>
+//                </div>
+
+            setType();
             modal.modal('show');
-        },
+        }
+        ,
         drawBundles: function () {
             var me = this;
             var fill = function (bundle) {
@@ -344,6 +497,7 @@
                     toastr.error("Failed to get AccountBundles : " + response.responseText);
                 });
         }
-    };
+    }
+    ;
     SubscriptionController.prototype.constructor = SubscriptionController;
 </script>

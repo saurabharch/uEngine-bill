@@ -48,9 +48,10 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
     }
 
     @Override
-    public Map selectProductByCondition(String organization_id, String is_active, String searchKey, Long offset, Long limit) {
+    public Map selectProductByCondition(String organization_id, String is_active,String category, String searchKey, Long offset, Long limit) {
         Map map = new HashMap();
         map.put("searchKey", searchKey);
+        map.put("category", category);
         map.put("offset", offset);
         map.put("limit", limit);
         map.put("organization_id", organization_id);

@@ -65,6 +65,7 @@ public class ProductRestController {
 
     @RequestMapping(value = "/product/pagination", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Product>> getProducts(HttpServletRequest request,
+                                                     @RequestParam(defaultValue = "") String category,
                                                      @RequestParam(defaultValue = "") String is_active,
                                                      @RequestParam(defaultValue = "0") Long offset,
                                                      @RequestParam(defaultValue = "100") Long limit) {
@@ -74,7 +75,7 @@ public class ProductRestController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active, null, offset, limit);
+            Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active,category, null, offset, limit);
             List<Product> products = (List<Product>) map.get("list");
             if (products == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -94,6 +95,7 @@ public class ProductRestController {
 
     @RequestMapping(value = "/product/search/{searchKey}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Product>> getProductsSearch(HttpServletRequest request,
+                                                           @RequestParam(defaultValue = "") String category,
                                                            @RequestParam(defaultValue = "") String is_active,
                                                            @PathVariable("searchKey") String searchKey,
                                                            @RequestParam(defaultValue = "0") Long offset,
@@ -104,7 +106,7 @@ public class ProductRestController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active, searchKey, offset, limit);
+            Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active, category,searchKey, offset, limit);
             List<Product> products = (List<Product>) map.get("list");
             if (products == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

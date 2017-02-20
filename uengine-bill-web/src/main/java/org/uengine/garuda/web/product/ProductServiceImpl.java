@@ -41,8 +41,8 @@ public class ProductServiceImpl implements ProductService {
     private Logger logger = LoggerFactory.getLogger(ProductRepository.class);
 
     @Override
-    public Map selectProductByCondition(String organization_id, String is_active, String searchKey, Long offset, Long limit) {
-        return productRepository.selectProductByCondition(organization_id, is_active, searchKey, offset, limit);
+    public Map selectProductByCondition(String organization_id, String is_active, String category, String searchKey, Long offset, Long limit) {
+        return productRepository.selectProductByCondition(organization_id, is_active,category, searchKey, offset, limit);
     }
 
     @Override
@@ -71,9 +71,9 @@ public class ProductServiceImpl implements ProductService {
     public int deleteProductById(String organization_id, String id) {
         //TODO 프로덕트 관련 서브스크립션이 있다면 삭제 불가.
         Long countByProduct = subscriptionEventRepository.selectSubscriptionCountByProduct(organization_id, id);
-        if(countByProduct > 0){
+        if (countByProduct > 0) {
             return 0;
-        }else{
+        } else {
             return productRepository.deleteProductById(organization_id, id);
         }
     }
