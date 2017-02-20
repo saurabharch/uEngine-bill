@@ -80,8 +80,7 @@
                                 <div class="col-sm-9">
                                     <div>
                                         <label>
-                                            <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediate
-                                            Change
+                                            <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediately
                                         </label>
                                     </div>
                                     <div>
@@ -150,7 +149,7 @@
         /**
          * ajax 플랜 선택창을 카테고리에 맞추어 초기화한다.
          **/
-        clearPlanSearch: function (category) {
+        clearPlanSearch: function (category, action) {
             $('[name=plan-search-form]').each(function () {
                 var form = $(this);
                 var productSelect = form.find('[name=product]');
@@ -165,6 +164,37 @@
 
                 form.find('[name=category]').val(category);
                 form.find('[name=product-label]').html('Product (' + category + ')');
+
+                var policyField = form.find('[name=policy]');
+                var dateField = form.find('[name=date]');
+                var typeRadio = form.find('[name=type]');
+                var setType = function (type) {
+                    if (!type) {
+                        type = 'IMMEDIATE';
+                        form.find('[name=type][value=IMMEDIATE]').prop('checked', true);
+                    }
+                    if (type == 'IMMEDIATE') {
+                        policyField.closest('.form-group').hide();
+                        dateField.closest('.form-group').hide();
+                    }
+                    else if (type == 'POLICY') {
+                        policyField.closest('.form-group').show();
+                        dateField.closest('.form-group').hide();
+                    } else if (type == 'DATE') {
+                        policyField.closest('.form-group').hide();
+                        dateField.closest('.form-group').show();
+                    }
+
+                    //서브스크립션 변경인 경우만 폴라이시 그룹을 선택가능.
+                    if (action != 'change') {
+                        policyField.closest('.form-group').hide();
+                    }
+                };
+                typeRadio.unbind('change');
+                typeRadio.bind('change', function () {
+                    setType(form.find('[name=type]:checked').val());
+                });
+                setType();
             });
         },
         /**
@@ -220,10 +250,35 @@
                             planSelect.trigger("chosen:updated");
                         });
                 };
+
+                var policySelect = form.find('[name=policy]');
+                if (policySelect.length) {
+                    policySelect.chosen({width: "100%"});
+                }
+
+                var dateGroup = form.find('[name=date]').closest('.form-group');
+                var picker = dateGroup.find('.input-group.date');
+                picker.datepicker('destroy');
+                picker.datepicker({
+                    todayBtn: "linked",
+                    keyboardNavigation: false,
+                    forceParse: false,
+                    calendarWeeks: true,
+                    autoclose: true,
+                    dateFormat: 'mm/dd/yy'
+                }).datepicker("setDate", new Date());
+
             };
             $('[name=plan-search-form]').each(function () {
                 activate($(this));
             });
+        },
+        convertDate: function (requestedDate) {
+            var splited = requestedDate.split('/');
+            var month = splited[0];
+            var date = splited[1];
+            var year = splited[2];
+            return year + '-' + month + '-' + date;
         },
         /**
          * 서브스크립션을 변경하는 팝업을 띄운다.
@@ -237,77 +292,43 @@
             var modal = $('#change-subscription-modal');
             var form = modal.find('form');
             var productCategory = subscription['productCategory'];
-            me.clearPlanSearch(productCategory);
+            me.clearPlanSearch(productCategory, 'change');
 
-            var policyField = form.find('[name=policy]');
-            var dateField = form.find('[name=date]');
-            var typeRadio = form.find('[name=type]');
-            var type;
-            var setType = function () {
-                type = form.find('[name=type]:checked').val();
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = form.serializeObject();
+                var sendData = {
+                    planName: data['plan'],
+                    accountId: subscription['accountId']
+                };
+                var billingPolicy = data['policy'];
+                var requestedDate = me.convertDate(data['date']);
+                //billingPolicy, requestedDate
+                var type = data['type'];
                 if (type == 'IMMEDIATE') {
-                    policyField.closest('.form-group').hide();
-                    dateField.closest('.form-group').hide();
-                }
-                else if (type == 'POLICY') {
-                    policyField.closest('.form-group').show();
-                    dateField.closest('.form-group').hide();
+                    billingPolicy = null;
+                    requestedDate = null;
+                } else if (type == 'POLICY') {
+                    requestedDate = null;
                 } else if (type == 'DATE') {
-                    policyField.closest('.form-group').hide();
-                    dateField.closest('.form-group').show();
+                    billingPolicy = null;
                 }
-            };
-            typeRadio.unbind('change');
-            typeRadio.bind('change', function () {
-                setType();
+
+                //changeSubscription
+                blockSubmitStart();
+                uBilling.changeSubscription(subscription['subscriptionId'], sendData, billingPolicy, requestedDate)
+                    .done(function (response) {
+                        toastr.success("Subscription changed");
+                        me.init();
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to subscription change : " + response.responseText);
+                    })
+                    .always(function (response) {
+                        blockStop();
+                        modal.modal('hide');
+                    });
             });
-
-
-            //켈린더, 폴리시 인티에이트 는 액티베이트 메소드에서...(공통쓰임)
-
-//            <div class="form-group"><label class="col-sm-3 control-label"></label>
-//
-//                <div class="col-sm-9">
-//                <div>
-//                <label>
-//                <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediate
-//            Change
-//            </label>
-//            </div>
-//            <div>
-//            <label>
-//            <input type="radio" checked="" value="POLICY" name="type"> Specify Policy
-//            </label>
-//            </div>
-//            <div>
-//            <label>
-//            <input type="radio" checked="" value="DATE" name="type"> Specify a date
-//            </label>
-//            </div>
-//            </div>
-//            </div>
-//            <div class="form-group"><label class="col-sm-3 control-label">Policy</label>
-//
-//                <div class="col-sm-9">
-//                <select class="chosen-select" tabindex="2" name="policy" required>
-//            <option value="IMMEDIATE">IMMEDIATE</option>
-//                <option value="END_OF_TERM">END_OF_TERM</option>
-//                </select>
-//                </div>
-//                </div>
-//                <div class="form-group"><label class="col-sm-3 control-label">Change Date</label>
-//
-//            <div class="col-sm-9">
-//                <div class="input-group date">
-//                <span class="input-group-addon">
-//                <i class="fa fa-calendar"></i>
-//                </span>
-//                <input name="date" type="text" class="form-control" value="01/02/2017">
-//                </div>
-//                </div>
-//                </div>
-
-            setType();
             modal.modal('show');
         }
         ,
@@ -334,6 +355,31 @@
                         if (action == 'change') {
                             me.changeSubscription(subscription);
                         }
+                        //TODO
+//                        {
+//                            text: 'Reinstate',
+//                                action: function () {
+//                            subscriptionControl('reinstate');
+//                        }
+//                        },
+//                        {
+//                            text: 'Change Bcd',
+//                                action: function () {
+//                            subscriptionControl('changeBcd');
+//                        }
+//                        },
+//                        {
+//                            text: 'Change',
+//                                action: function () {
+//                            subscriptionControl('change');
+//                        }
+//                        },
+//                        {
+//                            text: 'Cancel',
+//                                action: function () {
+//                            subscriptionControl('cancel');
+//                        }
+//                        }
                     }
                 };
                 var dt = new uengineDT(card.find('[name=subscription-table]'),

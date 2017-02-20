@@ -767,6 +767,23 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    changeSubscription: function (subscription_id, data, billingPolicy, requestedDate) {
+        var url = '/rest/v1/subscriptions/' + subscription_id + '?callCompletion=false';
+        if (billingPolicy) {
+            url = url + '&billingPolicy=' + billingPolicy;
+        }
+        if (requestedDate) {
+            url = url + '&requestedDate=' + requestedDate;
+        }
+        var options = {
+            type: "PUT",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var me = this;
