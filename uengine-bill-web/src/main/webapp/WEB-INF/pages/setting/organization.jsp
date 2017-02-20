@@ -200,8 +200,6 @@
                 })
         });
 
-        //TODO 이메일 생성 창 만들기.
-
         var newEmailModal = $('#contact-email-new-modal');
         var dt = new uengineDT($('#contact-email-table'),
             {

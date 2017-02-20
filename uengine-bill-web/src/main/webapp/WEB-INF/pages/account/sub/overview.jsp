@@ -1114,13 +1114,6 @@
         drawInfo: function () {
             var me = this;
             var fill = function (account) {
-
-                //외부 타이틀
-                var titleInfoPanel = $('[name=account-title-info]');
-                titleInfoPanel.find('[name=name]').html(account.name);
-                titleInfoPanel.find('[name=currency]').html(account.currency);
-                titleInfoPanel.find('[name=timeZone]').html(account.timeZone);
-
                 //인포
                 var infoPanel = me.panel.find('[name=account-info]');
                 infoPanel.find('[name=name]').html(account.name);

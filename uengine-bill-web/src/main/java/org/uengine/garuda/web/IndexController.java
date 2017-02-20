@@ -104,32 +104,37 @@ public class IndexController {
 
     @RequestMapping(value = "account/{id}/overview", method = RequestMethod.GET)
     public ModelAndView accountOverview(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/account/overview");
+        ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
+        view.addObject("page", "overview");
         return view;
     }
     @RequestMapping(value = "account/{id}/subscriptions", method = RequestMethod.GET)
     public ModelAndView accountSubscriptions(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/account/subscriptions");
+        ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
+        view.addObject("page", "subscriptions");
         return view;
     }
     @RequestMapping(value = "account/{id}/invoices", method = RequestMethod.GET)
     public ModelAndView accountInvoices(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/account/invoices");
+        ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
+        view.addObject("page", "invoices");
         return view;
     }
     @RequestMapping(value = "account/{id}/payments", method = RequestMethod.GET)
     public ModelAndView accountPayments(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/account/payments");
+        ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
+        view.addObject("page", "payments");
         return view;
     }
     @RequestMapping(value = "account/{id}/timeline", method = RequestMethod.GET)
     public ModelAndView accountTimeline(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/account/timeline");
+        ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
+        view.addObject("page", "timeline");
         return view;
     }
 

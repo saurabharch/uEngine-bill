@@ -756,6 +756,14 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getAccountBundles: function(account_id){
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/bundles',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var me = this;
