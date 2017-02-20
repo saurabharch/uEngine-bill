@@ -90,7 +90,7 @@
                     defaultContent: '',
                     event: {
                         click: function (key, value, rowValue, rowIdx, td) {
-                            window.location.href = '/account/' + rowValue['accountId'] + '/detail';
+                            window.location.href = '/account/' + rowValue['accountId'] + '/overview';
                         }
                     }
                 },

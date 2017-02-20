@@ -563,6 +563,199 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    deletePaymentMethod: function (pmId, forceDefaultPmDeletion, deleteDefaultPmWithAutoPayOff) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/paymentMethods/' + pmId +
+            '?forceDefaultPmDeletion=' + forceDefaultPmDeletion + '&deleteDefaultPmWithAutoPayOff=' + deleteDefaultPmWithAutoPayOff,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    setDefaultPaymentMethod: function (accountId, pmId, payAllUnpaidInvoices) {
+        if (!payAllUnpaidInvoices) {
+            payAllUnpaidInvoices = false;
+        } else {
+            payAllUnpaidInvoices = true;
+        }
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/accounts/' + accountId + '/paymentMethods/' + pmId + '/setDefault?payAllUnpaidInvoices=' + payAllUnpaidInvoices,
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    createAccountPayment: function (account_id, pmId, data) {
+        var url;
+        if (pmId) {
+            url = '/rest/v1/accounts/' + account_id + '/payments?paymentMethodId=' + pmId;
+        } else {
+            url = '/rest/v1/accounts/' + account_id + '/payments';
+        }
+        var getPaymentId = function (xhr) {
+            var locationHeader = xhr.getResponseHeader('Location');
+            if (locationHeader && locationHeader.length > 0) {
+                return {
+                    paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
+                }
+            } else {
+                return {
+                    error: response.responseText
+                }
+            }
+        };
+        var options = {
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                return getPaymentId(xhr);
+            },
+            reject: function (response, status, errorThrown) {
+                return getPaymentId(response);
+            }
+        };
+        return this.send(options);
+    },
+    capturePayment: function (data) {
+        var getPaymentId = function (xhr) {
+            var locationHeader = xhr.getResponseHeader('Location');
+            if (locationHeader && locationHeader.length > 0) {
+                return {
+                    paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
+                }
+            } else {
+                return {
+                    error: response.responseText
+                }
+            }
+        };
+        var options = {
+            type: "POST",
+            url: '/rest/v1/payments',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                return getPaymentId(xhr);
+            },
+            reject: function (response, status, errorThrown) {
+                return getPaymentId(response);
+            }
+        };
+        return this.send(options);
+    },
+    chargebackPayment: function (data) {
+        var getPaymentId = function (xhr) {
+            var locationHeader = xhr.getResponseHeader('Location');
+            if (locationHeader && locationHeader.length > 0) {
+                return {
+                    paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
+                }
+            } else {
+                return {
+                    error: response.responseText
+                }
+            }
+        };
+        var options = {
+            type: "POST",
+            url: '/rest/v1/payments/chargebacks',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                return getPaymentId(xhr);
+            },
+            reject: function (response, status, errorThrown) {
+                return getPaymentId(response);
+            }
+        };
+        return this.send(options);
+    },
+    refundPayment: function (data) {
+        var getPaymentId = function (xhr) {
+            var locationHeader = xhr.getResponseHeader('Location');
+            if (locationHeader && locationHeader.length > 0) {
+                return {
+                    paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
+                }
+            } else {
+                return {
+                    error: response.responseText
+                }
+            }
+        };
+        var options = {
+            type: "POST",
+            url: '/rest/v1/payments/refunds',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                return getPaymentId(xhr);
+            },
+            reject: function (response, status, errorThrown) {
+                return getPaymentId(response);
+            }
+        };
+        return this.send(options);
+    },
+    voidPayment: function (data) {
+        var getPaymentId = function (xhr) {
+            var locationHeader = xhr.getResponseHeader('Location');
+            if (locationHeader && locationHeader.length > 0) {
+                return {
+                    paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
+                }
+            } else {
+                return {
+                    error: response.responseText
+                }
+            }
+        };
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/payments',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                return getPaymentId(xhr);
+            },
+            reject: function (response, status, errorThrown) {
+                return getPaymentId(response);
+            }
+        };
+        return this.send(options);
+    },
+    addCredit: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/credits',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text',
+            resolve: function (response, status, xhr) {
+                var locationHeader = xhr.getResponseHeader('Location');
+                return locationHeader.substring(locationHeader.lastIndexOf('/') + 1);
+            }
+        };
+        return this.send(options);
+    },
+    addCharge: function (account_id, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/invoices/charges/' + account_id + '?autoCommit=true',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var me = this;

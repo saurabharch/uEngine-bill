@@ -190,7 +190,6 @@
 
         <%@include file="../template/footer.jsp" %>
         <%@include file="./sub/overview.jsp" %>
-        <%@include file="./sub/subscription.jsp" %>
         <%@include file="../subpages/credit-email.jsp" %>
         <%@include file="../subpages/invoice-email.jsp" %>
     </div>

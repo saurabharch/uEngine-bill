@@ -94,8 +94,8 @@
         <div class="col-md-8">
             <div>
                 <h3>Billing Info</h3>
-                <button type="button" class="btn btn-default btn-xs" name="mark">Add Credit</button>
-                <button type="button" class="btn btn-default btn-xs" name="mark">Create Charge
+                <button type="button" class="btn btn-default btn-xs" name="credit-add">Add Credit</button>
+                <button type="button" class="btn btn-default btn-xs" name="create-charge">Create Charge
                 </button>
 
                 <div class="feed-activity-list">
@@ -193,8 +193,11 @@
     <div class="ibox float-e-margins" name="payment-method-item" id="payment-method-item">
         <div class="ibox-title">
             <div>
-                <h5 style="float:left;" name="pluginName">killbill-payment-test</h5>
+                <h5 style="float:left;" name="pluginName"></h5>
                 <span class="label label-primary" name="isDefaultPaymentMethod">Default</span>
+                <a style="margin-left: 15px" name="setDefaultPaymentMethod">
+                    <small>Mark as default</small>
+                </a>
             </div>
             <div class="ibox-tools">
                 <button type="button" class="dropdown-toggle btn btn-default btn-sm"
@@ -226,28 +229,20 @@
                     <td>ID</td>
                     <td name="id"></td>
                 </tr>
-                <%--<tr>--%>
-                <%--<td>ccExpirationMonth</td>--%>
-                <%--<td>11</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td>ccExpirationYear</td>--%>
-                <%--<td>2022</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td>ccLast4</td>--%>
-                <%--<td>4242</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td>ccType</td>--%>
-                <%--<td>Visa</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td>token</td>--%>
-                <%--<td>card_19n23wBWDrG4AoVbQ8JInjvb</td>--%>
-                <%--</tr>--%>
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="row" name="plugin-property-item" id="plugin-property-item">
+        <div class="col-sm-5">
+            <input type="text" class="form-control" name="key" placeholder="key">
+        </div>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" name="value" placeholder="value">
+        </div>
+        <div class="col-sm-1">
+            <i name="delete" style="cursor: pointer" class="fa fa-trash-o"></i>
         </div>
     </div>
 </div>
@@ -312,6 +307,137 @@
     </div>
 </div>
 
+<div class="modal inmodal fade" id="payment-method-new-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Add Payment Method</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form method="get" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-3 control-label">External key</label>
+
+                                <div class="col-sm-9"><input type="text" class="form-control" name="externalKey">
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Plugin Name</label>
+
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" tabindex="2"
+                                            name="pluginName" required>
+                                        <option selected value="__EXTERNAL_PAYMENT__">__EXTERNAL_PAYMENT__</option>
+                                        <option value="killbill-payment-test">killbill-payment-test</option>
+                                        <option value="killbill-paypal-express">killbill-paypal-express</option>
+                                        <option value="killbill-stripe">killbill-stripe</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    <div>Properties</div>
+                                    <a href="Javascript:void(0)" name="plugin-property-add">+ Add</a>
+                                </label>
+
+                                <div class="col-sm-9" name="plugin-property-append">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+
+                                </label>
+                                <div class="col-sm-9">
+                                    <label>
+                                        <input type="checkbox" name="isDefault" value="true"> is Default?
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal fade" id="payment-transaction-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title">Process Transaction</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form method="get" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-3 control-label">Transaction Type</label>
+
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" tabindex="2" name="transactionType" required>
+                                        <option value="AUTHORIZE">AUTHORIZE</option>
+                                        <option value="CAPTURE">CAPTURE</option>
+                                        <option value="CHARGEBACK">CHARGEBACK</option>
+                                        <option value="CREDIT">CREDIT</option>
+                                        <option value="PURCHASE">PURCHASE</option>
+                                        <option value="REFUND">REFUND</option>
+                                        <option value="VOID">VOID</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Amount</label>
+
+                                <div class="col-sm-9"><input type="number" class="form-control" name="amount">
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Currency</label>
+
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" tabindex="2" name="currency" required>
+                                        <%@include file="../../template/currencyList.jsp" %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Payment Key</label>
+
+                                <div class="col-sm-9"><input type="text" class="form-control" name="paymentExternalKey">
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Transaction Key</label>
+
+                                <div class="col-sm-9"><input type="text" class="form-control"
+                                                             name="transactionExternalKey">
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Description</label>
+
+                                <div class="col-sm-9"><textarea rows="8" class="form-control"
+                                                                name="description"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var OverviewController = function (account_id, appendTo) {
         this.account_id = account_id;
@@ -337,30 +463,398 @@
             me.drawTags();
             me.drawContactPerson();
             me.drawPaymentMethods();
-
-            me.panel.find('.collapse-link').on('click', function () {
-                var ibox = $(this).closest('div.ibox');
-                var button = $(this).find('i');
-                var content = ibox.find('div.ibox-content');
-                content.slideToggle(200);
-                button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
-                ibox.toggleClass('').toggleClass('border-bottom');
-                setTimeout(function () {
-                    ibox.resize();
-                    ibox.find('[id^=map-]').resize();
-                }, 50);
+            me.drawCreditAndCharge();
+        },
+        drawCreditAndCharge: function () {
+            var me = this;
+            me.panel.find('[name=credit-add]').click(function () {
+                me.transactionPaymentMethod(null, 'ADD_CREDIT');
+            });
+            me.panel.find('[name=create-charge]').click(function () {
+                me.transactionPaymentMethod(null, 'ADD_CHARGE');
             });
         },
+        /**
+         * 페이먼트 메소드를 추가하는 팝업을 띄운다.
+         **/
+        addPaymentMethod: function () {
+            var me = this;
+            var modal = $('#payment-method-new-modal');
+            var form = modal.find('form');
+            var propertyAdd = modal.find('[name=plugin-property-add]');
+            var propertyAppend = modal.find('[name=plugin-property-append]');
+            form.deserialize({
+                externalKey: ''
+            });
+            form.find('[name=isDefault]').prop('checked', false);
+            form.find('[name=plugin-property-item]').remove();
+            form.find('.chosen-select').chosen({width: "100%"});
+            form.find('.chosen-select').trigger("chosen:updated");
+
+            propertyAdd.unbind('click');
+            propertyAdd.bind('click', function () {
+                var item = $('#plugin-property-item').clone();
+                item.removeAttr('id');
+                item.find('[name=delete]').click(function () {
+                    item.remove();
+                });
+                propertyAppend.append(item);
+            });
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = {};
+                var externalKey = form.find('[name=externalKey]').val();
+                var pluginName = form.find('[name=pluginName]').val();
+                var isDefault = form.find('[name=isDefault]').prop('checked');
+                if (externalKey && externalKey.length) {
+                    data.externalKey = externalKey;
+                }
+                if (pluginName && pluginName.length) {
+                    data.pluginName = pluginName;
+                }
+                form.find('[name=plugin-property-item]').each(function () {
+                    var item = $(this);
+                    var key = item.find('[name=key]').val();
+                    var value = item.find('[name=value]').val();
+                    if ((key && key.length > 0) && (value && value.length > 0)) {
+                        if (!data['pluginInfo']) {
+                            data['pluginInfo'] = {};
+                            data['pluginInfo']['properties'] = [];
+                        }
+                        data['pluginInfo']['properties'].push({
+                            key: key,
+                            value: value
+                        });
+                    }
+                });
+                blockSubmitStart();
+                uBilling.createAccountPaymentMethod(me.account_id, data, isDefault)
+                    .done(function () {
+                        toastr.success("AccountPaymentMethod created");
+                        me.init();
+                        modal.modal('hide');
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to create AccountPaymentMethod : " + response.responseText);
+                    })
+                    .always(function () {
+                        blockStop();
+                    })
+            });
+            modal.modal('show');
+        },
+        deletePaymentMethod: function (method) {
+            var me = this;
+            uBilling.deletePaymentMethod(method['paymentMethodId'], false, true)
+                .done(function () {
+                    toastr.success("PaymentMethod deleted");
+                    me.init();
+                })
+                .fail(function (response) {
+                    toastr.error("Failed to delete PaymentMethod : " + response.responseText);
+                })
+        },
+        /**
+         * 결제 트랜잭션을 보낸다.
+         **/
+        transactionPayment: function (method, data, modal) {
+            var me = this;
+            var sendToPaymentUrl = function (result) {
+                if (result['paymentId']) {
+                    window.location.href = './payments/' + result['paymentId'];
+                } else {
+                    toastr.error("Failed to create Payment : " + result['error']);
+                }
+            };
+            var transactionType = data['transactionType'];
+            if (transactionType == 'AUTHORIZE' || transactionType == 'CREDIT' || transactionType == 'PURCHASE') {
+                blockSubmitStart();
+                uBilling.createAccountPayment(me.account_id, method['paymentMethodId'], data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                    });
+            }
+
+            else if (transactionType == 'CAPTURE') {
+                blockSubmitStart();
+                uBilling.capturePayment(data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                    });
+            }
+            else if (transactionType == 'CHARGEBACK') {
+                blockSubmitStart();
+                uBilling.chargebackPayment(data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                    });
+            }
+            else if (transactionType == 'REFUND') {
+                blockSubmitStart();
+                uBilling.refundPayment(data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                    });
+            }
+            else if (transactionType == 'VOID') {
+                var voidData = {
+                    paymentExternalKey: data['paymentExternalKey'],
+                    transactionType: 'VOID'
+                };
+                blockSubmitStart();
+                uBilling.voidPayment(voidData)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                    });
+            }
+            else if (transactionType == 'ADD_CREDIT') {
+                var creditData = {
+                    creditAmount: data['amount'],
+                    currency: data['currency'],
+                    accountId: me.account_id
+                };
+                blockSubmitStart();
+                uBilling.addCredit(creditData)
+                    .done(function (response) {
+                        toastr.success("Account Credit added");
+                        me.init();
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to create Payment : " + response.responseText);
+                    })
+                    .always(function () {
+                        blockStop();
+                        modal.modal('hide')
+                    });
+            }
+            else if (transactionType == 'ADD_CHARGE') {
+                blockSubmitStart();
+                delete data['transactionType'];
+                var chargeData = [data];
+                uBilling.addCharge(me.account_id, chargeData)
+                    .done(function (response) {
+                        if(response && response.length){
+                            var invoiceId = response[0]['invoiceId'];
+                            window.location.href = './invoices/' + invoiceId;
+                        }
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to create charge : " + response.responseText);
+                    })
+                    .always(function () {
+                        blockStop();
+                        modal.modal('hide')
+                    });
+            }
+        },
+        transactionPaymentMethod: function (method, transaction) {
+
+            var me = this;
+            var modal = $('#payment-transaction-modal');
+            var form = modal.find('form');
+            form.deserialize({
+                transactionType: null,
+                amount: null,
+                currency: null,
+                paymentExternalKey: null,
+                transactionExternalKey: null,
+                description: null
+            });
+            form.find('[name=transactionType]').val(transaction);
+            form.find('[name=currency]').val(me.account['currency']);
+            form.find('.chosen-select').chosen({width: "100%"});
+            form.find('.chosen-select').trigger("chosen:updated");
+
+            //VOID
+            form.find('[name=transactionType]').unbind('change');
+            form.find('[name=transactionType]').bind('change', function (event, value) {
+                var transactionType = value['selected'];
+                setFormByTransactionType(transactionType);
+            });
+
+            var setFormByTransactionType = function (transactionType) {
+                var title = modal.find('[name=title]');
+                var transactionTypeSelect = form.find('[name=transactionType]').closest('.form-group');
+                var currency = form.find('[name=currency]').closest('.form-group');
+                var amount = form.find('[name=amount]').closest('.form-group');
+                var paymentExternalKey = form.find('[name=paymentExternalKey]').closest('.form-group');
+                var transactionExternalKey = form.find('[name=transactionExternalKey]').closest('.form-group');
+                var description = form.find('[name=description]').closest('.form-group');
+                if (transactionType == 'VOID') {
+                    transactionTypeSelect.show();
+                    currency.hide();
+                    amount.hide();
+                    paymentExternalKey.show();
+                    transactionExternalKey.show();
+                    description.hide();
+                }
+                else if (transactionType == 'AUTHORIZE' || transactionType == 'CREDIT' || transactionType == 'PURCHASE') {
+                    transactionTypeSelect.show();
+                    currency.show();
+                    amount.show();
+                    paymentExternalKey.hide();
+                    transactionExternalKey.hide();
+                    description.hide();
+                }
+                else if (transactionType == 'ADD_CREDIT') {
+                    transactionTypeSelect.hide();
+                    currency.show();
+                    amount.show();
+                    paymentExternalKey.hide();
+                    transactionExternalKey.hide();
+                    description.hide();
+                }
+                else if (transactionType == 'ADD_CHARGE') {
+                    transactionTypeSelect.hide();
+                    currency.show();
+                    amount.show();
+                    paymentExternalKey.hide();
+                    transactionExternalKey.hide();
+                    description.show();
+                }
+                else {
+                    transactionTypeSelect.show();
+                    currency.show();
+                    amount.show();
+                    paymentExternalKey.show();
+                    transactionExternalKey.show();
+                    description.hide();
+                }
+
+                //title
+                if (transactionType == 'ADD_CREDIT') {
+                    title.html('Add New Credit')
+                } else if (transactionType == 'ADD_CHARGE') {
+                    title.html('Add New Charge')
+                } else {
+                    title.html('Process Transaction')
+                }
+            };
+            setFormByTransactionType(transaction);
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = form.serializeObject();
+                for (var key in data) {
+                    if (data[key].length < 1) {
+                        delete data[key];
+                    }
+                }
+                if (transaction == 'ADD_CREDIT' || transaction == 'ADD_CHARGE') {
+                    data['transactionType'] = transaction;
+                }
+                me.transactionPayment(method, data, modal);
+            });
+            modal.modal('show');
+        },
+        /**
+         * 디퐅르 페이먼트 메소드로 등록한다.
+         **/
+        setDefaultPaymentMethod: function (method) {
+            var me = this;
+            uBilling.setDefaultPaymentMethod(me.account_id, method['paymentMethodId'], false)
+                .done(function () {
+                    toastr.success("PaymentMethod updated");
+                    me.init();
+                })
+                .fail(function (response) {
+                    toastr.error("Failed to update PaymentMethod : " + response.responseText);
+                })
+        },
+
+        /**
+         * 페이먼트 메소드 리스트를 그린다.
+         */
         drawPaymentMethods: function () {
             var me = this;
             var appendSpace = me.panel.find('[name=payment-method-append]');
             var methodNo = me.panel.find('[name=payment-method-no]');
             appendSpace.find('[name=payment-method-item]').remove();
+
+            /**
+             * 페이먼트 메소드 하나를 그린다.
+             * @param method
+             */
             var addPaymentItem = function (method) {
-                var item = $('#payment-method-item');
+                var item = $('#payment-method-item').clone();
                 item.removeAttr('id');
+                item.find('[name=pluginName]').html(method['pluginName']);
+                var isDefault = method['isDefault'];
+                if (isDefault) {
+                    item.find('[name=isDefaultPaymentMethod]').show();
+                    item.find('[name=setDefaultPaymentMethod]').hide();
+                } else {
+                    item.find('[name=isDefaultPaymentMethod]').hide();
+                    item.find('[name=setDefaultPaymentMethod]').show();
+                    item.find('[name=setDefaultPaymentMethod]').click(function () {
+                        me.setDefaultPaymentMethod(method);
+                    })
+                }
+                var properties = method['pluginInfo']['properties'];
+                item.find('[name=name]').html(method['pluginName']);
+                item.find('[name=id]').html(method['paymentMethodId']);
+                $.each(properties, function (index, property) {
+                    if (property['key'] && property['value']) {
+                        var tr = $('<tr><td>' + property['key'] + '</td><td>' + property['value'] + '</td></tr>');
+                        item.find('tbody').append(tr);
+                    }
+                });
 
+                //payment-method-delete
+                item.find('[name=payment-method-delete]').click(function () {
+                    me.deletePaymentMethod(method);
+                });
 
+                //transactionPaymentMethod
+                item.find('[name=payment]').click(function () {
+                    var transaction = $(this).data('transaction');
+                    if (transaction) {
+                        me.transactionPaymentMethod(method, transaction);
+                    }
+                });
+                item.find('.collapse-link').on('click', function () {
+                    var ibox = $(this).closest('div.ibox');
+                    var button = $(this).find('i');
+                    var content = ibox.find('div.ibox-content');
+                    content.slideToggle(200);
+                    button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+                    ibox.toggleClass('').toggleClass('border-bottom');
+                    setTimeout(function () {
+                        ibox.resize();
+                        ibox.find('[id^=map-]').resize();
+                    }, 50);
+                });
                 appendSpace.append(item);
             };
             var fill = function (methods) {
@@ -383,10 +877,11 @@
                     toastr.error("Failed to get account payment methods");
                 });
 
+            //addPaymentMethod
             var paymentAdd = me.panel.find('[name=payment-method-add]');
             paymentAdd.unbind('click');
             paymentAdd.bind('click', function () {
-                //TODO 모달 생성하고 페이먼트 메소드 만들기
+                me.addPaymentMethod();
             });
         },
         drawContactPerson: function () {

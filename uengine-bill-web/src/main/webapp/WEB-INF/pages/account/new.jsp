@@ -333,14 +333,14 @@
                                 .then(function () {
                                     uBilling.createAccountCustomFields(id, customFileds)
                                         .then(function () {
-                                            window.location.href = '/account/' + id + '/detail';
+                                            window.location.href = '/account/' + id + '/overview';
                                             blockStop();
                                         })
                                 })
                         } else {
                             uBilling.createAccountCustomFields(id, customFileds)
                                 .then(function () {
-                                    window.location.href = '/account/' + id + '/detail';
+                                    window.location.href = '/account/' + id + '/overview';
                                     blockStop();
                                 })
                         }
@@ -355,10 +355,10 @@
                         if (customFileds.length) {
                             uBilling.createAccountCustomFields(accountId, customFileds)
                                 .always(function () {
-                                    window.location.href = '/account/' + accountId + '/detail';
+                                    window.location.href = '/account/' + accountId + '/overview';
                                 });
                         } else {
-                            window.location.href = '/account/' + accountId + '/detail';
+                            window.location.href = '/account/' + accountId + '/overview';
                         }
                     })
                     .fail(function (response) {

@@ -102,9 +102,33 @@ public class IndexController {
         return view;
     }
 
-    @RequestMapping(value = "account/{id}/detail", method = RequestMethod.GET)
-    public ModelAndView accountDetail(HttpSession session, @PathVariable("id") String id) {
-        ModelAndView view = new ModelAndView("/account/detail");
+    @RequestMapping(value = "account/{id}/overview", method = RequestMethod.GET)
+    public ModelAndView accountOverview(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/overview");
+        view.addObject("id", id);
+        return view;
+    }
+    @RequestMapping(value = "account/{id}/subscriptions", method = RequestMethod.GET)
+    public ModelAndView accountSubscriptions(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/subscriptions");
+        view.addObject("id", id);
+        return view;
+    }
+    @RequestMapping(value = "account/{id}/invoices", method = RequestMethod.GET)
+    public ModelAndView accountInvoices(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/invoices");
+        view.addObject("id", id);
+        return view;
+    }
+    @RequestMapping(value = "account/{id}/payments", method = RequestMethod.GET)
+    public ModelAndView accountPayments(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/payments");
+        view.addObject("id", id);
+        return view;
+    }
+    @RequestMapping(value = "account/{id}/timeline", method = RequestMethod.GET)
+    public ModelAndView accountTimeline(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/timeline");
         view.addObject("id", id);
         return view;
     }
