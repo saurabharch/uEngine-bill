@@ -289,6 +289,40 @@
     </div>
 </div>
 
+<div class="modal inmodal fade" id="subscription-cancel-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Cancel Subscription</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form method="get" class="form-horizontal">
+
+                            <div class="form-group"><label class="col-sm-3 control-label">Cancel</label>
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" name="policy" required>
+                                        <option value="DEFAULT" selected>Cancel (default policy)</option>
+                                        <option value="IMMEDIATE">Cancel immediately (generate proration)</option>
+                                        <option value="END_OF_TERM">Cancel end of term</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var SubscriptionController = function (account_id, appendTo, account) {
@@ -296,6 +330,7 @@
         this.appendTo = appendTo;
         this.panel = null;
         this.account = account;
+        this.localDate = null;
         this.init();
     };
     SubscriptionController.prototype = {
@@ -305,7 +340,12 @@
             me.panel.removeAttr('id');
             me.appendTo.html('');
             me.appendTo.append(me.panel);
-            me.drawBundles();
+
+            uBilling.getClock()
+                .then(function (clock) {
+                    me.localDate = clock['localDate']
+                    me.drawBundles();
+                })
             me.activatePlanSearch();
             me.panel.find('[name=add-bundle]').click(function () {
                 me.addSubscription('BASE');
@@ -498,7 +538,7 @@
          * 서브스크립션 bcd 를 변경하는 팝업을 띄운다.
          * @param subscription
          */
-        changeSubscriptionBcd: function(subscription){
+        changeSubscriptionBcd: function (subscription) {
             var me = this;
             var modal = $('#subscription-bcd-modal');
 
@@ -610,6 +650,65 @@
                     });
             });
             modal.modal('show');
+        },
+        /**
+         * 구독을 중단하는 팝업을 띄운다.
+         * @param subscription
+         */
+        cancelSubscription: function (subscription) {
+            var me = this;
+            var modal = $('#subscription-cancel-modal');
+
+            var form = modal.find('form');
+            var policyField = form.find('[name=policy]');
+            policyField.chosen({width: "100%"});
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = form.serializeObject();
+                var policy = data['policy'];
+                var billingPolicy;
+                var entitlementPolicy;
+                var useRequestedDateForBilling = true;
+
+                if (policy == 'IMMEDIATE') {
+                    billingPolicy = 'IMMEDIATE';
+                    entitlementPolicy = 'IMMEDIATE';
+                }
+                else if (policy == 'END_OF_TERM') {
+                    billingPolicy = 'END_OF_TERM';
+                    entitlementPolicy = 'END_OF_TERM';
+                }
+
+                blockSubmitStart();
+                uBilling.cancelSubscription(subscription['subscriptionId'], billingPolicy, entitlementPolicy, useRequestedDateForBilling)
+                    .done(function (response) {
+                        toastr.success("Subscription canceled");
+                        me.init();
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to cancel subscription : " + response.responseText);
+                    })
+                    .always(function (response) {
+                        blockStop();
+                        modal.modal('hide');
+                    });
+            });
+            modal.modal('show');
+        },
+        unCancelSubscription: function(subscription){
+            var me = this;
+            uBilling.unCancelSubscription(subscription['subscriptionId'])
+                .done(function (response) {
+                    toastr.success("Subscription uncanceled.");
+                    me.init();
+                })
+                .fail(function (response) {
+                    toastr.error("Failed to uncancel subscription : " + response.responseText);
+                })
+                .always(function (response) {
+                    blockStop();
+                });
         }
         ,
         drawBundles: function () {
@@ -658,34 +757,15 @@
                         if (action == 'change') {
                             me.changeSubscription(subscription);
                         }
-                        else if(action == 'changeBcd'){
+                        else if (action == 'changeBcd') {
                             me.changeSubscriptionBcd(subscription);
                         }
-                        //TODO
-//                        {
-//                            text: 'Reinstate',
-//                                action: function () {
-//                            subscriptionControl('reinstate');
-//                        }
-//                        },
-//                        {
-//                            text: 'Change Bcd',
-//                                action: function () {
-//                            subscriptionControl('changeBcd');
-//                        }
-//                        },
-//                        {
-//                            text: 'Change',
-//                                action: function () {
-//                            subscriptionControl('change');
-//                        }
-//                        },
-//                        {
-//                            text: 'Cancel',
-//                                action: function () {
-//                            subscriptionControl('cancel');
-//                        }
-//                        }
+                        else if (action == 'cancel') {
+                            me.cancelSubscription(subscription);
+                        }
+                        else if(action == 'reinstate'){
+                            me.unCancelSubscription(subscription);
+                        }
                     }
                 };
                 var dt = new uengineDT(card.find('[name=subscription-table]'),
@@ -773,12 +853,18 @@
                     });
 
                 var subscriptions = bundle['subscriptions'];
+                console.log(subscriptions);
                 $.each(subscriptions, function (index, subscription) {
                     var state = subscription['state'];
                     var events = subscription['events'];
+                    var currentDate = new Date(me.localDate);
                     $.each(events, function (idx, event) {
                         if (event['eventType'] == 'STOP_ENTITLEMENT') {
-                            subscription['isStopEntitlement'] = true;
+                            var effectiveDate = new Date(event['effectiveDate']);
+                            if (effectiveDate > currentDate) {
+                                console.log(effectiveDate , currentDate);
+                                subscription['pendingCancel'] = event['effectiveDate'];
+                            }
                         }
                     });
                     if (state == 'ACTIVE') {
@@ -791,11 +877,10 @@
                         subscription['stateLabel'] = '<span class="label label-info">PENDING</span>';
                     }
                     else if (state == 'CANCELLED') {
-                        if (subscription['isStopEntitlement']) {
-                            subscription['stateLabel'] = '<span class="label label-danger">CANCELLED</span>';
-                        } else {
-                            subscription['stateLabel'] = '<span class="label label-warning">PENDING CANCEL</span>';
-                        }
+                        subscription['stateLabel'] = '<span class="label label-danger">CANCELLED</span>';
+                    }
+                    if (subscription['pendingCancel']) {
+                        subscription['stateLabel'] = '<span class="label label-warning">PENDING CANCEL: ' + subscription['pendingCancel'] + '</span>';
                     }
                 });
                 dt.renderGrid(subscriptions);
@@ -814,16 +899,14 @@
                         var data = selected[0];
 
 
+                        //완전 중단 상태일 경우 모든 버튼 잠금
                         if (data['state'] == 'CANCELLED') {
-                            //완전 중단 상태일 경우 모든 버튼 잠금
-                            if (data['isStopEntitlement']) {
-                                buttons.css('opacity', '0.5');
-                            }
-                            //중단 대기 상태일경우 Reinstate 만 활성화
-                            else {
-                                buttons.css('opacity', '0.5');
-                                buttons.eq(0).css('opacity', '1');
-                            }
+                            buttons.css('opacity', '0.5');
+                        }
+                        //중단 대기 상태일경우 Reinstate 만 활성화
+                        else if(data['pendingCancel']){
+                            buttons.css('opacity', '0.5');
+                            buttons.eq(0).css('opacity', '1');
                         }
                         // 그 외의 경우 Reinstate 잠금
                         else {

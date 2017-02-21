@@ -86,6 +86,14 @@ uBilling.prototype = {
         });
         return deferred.promise();
     },
+    getClock: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/test/clock',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
     getOrganizations: function () {
         console.log('getOrganizations...');
         var me = this;
@@ -813,6 +821,35 @@ uBilling.prototype = {
             type: "PUT",
             url: '/rest/v1/subscriptions/' + subscription_id + '/bcd',
             data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    cancelSubscription: function (subscription_id, billingPolicy, entitlementPolicy, useRequestedDateForBilling) {
+        var url = '/rest/v1/subscriptions/' + subscription_id;
+        if(useRequestedDateForBilling){
+            url = url + '?useRequestedDateForBilling=true'
+        }else{
+            url = url + '?useRequestedDateForBilling=false'
+        }
+        if(billingPolicy){
+            url = url + '&billingPolicy=' + billingPolicy;
+        }
+        if(entitlementPolicy){
+            url = url + '&entitlementPolicy=' + entitlementPolicy;
+        }
+        var options = {
+            type: "DELETE",
+            url: url,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    unCancelSubscription: function (subscription_id) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/subscriptions/' + subscription_id + '/uncancel',
             contentType: "application/json",
             dataType: 'text'
         };
