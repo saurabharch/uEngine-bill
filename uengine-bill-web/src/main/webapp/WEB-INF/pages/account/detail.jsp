@@ -119,6 +119,22 @@
             titleInfoPanel.find('[name=name]').html(account.name);
             titleInfoPanel.find('[name=currency]').html(account.currency);
             titleInfoPanel.find('[name=timeZone]').html(account.timeZone);
+
+            //페이지 활성화
+            switch (page) {
+                case "overview":
+                    new OverviewController(id, $('#overview-append'));
+                    break;
+                case "subscriptions":
+                    new SubscriptionController(id, $('#subscriptions-append'), account);
+                    break;
+                case "invoices":
+                    break;
+                case "payments":
+                    break;
+                case "timeline":
+                    break;
+            }
         };
         uBilling.getAccount(id)
             .done(function (account) {
@@ -157,20 +173,6 @@
             contentControl($(this));
         });
 
-        switch (page) {
-            case "overview":
-                new OverviewController(id, $('#overview-append'));
-                break;
-            case "subscriptions":
-                new SubscriptionController(id, $('#subscriptions-append'));
-                break;
-            case "invoices":
-                break;
-            case "payments":
-                break;
-            case "timeline":
-                break;
-        }
     });
 
 </script>

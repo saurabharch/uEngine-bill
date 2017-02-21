@@ -784,6 +784,40 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    createSubscription: function (data, requestedDate) {
+        var url = '/rest/v1/subscriptions?callCompletion=false';
+        if (requestedDate) {
+            url = url + '&requestedDate=' + requestedDate;
+        }
+        var options = {
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    transferOwnership: function (bundle_id, data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/bundles/' + bundle_id,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    updateSubscriptionBcd: function (subscription_id, data) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/subscriptions/' + subscription_id + '/bcd',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var me = this;
