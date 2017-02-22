@@ -101,6 +101,10 @@
         <%@include file="../template/footer.jsp" %>
         <%@include file="./sub/overview.jsp" %>
         <%@include file="./sub/subscription.jsp" %>
+        <%@include file="./sub/invoices.jsp" %>
+        <%@include file="./sub/invoice.jsp" %>
+        <%@include file="./sub/payments.jsp" %>
+        <%@include file="./sub/payment.jsp" %>
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
@@ -109,9 +113,14 @@
     $(document).ready(function () {
         var id = "${id}";
         var page = "${page}";
+        var objectId = "${objectId}";
+        var currentAccount = null;
+        if (!objectId || objectId.length == '') {
+            objectId = undefined;
+        }
 
         $('#account-edit').click(function () {
-            window.location.href = './edit';
+            window.location.href = '/account/' + id + '/edit';
         });
         var fill = function (account) {
             //외부 타이틀
@@ -129,8 +138,19 @@
                     new SubscriptionController(id, $('#subscriptions-append'), account);
                     break;
                 case "invoices":
+                    if (objectId) {
+                        new InvoiceDetailController(objectId, $('#invoices-append'), account)
+                    } else {
+                        new InvoiceController(id, $('#invoices-append'), account)
+                    }
                     break;
                 case "payments":
+                    if (objectId) {
+                        var overviewCtl = new OverviewController(id, $('#overview-append'));
+                        new PaymentDetailController(objectId, $('#payments-append'), account, true, overviewCtl);
+                    } else {
+                        new PaymentController(id, $('#payments-append'), account)
+                    }
                     break;
                 case "timeline":
                     break;
@@ -138,6 +158,7 @@
         };
         uBilling.getAccount(id)
             .done(function (account) {
+                currentAccount = account;
                 fill(account);
             })
             .fail(function () {
@@ -154,7 +175,7 @@
             }
             tab.click(function () {
                 if (pageData != page) {
-                    window.location.href = './' + pageData;
+                    window.location.href = '/account/' + id + '/' + pageData;
                 }
             })
         };

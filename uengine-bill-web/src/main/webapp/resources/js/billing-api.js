@@ -828,15 +828,15 @@ uBilling.prototype = {
     },
     cancelSubscription: function (subscription_id, billingPolicy, entitlementPolicy, useRequestedDateForBilling) {
         var url = '/rest/v1/subscriptions/' + subscription_id;
-        if(useRequestedDateForBilling){
+        if (useRequestedDateForBilling) {
             url = url + '?useRequestedDateForBilling=true'
-        }else{
+        } else {
             url = url + '?useRequestedDateForBilling=false'
         }
-        if(billingPolicy){
+        if (billingPolicy) {
             url = url + '&billingPolicy=' + billingPolicy;
         }
-        if(entitlementPolicy){
+        if (entitlementPolicy) {
             url = url + '&entitlementPolicy=' + entitlementPolicy;
         }
         var options = {
@@ -855,8 +855,110 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getAccountInvoices: function (account_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/invoices?withItems=true',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    getInvoice: function (invoice_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/invoices/' + invoice_id + '?withItems=true&audit=FULL',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createInvoiceCharge: function (account_id, data, requestedDate) {
+        var url = '/rest/v1/invoices/charges/' + account_id + '?autoCommit=true';
+        if(requestedDate && requestedDate.length > 0){
+            url = url + '&requestedDate=' + requestedDate;
+        }
+        var options = {
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    createInvoicePayment: function (invoice_id, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/invoices/' + invoice_id + '/payments?externalPayment=false',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
+    createInvoiceCredit: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/credits?autoCommit=false',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
+    adjustInvoiceItem: function (invoice_id, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/invoices/' + invoice_id,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
+    getAccountPayments: function(account_id){
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/payments',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    getInvoicePayments: function(payment_id){
+        var options = {
+            type: "GET",
+            url: '/rest/v1/invoicePayments/' + payment_id + '?withAttempts=true&withPluginInfo=true',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    getPaymentMethod: function(payment_method_id){
+        var options = {
+            type: "GET",
+            url: '/rest/v1/paymentMethods/' + payment_method_id + '?withPluginInfo=true',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    refundInvoicePayments: function(payment_id, data){
+        var options = {
+            type: "POST",
+            url: '/rest/v1/invoicePayments/' + payment_id + '/refunds',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
+        var caller = arguments.callee.caller.name;
         var me = this;
         var deferred = $.Deferred();
         var ajaxOptions = {
@@ -877,15 +979,15 @@ uBilling.prototype = {
         }
         var promise = $.ajax(ajaxOptions);
         promise.done(function (response, status, xhr) {
-            console.log('getOrganizationEmails success');
+            console.log(caller + ' success');
             if (options.resolve) {
                 response = options.resolve(response, status, xhr);
             }
             deferred.resolve(response);
         });
         promise.fail(function (response, status, errorThrown) {
+            console.log(caller + ' failed');
             console.log(response, status, errorThrown);
-            //console.log('getOrganizationEmails failed', errorThrown, response.responseText);
             if (options.reject) {
                 response = options.reject(response, status, errorThrown);
             }

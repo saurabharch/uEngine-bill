@@ -123,11 +123,27 @@ public class IndexController {
         view.addObject("page", "invoices");
         return view;
     }
+    @RequestMapping(value = "account/{id}/invoices/{invoiceId}", method = RequestMethod.GET)
+    public ModelAndView accountInvoiceDetail(HttpSession session, @PathVariable("id") String id,@PathVariable("invoiceId") String invoiceId) {
+        ModelAndView view = new ModelAndView("/account/detail");
+        view.addObject("id", id);
+        view.addObject("page", "invoices");
+        view.addObject("objectId", invoiceId);
+        return view;
+    }
     @RequestMapping(value = "account/{id}/payments", method = RequestMethod.GET)
     public ModelAndView accountPayments(HttpSession session, @PathVariable("id") String id) {
         ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
         view.addObject("page", "payments");
+        return view;
+    }
+    @RequestMapping(value = "account/{id}/payments/{paymentId}", method = RequestMethod.GET)
+    public ModelAndView accountPaymentDetail(HttpSession session, @PathVariable("id") String id,@PathVariable("paymentId") String paymentId) {
+        ModelAndView view = new ModelAndView("/account/detail");
+        view.addObject("id", id);
+        view.addObject("page", "payments");
+        view.addObject("objectId", paymentId);
         return view;
     }
     @RequestMapping(value = "account/{id}/timeline", method = RequestMethod.GET)

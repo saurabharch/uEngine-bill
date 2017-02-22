@@ -562,7 +562,7 @@
             var me = this;
             var sendToPaymentUrl = function (result) {
                 if (result['paymentId']) {
-                    window.location.href = './payments/' + result['paymentId'];
+                    window.location.href = '/account/'+me.account_id+'/payments/' + result['paymentId'];
                 } else {
                     toastr.error("Failed to create Payment : " + result['error']);
                 }
@@ -666,7 +666,7 @@
                     .done(function (response) {
                         if(response && response.length){
                             var invoiceId = response[0]['invoiceId'];
-                            window.location.href = './invoices/' + invoiceId;
+                            window.location.href = '/account/'+me.account_id+'/invoices/' + invoiceId;
                         }
                     })
                     .fail(function (response) {
