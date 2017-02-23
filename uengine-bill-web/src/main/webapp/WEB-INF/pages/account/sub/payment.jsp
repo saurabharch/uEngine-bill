@@ -5,10 +5,17 @@
                 <h5 name="title" style="float: none"></h5>
                 <div class="text-muted" style="float: none" name="paymentId"></div>
                 <div class="ibox-tools">
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="REFUND" name="payment">Refund</button>
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="CHARGEBACK" name="payment">Charge back</button>
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="CAPTURE" name="payment">Capture</button>
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="VOID" name="payment">Void</button>
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="REFUND" name="payment">
+                        Refund
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="CHARGEBACK" name="payment">
+                        Charge back
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="CAPTURE" name="payment">
+                        Capture
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="VOID" name="payment">Void
+                    </button>
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
                     </a>
@@ -25,79 +32,53 @@
 </div>
 
 
-<%--<div class="modal inmodal fade" id="invoice-ctl-modal" tabindex="-1" role="dialog" aria-hidden="true">--%>
-    <%--<div class="modal-dialog">--%>
-        <%--<div class="modal-content">--%>
-            <%--<div class="modal-header">--%>
-                <%--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span--%>
-                        <%--class="sr-only">Close</span></button>--%>
-                <%--<h4 class="modal-title" name="title"></h4>--%>
-            <%--</div>--%>
-            <%--<div class="modal-body">--%>
-                <%--<div class="ibox float-e-margins">--%>
-                    <%--<div class="ibox-content no-padding">--%>
-                        <%--<form method="get" class="form-horizontal">--%>
+<div class="modal inmodal fade" id="payment-detail-transaction-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title">Process Transaction</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form method="get" class="form-horizontal">
+                            <input type="hidden" name="paymentExternalKey">
+                            <div class="form-group"><label class="col-sm-3 control-label">Transaction Type</label>
 
-                            <%--<div class="form-group"><label class="col-sm-3 control-label">Amount</label>--%>
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" tabindex="2" name="transactionType" required>
+                                        <option value="CAPTURE">CAPTURE</option>
+                                        <option value="CHARGEBACK">CHARGEBACK</option>
+                                        <option value="REFUND">REFUND</option>
+                                        <option value="VOID">VOID</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label">Amount</label>
 
-                                <%--<div class="col-sm-9">--%>
-                                    <%--<input type="number" class="form-control" name="amount">--%>
-                                    <%--<div class="text-muted">Currency: <span class="text-success" name="currency"></span>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="amount">
+                                    <div class="text-muted">Currency: <span class="text-success" name="currency"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-                            <%--<div class="form-group"><label class="col-sm-3 control-label"--%>
-                                                           <%--name="product-label">Payment Method</label>--%>
-
-                                <%--<div class="col-sm-9">--%>
-                                    <%--<select class="chosen-select" tabindex="2" name="paymentMethodId" required>--%>
-                                        <%--<option value=""></option>--%>
-                                    <%--</select>--%>
-                                    <%--<div class="text-muted">Leave blank to use account's default</div>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-
-                            <%--<div class="form-group"><label class="col-sm-3 control-label">Description</label>--%>
-
-                                <%--<div class="col-sm-9">--%>
-                                    <%--<textarea rows="4" class="form-control" name="description"></textarea>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-
-                            <%--<div class="form-group"><label class="col-sm-3 control-label">Request Date</label>--%>
-
-                                <%--<div class="col-sm-9">--%>
-                                    <%--<div class="input-group date">--%>
-                                        <%--<span class="input-group-addon">--%>
-                                            <%--<i class="fa fa-calendar"></i>--%>
-                                        <%--</span>--%>
-                                        <%--<input name="requestedDate" type="text" class="form-control" value="01/02/2017">--%>
-                                    <%--</div>--%>
-
-                                    <%--<div>--%>
-                                        <%--<label>--%>
-                                            <%--<input type="checkbox" name="useDate" value="false"> Use Request Date--%>
-                                        <%--</label>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-
-                        <%--</form>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-
-            <%--<div class="modal-footer">--%>
-                <%--<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>--%>
-                <%--<button type="button" class="btn btn-primary" name="save">Save</button>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    var PaymentDetailController = function (payment_id, appendTo, account, showMethod, overviewCtl) {
+    var PaymentDetailController = function (payment_id, appendTo, account, showMethod) {
         this.payment_id = payment_id;
         this.appendTo = appendTo;
         this.panel = null;
@@ -105,7 +86,6 @@
         this.dt = null;
         this.payment = null;
         this.showMethod = showMethod;
-        this.overviewCtl = overviewCtl;
         this.init();
     };
     PaymentDetailController.prototype = {
@@ -116,7 +96,7 @@
             me.appendTo.html('');
             me.appendTo.append(me.panel);
             me.drawPayment();
-            if(me.showMethod){
+            if (me.showMethod) {
                 me.drawPaymentMethod();
             }
         }
@@ -125,21 +105,150 @@
 
         }
         ,
-        transactionPaymentMethod: function (transactionAction) {
+//        transactionPaymentMethod: function (transactionAction) {
+//            var me = this;
+//            //여기서 페이먼트키와, 유알엘 리다이렉트 대신 이 컨트롤러를 리프레쉬하도록 오버뷰컨트롤러를 조정한다.
+//            //아니면 오버뷰 컨트롤러 관련 내용을 새로 코딩한다 ==> 이것이 좋아보인다. ok
+//            //그리고, 인보이스 페이먼트의 리펀드 관련 작성하기.
+//            //타임라인 작성하기
+//            //서브스크립션, 인보이스 독립 페이지 연결하기
+//            //페이먼트 메소드 정보 그리기
+//            //인보이스 페이지에 이 컨트롤러를 삽입하기
+//            //인보이스 메일 발송 과정 디버깅하기
+//            //인보이스 템플릿 등록 만들기
+//            //페이먼트 메소드 등록 페이지 만들기
+//            //페이먼트 메소드 등록 이메일 발송
+//            //카우치 디비 요소 mysql 로 이사하기
+//            //PG 등록 페이지 만들기
+//            //통계 관련 작업 시작하기 (커런시, 아날리틱스)
+//
+//            me.overviewCtl.transactionPaymentMethod(null,transactionAction);
+//        },
+        /**
+         * 결제 트랜잭션을 보낸다.
+         **/
+        transactionPayment: function (data, modal) {
             var me = this;
-            //여기서 페이먼트키와, 유알엘 리다이렉트 대신 이 컨트롤러를 리프레쉬하도록 오버뷰컨트롤러를 조정한다.
-            //아니면 오버뷰 컨트롤러 관련 내용을 새로 코딩한다 ==> 이것이 좋아보인다.
-            //그리고, 인보이스 페이먼트의 리펀드 관련 작성하기.
-            //타임라인 작성하기
-            //서브스크립션, 인보이스 독립 페이지 연결하기
-            //페이먼트 메소드 정보 그리기
-            //인보이스 페이지에 이 컨트롤러를 삽입하기
-            //인보이스 메일 발송
-            me.overviewCtl.transactionPaymentMethod(null,transactionAction);
+            var sendToPaymentUrl = function (result) {
+                if (result['paymentId']) {
+                    me.init();
+                } else {
+                    toastr.error("Failed to create Payment : " + result['error']);
+                }
+            };
+            var transactionType = data['transactionType'];
+
+            if (transactionType == 'CAPTURE') {
+                blockSubmitStart();
+                uBilling.capturePayment(data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                        modal.modal('hide');
+                    });
+            }
+            else if (transactionType == 'CHARGEBACK') {
+                blockSubmitStart();
+                uBilling.chargebackPayment(data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                        modal.modal('hide');
+                    });
+            }
+            else if (transactionType == 'REFUND') {
+                blockSubmitStart();
+                uBilling.refundPayment(data)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                        modal.modal('hide');
+                    });
+            }
+            else if (transactionType == 'VOID') {
+                var voidData = {
+                    paymentExternalKey: data['paymentExternalKey'],
+                    transactionType: 'VOID'
+                };
+                blockSubmitStart();
+                uBilling.voidPayment(voidData)
+                    .done(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .fail(function (result) {
+                        sendToPaymentUrl(result);
+                    })
+                    .always(function () {
+                        blockStop();
+                        modal.modal('hide');
+                    });
+            }
+        },
+        transactionPaymentMethod: function (transaction) {
+            var me = this;
+            var modal = $('#payment-detail-transaction-modal');
+            var form = modal.find('form');
+            form.deserialize({
+                transactionType: transaction,
+                amount: null,
+                paymentExternalKey: me.payment['paymentExternalKey']
+            });
+            form.find('[name=currency]').html(me.payment['currency']);
+            form.find('.chosen-select').chosen({width: "100%"});
+            form.find('.chosen-select').trigger("chosen:updated");
+
+            form.find('[name=transactionType]').unbind('change');
+            form.find('[name=transactionType]').bind('change', function (event, value) {
+                var transactionType = value['selected'];
+                setFormByTransactionType(transactionType);
+            });
+
+            var setFormByTransactionType = function (transactionType) {
+                var title = modal.find('[name=title]');
+                var transactionTypeSelect = form.find('[name=transactionType]').closest('.form-group');
+                var amount = form.find('[name=amount]').closest('.form-group');
+                if (transactionType == 'VOID') {
+                    transactionTypeSelect.show();
+                    amount.hide();
+                }
+                else {
+                    transactionTypeSelect.show();
+                    amount.show();
+                }
+                title.html('Process Transaction')
+            };
+            setFormByTransactionType(transaction);
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = form.serializeObject();
+                for (var key in data) {
+                    if (data[key].length < 1) {
+                        delete data[key];
+                    }
+                }
+                me.transactionPayment(data, modal);
+            });
+            modal.modal('show');
         },
         paymentCtlEvents: function () {
             var me = this;
-            if(me.payment['authAmount'] > 0){
+            if (me.payment['authAmount'] > 0) {
 
             }
             var REFUND;
@@ -147,35 +256,35 @@
             var CAPTURE;
             var VOID;
             me.panel.find('[name=payment]').hide();
-            me.panel.find('[name=payment]').each(function(){
+            me.panel.find('[name=payment]').each(function () {
                 var transaction = $(this).data('transaction');
-                $(this).click(function(){
+                $(this).click(function () {
                     me.transactionPaymentMethod(transaction);
                 })
-                if(transaction == 'REFUND'){
+                if (transaction == 'REFUND') {
                     REFUND = $(this);
                 }
-                if(transaction == 'CHARGEBACK'){
+                if (transaction == 'CHARGEBACK') {
                     CHARGEBACK = $(this);
                 }
-                if(transaction == 'CAPTURE'){
+                if (transaction == 'CAPTURE') {
                     CAPTURE = $(this);
                 }
-                if(transaction == 'VOID'){
+                if (transaction == 'VOID') {
                     VOID = $(this);
                 }
             });
-            var authAmount= me.payment['authAmount'];
-            var capturedAmount= me.payment['capturedAmount'];
-            var purchasedAmount= me.payment['purchasedAmount'];
-            var refundedAmount= me.payment['refundedAmount'];
-            if(authAmount > 0 && authAmount > capturedAmount){
+            var authAmount = me.payment['authAmount'];
+            var capturedAmount = me.payment['capturedAmount'];
+            var purchasedAmount = me.payment['purchasedAmount'];
+            var refundedAmount = me.payment['refundedAmount'];
+            if (authAmount > 0 && authAmount > capturedAmount) {
                 CAPTURE.show();
             }
-            if(authAmount > 0 && capturedAmount == 0){
+            if (authAmount > 0 && capturedAmount == 0) {
                 VOID.show();
             }
-            if(capturedAmount > 0 || purchasedAmount > 0){
+            if (capturedAmount > 0 || purchasedAmount > 0) {
                 REFUND.show();
                 CHARGEBACK.show();
             }

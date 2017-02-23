@@ -21,13 +21,20 @@
 
 <body class="gray-bg">
 
+<div id="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <iframe src="/resources/d3/world/index.html" frameborder="no" scrolling="no" style="width: 100%;height: 450px;"></iframe>
+            </div>
+        </div>
+</div>
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
-        <div>
+        <%--<div>--%>
 
-            <h1 class="logo-name">uEngine</h1>
+            <%--<h1 class="logo-name">uEngine</h1>--%>
 
-        </div>
+        <%--</div>--%>
         <h3>Welcome to uEngine Billing</h3>
 
         <p>uEngine Billing is a powerful subscription management software which handles recurring billing and payments

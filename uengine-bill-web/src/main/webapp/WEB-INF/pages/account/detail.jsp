@@ -146,8 +146,7 @@
                     break;
                 case "payments":
                     if (objectId) {
-                        var overviewCtl = new OverviewController(id, $('#overview-append'));
-                        new PaymentDetailController(objectId, $('#payments-append'), account, true, overviewCtl);
+                        new PaymentDetailController(objectId, $('#payments-append'), account, true);
                     } else {
                         new PaymentController(id, $('#payments-append'), account)
                     }
