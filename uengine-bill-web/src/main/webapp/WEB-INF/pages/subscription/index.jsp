@@ -32,124 +32,14 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Subscriptions</h5>
+                        <h5>Subscription Bundles</h5>
 
-                        <div class="ibox-tools">
-                            <a href="./subscription/new" type="button" class="btn btn-primary btn-sm">New +</a>
-                            <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#"><i
-                                    class="fa fa-bars"></i></a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">All</a>
-                                </li>
-                                <li><a href="#">Active</a>
-                                </li>
-                                <li><a href="#">Inactive</a>
-                                </li>
-                                <li><a href="#">Trial</a>
-                                </li>
-                                <li><a href="#">Canceled This Month</a>
-                                </li>
-                                <li><a href="#">Canceled Last Month</a>
-                                </li>
-                                <li><a href="#">Dunning</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Export Subscriptions</a>
-                                </li>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Refresh List</a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                     <div class="ibox-content">
 
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover dataTables-example">
-                                <thead>
-                                <tr>
-                                    <th>DATE</th>
-                                    <th>CUSTOMER NAME</th>
-                                    <th>EMAIL</th>
-                                    <th>STATUS</th>
-                                    <th>PLAN NAME</th>
-                                    <th>AMOUNT</th>
-                                    <th>ACTIVATED ON</th>
-                                    <th>LAST BILLED ON</th>
-                                    <th>NEXT BILLING ON</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>20 Dec 2016</td>
-                                    <td><a href="./subscription/detail">darkgodarkgo</a></td>
-                                    <td>sppark@uengine.org</td>
-                                    <td class="text-success">LIVE</td>
-                                    <td>basic-monthly</td>
-                                    <td>$33.92</td>
-                                    <td>20 Dec 2016</td>
-                                    <td>21 Dec 2016</td>
-                                    <td>20 Jan 2017</td>
-                                </tr>
-                                <tr>
-                                    <td>20 Dec 2016</td>
-                                    <td><a href="./subscription/detail">darkgodarkgo</a></td>
-                                    <td>sppark@uengine.org</td>
-                                    <td class="text-success">LIVE</td>
-                                    <td>basic-monthly</td>
-                                    <td>$33.92</td>
-                                    <td>20 Dec 2016</td>
-                                    <td>21 Dec 2016</td>
-                                    <td>20 Jan 2017</td>
-                                </tr>
-                                <tr>
-                                    <td>20 Dec 2016</td>
-                                    <td><a href="./subscription/detail">darkgodarkgo</a></td>
-                                    <td>sppark@uengine.org</td>
-                                    <td class="text-success">LIVE</td>
-                                    <td>basic-monthly</td>
-                                    <td>$33.92</td>
-                                    <td>20 Dec 2016</td>
-                                    <td>21 Dec 2016</td>
-                                    <td>20 Jan 2017</td>
-                                </tr>
-                                <tr>
-                                    <td>20 Dec 2016</td>
-                                    <td><a href="./subscription/detail">darkgodarkgo</a></td>
-                                    <td>sppark@uengine.org</td>
-                                    <td class="text-success">LIVE</td>
-                                    <td>basic-monthly</td>
-                                    <td>$33.92</td>
-                                    <td>20 Dec 2016</td>
-                                    <td>21 Dec 2016</td>
-                                    <td>20 Jan 2017</td>
-                                </tr>
-                                <tr>
-                                    <td>20 Dec 2016</td>
-                                    <td><a href="./subscription/detail">darkgodarkgo</a></td>
-                                    <td>sppark@uengine.org</td>
-                                    <td class="text-success">LIVE</td>
-                                    <td>basic-monthly</td>
-                                    <td>$33.92</td>
-                                    <td>20 Dec 2016</td>
-                                    <td>21 Dec 2016</td>
-                                    <td>20 Jan 2017</td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>DATE</th>
-                                    <th>CUSTOMER NAME</th>
-                                    <th>EMAIL</th>
-                                    <th>STATUS</th>
-                                    <th>PLAN NAME</th>
-                                    <th>AMOUNT</th>
-                                    <th>ACTIVATED ON</th>
-                                    <th>LAST BILLED ON</th>
-                                    <th>NEXT BILLING ON</th>
-                                </tr>
-                                </tfoot>
+                            <table id="subscription-table" class="table table-striped table-bordered table-hover">
+
                             </table>
                         </div>
                     </div>
@@ -166,8 +56,57 @@
 
 <script>
     $(document).ready(function () {
-        $('.dataTables-example').DataTable({
-            pageLength: 25,
+        var dt = new uengineDT($('#subscription-table'), {
+            select: true,
+            columns: [
+                {
+                    data: 'bundleIdLabel',
+                    title: 'BUNDLE ID',
+                    defaultContent: '',
+                    event: {
+                        click: function (key, value, rowValue, rowIdx, td) {
+                            //window.location.href = '/account/' + rowValue['accountId'] + '/overview';
+                        }
+                    }
+                },
+                {
+                    data: 'stateLabel',
+                    title: 'STATE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'productName',
+                    title: 'PRODUCT NAME',
+                    defaultContent: ''
+                },
+                {
+                    data: 'planName',
+                    title: 'PLAN NAME',
+                    defaultContent: ''
+                },
+                {
+                    data: 'phaseType',
+                    title: 'PHASE TYPE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'startDate',
+                    title: 'START DATE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'chargedThroughDate',
+                    title: 'CHARGED THROUGH DATE',
+                    defaultContent: ''
+                },
+                {
+                    data: 'billCycleDayLocal',
+                    title: 'BILL CYCLE DAY',
+                    defaultContent: ''
+                }
+            ],
+            pageLength: 10,
+            info: true,
             responsive: true,
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [
@@ -183,13 +122,60 @@
                         $(win.document.body).css('font-size', '10px');
 
                         $(win.document.body).find('table')
-                                .addClass('compact')
-                                .css('font-size', 'inherit');
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
                     }
                 }
-            ]
-
+            ],
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, callback, settings) {
+                var offset = data.start;
+                var limit = data.length;
+                var searchKey = data.search.value;
+                searchKey = searchKey.length > 0 ? searchKey : null;
+                uBilling.getAccountSearch(searchKey, offset, limit)
+                    .done(function (response) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            response.data[i].name = '<a>' + response.data[i].name + '</a>'
+                        }
+                        dt.gridData = response.data;
+                        callback({
+                            recordsTotal: response.total,
+                            recordsFiltered: response.filtered,
+                            data: response.data
+                        });
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find account list.");
+                    });
+            }
         });
+        dt.renderGrid();
+        dt.getDt()
+            .on('user-select', function (e, dt, type, cell, originalEvent) {
+                if ($(originalEvent.target).index() === 0) {
+                    e.preventDefault();
+                }
+            })
+            .on('select', function (e, dt, type, indexes) {
+                tableButtonCss();
+            })
+            .on('deselect', function (e, dt, type, indexes) {
+                tableButtonCss();
+            });
+        var tableButtonCss = function () {
+            var buttons = dt.getPanel().parent().find('.html5buttons').find('a');
+            var count = dt.getDt().rows({selected: true}).count();
+            if (count > 0) {
+                buttons.eq(0).css('opacity', '1');
+                buttons.eq(1).css('opacity', '1');
+            } else {
+                buttons.eq(0).css('opacity', '0.5');
+                buttons.eq(1).css('opacity', '0.5');
+            }
+        };
+        tableButtonCss();
     });
 </script>
 </body>

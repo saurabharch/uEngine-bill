@@ -928,6 +928,15 @@ uBilling.prototype = {
         return this.send(options);
     },
 
+    getPaymentsByInvoiceId: function(invoice_id){
+        var options = {
+            type: "GET",
+            url: '/rest/v1/invoices/' + invoice_id + '/payments?withAttempts=true&withPluginInfo=true&audit=FULL',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
     getInvoicePayments: function(payment_id){
         var options = {
             type: "GET",

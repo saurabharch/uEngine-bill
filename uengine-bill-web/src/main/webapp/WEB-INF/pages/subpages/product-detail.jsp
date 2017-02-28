@@ -184,33 +184,33 @@
             <div class="hr-line-dashed"></div>
             <div class="row">
                 <div class="col-md-12">
-                    <div style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
                         UNIT
                     </div>
-                    <div style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
                         SIZE
                     </div>
-                    <div style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
                         MAX
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
                         <input type="text"
                                class="form-control"
                                name="unit"
                                value="">
                     </div>
-                    <div style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
                         <input type="number"
                                class="form-control"
                                min="0"
                                name="size"
                                value="">
                     </div>
-                    <div style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
                         <input type="number"
                                class="form-control"
                                min="0"

@@ -43,6 +43,10 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div name="payments-append">
+
+                </div>
             </div>
         </div>
     </div>
@@ -138,7 +142,25 @@
             me.appendTo.html('');
             me.appendTo.append(me.panel);
             me.drawInvoice();
+            me.drawInvoicePayments();
             me.invoiceCtlEvents();
+        },
+        drawInvoicePayments: function () {
+            var me = this;
+
+            uBilling.getPaymentsByInvoiceId(me.invoice_id)
+                .done(function (payments) {
+                    if (payments && payments.length) {
+                        $.each(payments, function (index, payment) {
+                            var card = $('<div></div>');
+                            me.panel.find('[name=payments-append]').append(card);
+                            new PaymentDetailController(payment['paymentId'], card, me.account, false, me);
+                        });
+                    }
+                })
+                .fail(function (response) {
+                    toastr.error("Failed to get payments : " + response.responseText);
+                })
         },
         invoiceCtlAction: function (action, object) {
             var me = this;
@@ -208,7 +230,7 @@
                         .fail(function (response) {
                             toastr.error("Failed to create InvoiceCredit : " + response.responseText);
                         })
-                        .always(function(){
+                        .always(function () {
                             modal.modal('hide');
                             blockStop();
                         })
@@ -228,7 +250,7 @@
                         amount: amount.val(),
                         currency: me.invoice['currency']
                     }
-                    if(description.val() && description.val().length > 0){
+                    if (description.val() && description.val().length > 0) {
                         data['description'] = description.val();
                     }
 
@@ -247,7 +269,7 @@
                         .fail(function (response) {
                             toastr.error("Failed to create InvoiceCharge : " + response.responseText);
                         })
-                        .always(function(){
+                        .always(function () {
                             modal.modal('hide');
                             blockStop();
                         })
@@ -286,7 +308,7 @@
                         purchasedAmount: amount.val(),
                         currency: me.invoice['currency']
                     }
-                    if(paymentMethodId.val() && paymentMethodId.val().length > 0){
+                    if (paymentMethodId.val() && paymentMethodId.val().length > 0) {
                         data['paymentMethodId'] = paymentMethodId.val();
                     }
 
@@ -299,7 +321,7 @@
                         .fail(function (response) {
                             toastr.error("Failed to create InvoicePayment : " + response.responseText);
                         })
-                        .always(function(){
+                        .always(function () {
                             modal.modal('hide');
                             blockStop();
                         });
@@ -331,7 +353,7 @@
                         .fail(function (response) {
                             toastr.error("Failed to adjust InvoiceItem : " + response.responseText);
                         })
-                        .always(function(){
+                        .always(function () {
                             modal.modal('hide');
                             blockStop();
                         })
