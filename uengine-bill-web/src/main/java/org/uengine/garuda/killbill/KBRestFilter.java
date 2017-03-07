@@ -358,7 +358,7 @@ public class KBRestFilter implements Filter {
             //transfer-encoding 을 제외한 헤더값을 카피한다.
             if (headers != null) {
                 for (int i = 0; i < headers.length; i++) {
-                    if(!"transfer-encoding".equals(headers[i].getName().toLowerCase())){
+                    if (!"transfer-encoding".equals(headers[i].getName().toLowerCase())) {
                         response.setHeader(headers[i].getName(), headers[i].getValue());
                     }
                 }
@@ -376,6 +376,7 @@ public class KBRestFilter implements Filter {
 
     /**
      * 서브스크립션 생성, 업데이트 후 변경 정보를 킬빌서버로부터 가져온다.
+     *
      * @param organization
      * @param endPoint
      * @return
@@ -415,6 +416,7 @@ public class KBRestFilter implements Filter {
 
     /**
      * 킬빌 서버로 서브스크립션 생성 요청을 보낸다.
+     *
      * @param request
      * @param organization
      * @param body
@@ -473,11 +475,17 @@ public class KBRestFilter implements Filter {
 
         Map requiredHeaders = new HashMap();
         requiredHeaders.put("Authorization", "Basic " + encode);
-        requiredHeaders.put("Content-Type", "application/json");
         requiredHeaders.put("Accept", "application/json");
         requiredHeaders.put("X-Killbill-CreatedBy", "uEngine");
         requiredHeaders.put("X-Killbill-ApiKey", tenant_api_key);
         requiredHeaders.put("X-Killbill-ApiSecret", tenant_api_secret);
+
+        String contentHeader = request.getHeader("Content-Type");
+        if (!StringUtils.isEmpty(contentHeader)) {
+            requiredHeaders.put("Content-Type", contentHeader);
+        } else {
+            requiredHeaders.put("Content-Type", "application/json");
+        }
 
         ProxyRequest proxyRequest = new ProxyRequest();
         proxyRequest.setRequest(request);

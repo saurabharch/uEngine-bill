@@ -873,7 +873,7 @@ uBilling.prototype = {
     },
     createInvoiceCharge: function (account_id, data, requestedDate) {
         var url = '/rest/v1/invoices/charges/' + account_id + '?autoCommit=true';
-        if(requestedDate && requestedDate.length > 0){
+        if (requestedDate && requestedDate.length > 0) {
             url = url + '&requestedDate=' + requestedDate;
         }
         var options = {
@@ -919,7 +919,7 @@ uBilling.prototype = {
         return this.send(options);
     },
 
-    getAccountPayments: function(account_id){
+    getAccountPayments: function (account_id) {
         var options = {
             type: "GET",
             url: '/rest/v1/accounts/' + account_id + '/payments',
@@ -928,7 +928,7 @@ uBilling.prototype = {
         return this.send(options);
     },
 
-    getPaymentsByInvoiceId: function(invoice_id){
+    getPaymentsByInvoiceId: function (invoice_id) {
         var options = {
             type: "GET",
             url: '/rest/v1/invoices/' + invoice_id + '/payments?withAttempts=true&withPluginInfo=true&audit=FULL',
@@ -937,7 +937,7 @@ uBilling.prototype = {
         return this.send(options);
     },
 
-    getInvoicePayments: function(payment_id){
+    getInvoicePayments: function (payment_id) {
         var options = {
             type: "GET",
             url: '/rest/v1/invoicePayments/' + payment_id + '?withAttempts=true&withPluginInfo=true',
@@ -946,7 +946,7 @@ uBilling.prototype = {
         return this.send(options);
     },
 
-    getPaymentMethod: function(payment_method_id){
+    getPaymentMethod: function (payment_method_id) {
         var options = {
             type: "GET",
             url: '/rest/v1/paymentMethods/' + payment_method_id + '?withPluginInfo=true',
@@ -955,13 +955,40 @@ uBilling.prototype = {
         return this.send(options);
     },
 
-    refundInvoicePayments: function(payment_id, data){
+    refundInvoicePayments: function (payment_id, data) {
         var options = {
             type: "POST",
             url: '/rest/v1/invoicePayments/' + payment_id + '/refunds',
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    getPluginConfig: function (pluginName) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/tenants/uploadPluginConfig/' + pluginName,
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    updatePluginConfig: function (pluginName, pluginData) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/tenants/uploadPluginConfig/' + pluginName,
+            data: pluginData,
+            contentType: "text/plain",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    deletePluginConfig: function (pluginName) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/tenants/uploadPluginConfig/' + pluginName
         };
         return this.send(options);
     },

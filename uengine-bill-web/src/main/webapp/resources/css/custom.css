@@ -3,4 +3,48 @@
     padding-right: 1px;
 }
 
+.logo-card-types {
+    background-image: url('../images/pg/card-types.png');
+    background-image: -webkit-image-set(url(../images/pg/card-types.png) 1x, url(../images/pg/card-types.png) 2x);
+    background-repeat: no-repeat;
+    display: inline-block
+}
+
+.logo-card-types.visa-card {
+    background-position: -4px -8px;
+    width: 49px;
+    height: 17px
+}
+
+.logo-card-types.master-card {
+    background-position: -268px -5px;
+    width: 39px;
+    height: 23px
+}
+
+.logo-card-types.diners-club {
+    background-position: -92px -10px;
+    width: 44px;
+    height: 14px
+}
+
+.logo-card-types.discover {
+    background-position: -180px -13px;
+    width: 49px;
+    height: 8px
+}
+
+.logo-card-types.jcb {
+    background-position: -346px -1px;
+    width: 40px;
+    height: 31px
+}
+
+.logo-card-types.american-express {
+    background-position: -426px 0;
+    width: 32px;
+    height: 32px
+}
+
+
 
