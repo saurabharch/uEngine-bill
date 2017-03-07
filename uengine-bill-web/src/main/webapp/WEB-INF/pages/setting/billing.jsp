@@ -40,6 +40,28 @@
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal" id="billing-rule-form" novalidate>
 
+                            <%--<div>--%>
+                            <%--<span>--%>
+                            <%--<h3 class="m-t-none m-b" name="box-title">RECURRING MODE</h3>--%>
+                            <%--</span>--%>
+                            <%--<div class="hr-line-dashed"></div>--%>
+                            <%--</div>--%>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    <h3>RECURRING MODE</h3>
+                                </label>
+
+                                <div class="col-sm-4">
+                                    <select data-placeholder="" class="chosen-select"
+                                            tabindex="2" name="recurringBillingMode" required>
+                                        <option value="IN_ADVANCE">IN_ADVANCE</option>
+                                        <option value="IN_ARREAR">IN_ARREAR</option>
+                                    </select>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                            </div>
+
                             <div id="box-before"></div>
 
                             <div class="form-group">
@@ -218,6 +240,9 @@
             }
         };
 
+        var recurringBillingMode = form.find('[name=recurringBillingMode]');
+        recurringBillingMode.chosen({width: "100%"});
+
         var drawRules = function (rule) {
             var addRuleBox = function (ruleBoxDiv, key) {
                 ruleBoxDiv.find('[name=add-case]').click(function () {
@@ -227,21 +252,26 @@
                 });
             };
             for (var key in rule) {
-                var ruleData = rule[key];
-                var ruleBox = caseMap.rules[key];
-                var ruleBoxTitle = ruleBox.title;
-                var ruleBoxDiv = $('#rule-template').clone();
-                ruleBoxDiv.removeAttr('id');
-                if (!ruleBox.condition || !ruleBox.condition.length) {
-                    ruleBoxDiv.find('[name=add-case]').hide();
-                }
-                ruleBoxDiv.find('[name=box-title]').html(ruleBoxTitle);
-                $('#box-before').before(ruleBoxDiv);
+                if (key == 'recurringBillingMode') {
+                    recurringBillingMode.val(rule['recurringBillingMode']);
+                    recurringBillingMode.trigger("chosen:updated");
+                } else {
+                    var ruleData = rule[key];
+                    var ruleBox = caseMap.rules[key];
+                    var ruleBoxTitle = ruleBox.title;
+                    var ruleBoxDiv = $('#rule-template').clone();
+                    ruleBoxDiv.removeAttr('id');
+                    if (!ruleBox.condition || !ruleBox.condition.length) {
+                        ruleBoxDiv.find('[name=add-case]').hide();
+                    }
+                    ruleBoxDiv.find('[name=box-title]').html(ruleBoxTitle);
+                    $('#box-before').before(ruleBoxDiv);
 
-                for (var i = 0; i < ruleData.length; i++) {
-                    drawCases(ruleBoxDiv, key, ruleData[i]);
+                    for (var i = 0; i < ruleData.length; i++) {
+                        drawCases(ruleBoxDiv, key, ruleData[i]);
+                    }
+                    addRuleBox(ruleBoxDiv, key);
                 }
-                addRuleBox(ruleBoxDiv, key);
             }
         };
 
@@ -379,12 +409,12 @@
                 var caseType = caseDivBox.data('caseType');
                 var actionKey = caseMap.rules[caseType].action;
                 var actionValue = caseDivBox.find('[name=action]').val();
-                if(actionValue){
+                if (actionValue) {
                     caseDivBox.find('.condition-template').each(function () {
                         var conditionBox = $(this);
                         var conditionKey = conditionBox.find('[name=condition-key]').val();
                         var conditionValue = conditionBox.find('[name=condition-value]').val();
-                        if(conditionKey && conditionValue){
+                        if (conditionKey && conditionValue) {
                             caseData[conditionKey] = conditionValue;
                         }
                     });
@@ -396,6 +426,9 @@
                     data[caseType].push(caseData);
                 }
             });
+
+            data['recurringBillingMode'] = recurringBillingMode.val();
+            console.log(data);
 
             uBilling.uploadBillingRule(data)
                 .done(function () {
