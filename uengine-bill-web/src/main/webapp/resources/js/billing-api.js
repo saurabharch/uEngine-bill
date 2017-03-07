@@ -992,6 +992,33 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getBundleSearch: function (searchKey, offset, limit) {
+        var data = {
+            offset: offset ? offset : 0,
+            limit: limit ? limit : 100,
+            audit: 'NONE'
+        };
+        var url = searchKey ? '/rest/v1/bundles/search/' + searchKey : '/rest/v1/bundles/pagination';
+        var options = {
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: data,
+            resolve: function (response, status, xhr) {
+                //x-killbill-pagination-maxnbrecords
+                var total = parseInt(xhr.getResponseHeader('x-killbill-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-killbill-pagination-maxnbrecords'));
+                return {
+                    data: response,
+                    total: total,
+                    filtered: filtered,
+                    offset: data.offset,
+                    limit: data.limit
+                };
+            }
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var caller = arguments.callee.caller.name;

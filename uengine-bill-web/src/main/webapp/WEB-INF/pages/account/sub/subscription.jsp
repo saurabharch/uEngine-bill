@@ -853,7 +853,6 @@
                     });
 
                 var subscriptions = bundle['subscriptions'];
-                console.log(subscriptions);
                 $.each(subscriptions, function (index, subscription) {
                     var state = subscription['state'];
                     var events = subscription['events'];
@@ -862,7 +861,6 @@
                         if (event['eventType'] == 'STOP_ENTITLEMENT') {
                             var effectiveDate = new Date(event['effectiveDate']);
                             if (effectiveDate > currentDate) {
-                                console.log(effectiveDate , currentDate);
                                 subscription['pendingCancel'] = event['effectiveDate'];
                             }
                         }

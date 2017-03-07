@@ -428,7 +428,6 @@
             });
 
             data['recurringBillingMode'] = recurringBillingMode.val();
-            console.log(data);
 
             uBilling.uploadBillingRule(data)
                 .done(function () {
