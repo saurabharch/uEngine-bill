@@ -30,6 +30,32 @@
         </div>
     </div>
 
+    <div class="ibox float-e-margins" name="payment-detail-method-item" id="payment-detail-method-item">
+        <div class="ibox-title">
+            <div>
+                <h5 style="float:left;" name="pluginName"></h5>
+                <span class="label label-primary" name="isDefaultPaymentMethod">Default</span>
+            </div>
+            <div class="ibox-tools">
+
+            </div>
+        </div>
+        <div class="ibox-content">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td name="name"></td>
+                </tr>
+                <tr>
+                    <td>ID</td>
+                    <td name="id"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <div id="adjustment-refund-item" name="adjustment-refund-item">
         <div><label> <input type="checkbox" value="" name="invoiceItemId"> <span name="description"></span> </label>
         </div>
@@ -122,14 +148,42 @@
                 me.appendTo.html('');
                 me.appendTo.append(me.panel);
                 me.drawPayment();
-                if (me.showMethod) {
-                    me.drawPaymentMethod();
-                }
             }
         }
         ,
         drawPaymentMethod: function () {
+            var me = this;
+            var paymentMethodId = me.payment['paymentMethodId'];
+            var fill = function (method) {
+                var item = $('#payment-detail-method-item').clone();
+                item.removeAttr('id');
+                item.find('[name=pluginName]').html(method['pluginName']);
+                var isDefault = method['isDefault'];
+                if (isDefault) {
+                    item.find('[name=isDefaultPaymentMethod]').show();
+                } else {
+                    item.find('[name=isDefaultPaymentMethod]').hide();
+                }
+                var properties = method['pluginInfo']['properties'];
+                item.find('[name=name]').html(method['pluginName']);
+                item.find('[name=id]').html(method['paymentMethodId']);
+                $.each(properties, function (index, property) {
+                    if (property['key'] && property['value']) {
+                        var tr = $('<tr><td>' + property['key'] + '</td><td>' + property['value'] + '</td></tr>');
+                        item.find('tbody').append(tr);
+                    }
+                });
 
+                me.panel.append(item);
+            }
+            uBilling.getPaymentMethod(paymentMethodId)
+                .done(function (method) {
+                    console.log(method);
+                    fill(method);
+                })
+                .fail(function (response) {
+                    toastr.error("Failed to create Payment : " + response.responseText);
+                })
         }
         ,
         /**
@@ -541,6 +595,9 @@
                     me.payment = payment;
                     me.drawInfo();
                     me.paymentCtlEvents();
+                    if (me.showMethod) {
+                        me.drawPaymentMethod();
+                    }
                     var transactions = payment['transactions'];
                     if (transactions && transactions.length) {
                         $.each(transactions, function (index, transaction) {
