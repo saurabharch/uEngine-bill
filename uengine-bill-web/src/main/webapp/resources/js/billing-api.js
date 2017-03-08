@@ -1047,6 +1047,14 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getAccountTimeLine: function (account_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/timeline?audit=FULL&parallel=false',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var caller = arguments.callee.caller.name;

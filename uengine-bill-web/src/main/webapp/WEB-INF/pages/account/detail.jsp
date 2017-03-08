@@ -105,6 +105,7 @@
         <%@include file="./sub/invoice.jsp" %>
         <%@include file="./sub/payments.jsp" %>
         <%@include file="./sub/payment.jsp" %>
+        <%@include file="./sub/timeline.jsp" %>
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
@@ -152,6 +153,7 @@
                     }
                     break;
                 case "timeline":
+                    new TimeLineController(id, $('#timeline-append'), account);
                     break;
             }
         };

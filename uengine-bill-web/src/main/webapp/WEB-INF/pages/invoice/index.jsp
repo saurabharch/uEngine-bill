@@ -57,6 +57,7 @@
 <script>
     $(document).ready(function () {
         var dt = new uengineDT($('#invoice-table'), {
+            order: [[0, "desc"]],
             select: true,
             columns: [
                 {
@@ -70,23 +71,13 @@
                     }
                 },
                 {
-                    data: 'invoiceId',
-                    title: 'ID',
-                    defaultContent: ''
-                },
-                {
                     data: 'invoiceDate',
                     title: 'DATE',
                     defaultContent: ''
                 },
                 {
-                    data: 'amountWithCurrency',
-                    title: 'AMOUNT',
-                    defaultContent: ''
-                },
-                {
-                    data: 'balanceWithCurrency',
-                    title: 'BALANCE',
+                    data: 'invoiceId',
+                    title: 'ID',
                     defaultContent: ''
                 }
             ],
@@ -126,8 +117,6 @@
                         $.each(invoices, function (index, invoice) {
                             var currencyLabel = '<small class="text-success">' + invoice['currency'] + '</small>'
                             invoice['label'] = '<a href="Javascript:void(0);">' + invoice['invoiceNumber'] + '</a>';
-                            invoice['amountWithCurrency'] = '<span>' + invoice['amount'] + '</span> ' + currencyLabel;
-                            invoice['balanceWithCurrency'] = '<span>' + invoice['balance'] + '</span> ' + currencyLabel;
                         })
                         dt.gridData = invoices;
                         callback({
