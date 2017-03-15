@@ -60,11 +60,10 @@ CREATE TABLE organization_email (
   DROP TABLE IF EXISTS organization_template;
 CREATE TABLE organization_template (
     record_id INT(11) NOT NULL AUTO_INCREMENT,
-    id VARCHAR(36) NOT NULL,
     organization_id VARCHAR(36) NOT NULL,
     tenant_id VARCHAR(36) NOT NULL,
     tenant_record_id BIGINT(20) NOT NULL,
-    template_type VARCHAR(36) NOT NULL,
+    notification_type VARCHAR(36) NOT NULL,
     locale VARCHAR(256) NOT NULL,
     is_default CHAR(1) DEFAULT 'N',
     subject LONGTEXT,
@@ -81,7 +80,7 @@ CREATE TABLE notification_config (
     organization_id VARCHAR(36) NOT NULL,
     tenant_id VARCHAR(36) NOT NULL,
     tenant_record_id BIGINT(20) NOT NULL,
-    configration VARCHAR(4096) NOT NULL,
+    configuration VARCHAR(4096) NOT NULL,
     reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(record_id)
 )

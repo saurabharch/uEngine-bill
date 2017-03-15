@@ -1,0 +1,1 @@
+Payment Confirmation from {{organization.company_name}}

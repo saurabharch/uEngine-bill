@@ -1,0 +1,1 @@
+Refund Receipt from {{organization.company_name}}

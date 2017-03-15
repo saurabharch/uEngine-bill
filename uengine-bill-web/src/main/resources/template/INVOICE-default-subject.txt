@@ -1,0 +1,1 @@
+Invoice from {{organization.company_name}} (Invoice#: {{invoice.invoiceNumber}})

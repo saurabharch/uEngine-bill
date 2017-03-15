@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.template.TemplateRepository">
+
+    <insert id="insertTemplate" parameterType="org.uengine.garuda.model.Template">
+        INSERT INTO organization_template (
+        organization_id,
+        tenant_id,
+        tenant_record_id,
+        notification_type,
+        locale,
+        is_default,
+        subject,
+        body
+        )
+        VALUES (
+        #{organization_id},
+        #{tenant_id},
+        #{tenant_record_id},
+        #{notification_type},
+        #{locale},
+        #{is_default},
+        #{subject},
+        #{body}
+        )
+    </insert>
+
+    <update id="updateTemplate" parameterType="org.uengine.garuda.model.Template">
+        UPDATE organization_template
+        SET
+        subject = #{subject},
+        body = #{body}
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+        AND locale = #{locale}
+    </update>
+
+    <update id="unsetDefaultTemplate" parameterType="map">
+        UPDATE organization_template
+        SET
+        is_default = 'N'
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+    </update>
+
+    <update id="setDefaultTemplate" parameterType="map">
+        UPDATE organization_template
+        SET
+        is_default = 'Y'
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+        AND locale = #{locale}
+    </update>
+
+    <select id="selectByOrgId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Template">
+        SELECT * FROM organization_template
+        WHERE organization_id = #{organization_id}
+    </select>
+
+    <select id="selectByOrgIdAndType" parameterType="map" resultType="org.uengine.garuda.model.Template">
+        SELECT * FROM organization_template
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+    </select>
+
+    <select id="selectByOrgIdAndTypeAndLocale" parameterType="map" resultType="org.uengine.garuda.model.Template">
+        SELECT * FROM organization_template
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+        AND locale = #{locale}
+    </select>
+
+    <select id="selectByTenantRecordIdAndTypeAndLocale" parameterType="map" resultType="org.uengine.garuda.model.Template">
+        SELECT * FROM organization_template
+        WHERE tenant_record_id = #{tenant_record_id}
+        AND notification_type = #{notification_type}
+        AND locale = #{locale}
+    </select>
+
+    <delete id="deleteByOrgIdAndType" parameterType="map">
+        DELETE FROM organization_template
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+    </delete>
+
+    <delete id="deleteByOrgIdAndTypeAndLocale" parameterType="map">
+        DELETE FROM organization_template
+        WHERE organization_id = #{organization_id}
+        AND notification_type = #{notification_type}
+        AND locale = #{locale}
+    </delete>
+
+</mapper>

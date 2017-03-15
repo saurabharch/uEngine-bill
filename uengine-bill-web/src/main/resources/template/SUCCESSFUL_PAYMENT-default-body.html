@@ -1,0 +1,22 @@
+This email confirms your recent payment.
+
+Here are the details of your payment:
+
+invoiceNumber: {{invoice.invoiceNumber}}
+paymentDate: {{invoice.invoiceDate}}
+
+{{#invoice.invoiceItems}}
+{{startDate}} {{planName}} : {{formattedAmount}}
+{{/invoice.invoiceItems}}
+
+invoiceAmountPaid:  {{invoice.formattedPaidAmount}}
+invoiceAmountTotal: {{invoice.formattedBalance}}
+
+billedTo:
+{{account.companyName}}
+{{account.name}}
+{{account.address1}}
+{{account.city}}, {{account.stateOrProvince}} {{account.postalCode}}
+{{account.country}}
+
+If you have any questions about your account, please reply to this email or contact {{organization.company_name}} Support at: {{organization.phone}}

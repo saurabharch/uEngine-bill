@@ -16,8 +16,11 @@
  */
 package org.uengine.garuda.web.template;
 
+import org.uengine.garuda.model.NotificationType;
 import org.uengine.garuda.model.Product;
+import org.uengine.garuda.model.Template;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,19 +30,21 @@ public interface TemplateRepository {
 
     String NAMESPACE = TemplateRepository.class.getName();
 
-    Map selectProductByCondition(String organization_id, String is_active, String category, String searchKey, Long offset, Long limit);
+    List<Template> selectByOrgId(String organization_id);
 
-    Product selectProductById(String organization_id, String id);
+    List<Template> selectByOrgIdAndType(String organization_id, String notification_type);
 
-    Product insertProduct(Product product);
+    Template selectByOrgIdAndTypeAndLocale(String organization_id, String notification_type, String locale);
 
-    Product updateProductById(Product product);
+    Template insertTemplate(Template template);
 
-    Product updateProductActiveById(String organization_id, String id, String is_active);
+    Template updateTemplate(Template template);
 
-    int updateProductId(Long record_id, String id);
+    Template setDefaultTemplate(String organization_id, String notification_type, String locale);
 
-    int updatePlanUsageSeq(String organization_id, String id, Long plan_seq, Long usage_seq);
+    int deleteByOrgIdAndType(String organization_id, String notification_type);
 
-    int deleteProductById(String organization_id, String id);
+    int deleteByOrgIdAndTypeAndLocale(String organization_id, String notification_type, String locale);
+
+    Template getDefaultTemplate(NotificationType notificationType);
 }

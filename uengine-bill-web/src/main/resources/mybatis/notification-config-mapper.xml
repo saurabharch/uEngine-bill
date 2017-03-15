@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.rule.NotificationConfigRepository">
+
+    <insert id="insertConfig" parameterType="org.uengine.garuda.model.NotificationConfig">
+        INSERT INTO notification_config (
+        organization_id,
+        tenant_id,
+        tenant_record_id,
+        configuration
+        )
+        VALUES (
+        #{organization_id},
+        #{tenant_id},
+        #{tenant_record_id},
+        #{configuration}
+        )
+    </insert>
+
+    <update id="updateConfig" parameterType="org.uengine.garuda.model.NotificationConfig">
+        UPDATE notification_config
+        SET
+        configuration = #{configuration}
+        WHERE organization_id = #{organization_id}
+    </update>
+
+    <select id="selectConfigByOrgId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.NotificationConfig">
+        SELECT * FROM notification_config
+        WHERE organization_id = #{organization_id}
+    </select>
+
+    <delete id="deleteConfigByOrgId" parameterType="java.lang.String">
+        DELETE FROM notification_config
+        WHERE organization_id = #{organization_id}
+    </delete>
+
+</mapper>
