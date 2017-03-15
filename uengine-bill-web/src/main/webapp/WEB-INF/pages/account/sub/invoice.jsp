@@ -417,7 +417,7 @@
                             defaultContent: '',
                             event: {
                                 click: function (key, value, rowValue, rowIdx, td) {
-                                    if (rowValue['itemType'] != 'ITEM_ADJ') {
+                                    if (rowValue['itemType'] != 'ITEM_ADJ' && rowValue['itemType'] != 'REPAIR_ADJ') {
                                         me.invoiceCtlAction('adjustInvoiceItem', rowValue);
                                     }
                                 }
@@ -485,7 +485,7 @@
                             var currencyLabel = '<small class="text-success">' + item['currency'] + '</small>'
                             item['amountWithCurrency'] = '<span>' + item['amount'] + '</span> ' + currencyLabel;
 
-                            if (item['itemType'] == 'ITEM_ADJ') {
+                            if (item['itemType'] == 'ITEM_ADJ' || item['itemType'] == 'REPAIR_ADJ') {
                                 item['adjust'] = '<span class="text-muted">Adjust</span>';
                             } else {
                                 item['adjust'] = '<a href="Javascript:void(0)">Adjust</a>';

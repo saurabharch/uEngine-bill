@@ -304,7 +304,7 @@
             var drawAdjustmentItem = function (invoiceItem) {
 
                 //앱저스트 아이템 목록은 그리지 않는다.
-                if (invoiceItem['itemType'] == 'ITEM_ADJ') {
+                if (invoiceItem['itemType'] == 'ITEM_ADJ' || invoiceItem['itemType'] == 'REPAIR_ADJ') {
                     return;
                 }
                 var amount = modal.find('[name=amount]');

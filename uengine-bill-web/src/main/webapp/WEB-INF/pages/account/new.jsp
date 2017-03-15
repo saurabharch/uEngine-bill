@@ -95,6 +95,16 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group"><label
+                                                    class="col-sm-2 control-label">Locale(Language)</label>
+
+                                                <div class="col-sm-5">
+                                                    <select class="chosen-select" tabindex="2" name="locale" required>
+                                                        <%@include file="../template/localeList.jsp" %>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group"><label class="col-sm-2 control-label">Payment
                                                 Terms</label>
                                                 <div class="col-sm-5">
@@ -167,13 +177,6 @@
 
                                                         <div class="col-sm-8"><input type="text" class="form-control"
                                                                                      name="postalCode">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group"><label
-                                                            class="col-sm-4 control-label">Locale</label>
-
-                                                        <div class="col-sm-8"><input type="text" class="form-control"
-                                                                                     name="locale">
                                                         </div>
                                                     </div>
                                                     <div class="form-group"><label class="col-sm-4 control-label">Country</label>
