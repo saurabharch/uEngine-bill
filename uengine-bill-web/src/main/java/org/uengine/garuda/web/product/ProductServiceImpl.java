@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public int deleteProductById(String organization_id, String id) {
-        //TODO 프로덕트 관련 서브스크립션이 있다면 삭제 불가.
+        //프로덕트 관련 서브스크립션이 있다면 삭제 불가.
         Long countByProduct = subscriptionEventRepository.selectSubscriptionCountByProduct(organization_id, id);
         if (countByProduct > 0) {
             return 0;

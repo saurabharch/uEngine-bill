@@ -14,13 +14,11 @@ import org.uengine.garuda.killbill.KBService;
 import org.uengine.garuda.killbill.KBServiceFactory;
 import org.uengine.garuda.killbill.KBServiceImpl;
 import org.uengine.garuda.killbill.api.model.Tenant;
-import org.uengine.garuda.model.Authority;
-import org.uengine.garuda.model.BillingRule;
-import org.uengine.garuda.model.Organization;
-import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.garuda.model.*;
 import org.uengine.garuda.util.JsonUtils;
 import org.uengine.garuda.util.StringUtils;
 import org.uengine.garuda.web.rule.BillingRuleRepository;
+import org.uengine.garuda.web.rule.NotificationConfigRepository;
 import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +48,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     private KBService kbService;
+
+    @Autowired
+    private NotificationConfigRepository notificationConfigRepository;
 
     private Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
@@ -117,6 +118,18 @@ public class OrganizationServiceImpl implements OrganizationService {
         //디폴트 retry 규칙을 생성한다.
         kbService.uploadRetry(createdOrganization.getTenant_api_key(), createdOrganization.getTenant_api_secret(),
                 billingRuleRepository.getDefaultRetryRule());
+
+        //디폴트 노티피케이션 규칙을 생성한다.
+        Map tenantMap = kbRepository.getTenantById(organization.getTenant_id());
+        if (tenantMap != null) {
+            Long record_id = Long.parseLong(tenantMap.get("record_id") + "");
+            NotificationConfig notificationConfig = new NotificationConfig();
+            notificationConfig.setOrganization_id(organization.getId());
+            notificationConfig.setTenant_id(organization.getTenant_id());
+            notificationConfig.setTenant_record_id(record_id);
+            notificationConfig.setConfiguration(notificationConfigRepository.getDefaultConfig());
+            notificationConfigRepository.insertConfig(notificationConfig);
+        }
 
         logger.info("Success to create organization {}", organization.getName());
 

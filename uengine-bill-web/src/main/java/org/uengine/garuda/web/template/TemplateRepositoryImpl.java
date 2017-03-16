@@ -51,7 +51,7 @@ public class TemplateRepositoryImpl extends PersistentRepositoryImpl<String, Obj
 
     @Override
     public List<Template> selectByOrgId(String organization_id) {
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByOrgId", organization_id);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByOrgId", organization_id);
     }
 
     @Override

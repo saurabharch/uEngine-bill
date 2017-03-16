@@ -8,7 +8,6 @@ import java.sql.Date;
 public class NotificationConfig {
 
     private Long record_id;
-    private String id;
     private String organization_id;
     private String tenant_id;
     private Long tenant_record_id;
@@ -21,14 +20,6 @@ public class NotificationConfig {
 
     public void setRecord_id(Long record_id) {
         this.record_id = record_id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getOrganization_id() {

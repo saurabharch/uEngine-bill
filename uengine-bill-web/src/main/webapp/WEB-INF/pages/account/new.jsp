@@ -108,7 +108,7 @@
                                             <div class="form-group"><label class="col-sm-2 control-label">Payment
                                                 Terms</label>
                                                 <div class="col-sm-5">
-                                                    <select class="chosen-select" name="billCycleDayLocal" required>
+                                                    <select class="form-control" name="billCycleDayLocal" required>
                                                         <option value="0" selected>Due on Receipt</option>
                                                         <option value="31">Due end of the month</option>
                                                         <option value="1">1</option>
@@ -270,7 +270,6 @@
                                 addCustomField(response[i].name, response[i].value);
                             }
                         });
-
                     $('.chosen-select').chosen({width: "100%"});
                 })
                 .fail(function () {
@@ -306,6 +305,7 @@
             data.name = data['first_name'] + ' ' + data['last_name'];
             data.firstNameLength = data['first_name'].length;
             data.billCycleDayLocal = parseInt(data.billCycleDayLocal);
+
             delete data['first_name'];
             delete data['last_name'];
 
@@ -353,6 +353,7 @@
                         blockStop();
                     });
             } else {
+
                 uBilling.createAccount(data)
                     .done(function (accountId) {
                         if (customFileds.length) {

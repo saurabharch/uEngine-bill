@@ -22,13 +22,17 @@ import org.opencloudengine.garuda.util.ResourceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.uengine.garuda.common.repository.PersistentRepositoryImpl;
+import org.uengine.garuda.killbill.KBRepository;
 import org.uengine.garuda.model.BillingRule;
 import org.uengine.garuda.model.NotificationConfig;
+import org.uengine.garuda.model.Organization;
+import org.uengine.garuda.web.organization.OrganizationRepository;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Map;
 
 /**
  * @author Seungpil PARK
