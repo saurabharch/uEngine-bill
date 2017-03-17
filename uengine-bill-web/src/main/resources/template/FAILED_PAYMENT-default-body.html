@@ -1,28 +1,32 @@
-Oops, your most recent subscription payment was declined by your bank.
-
-Here are the details of your declined payment:
-
-invoiceNumber: {{invoice.invoiceNumber}}
-paymentDate: {{invoice.invoiceDate}}
-
-{{#invoice.invoiceItems}}
-{{startDate}} {{planName}} : {{formattedAmount}}
-{{/invoice.invoiceItems}}
-
-invoiceAmountPaid:  {{invoice.formattedPaidAmount}}
-invoiceAmountTotal: {{invoice.formattedBalance}}
-
-
-billedTo:
-{{account.companyName}}
-{{account.name}}
-{{account.address1}}
-{{account.city}}, {{account.stateOrProvince}} {{account.postalCode}}
-{{account.country}}
-
-You can update your payment information here:
-http://your-application/payment-method-update-page
-
-To ensure continued access to {{organization.company_name}}, please update your billing information within 14 days of your last statement.
-
-If you have any questions about your account, please reply to this email or contact {{organization.company_name}} Support at: {{organization.phone}}
+<div>Oops, your most recent subscription payment was declined by your bank.</div>
+<div><br></div>
+<div>Here are the details of your declined payment:</div>
+<div><br></div>
+<div>invoiceNumber: {{invoice.invoiceNumber}}</div>
+<div>paymentDate: {{invoice.invoiceDate}}</div>
+<div><br></div>
+<div>{{#invoice.invoiceItems}}</div>
+<div>{{startDate}} {{planName}} : {{formattedAmount}}</div>
+<div>{{/invoice.invoiceItems}}</div>
+<div><br></div>
+<div>invoiceAmountPaid: &nbsp;{{invoice.formattedPaidAmount}}</div>
+<div>invoiceAmountTotal: {{invoice.formattedBalance}}</div>
+<div><br></div>
+<div><br></div>
+<div>billedTo:</div>
+<div>{{account.companyName}}</div>
+<div>{{account.name}}</div>
+<div>{{account.address1}}</div>
+<div>{{account.city}}, {{account.stateOrProvince}} {{account.postalCode}}</div>
+<div>{{account.country}}</div>
+<div><br></div>
+<div>You can update your payment information here:</div>
+<div>http://your-application/payment-method-update-page</div>
+<div><br></div>
+<div>To ensure continued access to {{organization.company_name}}, please update your billing information within 14 days
+    of your last statement.
+</div>
+<div><br></div>
+<div>If you have any questions about your account, please reply to this email or contact {{organization.company_name}}
+    Support at: {{organization.phone}}
+</div>
