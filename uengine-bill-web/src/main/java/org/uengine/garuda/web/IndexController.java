@@ -203,13 +203,6 @@ public class IndexController {
         return new ModelAndView("/setting/user");
     }
 
-    @RequestMapping(value = "setting/preference", method = RequestMethod.GET)
-    public ModelAndView preference(HttpSession session, final Locale locale) {
-        session.setAttribute("lang", locale.toString());
-
-        return new ModelAndView("/setting/preference");
-    }
-
     @RequestMapping(value = "setting/billing", method = RequestMethod.GET)
     public ModelAndView billing(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());
@@ -229,25 +222,11 @@ public class IndexController {
         return new ModelAndView("/setting/retry");
     }
 
-    @RequestMapping(value = "setting/currencie", method = RequestMethod.GET)
+    @RequestMapping(value = "setting/currency", method = RequestMethod.GET)
     public ModelAndView currencie(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());
 
-        return new ModelAndView("/setting/currencie");
-    }
-
-    @RequestMapping(value = "setting/template", method = RequestMethod.GET)
-    public ModelAndView template(HttpSession session, final Locale locale) {
-        session.setAttribute("lang", locale.toString());
-
-        return new ModelAndView("/setting/template");
-    }
-
-    @RequestMapping(value = "setting/hosted", method = RequestMethod.GET)
-    public ModelAndView hosted(HttpSession session, final Locale locale) {
-        session.setAttribute("lang", locale.toString());
-
-        return new ModelAndView("/setting/hosted");
+        return new ModelAndView("/setting/currency");
     }
 
     @RequestMapping(value = "setting/notification", method = RequestMethod.GET)
@@ -257,13 +236,6 @@ public class IndexController {
         return new ModelAndView("/setting/notification");
     }
 
-    @RequestMapping(value = "setting/reminder", method = RequestMethod.GET)
-    public ModelAndView reminder(HttpSession session, final Locale locale) {
-        session.setAttribute("lang", locale.toString());
-
-        return new ModelAndView("/setting/reminder");
-    }
-
     @RequestMapping(value = "setting/integration", method = RequestMethod.GET)
     public ModelAndView integration(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());
@@ -271,12 +243,6 @@ public class IndexController {
         return new ModelAndView("/setting/integration");
     }
 
-    @RequestMapping(value = "setting/webhook", method = RequestMethod.GET)
-    public ModelAndView webhook(HttpSession session, final Locale locale) {
-        session.setAttribute("lang", locale.toString());
-
-        return new ModelAndView("/setting/webhook");
-    }
 
 
     @RequestMapping(value = "redirect", method = RequestMethod.GET)

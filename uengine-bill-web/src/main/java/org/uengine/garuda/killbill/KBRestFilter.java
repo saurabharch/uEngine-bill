@@ -63,7 +63,8 @@ public class KBRestFilter implements Filter {
                 "/rest/v1/tenants",
                 "/rest/v1/test",
                 "/rest/v1/usages",
-                "/rest/v1/tagDefinitions"
+                "/rest/v1/tagDefinitions",
+                "plugins"
         };
 
         boolean is_proxy = false;

@@ -43,17 +43,12 @@
                 <ul class="nav nav-second-level collapse">
                     <li name="list-menu-setting-organization"><a href="/setting/organization">Organization Profile</a></li>
                     <li name="list-menu-setting-user"><a href="/setting/user">Users</a></li>
-                    <li name="list-menu-setting-preference"><a href="/setting/preference">Preferences</a></li>
                     <li name="list-menu-setting-billing"><a href="/setting/billing">Billing Settings</a></li>
                     <li name="list-menu-setting-overdue"><a href="/setting/overdue">Overdue Settings</a></li>
                     <li name="list-menu-setting-retry"><a href="/setting/retry">Retry Settings</a></li>
-                    <li name="list-menu-setting-currencie"><a href="/setting/currencie">Currencies</a></li>
-                    <li name="list-menu-setting-template"><a href="/setting/template">Templates</a></li>
-                    <li name="list-menu-setting-hosted"><a href="/setting/hosted">Hosted Pages</a></li>
+                    <li name="list-menu-setting-currencie"><a href="/setting/currency">Currencies</a></li>
                     <li name="list-menu-setting-notification"><a href="/setting/notification">Email Notifications</a></li>
-                    <li name="list-menu-setting-reminder"><a href="/setting/reminder">Reminders</a></li>
                     <li name="list-menu-setting-integration"><a href="/setting/integration">Integrations</a></li>
-                    <li name="list-menu-setting-webhook"><a href="/setting/webhook">Webhooks</a></li>
                 </ul>
             </li>
             <li name="list-menu-apidoc">

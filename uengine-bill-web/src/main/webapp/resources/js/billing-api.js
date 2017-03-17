@@ -1056,6 +1056,62 @@ uBilling.prototype = {
         return this.send(options);
     },
 
+    getNotificationConfig: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/notification_config',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    updateNotificationConfig: function (data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/notification_config',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
+    getAllTemplate: function () {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/template',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
+    createTemplate: function (template_type, locale, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/template/' + template_type + '/' + locale,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
+    deleteTemplate: function (template_type, locale) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/template/' + template_type + '/' + locale
+        };
+        return this.send(options);
+    },
+
+    setDefaultTemplate: function (template_type, locale) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/template/' + template_type + '/' + locale,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+
     send: function (options) {
         var caller = arguments.callee.caller.name;
         var me = this;
