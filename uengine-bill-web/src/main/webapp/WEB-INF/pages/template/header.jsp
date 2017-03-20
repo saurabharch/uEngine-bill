@@ -19,6 +19,9 @@
             <li>
                 <span class="m-r-sm text-muted welcome-message">Welcome to uEngine Billing</span>
             </li>
+            <li style="display: none">
+                <button type="button" class="btn btn-default btn-sm" name="change-test-date">Date</button>
+            </li>
             <li class="dropdown">
                 <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" id="organization-current">
 
@@ -118,4 +121,38 @@
     </div>
 </div>
 
+
+<div class="modal inmodal fade" id="test-date-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="modal-title">Change Test Date</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form class="form">
+                            <div class="form-group" id="test-date-group">
+                                <label class="font-noraml">Test date</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input type="text" class="form-control" value="01/02/2017">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 

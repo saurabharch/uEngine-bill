@@ -94,6 +94,15 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    updateClock: function (requestedDate) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/test/clock?requestedDate=' + requestedDate + '&timeoutSec=5',
+            contentType: "text/plain",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
     getOrganizations: function () {
         console.log('getOrganizations...');
         var me = this;

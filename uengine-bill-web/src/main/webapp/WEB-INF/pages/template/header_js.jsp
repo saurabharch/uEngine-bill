@@ -76,6 +76,12 @@
 <script type="text/javascript" src="/config/js.json"></script>
 <script type="text/javascript">
     var lang = config['default.locale'];
+    var testMode = config['system.test.mode'];
+    if (testMode == 'true') {
+        testMode = true;
+    } else {
+        testMode = false;
+    }
 </script>
 <script type="text/javascript" src="/resources/js/bundle.js"></script>
 
@@ -139,7 +145,9 @@
 
 
     $(function () {
-        if(organizations && organizations.length){
+
+        //상단 헤더에 조직 선택 리스트를 생성한다.
+        if (organizations && organizations.length) {
             for (var i in organizations) {
                 var org = organizations[i];
                 var li = $('<li><a href="#" name="organization-item">' + org.name + '</a></li>');
@@ -154,11 +162,74 @@
             $('#organization-current').html(currentOrg.name);
         }
 
+
+        //조직 생성 페이지를 링크시킨다.
         var li = $('<li><a href="#"> + New </a></li>');
         $('[name=organization-list]').append(li);
         li.find('a').click(function () {
             window.location.href = '/organization/create';
         });
+
+
+        //테스트 모드일경우, 테스트 시간 변경 버튼을 생성한다.
+        if (organizations && organizations.length && testMode) {
+            var drawTestDate = function(){
+                var testDate = $('[name=change-test-date]');
+                uBilling.getClock()
+                    .done(function (clock) {
+                        testDate.parent().show();
+                        testDate.html(clock['localDate']);
+
+                        testDate.click(function () {
+                            var me = this;
+                            var modal = $('#test-date-modal');
+                            var testDate = clock['localDate'];
+                            var split = testDate.split('-');
+                            var year = split[0];
+                            var month = split[1];
+                            var date = split[2];
+                            var pickerValue = month + '/' + date + '/' + year;
+                            var picker = $('#test-date-group .input-group.date');
+                            picker.datepicker('destroy');
+                            $('#test-date-group').find('input').val(pickerValue);
+                            picker.datepicker({
+                                todayBtn: "linked",
+                                keyboardNavigation: false,
+                                forceParse: false,
+                                calendarWeeks: true,
+                                autoclose: true,
+                                dateFormat: 'mm/dd/yy'
+                            }).datepicker("setDate", pickerValue);
+
+                            modal.find('[name=save]').unbind('click');
+                            modal.find('[name=save]').bind('click', function () {
+                                var value = $('#test-date-group').find('input').val();
+                                var splited = value.split('/');
+                                var month = splited[0];
+                                var date = splited[1];
+                                var year = splited[2];
+                                var requestedDate = year + '-' + month + '-' + date;
+                                uBilling.updateClock(requestedDate)
+                                    .done(function (clock) {
+                                        toastr.success('Server date changed.');
+                                        drawTestDate();
+                                    })
+                                    .fail(function (response) {
+                                        toastr.error("Failed to change server date: " + response.responseText);
+                                    })
+                                    .always(function () {
+                                        modal.modal('hide');
+                                    })
+                            });
+                            modal.modal('show');
+                        })
+                    })
+                    .fail(function(){
+                        testDate.hide();
+                    })
+            }
+            drawTestDate();
+        }
 
         $('form').each(function () {
             var form = $(this);

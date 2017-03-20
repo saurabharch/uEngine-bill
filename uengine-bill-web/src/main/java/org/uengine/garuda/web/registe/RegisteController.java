@@ -24,8 +24,6 @@ import org.uengine.garuda.util.EscapeUtils;
 import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.util.NetworkUtils;
 import org.uengine.garuda.web.configuration.DefaultController;
-import org.uengine.garuda.web.organization.OrganizationRepository;
-import org.uengine.garuda.web.security.AESPasswordEncoder;
 import org.uengine.garuda.web.system.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,10 +61,6 @@ public class RegisteController extends DefaultController {
 
     @Autowired
     private RegisteService registeService;
-
-    @Autowired
-    @Qualifier("passwordEncoder")
-    private AESPasswordEncoder passwordEncoder;
 
     /**
      * SLF4J Logging
