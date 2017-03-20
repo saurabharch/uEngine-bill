@@ -70,7 +70,7 @@
          style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
         <select class="chosen-select" name="currency">
             <%@include
-                    file="../template/currencyList.jsp" %>
+                    file="../../template/currencyList.jsp" %>
         </select>
         <input type="number" step="0.01" min="0" class="form-control" name="value">
         <i style="cursor:pointer;position: absolute;top:10px;right: -11px"

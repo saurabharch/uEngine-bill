@@ -178,8 +178,8 @@
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
-<%@include file="../subpages/product-new.jsp" %>
-<%@include file="../subpages/product-detail.jsp" %>
+<%@include file="./sub/product-new.jsp" %>
+<%@include file="./sub/product-detail.jsp" %>
 
 
 <script>
@@ -1008,7 +1008,7 @@
                         }
                         priceItem.find('[name=currency]').chosen({width: "100%"});
 
-                        if (value) {
+                        if (value || value == 0) {
                             priceItem.find('[name=value]').val(value);
                         }
                         panel.append(priceItem);
