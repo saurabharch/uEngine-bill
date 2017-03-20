@@ -17,11 +17,13 @@ import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
 import org.uengine.garuda.model.Product;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.web.organization.OrganizationRole;
 import org.uengine.garuda.web.organization.OrganizationService;
 import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +67,7 @@ public class ProductRestController {
 
     @RequestMapping(value = "/product/pagination", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Product>> getProducts(HttpServletRequest request,
+                                                     HttpServletResponse response,
                                                      @RequestParam(defaultValue = "") String category,
                                                      @RequestParam(defaultValue = "") String is_active,
                                                      @RequestParam(defaultValue = "0") Long offset,
@@ -88,13 +91,14 @@ public class ProductRestController {
 
             return new ResponseEntity<>(products, headers, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/search/{searchKey}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Product>> getProductsSearch(HttpServletRequest request,
+                                                           HttpServletResponse response,
                                                            @RequestParam(defaultValue = "") String category,
                                                            @RequestParam(defaultValue = "") String is_active,
                                                            @PathVariable("searchKey") String searchKey,
@@ -119,13 +123,14 @@ public class ProductRestController {
 
             return new ResponseEntity<>(products, headers, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Product> getProduct(HttpServletRequest request,
+                                              HttpServletResponse response,
                                               @PathVariable("id") String id) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
@@ -141,13 +146,16 @@ public class ProductRestController {
 
             return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product", method = RequestMethod.POST)
-    public ResponseEntity<Void> createProduct(HttpServletRequest request, @RequestBody Product product, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createProduct(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              @RequestBody Product product,
+                                              UriComponentsBuilder ucBuilder) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -161,13 +169,15 @@ public class ProductRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/product/{id}").buildAndExpand(createdProduct.getId()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Product> updateProduct(HttpServletRequest request, @PathVariable("id") String id, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(HttpServletRequest request,
+                                                 HttpServletResponse response,
+                                                 @PathVariable("id") String id, @RequestBody Product product) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -185,12 +195,15 @@ public class ProductRestController {
             currentProduct = productService.updateProductById(organization, product);
             return new ResponseEntity<>(currentProduct, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}/active", method = RequestMethod.PUT)
-    public ResponseEntity<Product> updateProduct(HttpServletRequest request, @PathVariable("id") String id, @RequestBody Map map) {
+    public ResponseEntity<Product> updateProduct(HttpServletRequest request,
+                                                 HttpServletResponse response,
+                                                 @PathVariable("id") String id, @RequestBody Map map) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -212,12 +225,15 @@ public class ProductRestController {
 
             return new ResponseEntity<>(currentProduct, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteProduct(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteProduct(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              @PathVariable("id") String id) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -238,7 +254,8 @@ public class ProductRestController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }

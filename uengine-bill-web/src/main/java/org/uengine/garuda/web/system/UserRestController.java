@@ -74,7 +74,8 @@ public class UserRestController extends DefaultController {
     private Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
     @RequestMapping(value = "/access_token", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<Map> accessToken(HttpServletRequest request) {
+    public ResponseEntity<Map> accessToken(HttpServletRequest request,
+                                           HttpServletResponse response) {
 
         try {
             String username = request.getParameter("username");
@@ -96,7 +97,8 @@ public class UserRestController extends DefaultController {
     }
 
     @RequestMapping(value = "/token_info", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<OauthUser> tokenInfo(HttpServletRequest request, HttpServletResponse response
+    public ResponseEntity<OauthUser> tokenInfo(HttpServletRequest request,
+                                               HttpServletResponse response
     ) throws IOException {
 
         try {

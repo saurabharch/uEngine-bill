@@ -18,6 +18,7 @@ import org.uengine.garuda.web.organization.OrganizationService;
 import org.uengine.garuda.web.product.ProductService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -43,6 +44,7 @@ public class ProductVersionRestController {
 
     @RequestMapping(value = "/product/{id}/version", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Map>> getProductVersions(HttpServletRequest request,
+                                                        HttpServletResponse response,
                                                         @PathVariable("id") String id) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
@@ -58,18 +60,14 @@ public class ProductVersionRestController {
             List<Map> list = productVersionService.listVersionExcludePlans(organization.getId(), id);
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}/version/{version}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<ProductVersion> getProductVersion(HttpServletRequest request,
+                                                            HttpServletResponse response,
                                                             @PathVariable("id") String id,
                                                             @PathVariable("version") Long version) {
         try {
@@ -86,18 +84,14 @@ public class ProductVersionRestController {
 
             return new ResponseEntity<>(productVersion, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}/version/current", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<ProductVersion> getCurrentProductVersion(HttpServletRequest request,
+                                                                   HttpServletResponse response,
                                                                    @PathVariable("id") String id) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
@@ -113,19 +107,15 @@ public class ProductVersionRestController {
 
             return new ResponseEntity<>(productVersion, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
 
     @RequestMapping(value = "/product/{id}/version", method = RequestMethod.POST)
     public ResponseEntity<Void> createProductVersion(HttpServletRequest request,
+                                                     HttpServletResponse response,
                                                      @RequestBody ProductVersion productVersion,
                                                      @PathVariable("id") String id,
                                                      UriComponentsBuilder ucBuilder) {
@@ -148,18 +138,14 @@ public class ProductVersionRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/product/{id}/version/{version}").buildAndExpand(id, createdVersion.getVersion()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}/version/{version}", method = RequestMethod.PUT)
     public ResponseEntity<ProductVersion> updateProductVersion(HttpServletRequest request,
+                                                               HttpServletResponse response,
                                                                @PathVariable("id") String id,
                                                                @PathVariable("version") Long version,
                                                                @RequestBody ProductVersion productVersion) {
@@ -178,18 +164,14 @@ public class ProductVersionRestController {
             currentVersion = productVersionService.updateVersion(organization.getId(), id, version, productVersion);
             return new ResponseEntity<>(currentVersion, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/product/{id}/version/{version}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteProductVersion(HttpServletRequest request,
+                                                     HttpServletResponse response,
                                               @PathVariable("id") String id,
                                               @PathVariable("version") Long version) {
 
@@ -209,13 +191,8 @@ public class ProductVersionRestController {
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-uengine-error-message", ex.getMessage());
-            if (ex.getCause() != null) {
-                headers.add("x-uengine-error-cause", ex.getCause().getMessage());
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 

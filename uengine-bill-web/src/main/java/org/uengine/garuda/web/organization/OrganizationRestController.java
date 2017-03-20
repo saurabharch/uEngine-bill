@@ -17,9 +17,11 @@ import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,13 +41,10 @@ public class OrganizationRestController {
     private OrganizationService organizationService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     AuthenticationService authenticationService;
 
     @RequestMapping(value = "/organization", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<Organization>> listOrganization(HttpServletRequest request) {
+    public ResponseEntity<List<Organization>> listOrganization(HttpServletRequest request, HttpServletResponse response) {
 
         try {
             AuthInformation authInformation = authenticationService.validateRequest(
@@ -63,13 +62,15 @@ public class OrganizationRestController {
             }
             return new ResponseEntity<>(organizations, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Organization> getOrganization(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Organization> getOrganization(HttpServletRequest request,
+                                                        HttpServletResponse response,
+                                                        @PathVariable("id") String id) {
         try {
             AuthInformation authInformation = authenticationService.validateRequest(
                     request,
@@ -90,13 +91,15 @@ public class OrganizationRestController {
             }
             return new ResponseEntity<>(organization, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organization", method = RequestMethod.POST)
-    public ResponseEntity<Void> createOrganization(HttpServletRequest request, @RequestBody Organization organization, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createOrganization(HttpServletRequest request,
+                                                   HttpServletResponse response,
+                                                   @RequestBody Organization organization, UriComponentsBuilder ucBuilder) {
 
         try {
             AuthInformation authInformation = authenticationService.validateRequest(
@@ -119,13 +122,15 @@ public class OrganizationRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/organization/{_id}").buildAndExpand(createdOrganization.getId()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Organization> updateOrganization(HttpServletRequest request, @PathVariable("id") String id, @RequestBody Organization organization) {
+    public ResponseEntity<Organization> updateOrganization(HttpServletRequest request,
+                                                           HttpServletResponse response,
+                                                           @PathVariable("id") String id, @RequestBody Organization organization) {
 
         try {
             AuthInformation authInformation = authenticationService.validateRequest(
@@ -156,12 +161,15 @@ public class OrganizationRestController {
 
             return new ResponseEntity<>(currentOrganization, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organization/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteOrganization(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteOrganization(HttpServletRequest request,
+                                                   HttpServletResponse response,
+                                                   @PathVariable("id") String id) {
 
         try {
             AuthInformation authInformation = authenticationService.validateRequest(
@@ -185,12 +193,14 @@ public class OrganizationRestController {
             organizationService.deleteOrganization(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organizationEmail", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<OrganizationEmail>> getOrganizationEmails(HttpServletRequest request) {
+    public ResponseEntity<List<OrganizationEmail>> getOrganizationEmails(HttpServletRequest request,
+                                                                         HttpServletResponse response) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -203,13 +213,15 @@ public class OrganizationRestController {
             }
             return new ResponseEntity<>(emails, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organizationEmail", method = RequestMethod.POST)
-    public ResponseEntity<Void> createOrganizationEmails(HttpServletRequest request, @RequestBody OrganizationEmail email, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createOrganizationEmails(HttpServletRequest request,
+                                                         HttpServletResponse response,
+                                                         @RequestBody OrganizationEmail email, UriComponentsBuilder ucBuilder) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -236,13 +248,15 @@ public class OrganizationRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/organizationEmail/{id}").buildAndExpand(createdEmail.getId()).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organizationEmail/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<OrganizationEmail> updateOrganization(HttpServletRequest request, @PathVariable("id") String id, @RequestBody OrganizationEmail email) {
+    public ResponseEntity<OrganizationEmail> updateOrganization(HttpServletRequest request,
+                                                                HttpServletResponse response,
+                                                                @PathVariable("id") String id, @RequestBody OrganizationEmail email) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -275,12 +289,15 @@ public class OrganizationRestController {
 
             return new ResponseEntity<>(currentEmail, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/organizationEmail/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteOrganizationEmail(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteOrganizationEmail(HttpServletRequest request,
+                                                        HttpServletResponse response,
+                                                        @PathVariable("id") String id) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -294,14 +311,15 @@ public class OrganizationRestController {
             }
 
             //디폴트 이메일은 삭제할 수 없다.
-            if("Y".equals(currentEmail.getIs_default())){
+            if ("Y".equals(currentEmail.getIs_default())) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             organizationService.deleteOrganizationEmail(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }

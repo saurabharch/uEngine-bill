@@ -218,17 +218,17 @@
                                             me.version = version;
                                             me.fillProductVersion(version);
                                         })
-                                        .fail(function () {
-                                            toastr.error("Failed to get product version");
+                                        .fail(function (response) {
+                                            toastr.error("Failed to get product version: " + response.responseText);
                                         });
                                 }
                             })
-                            .fail(function () {
-                                toastr.error("Failed to get product versions");
+                            .fail(function (response) {
+                                toastr.error("Failed to get product versions: " + response.responseText);
                             });
                     })
-                    .fail(function () {
-                        toastr.error("Not found product id");
+                    .fail(function (response) {
+                        toastr.error("Not found product id: " + response.responseText);
                     });
 
                 //플랜 => 디테일 페이지 원복
@@ -312,8 +312,8 @@
                         .done(function () {
                             window.location.href = '/product/' + me.product_id + '/version/' + me.version_count + '/detail'
                         })
-                        .fail(function () {
-                            toastr.error("Plan update failed.");
+                        .fail(function (response) {
+                            toastr.error("Plan update failed: " + response.responseText);
                         });
                 });
                 modal.modal('show');
@@ -355,8 +355,8 @@
                         .done(function (newVersion) {
                             window.location.href = '/product/' + me.product_id + '/version/' + newVersion + '/detail'
                         })
-                        .fail(function () {
-                            toastr.error("Failed to create new version")
+                        .fail(function (response) {
+                            toastr.error("Failed to create new version: " + response.responseText)
                         })
                         .always(function () {
                             blockStop();
@@ -591,8 +591,8 @@
                         toastr.success("Plan updated.");
                         me.refreshVersion();
                     })
-                    .fail(function () {
-                        toastr.error("Plan update failed.");
+                    .fail(function (response) {
+                        toastr.error("Plan update failed.: " + response.responseText);
                     });
             },
             /**
@@ -606,8 +606,8 @@
                         me.version = version;
                         me.fillProductVersion(version);
                     })
-                    .fail(function () {
-                        toastr.error("Failed to get product version");
+                    .fail(function (response) {
+                        toastr.error("Failed to get product version: " + response.responseText);
                     });
             },
             copyPlan: function (plan, command) {
@@ -738,8 +738,8 @@
                         .done(function () {
                             window.location.href = '/product/' + me.product_id + '/version/' + me.version_count + '/detail'
                         })
-                        .fail(function () {
-                            toastr.error("Failed to delete plan")
+                        .fail(function (response) {
+                            toastr.error("Failed to delete plan: " + response.responseText)
                         })
                         .always(function () {
                             blockStop();
@@ -884,8 +884,8 @@
                         .done(function () {
                             window.location.href = '/product/' + me.product_id + '/version/current/detail'
                         })
-                        .fail(function () {
-                            toastr.error("Failed to save plan data")
+                        .fail(function (response) {
+                            toastr.error("Failed to save plan data: " + response.responseText)
                         })
                         .always(function () {
                             blockStop();
@@ -910,8 +910,8 @@
                         .done(function () {
                             window.location.href = '/product/' + me.product_id + '/version/' + me.version_count + '/detail'
                         })
-                        .fail(function () {
-                            toastr.error("Failed to save plan data")
+                        .fail(function (response) {
+                            toastr.error("Failed to save plan data: " + response.responseText)
                         })
                         .always(function () {
                             blockStop();
@@ -1024,8 +1024,6 @@
                     }
                 };
 
-                //$('form').deserialize(response);
-                //var data = $(this).serializeObject();
                 //duration
                 var drawDurationForm = function (phaseType) {
                     card.find('[name=duration-tab]').find('[name=duration-form]').remove();

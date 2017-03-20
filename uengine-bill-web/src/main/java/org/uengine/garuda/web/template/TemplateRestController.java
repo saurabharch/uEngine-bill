@@ -13,6 +13,7 @@ import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.Product;
 import org.uengine.garuda.model.Template;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.web.organization.OrganizationRole;
 import org.uengine.garuda.web.organization.OrganizationService;
 import org.uengine.garuda.web.product.ProductService;
@@ -43,7 +44,8 @@ public class TemplateRestController {
     private TemplateService templateService;
 
     @RequestMapping(value = "/template", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getAllTemplate(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Map> getAllTemplate(HttpServletRequest request,
+                                              HttpServletResponse response) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -54,13 +56,14 @@ public class TemplateRestController {
             Map map = templateService.selectByOrgId(organization.getId());
             return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/template/{notification_type}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getTemplateByType(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<Map> getTemplateByType(HttpServletRequest request,
+                                                 HttpServletResponse response,
                                                  @PathVariable("notification_type") String notification_type) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
@@ -72,13 +75,14 @@ public class TemplateRestController {
             Map map = templateService.selectByOrgIdAndType(organization.getId(), notification_type);
             return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/template/{notification_type}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteTemplateByType(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<Void> deleteTemplateByType(HttpServletRequest request,
+                                                     HttpServletResponse response,
                                                      @PathVariable("notification_type") String notification_type) {
 
         try {
@@ -91,12 +95,14 @@ public class TemplateRestController {
             templateService.deleteByOrgIdAndType(organization.getId(), notification_type);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/template/{notification_type}/{locale}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Template> getTemplateByTypeAndLocale(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<Template> getTemplateByTypeAndLocale(HttpServletRequest request,
+                                                               HttpServletResponse response,
                                                                @PathVariable("notification_type") String notification_type,
                                                                @PathVariable("locale") String locale) {
         try {
@@ -112,13 +118,14 @@ public class TemplateRestController {
             }
             return new ResponseEntity<>(template, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/template/{notification_type}/{locale}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteTemplateByTypeAndLocale(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<Void> deleteTemplateByTypeAndLocale(HttpServletRequest request,
+                                                              HttpServletResponse response,
                                                               @PathVariable("notification_type") String notification_type,
                                                               @PathVariable("locale") String locale) {
 
@@ -132,12 +139,14 @@ public class TemplateRestController {
             templateService.deleteByOrgIdAndTypeAndLocale(organization.getId(), notification_type, locale);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/template/{notification_type}/{locale}", method = RequestMethod.POST)
-    public ResponseEntity<Void> createTemplate(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<Void> createTemplate(HttpServletRequest request,
+                                               HttpServletResponse response,
                                                @PathVariable("notification_type") String notification_type,
                                                @PathVariable("locale") String locale,
                                                @RequestBody Template template, UriComponentsBuilder ucBuilder) {
@@ -154,13 +163,14 @@ public class TemplateRestController {
                     .buildAndExpand(notification_type, locale).toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/template/{notification_type}/{locale}", method = RequestMethod.PUT)
-    public ResponseEntity<Template> setDefaultTemplate(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<Template> setDefaultTemplate(HttpServletRequest request,
+                                                       HttpServletResponse response,
                                                        @PathVariable("notification_type") String notification_type,
                                                        @PathVariable("locale") String locale) {
 
@@ -179,7 +189,8 @@ public class TemplateRestController {
 
             return new ResponseEntity<>(template, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }

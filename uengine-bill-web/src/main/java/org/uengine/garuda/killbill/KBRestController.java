@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.web.organization.OrganizationRole;
 import org.uengine.garuda.web.organization.OrganizationService;
 import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -39,7 +41,8 @@ public class KBRestController {
     private KBRepository kbRepository;
 
     @RequestMapping(value = "/accounts/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteAccount(HttpServletRequest request, @PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteAccount(HttpServletRequest request, HttpServletResponse response,
+                                              @PathVariable("id") String id) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -63,7 +66,8 @@ public class KBRestController {
             kbRepository.deleteAccountById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }

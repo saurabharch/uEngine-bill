@@ -18,12 +18,14 @@ import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.BillingRule;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.util.JsonUtils;
 import org.uengine.garuda.web.organization.OrganizationRole;
 import org.uengine.garuda.web.organization.OrganizationService;
 import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -53,7 +55,8 @@ public class BillingRuleRestController {
     AuthenticationService authenticationService;
 
     @RequestMapping(value = "/rule", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getRule(HttpServletRequest request) {
+    public ResponseEntity<Map> getRule(HttpServletRequest request,
+                                       HttpServletResponse response) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -65,13 +68,14 @@ public class BillingRuleRestController {
 
             return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/rule/default", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getDefaultRule(HttpServletRequest request) {
+    public ResponseEntity<Map> getDefaultRule(HttpServletRequest request,
+                                              HttpServletResponse response) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -81,13 +85,15 @@ public class BillingRuleRestController {
             Map map = JsonUtils.marshal(billingRuleRepository.getDefaultBillingRule());
             return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/rule", method = RequestMethod.POST)
-    public ResponseEntity<Void> uploadRule(HttpServletRequest request, @RequestBody Map map, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> uploadRule(HttpServletRequest request,
+                                           HttpServletResponse response,
+                                           @RequestBody Map map, UriComponentsBuilder ucBuilder) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -104,13 +110,14 @@ public class BillingRuleRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/rule").buildAndExpand().toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/retry", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getRetry(HttpServletRequest request) {
+    public ResponseEntity<Map> getRetry(HttpServletRequest request,
+                                        HttpServletResponse response) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -122,13 +129,15 @@ public class BillingRuleRestController {
 
             return new ResponseEntity<>(retry, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/retry", method = RequestMethod.POST)
-    public ResponseEntity<Void> uploadRetry(HttpServletRequest request, @RequestBody Map map, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> uploadRetry(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            @RequestBody Map map, UriComponentsBuilder ucBuilder) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -144,8 +153,8 @@ public class BillingRuleRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/retry").buildAndExpand().toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }

@@ -1004,7 +1004,6 @@ uBilling.prototype = {
             dataType: 'json',
             data: data,
             resolve: function (response, status, xhr) {
-                //x-uengine-pagination-maxnbrecords
                 var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
                 var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
                 return {

@@ -16,12 +16,14 @@ import org.uengine.garuda.killbill.KBService;
 import org.uengine.garuda.model.BillingRule;
 import org.uengine.garuda.model.NotificationConfig;
 import org.uengine.garuda.model.Organization;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.util.JsonUtils;
 import org.uengine.garuda.web.organization.OrganizationRepository;
 import org.uengine.garuda.web.organization.OrganizationRole;
 import org.uengine.garuda.web.organization.OrganizationService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Properties;
 
@@ -50,7 +52,8 @@ public class NotificationConfigRestController {
     AuthenticationService authenticationService;
 
     @RequestMapping(value = "/notification_config", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Map> getNotificationConfiguration(HttpServletRequest request) {
+    public ResponseEntity<Map> getNotificationConfiguration(HttpServletRequest request,
+                                                            HttpServletResponse response) {
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
             if (!role.getAccept()) {
@@ -77,13 +80,15 @@ public class NotificationConfigRestController {
             Map map = JsonUtils.marshal(notificationConfig.getConfiguration());
             return new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
     @RequestMapping(value = "/notification_config", method = RequestMethod.POST)
-    public ResponseEntity<Void> uploadNotificationConfiguration(HttpServletRequest request, @RequestBody Map map, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> uploadNotificationConfiguration(HttpServletRequest request,
+                                                                HttpServletResponse response,
+                                                                @RequestBody Map map, UriComponentsBuilder ucBuilder) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
@@ -100,8 +105,8 @@ public class NotificationConfigRestController {
             headers.setLocation(ucBuilder.path("/rest/v1/notification_config").buildAndExpand().toUri());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }
