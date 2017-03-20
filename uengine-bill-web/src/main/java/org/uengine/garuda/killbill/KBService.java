@@ -8,6 +8,7 @@ import org.uengine.garuda.model.OrganizationEmail;
 import org.uengine.garuda.web.organization.OrganizationRole;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +21,6 @@ public interface KBService {
     Clock getTime(String apiKey, String apiSecret);
 
     Clock updateTime(String apiKey, String apiSecret, String requestedDate);
+
+    void convertPaginationHeader(HttpServletResponse response);
 }

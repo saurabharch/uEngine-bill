@@ -9,8 +9,10 @@ import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.killbill.api.model.Clock;
 import org.uengine.garuda.util.JsonUtils;
+import org.uengine.garuda.util.StringUtils;
 import org.uengine.garuda.web.organization.OrganizationRepository;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -75,5 +77,22 @@ public class KBServiceImpl implements KBService {
     @Override
     public Clock updateTime(String apiKey, String apiSecret, String requestedDate) {
         return killbillServiceFactory.apiClient(apiKey, apiSecret).testApi().updateTime(requestedDate, null, null);
+    }
+
+    @Override
+    public void convertPaginationHeader(HttpServletResponse response) {
+        String maxnbrecords = response.getHeader("x-killbill-pagination-maxnbrecords");
+        String currentoffset = response.getHeader("x-killbill-pagination-currentoffset");
+        String totalnbrecords = response.getHeader("x-killbill-pagination-totalnbrecords");
+
+        if(!StringUtils.isEmpty(maxnbrecords)){
+            response.setHeader("x-uengine-pagination-maxnbrecords",maxnbrecords);
+        }
+        if(!StringUtils.isEmpty(currentoffset)){
+            response.setHeader("x-uengine-pagination-currentoffset",currentoffset);
+        }
+        if(!StringUtils.isEmpty(totalnbrecords)){
+            response.setHeader("x-uengine-pagination-totalnbrecords",totalnbrecords);
+        }
     }
 }

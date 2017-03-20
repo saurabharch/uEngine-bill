@@ -64,7 +64,7 @@ public class KBRestFilter implements Filter {
                 "/rest/v1/test",
                 "/rest/v1/usages",
                 "/rest/v1/tagDefinitions",
-                "plugins"
+                "/plugins"
         };
 
         boolean is_proxy = false;
@@ -355,7 +355,6 @@ public class KBRestFilter implements Filter {
             if (statusCode == 0) {
                 statusCode = 400;
             }
-
             //transfer-encoding 을 제외한 헤더값을 카피한다.
             if (headers != null) {
                 for (int i = 0; i < headers.length; i++) {

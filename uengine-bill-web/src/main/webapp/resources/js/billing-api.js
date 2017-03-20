@@ -236,9 +236,8 @@ uBilling.prototype = {
             dataType: 'json',
             data: data,
             resolve: function (response, status, xhr) {
-                //x-killbill-pagination-maxnbrecords
-                var total = parseInt(xhr.getResponseHeader('x-killbill-pagination-totalnbrecords'));
-                var filtered = parseInt(xhr.getResponseHeader('x-killbill-pagination-maxnbrecords'));
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
                 return {
                     data: response,
                     total: total,
@@ -1005,9 +1004,9 @@ uBilling.prototype = {
             dataType: 'json',
             data: data,
             resolve: function (response, status, xhr) {
-                //x-killbill-pagination-maxnbrecords
-                var total = parseInt(xhr.getResponseHeader('x-killbill-pagination-totalnbrecords'));
-                var filtered = parseInt(xhr.getResponseHeader('x-killbill-pagination-maxnbrecords'));
+                //x-uengine-pagination-maxnbrecords
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
                 return {
                     data: response,
                     total: total,
@@ -1033,9 +1032,9 @@ uBilling.prototype = {
             dataType: 'json',
             data: data,
             resolve: function (response, status, xhr) {
-                //x-killbill-pagination-maxnbrecords
-                var total = parseInt(xhr.getResponseHeader('x-killbill-pagination-totalnbrecords'));
-                var filtered = parseInt(xhr.getResponseHeader('x-killbill-pagination-maxnbrecords'));
+                //x-uengine-pagination-maxnbrecords
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
                 return {
                     data: response,
                     total: total,

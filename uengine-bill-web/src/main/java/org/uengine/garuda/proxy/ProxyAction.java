@@ -19,9 +19,13 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.opencloudengine.garuda.common.exception.ServiceException;
+import org.opencloudengine.garuda.util.ApplicationContextRegistry;
 import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.uengine.garuda.killbill.KBService;
+import org.uengine.garuda.web.configuration.ConfigurationHelper;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -189,6 +193,13 @@ public class ProxyAction {
             response.setStatus(statusCode, proxyResponse.getStatusLine().getReasonPhrase());
 
             copyResponseHeaders(proxyResponse, request, response);
+
+            //페이지네이션 헤더 바꾸기.
+            ApplicationContext context = org.uengine.garuda.util.ApplicationContextRegistry.getApplicationContext();
+            KBService kbService = context.getBean(KBService.class);
+            kbService.convertPaginationHeader(response);
+            //End
+
 
             if (statusCode == HttpServletResponse.SC_NOT_MODIFIED) {
 
