@@ -151,9 +151,14 @@
                     window.location.href = '/';
                 });
             }
-
             $('#organization-current').html(currentOrg.name);
         }
+
+        var li = $('<li><a href="#"> + New </a></li>');
+        $('[name=organization-list]').append(li);
+        li.find('a').click(function () {
+            window.location.href = '/organization/create';
+        });
 
         $('form').each(function () {
             var form = $(this);
