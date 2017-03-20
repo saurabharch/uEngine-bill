@@ -20,6 +20,7 @@ import org.opencloudengine.garuda.client.IamClient;
 import org.opencloudengine.garuda.client.ResourceOwnerPasswordCredentials;
 import org.opencloudengine.garuda.client.model.OauthClient;
 import org.opencloudengine.garuda.client.model.OauthUser;
+import org.springframework.beans.factory.InitializingBean;
 import org.uengine.garuda.authentication.AuthInformation;
 import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.mail.MailService;
@@ -39,7 +40,7 @@ import java.util.Properties;
  * @author Seungpil PARK
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, InitializingBean {
 
     @Autowired
     @Qualifier("config")
@@ -58,6 +59,20 @@ public class UserServiceImpl implements UserService {
     private MailService mailService;
 
     @Override
+    public void afterPropertiesSet() throws Exception {
+
+        //기본 유저 등록
+        if (this.selectByUserName(config.getProperty("system.admin.username")) == null) {
+            OauthUser user = new OauthUser();
+            user.setUserName(config.getProperty("system.admin.username"));
+            user.setUserPassword(config.getProperty("system.admin.password"));
+            user.put("email", config.getProperty("system.admin.email"));
+
+            this.createEnableUser(user);
+        }
+    }
+
+    @Override
     public Map accessToken(String userName, String password, String scope) {
         IamClient iamClient = serviceFactory.trustClient();
         ResourceOwnerPasswordCredentials passwordCredentials = new ResourceOwnerPasswordCredentials();
@@ -65,9 +80,9 @@ public class UserServiceImpl implements UserService {
         passwordCredentials.setPassword(password);
         passwordCredentials.setScope(scope);
         passwordCredentials.setToken_type("JWT");
-        try{
+        try {
             return iamClient.accessToken(passwordCredentials);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
@@ -76,9 +91,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map tokenInfo(String accessToken) {
         IamClient iamClient = serviceFactory.trustClient();
-        try{
+        try {
             return iamClient.tokenInfo(accessToken);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
@@ -216,22 +231,19 @@ public class UserServiceImpl implements UserService {
     public void sendPasswdMail(String userName) {
         OauthUser user = this.selectByUserName(userName);
         Registe registe = new Registe();
-        registe.setUserId(user.get_id());
+        registe.setUser_id(user.get_id());
 
         String fromUser = config.getProperty("mail.contacts.address");
         String token = new String(Base64.encode(String.valueOf(System.currentTimeMillis()).getBytes()));
         registe.setToken(token);
 
-        registeRepository.insert(registe);
-        mailService.passwd(registe.get_id(), token, "Forgot Password", fromUser, "uEngine", (String) user.get("email"), null);
+        registeRepository.insertRegiste(registe);
+        mailService.passwd(registe.getUser_id(), token, "Forgot Password", fromUser, "uEngine", (String) user.get("email"), null);
     }
 
     @Override
     public boolean reqPasswdExist(String id, String token) {
-        Registe registe = new Registe();
-        registe.setUserId(id);
-        registe.setToken(token);
-        Registe managedRegiste = registeRepository.selectByUserIdAndToken(registe);
+        Registe managedRegiste = registeRepository.selectByUserIdAndToken(id, token);
         if (managedRegiste == null) {
             return false;
         }

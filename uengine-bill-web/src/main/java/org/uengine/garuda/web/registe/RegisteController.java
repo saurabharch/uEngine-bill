@@ -89,41 +89,46 @@ public class RegisteController extends DefaultController {
             @RequestParam String email,
             @RequestParam String confirmPassword) {
 
-        String unescapedPassword = EscapeUtils.unescape(password);
-        OauthUser existUser = userService.selectByUserName(userName);
+        try{
+            String unescapedPassword = EscapeUtils.unescape(password);
+            OauthUser existUser = userService.selectByUserName(userName);
 
-        //계정은 있으나 메일확인을 받지 못한 경우
-        if (userService.waitingConfirmation(userName)) {
+            //계정은 있으나 메일확인을 받지 못한 경우
+            if (userService.waitingConfirmation(userName)) {
+                ModelAndView mav = new ModelAndView();
+                mav.setViewName("/registe/reaffirm");
+                mav.addObject("responseUserName", userName);
+                mav.addObject("responseEmail", (String) existUser.get("email"));
+                return mav;
+            }
+
+            //계정이 이미 있고 메일확인까지 받은 경우
+            if (userService.completeAccount(userName)) {
+                ModelAndView mav = new ModelAndView();
+                mav.setViewName("/registe/exist");
+                mav.addObject("responseUserName", userName);
+                mav.addObject("responseEmail", (String) existUser.get("email"));
+                return mav;
+            }
+
+            //신규 계정일 경우 유저를 만들고 이메일 전송 후 화면 이동시킨다.
+            String ipAddr = NetworkUtils.getIpAddr(request);
+            OauthUser user = new OauthUser();
+            user.setUserName(userName);
+            user.setUserPassword(unescapedPassword);
+            user.put("email", email);
+
+            userService.createUser(user);
+            registeService.sendRegisteMail(userName);
+
             ModelAndView mav = new ModelAndView();
-            mav.setViewName("/registe/reaffirm");
-            mav.addObject("responseUserName", userName);
-            mav.addObject("responseEmail", (String) existUser.get("email"));
+            mav.addObject("responseEmail", email);
+            mav.setViewName("/registe/confirmation");
             return mav;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
         }
-
-        //계정이 이미 있고 메일확인까지 받은 경우
-        if (userService.completeAccount(userName)) {
-            ModelAndView mav = new ModelAndView();
-            mav.setViewName("/registe/exist");
-            mav.addObject("responseUserName", userName);
-            mav.addObject("responseEmail", (String) existUser.get("email"));
-            return mav;
-        }
-
-        //신규 계정일 경우 유저를 만들고 이메일 전송 후 화면 이동시킨다.
-        String ipAddr = NetworkUtils.getIpAddr(request);
-        OauthUser user = new OauthUser();
-        user.setUserName(userName);
-        user.setUserPassword(unescapedPassword);
-        user.put("email", email);
-
-        userService.createUser(user);
-        registeService.sendRegisteMail(userName);
-
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("responseEmail", email);
-        mav.setViewName("/registe/confirmation");
-        return mav;
     }
 
     @RequestMapping(value = "/remail", method = RequestMethod.POST)
@@ -136,6 +141,7 @@ public class RegisteController extends DefaultController {
             registeService.sendRegisteMail(userName);
             response.setSuccess(true);
         } catch (Exception ex) {
+            ex.printStackTrace();
             response.setSuccess(false);
             response.getError().setMessage(ex.getMessage());
             if (ex.getCause() != null) response.getError().setCause(ex.getCause().getMessage());
@@ -164,6 +170,7 @@ public class RegisteController extends DefaultController {
             mav.setViewName("/registe/complete");
             return mav;
         } catch (Exception ex) {
+            ex.printStackTrace();
             ModelAndView mav = new ModelAndView();
             mav.setViewName("/auth/error-401");
             return mav;

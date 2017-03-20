@@ -33,7 +33,7 @@ public class RegisteServiceImpl implements RegisteService {
 
         OauthUser user = userService.selectByUserName(userName);
         Registe registe = new Registe();
-        registe.setUserId(user.get_id());
+        registe.setUser_id(user.get_id());
 
         String email = user.get("email").toString();
 
@@ -41,24 +41,17 @@ public class RegisteServiceImpl implements RegisteService {
         String token = new String(Base64.encode(String.valueOf(System.currentTimeMillis()).getBytes()));
         registe.setToken(token);
 
-        registeRepository.insert(registe);
-        mailService.registe(registe.getUserId(), token, "Confirm Registration", fromUser, "uEngine", email, null);
+        registeRepository.insertRegiste(registe);
+        mailService.registe(registe.getUser_id(), token, "Confirm Registration", fromUser, "uEngine", email, null);
     }
 
     @Override
     public void completeRegiste(String user_id, String token) {
-        Registe registe = new Registe();
-        registe.setUserId(user_id);
-        registe.setToken(token);
-        Registe managedRegiste = registeRepository.selectByUserIdAndToken(registe);
+
+        Registe managedRegiste = registeRepository.selectByUserIdAndToken(user_id,token);
         if (managedRegiste == null) throw new ServiceException("가입 확인 처리할 대상이 없습니다.");
 
-        OauthUser user = userService.selectByUserId(registe.getUserId());
+        OauthUser user = userService.selectByUserId(user_id);
         userService.acknowledge(user.getUserName());
-
-        try {
-            //zenService.upgradeZendeskUser( user.getEmail() );
-        } catch (Exception ex) {
-        } //별다른 작업을 하지 않아도 된다.
     }
 }

@@ -1,46 +1,38 @@
 package org.uengine.garuda.web.registe;
 
-import com.cloudant.client.api.model.Response;
-import com.cloudant.client.api.views.Key;
-import com.cloudant.client.api.views.ViewRequestBuilder;
-import org.uengine.garuda.couchdb.CouchServiceFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.uengine.garuda.common.repository.PersistentRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
-public class RegisteRepositoryImpl implements RegisteRepository {
+public class RegisteRepositoryImpl extends PersistentRepositoryImpl<String, Object> implements RegisteRepository {
 
-    private String NAMESPACE = "registe";
-
-    @Autowired
-    CouchServiceFactory serviceFactory;
 
     @Override
-    public Registe insert(Registe registe) {
-        long time = new Date().getTime();
-        registe.setDocType(NAMESPACE);
-        registe.setRegDate(time);
-        registe.setUpdDate(time);
+    public String getNamespace() {
+        return this.NAMESPACE;
+    }
 
-        Response response = serviceFactory.getDb().save(registe);
-        registe.set_id(response.getId());
-        registe.set_rev(response.getRev());
-        return registe;
+    @Autowired
+    public RegisteRepositoryImpl(SqlSessionTemplate sqlSessionTemplate) {
+        super.setSqlSessionTemplate(sqlSessionTemplate);
+    }
+
+    @Override
+    public int insertRegiste(Registe registe) {
+        return this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertRegiste", registe);
     }
 
 
     @Override
-    public Registe selectByUserIdAndToken(Registe registe) {
-        try {
-            ViewRequestBuilder builder = serviceFactory.getDb().getViewRequestBuilder(NAMESPACE, "selectByUserIdAndToken");
-            Key.ComplexKey complex = new Key().complex(registe.getUserId()).add(registe.getToken());
-            return builder.newRequest(Key.Type.COMPLEX, Registe.class).
-                    keys(complex).
-                    build().getResponse().getRows().get(0).getValue();
-        } catch (Exception ex) {
-            return null;
-        }
+    public Registe selectByUserIdAndToken(String user_id, String token) {
+        Map map = new HashMap();
+        map.put("user_id", user_id);
+        map.put("token", token);
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByUseridAndToken", map);
     }
 }

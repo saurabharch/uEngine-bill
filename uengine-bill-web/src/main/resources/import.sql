@@ -1,5 +1,16 @@
 alter table killbill.accounts add column billing_cycle_day_local_ext int(11) DEFAULT NULL after billing_cycle_day_local;
 
+DROP TABLE IF EXISTS registe;
+CREATE TABLE IF NOT EXISTS registe (
+  id               INT(11) NOT NULL AUTO_INCREMENT,
+  user_id          VARCHAR(36) NOT NULL,
+  token            VARCHAR(255) NOT NULL,
+  registration     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY (token),
+  PRIMARY KEY (id)
+)
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS organization;
 CREATE TABLE organization (
     id VARCHAR(36) NOT NULL,

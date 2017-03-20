@@ -1,27 +1,31 @@
 package org.uengine.garuda.web.registe;
 
-import org.uengine.garuda.couchdb.CouchDAO;
+import java.util.Date;
 
 /**
  * Created by uengine on 2015. 6. 3..
  */
-public class Registe extends CouchDAO{
+public class Registe {
 
-    String userId;
-    String token;
-    Long regDate;
-    Long updDate;
+    private Long id;
+    private String user_id;
+    private String token;
+    private Date registration;
 
-    public Registe(){
-
+    public Long getId() {
+        return id;
     }
 
-    public String getUserId() {
-        return userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getToken() {
@@ -32,21 +36,11 @@ public class Registe extends CouchDAO{
         this.token = token;
     }
 
-    public Long getRegDate() {
-        return regDate;
+    public Date getRegistration() {
+        return registration;
     }
 
-    public void setRegDate(Long regDate) {
-        this.regDate = regDate;
+    public void setRegistration(Date registration) {
+        this.registration = registration;
     }
-
-    public Long getUpdDate() {
-        return updDate;
-    }
-
-    public void setUpdDate(Long updDate) {
-        this.updDate = updDate;
-    }
-
-
 }
