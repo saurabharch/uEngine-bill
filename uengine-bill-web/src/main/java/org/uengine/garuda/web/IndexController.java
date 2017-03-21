@@ -186,7 +186,7 @@ public class IndexController {
     public ModelAndView apidoc(HttpSession session, final Locale locale) {
         session.setAttribute("lang", locale.toString());
 
-        return new ModelAndView("/apidoc/index");
+        return new ModelAndView("/api");
     }
 
     @RequestMapping(value = "setting/organization", method = RequestMethod.GET)

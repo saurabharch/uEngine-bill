@@ -64,6 +64,7 @@ public class KBRestFilter implements Filter {
                 "/rest/v1/test",
                 "/rest/v1/usages",
                 "/rest/v1/tagDefinitions",
+                "/rest/v1/tags",
                 "/plugins"
         };
 
