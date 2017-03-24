@@ -254,7 +254,7 @@ public class OrganizationRestController {
     }
 
     @RequestMapping(value = "/organizationEmail/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<OrganizationEmail> updateOrganization(HttpServletRequest request,
+    public ResponseEntity<OrganizationEmail> updateOrganizationEmail(HttpServletRequest request,
                                                                 HttpServletResponse response,
                                                                 @PathVariable("id") String id, @RequestBody OrganizationEmail email) {
 

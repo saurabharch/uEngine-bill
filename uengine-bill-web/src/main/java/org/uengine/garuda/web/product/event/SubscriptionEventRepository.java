@@ -16,8 +16,6 @@
  */
 package org.uengine.garuda.web.product.event;
 
-import org.killbill.billing.entitlement.api.SubscriptionEvent;
-import org.uengine.garuda.model.Product;
 import org.uengine.garuda.model.SubscriptionEventsExt;
 
 import java.util.List;
@@ -31,6 +29,8 @@ public interface SubscriptionEventRepository {
     String NAMESPACE = SubscriptionEventRepository.class.getName();
 
     List<Map> selectSubscriptionCountByProductVersion(String organization_id, String product_id, Long version);
+
+    List<SubscriptionEventsExt> selectByAccountIdAndSubId(String account_id, String subscription_id);
 
     Long selectSubscriptionCountByProduct(String organization_id, String product_id);
 

@@ -136,6 +136,12 @@ public class TemplateRestController {
             }
 
             Organization organization = role.getOrganization();
+
+            Template template = templateService.selectByOrgIdAndTypeAndLocale(organization.getId(), notification_type, locale);
+            if(template == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
             templateService.deleteByOrgIdAndTypeAndLocale(organization.getId(), notification_type, locale);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {

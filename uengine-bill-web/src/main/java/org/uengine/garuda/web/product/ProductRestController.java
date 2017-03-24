@@ -51,7 +51,7 @@ public class ProductRestController {
     private ProductService productService;
 
     @RequestMapping(value = "/sample", method = RequestMethod.POST)
-    public ResponseEntity<Void> createProduct(HttpServletRequest request) {
+    public ResponseEntity<Void> sampleProduct(HttpServletRequest request) {
 
         try {
             String queryString = request.getQueryString();
@@ -81,7 +81,7 @@ public class ProductRestController {
             Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active,category, null, offset, limit);
             List<Product> products = (List<Product>) map.get("list");
             if (products == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             HttpHeaders headers = new HttpHeaders();
@@ -113,7 +113,7 @@ public class ProductRestController {
             Map map = productService.selectProductByCondition(role.getOrganization().getId(), is_active, category,searchKey, offset, limit);
             List<Product> products = (List<Product>) map.get("list");
             if (products == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             HttpHeaders headers = new HttpHeaders();
@@ -201,7 +201,7 @@ public class ProductRestController {
     }
 
     @RequestMapping(value = "/product/{id}/active", method = RequestMethod.PUT)
-    public ResponseEntity<Product> updateProduct(HttpServletRequest request,
+    public ResponseEntity<Product> activeProduct(HttpServletRequest request,
                                                  HttpServletResponse response,
                                                  @PathVariable("id") String id, @RequestBody Map map) {
 

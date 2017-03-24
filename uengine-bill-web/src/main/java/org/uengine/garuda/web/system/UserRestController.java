@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.uengine.garuda.authentication.AuthInformation;
 import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.util.DateUtils;
+import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.configuration.DefaultController;
 
@@ -92,7 +93,8 @@ public class UserRestController extends DefaultController {
             return new ResponseEntity<>(map, HttpStatus.OK);
 
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 
@@ -117,7 +119,8 @@ public class UserRestController extends DefaultController {
 
 
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
         }
     }
 }

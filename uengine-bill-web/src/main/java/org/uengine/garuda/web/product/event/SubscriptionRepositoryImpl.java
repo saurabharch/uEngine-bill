@@ -48,6 +48,14 @@ public class SubscriptionRepositoryImpl extends PersistentRepositoryImpl<String,
     }
 
     @Override
+    public List<SubscriptionEventsExt> selectByAccountIdAndSubId(String account_id, String subscription_id) {
+        Map map = new HashMap();
+        map.put("account_id", account_id);
+        map.put("subscription_id", subscription_id);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByAccountIdAndSubId", map);
+    }
+
+    @Override
     public List<Map> selectSubscriptionCountByProductVersion(String organization_id, String product_id, Long version) {
         Map map = new HashMap();
         map.put("organization_id", organization_id);

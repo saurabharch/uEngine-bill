@@ -5,7 +5,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.springframework.context.ApplicationContext;
-import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.Product;
 import org.uengine.garuda.model.ProductVersion;
@@ -83,6 +82,20 @@ public class KBRestFilter implements Filter {
             ArrayList<String> plan_names = new ArrayList<>();
             String command = null;
             String body = null;
+            String bundleId = null;
+
+            //번들 이동
+            if (requestURI.startsWith("/rest/v1/bundles/") && request.getMethod().toLowerCase().equals("put")) {
+                String[] split = requestURI.split("/");
+                if (split.length == 5) {
+                    bundleId = split[4];
+                    Map map = new ObjectMapper().readValue(request.getInputStream(), Map.class);
+                    body = JsonUtils.marshal(map);
+                    accountId = map.get("accountId").toString();
+                    command = "transferBundle";
+                }
+            }
+
             //서브스크립션 추가
             if (requestURI.equals("/rest/v1/subscriptions") && request.getMethod().toLowerCase().equals("post")) {
                 Map map = new ObjectMapper().readValue(request.getInputStream(), Map.class);
@@ -127,7 +140,7 @@ public class KBRestFilter implements Filter {
             }
 
             if (command != null) {
-                doSubscriptionIntercept(request, response, body, command, plan_names, accountId);
+                doSubscriptionIntercept(request, response, body, command, plan_names, accountId, bundleId);
                 return;
             }
         } catch (Exception ex) {
@@ -162,14 +175,14 @@ public class KBRestFilter implements Filter {
     }
 
     /**
-     * 서브스크립션 생성, 삭제 요청을 인터셉트하여 이벤트 테이블에 추가,삭제한다.
+     * 서브스크립션 생성, 삭제, 번들 이동 요청을 인터셉트하여 이벤트 테이블에 추가,삭제한다.
      *
      * @param request
      * @param response
      * @param plan_names
      */
     private void doSubscriptionIntercept(HttpServletRequest request, HttpServletResponse response, String body,
-                                         String command, ArrayList<String> plan_names, String accountId) {
+                                         String command, ArrayList<String> plan_names, String accountId, String bundleId) {
 
         ApplicationContext context = ApplicationContextRegistry.getApplicationContext();
         OrganizationService organizationService = context.getBean(OrganizationService.class);
@@ -206,50 +219,74 @@ public class KBRestFilter implements Filter {
             Map tenant = kbRepository.getTenantById(organization.getTenant_id());
             Long tenant_record_id = Long.parseLong(tenant.get("record_id") + "");
 
-            //플랜 이름마다 서브스크립션 이벤트에 저장.
-            for (String plan_name : plan_names) {
-                String product_id = plan_name.substring(0, 14);
-                //프로덕트 얻기
-                Product product = productService.selectProductById(organization.getId(), product_id);
-                if (!"Y".equals(product.getIs_active())) {
-                    //액티브 프로덕트가 아닐경우
-                    response.setStatus(400);
-                    return;
-                }
+            if ("transferBundle".equals(command)) {
+                //번들의 정보를 킬빌서버로부터 알아온다.
+                String result = getSubscriptionsAfterIntercept(organization, "/1.0/kb/bundles/" + bundleId);
+                Map bundleMap = JsonUtils.unmarshal(result);
+                String ownerAccountId = bundleMap.get("accountId").toString();
+                List<Map> subscriptions = (List<Map>) bundleMap.get("subscriptions");
 
-                //프로덕트 버젼 얻기
-                ProductVersion currentVersion = productVersionService.getCurrentVersion(organization.getId(), product_id);
-
-                //플랜 얻기
-                List<Plan> plans = currentVersion.getPlans();
-                Plan plan = null;
-                for (Plan p : plans) {
-                    if (plan_name.equals(p.getName())) {
-                        plan = p;
+                //번들에 포함된 서브스크립션의 히스토리를 이양할 구매자 계정으로 카피한다.
+                for (Map subscription : subscriptions) {
+                    String subscriptionId = subscription.get("subscriptionId").toString();
+                    List<SubscriptionEventsExt> subscriptionEventsExts = subscriptionEventRepository.selectByAccountIdAndSubId(ownerAccountId, subscriptionId);
+                    for (SubscriptionEventsExt eventsExt : subscriptionEventsExts) {
+                        eventsExt.setSubscription_id(null);
+                        eventsExt.setId(null);
+                        eventsExt.setAccount_id(accountId);
+                        eventsExt.setAccount_record_id(account_record_id);
+                        eventsExt.setUser_type("REQUEST");
+                        eventsExt.setReg_dt(null);
+                        eventsExt = subscriptionEventRepository.insert(eventsExt);
+                        eventIds.add(eventsExt.getId());
                     }
                 }
-                //플랜이 없거나 허용되지 않음
-                if (plan == null || !"Y".equals(plan.getIs_active())) {
-                    response.setStatus(400);
-                    return;
-                }
+            } else {
+                //플랜 이름마다 서브스크립션 이벤트에 저장.
+                for (String plan_name : plan_names) {
+                    String product_id = plan_name.substring(0, 14);
+                    //프로덕트 얻기
+                    Product product = productService.selectProductById(organization.getId(), product_id);
+                    if (!"Y".equals(product.getIs_active())) {
+                        //액티브 프로덕트가 아닐경우
+                        response.setStatus(400);
+                        return;
+                    }
 
-                SubscriptionEventsExt eventsExt = new SubscriptionEventsExt();
-                eventsExt.setAccount_id(accountId);
-                eventsExt.setAccount_record_id(account_record_id);
-                eventsExt.setOrganization_id(organization.getId());
-                eventsExt.setTenant_id(organization.getTenant_id());
-                eventsExt.setTenant_record_id(tenant_record_id);
-                eventsExt.setUser_type("REQUEST");
-                eventsExt.setProduct_id(product_id);
-                eventsExt.setVersion(currentVersion.getVersion());
-                eventsExt.setPlan_name(plan_name);
-                eventsExt = subscriptionEventRepository.insert(eventsExt);
-                eventIds.add(eventsExt.getId());
+                    //프로덕트 버젼 얻기
+                    ProductVersion currentVersion = productVersionService.getCurrentVersion(organization.getId(), product_id);
+
+                    //플랜 얻기
+                    List<Plan> plans = currentVersion.getPlans();
+                    Plan plan = null;
+                    for (Plan p : plans) {
+                        if (plan_name.equals(p.getName())) {
+                            plan = p;
+                        }
+                    }
+                    //플랜이 없거나 허용되지 않음
+                    if (plan == null || !"Y".equals(plan.getIs_active())) {
+                        response.setStatus(400);
+                        return;
+                    }
+
+                    SubscriptionEventsExt eventsExt = new SubscriptionEventsExt();
+                    eventsExt.setAccount_id(accountId);
+                    eventsExt.setAccount_record_id(account_record_id);
+                    eventsExt.setOrganization_id(organization.getId());
+                    eventsExt.setTenant_id(organization.getTenant_id());
+                    eventsExt.setTenant_record_id(tenant_record_id);
+                    eventsExt.setUser_type("REQUEST");
+                    eventsExt.setProduct_id(product_id);
+                    eventsExt.setVersion(currentVersion.getVersion());
+                    eventsExt.setPlan_name(plan_name);
+                    eventsExt = subscriptionEventRepository.insert(eventsExt);
+                    eventIds.add(eventsExt.getId());
+                }
             }
 
             //킬빌 통신 시도
-            HttpResponse httpResponse = sendSubscriptionsRequest(request, organization, body);
+            HttpResponse httpResponse = sendKBRequest(request, organization, body);
 
             //통신 후 리스폰스를 위한 요소들을 가지고있는다.
             resultBody = EntityUtils.toString(httpResponse.getEntity());
@@ -265,6 +302,21 @@ public class KBRestFilter implements Filter {
             String value;
             List<Map> subscriptions;
             switch (command) {
+                case "transferBundle":
+                    if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                        result_user_type = "CREATE";
+                        locations = httpResponse.getHeaders("location");
+                        location = locations[0];
+                        value = location.getValue();
+                        result = getSubscriptionsAfterIntercept(organization, value.substring(value.indexOf("/1.0/kb/")));
+                        map = JsonUtils.unmarshal(result);
+
+                        subscriptions = (List<Map>) map.get("subscriptions");
+                        for (Map subscription : subscriptions) {
+                            createdSubscriptions.add(subscription);
+                        }
+                    }
+                    break;
                 case "createSubscription":
                     if (httpResponse.getStatusLine().getStatusCode() == 201) {
                         result_user_type = "CREATE";
@@ -424,7 +476,7 @@ public class KBRestFilter implements Filter {
      * @return
      * @throws IOException
      */
-    private HttpResponse sendSubscriptionsRequest(HttpServletRequest request, Organization organization, String body) throws IOException {
+    private HttpResponse sendKBRequest(HttpServletRequest request, Organization organization, String body) throws IOException {
         ApplicationContext context = ApplicationContextRegistry.getApplicationContext();
         ConfigurationHelper configurationHelper = context.getBean(ConfigurationHelper.class);
         String tenant_api_key = organization.getTenant_api_key();

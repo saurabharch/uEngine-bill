@@ -37,6 +37,12 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectByAccountIdAndSubId" parameterType="map" resultType="org.uengine.garuda.model.SubscriptionEventsExt">
+        SELECT * FROM subscription_events_ext
+        WHERE account_id = #{account_id}
+        AND subscription_id = #{subscription_id}
+    </select>
+
     <delete id="delete" parameterType="java.lang.Long">
         DELETE FROM subscription_events_ext
         WHERE id = #{id}
