@@ -1,6 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
+    "version": "1.0",
     "description": "유엔진 빌링은 과금 및 결제 오픈소스 플랫폼입니다.",
     "title": "uEngine Bill",
     "contact": {
@@ -12,6 +13,30 @@
     }
   },
   "tags": [
+    {
+      "name": "auth"
+    },
+    {
+      "name": "organization"
+    },
+    {
+      "name": "product"
+    },
+    {
+      "name": "rule"
+    },
+    {
+      "name": "retry"
+    },
+    {
+      "name": "notification"
+    },
+    {
+      "name": "template"
+    },
+    {
+      "name": "accounts"
+    },
     {
       "name": "bundles"
     },
@@ -37,9 +62,6 @@
       "name": "tags"
     },
     {
-      "name": "paymentGateways"
-    },
-    {
       "name": "paymentMethods"
     },
     {
@@ -62,12 +84,1408 @@
     },
     {
       "name": "paymentTransactions"
-    },
-    {
-      "name": "accounts"
     }
   ],
   "paths": {
+    "/rest/v1/access_token": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login and get token",
+        "description": "로그인 하여 토큰을 받아온다.",
+        "operationId": "accessToken",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid user information"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TokenJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/token_info": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Validate token",
+        "description": "토큰이 유효한지 체크한다.",
+        "operationId": "tokenInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid token"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/organization": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "List organizations",
+        "description": "사용자가 소유한 organization 목록을 조회한다.",
+        "operationId": "listOrganization",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "204": {
+            "description": "Organization Not Found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationJson"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Create organization",
+        "description": "Organization 을 생성한다.",
+        "operationId": "createOrganization",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationJson"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "409": {
+            "description": "Conflict Name"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/organization/{organizationId}": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Retrieve an Organization by id",
+        "description": "organization 을 아이디로 조회한다.",
+        "operationId": "getOrganization",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Organization not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationJson"
+            }
+          },
+          "400": {
+            "description": "Invalid organization id supplied"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Update Organization",
+        "description": "Organization 정보를 업데이트한다.",
+        "operationId": "updateOrganization",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/OrganizationJson"
+            }
+          },
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid organization data supplied"
+          },
+          "404": {
+            "description": "Organization not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationJson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Remove organization",
+        "description": "organization 을 삭제한다.",
+        "operationId": "deleteOrganization",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid organization id supplied"
+          },
+          "404": {
+            "description": "Organization not found"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/organizationEmail": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "List organizationEmail",
+        "description": "사용자가 소유한 organization email 목록을 조회한다.",
+        "operationId": "listOrganizationEmail",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "204": {
+            "description": "Organization Not Found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationEmailJson"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Create organizationEmail",
+        "description": "Organization email 을 생성한다.",
+        "operationId": "createOrganizationEmail",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationEmailJson"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "409": {
+            "description": "Conflict Email"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/organizationEmail/{organizationEmailId}": {
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Update Organization Email",
+        "description": "Organization Email 정보를 업데이트한다.",
+        "operationId": "updateOrganizationEmail",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/OrganizationEmailJson"
+            }
+          },
+          {
+            "name": "organizationEmailId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid organization email data supplied"
+          },
+          "404": {
+            "description": "Organization email not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationEmailJson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Remove organization email",
+        "description": "organization email 을 삭제한다.",
+        "operationId": "deleteOrganizationEmail",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "organizationEmailId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid organization email id supplied"
+          },
+          "404": {
+            "description": "Organization email not found"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/product": {
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Create product",
+        "description": "Product 을 생성한다.",
+        "operationId": "createProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductJson"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Retrieve an product by id",
+        "description": "product 을 아이디로 조회한다.",
+        "operationId": "getProduct",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "product not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductJson"
+            }
+          },
+          "400": {
+            "description": "Invalid product id supplied"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Update product",
+        "description": "product 정보를 업데이트한다.",
+        "operationId": "updateProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ProductJson"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid product data supplied"
+          },
+          "404": {
+            "description": "product not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductJson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Remove product",
+        "description": "product 을 삭제한다.",
+        "operationId": "deleteProduct",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid product id supplied"
+          },
+          "404": {
+            "description": "product not found"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/active": {
+      "put": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Set product active",
+        "description": "product 의 active 여부를 결정한다.",
+        "operationId": "updateProductActive",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ProductJson"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid product data supplied"
+          },
+          "404": {
+            "description": "product not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/product/pagination": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "List products",
+        "description": "product 를 페이징 하여 조회한다.",
+        "operationId": "listProducts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "BASE",
+              "ADD_ON"
+            ]
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Y",
+              "N"
+            ]
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductJson"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/product/search/{searchKey}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Search products",
+        "description": "주어진 검색어에 해당하는 product 들을 페이징 처리하여 반환한다.",
+        "operationId": "searchProduct",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": ".*"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "BASE",
+              "ADD_ON"
+            ]
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "Y",
+              "N"
+            ]
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductJson"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/version": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "List Product Version",
+        "description": "product 의 모든 version 을 조회한다.",
+        "operationId": "listProductVersions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "product not found"
+          },
+          "400": {
+            "description": "Invalid product id supplied"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductVersionJson"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Create product version",
+        "description": "Product Version 을 생성한다.",
+        "operationId": "createProductVersion",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductVersionJson"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "product not found"
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/version/{version}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Retrieve an product version by version",
+        "description": "product 의 version 을 조회한다.",
+        "operationId": "getProductVersion",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "product version not found"
+          },
+          "400": {
+            "description": "Invalid product version supplied"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductVersionJson"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Update product version",
+        "description": "product version 정보를 업데이트한다.",
+        "operationId": "updateProductVersion",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ProductVersionJson"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid product version data supplied"
+          },
+          "404": {
+            "description": "product version not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductVersionJson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Remove product version",
+        "description": "product version 을 삭제한다.",
+        "operationId": "deleteProductVersion",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid product version supplied"
+          },
+          "404": {
+            "description": "product version not found"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/version/current": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Retrieve an current product version",
+        "description": "product 의 현재 시각 적용 version 을 조회한다.",
+        "operationId": "getCurrentProductVersion",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "product version not found"
+          },
+          "400": {
+            "description": "Invalid product version supplied"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductVersionJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/rule": {
+      "get": {
+        "tags": [
+          "rule"
+        ],
+        "summary": "Get billing rule",
+        "description": "빌링 규칙을 조회한다.",
+        "operationId": "getBillingRule",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/BillingRuleJson"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "rule"
+        ],
+        "summary": "Update billing rule",
+        "description": "빌링 규칙을 업데이트 한다.",
+        "operationId": "updateBillingRule",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingRuleJson"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/retry": {
+      "get": {
+        "tags": [
+          "retry"
+        ],
+        "summary": "Get retry rule",
+        "description": "결제 재시도 규칙을 조회한다.",
+        "operationId": "getRetryRule",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/RetryRuleJson"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "retry"
+        ],
+        "summary": "Update retry rule",
+        "description": "결제 재시도 규칙을 업데이트 한다.",
+        "operationId": "updateRetryRule",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RetryRuleJson"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/notification_config": {
+      "get": {
+        "tags": [
+          "notification"
+        ],
+        "summary": "Get notification rule",
+        "description": "알림 규칙을 조회한다.",
+        "operationId": "getNotificationRule",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/NotificationRuleJson"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "notification"
+        ],
+        "summary": "Update notification rule",
+        "description": "알림 규칙을 업데이트 한다.",
+        "operationId": "updateNotificationRule",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NotificationRuleJson"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/template": {
+      "get": {
+        "tags": [
+          "template"
+        ],
+        "summary": "List notification templates",
+        "description": "Notification template 목록을 조회한다.",
+        "operationId": "getAllTemplates",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TemplatePerNotificationJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/template/{notificationType}": {
+      "get": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Retrieve an template by notificationType",
+        "description": "notificationType 별로 template 을 조회한다.",
+        "operationId": "getTemplateByType",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "notificationType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid notificationType supplied"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TemplatePerNotificationJson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Remove template by notificationType",
+        "description": "notificationType 의 template 을 모두 삭제한다.",
+        "operationId": "deleteTemplateByType",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "notificationType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid notificationType supplied"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/template/{notificationType}/{locale}": {
+      "get": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Retrieve an template by notificationType and locale",
+        "description": "notificationType 과 locale 에 해당하는 template 을 조회한다.",
+        "operationId": "getTemplateByTypeAndLocale",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "notificationType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid notificationType and locale supplied"
+          },
+          "404": {
+            "description": "template not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TemplateJson"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Upload template by notificationType and locale",
+        "description": "notificationType 과 locale 에 해당하는 template 을 업로드한다.",
+        "operationId": "createTemplate",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TemplateJson"
+            }
+          },
+          {
+            "name": "notificationType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Remove template by notificationType and locale",
+        "description": "notificationType 과 locale 에 해당하는 template 을 삭제한다.",
+        "operationId": "deleteTemplateByTypeAndLocale",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "notificationType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid notificationType and locale supplied"
+          },
+          "404": {
+            "description": "template not found"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "template"
+        ],
+        "summary": "Set default template by notificationType and locale",
+        "description": "notificationType 과 locale 에 해당하는 template 을 default template 으로 지정한다.",
+        "operationId": "setDefaultTemplate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "notificationType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid notificationType and locale supplied"
+          },
+          "404": {
+            "description": "template not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TemplateJson"
+            }
+          }
+        }
+      }
+    },
     "/rest/v1/accounts": {
       "get": {
         "tags": [
@@ -174,7 +1592,7 @@
           "accounts"
         ],
         "summary": "List accounts",
-        "description": "",
+        "description": "구매자 계정을 페이징 처리하여 조회한다.",
         "operationId": "getAccounts",
         "produces": [
           "application/json"
@@ -237,7 +1655,7 @@
           "accounts"
         ],
         "summary": "Trigger a payment using the account external key (authorization, purchase or credit)",
-        "description": "",
+        "description": "주어진 구매자 external key 로 authorization, purchase, credit 결제를 수행한다.",
         "operationId": "processPaymentByExternalKey",
         "consumes": [
           "application/json"
@@ -339,7 +1757,7 @@
           "accounts"
         ],
         "summary": "Search accounts",
-        "description": "",
+        "description": "주어진 검색어에 해당하는 구매자 계정들을 페이징 처리하여 반환한다.",
         "operationId": "searchAccounts",
         "produces": [
           "application/json"
@@ -409,7 +1827,7 @@
           "accounts"
         ],
         "summary": "Retrieve an account by id",
-        "description": "",
+        "description": "구매자 계정을 id 로 조회한다.",
         "operationId": "getAccount",
         "produces": [
           "application/json"
@@ -464,7 +1882,7 @@
           "accounts"
         ],
         "summary": "Update account",
-        "description": "",
+        "description": "구매자 계정 정보를 업데이트한다.",
         "operationId": "updateAccount",
         "consumes": [
           "application/json"
@@ -520,7 +1938,7 @@
           "accounts"
         ],
         "summary": "Retrieve account tags",
-        "description": "",
+        "description": "구매자 계정과 관련된 모든 태그들을 objectType 별로 조회한다.",
         "operationId": "getAllTags",
         "produces": [
           "application/json"
@@ -601,7 +2019,7 @@
           "accounts"
         ],
         "summary": "Retrieve blocking states for account",
-        "description": "",
+        "description": "구매자 계정의 blocking 이력을 조회한다.",
         "operationId": "getBlockingStates",
         "produces": [
           "application/json"
@@ -667,7 +2085,7 @@
           "accounts"
         ],
         "summary": "Block an account",
-        "description": "",
+        "description": "구매자 계정을 Block 시킨다.",
         "operationId": "addAccountBlockingState",
         "consumes": [
           "application/json"
@@ -739,7 +2157,7 @@
           "accounts"
         ],
         "summary": "Retrieve bundles for account",
-        "description": "",
+        "description": "구매자 계정이 구독중인 bundle 리스트를 조회한다.",
         "operationId": "getAccountBundles",
         "produces": [
           "application/json"
@@ -797,7 +2215,7 @@
           "accounts"
         ],
         "summary": "Rebalance account CBA",
-        "description": "",
+        "description": "구매자 계정의 가상 화폐(Credit) 를 리밸런싱한다.",
         "operationId": "rebalanceExistingCBAOnAccount",
         "consumes": [
           "application/json"
@@ -845,7 +2263,7 @@
           "accounts"
         ],
         "summary": "List children accounts",
-        "description": "",
+        "description": "구매자 계정의 하위 계정들을 조회한다.",
         "operationId": "getChildrenAccounts",
         "produces": [
           "application/json"
@@ -905,8 +2323,8 @@
           "accounts"
         ],
         "summary": "Retrieve account custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "구매자 계정의 custom fields 를 조회한다.",
+        "operationId": "getAccountCustomFields",
         "produces": [
           "application/json"
         ],
@@ -946,8 +2364,8 @@
           "accounts"
         ],
         "summary": "Add custom fields to account",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "구매자 계정에 custom field 를 추가한다.",
+        "operationId": "createAccountCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -1003,8 +2421,8 @@
           "accounts"
         ],
         "summary": "Remove custom fields from account",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "구매자 계정의 custom field 를 삭제한다.",
+        "operationId": "deleteAccountCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -1057,7 +2475,7 @@
           "accounts"
         ],
         "summary": "Retrieve account email notification",
-        "description": "",
+        "description": "구매자 계정으로 인보이스 발송 여부를 조회한다.",
         "operationId": "getEmailNotificationsForAccount",
         "produces": [
           "application/json"
@@ -1091,7 +2509,7 @@
           "accounts"
         ],
         "summary": "Set account email notification",
-        "description": "",
+        "description": "구매자 계정으로 인보이스 발송 여부를 결정한다.",
         "operationId": "setEmailNotificationsForAccount",
         "consumes": [
           "application/json"
@@ -1150,7 +2568,7 @@
           "accounts"
         ],
         "summary": "Retrieve an account emails",
-        "description": "",
+        "description": "인보이스 및 이메일 알림에 대해 CC(참조) 를 받는 이메일 계정 리스트를 불러온다.",
         "operationId": "getEmails",
         "produces": [
           "application/json"
@@ -1184,7 +2602,7 @@
           "accounts"
         ],
         "summary": "Add account email",
-        "description": "",
+        "description": "인보이스 및 이메일 알림에 대해 CC(참조) 를 받는 이메일 계정을 추가한다.",
         "operationId": "addEmail",
         "consumes": [
           "application/json"
@@ -1243,7 +2661,7 @@
           "accounts"
         ],
         "summary": "Delete email from account",
-        "description": "",
+        "description": "인보이스 및 이메일 알림에 대해 CC(참조) 를 받는 이메일 계정을 삭제한다.",
         "operationId": "removeEmail",
         "produces": [
           "application/json"
@@ -1294,8 +2712,8 @@
           "accounts"
         ],
         "summary": "Retrieve account invoice payments",
-        "description": "",
-        "operationId": "getInvoicePayments",
+        "description": "구매자 계정의 모든 인보이스와 연계된 결제내역을 불러온다.",
+        "operationId": "getAccountInvoicePayments",
         "produces": [
           "application/json"
         ],
@@ -1362,7 +2780,7 @@
           "accounts"
         ],
         "summary": "Trigger a payment for all unpaid invoices",
-        "description": "",
+        "description": "구매자 계정의 모든 미결제된 인보이스에 대해 결제시도를 한다.",
         "operationId": "payAllInvoices",
         "consumes": [
           "application/json"
@@ -1436,8 +2854,8 @@
           "accounts"
         ],
         "summary": "Retrieve account invoices",
-        "description": "",
-        "operationId": "getInvoices",
+        "description": "구매자 계정의 모든 인보이스를 조회한다.",
+        "operationId": "getAccountInvoices",
         "produces": [
           "application/json"
         ],
@@ -1500,7 +2918,7 @@
           "accounts"
         ],
         "summary": "Retrieve overdue state for account",
-        "description": "",
+        "description": "구매자 계정의 연체 상태를 조회한다.",
         "operationId": "getOverdueAccount",
         "produces": [
           "application/json"
@@ -1536,8 +2954,8 @@
           "accounts"
         ],
         "summary": "Retrieve account payment methods",
-        "description": "",
-        "operationId": "getPaymentMethods",
+        "description": "구매자 계정의 모든 결제수단을 조회한다.",
+        "operationId": "getAccountPaymentMethods",
         "produces": [
           "application/json"
         ],
@@ -1597,7 +3015,7 @@
           "accounts"
         ],
         "summary": "Add a payment method",
-        "description": "",
+        "description": "구매자 계정에 결제수단을 추가한다.",
         "operationId": "createPaymentMethod",
         "consumes": [
           "application/json"
@@ -1680,7 +3098,7 @@
           "accounts"
         ],
         "summary": "Refresh account payment methods",
-        "description": "",
+        "description": "구매자 계정의 결제 수단을 리프레쉬한다.",
         "operationId": "refreshPaymentMethods",
         "produces": [
           "application/json"
@@ -1744,7 +3162,7 @@
           "accounts"
         ],
         "summary": "Set the default payment method",
-        "description": "",
+        "description": "구매자 계정의 결제 수단을 디폴트로 지정한다. (인보이스 생성시 디폴트 결제 수단으로 결제된다.)",
         "operationId": "setDefaultPaymentMethod",
         "consumes": [
           "application/json"
@@ -1819,8 +3237,8 @@
           "accounts"
         ],
         "summary": "Retrieve account payments",
-        "description": "",
-        "operationId": "getPayments",
+        "description": "구매자 계정의 결제이력을 조회한다.",
+        "operationId": "getAccountPayments",
         "produces": [
           "application/json"
         ],
@@ -1884,7 +3302,7 @@
           "accounts"
         ],
         "summary": "Trigger a payment (authorization, purchase or credit)",
-        "description": "",
+        "description": "구매자 계정으로 하여금 authorization, purchase, credit 결제를 수행한다.",
         "operationId": "processPayment",
         "consumes": [
           "application/json"
@@ -1987,8 +3405,8 @@
           "accounts"
         ],
         "summary": "Retrieve account tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "구매자 계정의 tag 를 조회한다.",
+        "operationId": "getAccountTags",
         "produces": [
           "application/json"
         ],
@@ -2038,8 +3456,8 @@
           "accounts"
         ],
         "summary": "Add tags to account",
-        "description": "",
-        "operationId": "createTags",
+        "description": "구매자 계정에 태그를 추가한다.",
+        "operationId": "createAccountTags",
         "produces": [
           "application/json"
         ],
@@ -2087,8 +3505,8 @@
           "accounts"
         ],
         "summary": "Remove tags from account",
-        "description": "",
-        "operationId": "deleteTags",
+        "description": "구매자 계정의 태그를 삭제한다.",
+        "operationId": "deleteAccountTags",
         "consumes": [
           "application/json"
         ],
@@ -2141,7 +3559,7 @@
           "accounts"
         ],
         "summary": "Retrieve account timeline",
-        "description": "",
+        "description": "구매자 계정의 모든 타임라인을 조회한다.(구독, 결제, 인보이스 이력)",
         "operationId": "getAccountTimeline",
         "produces": [
           "application/json"
@@ -2191,7 +3609,7 @@
           "accounts"
         ],
         "summary": "Move a given child credit to the parent level",
-        "description": "",
+        "description": "구매자 계정의 가상 화폐(Credit) 의 잔액을 부모 계정으로 이동시킨다. (부모 계정이 있을 경우만 해당된다.)",
         "operationId": "transferChildCreditToParent",
         "consumes": [
           "application/json"
@@ -2242,7 +3660,7 @@
           "bundles"
         ],
         "summary": "Retrieve a bundle by external key",
-        "description": "",
+        "description": "주어진 external key 로 번들 한건을 조회한다.",
         "operationId": "getBundleByKey",
         "produces": [
           "application/json"
@@ -2288,7 +3706,7 @@
           "bundles"
         ],
         "summary": "List bundles",
-        "description": "",
+        "description": "번들을 페이징하여 조회한다.",
         "operationId": "getBundles",
         "produces": [
           "application/json"
@@ -2337,7 +3755,7 @@
           "bundles"
         ],
         "summary": "Search bundles",
-        "description": "",
+        "description": "주어진 검색어로 번들을 조회한다.",
         "operationId": "searchBundles",
         "produces": [
           "application/json"
@@ -2393,7 +3811,7 @@
           "bundles"
         ],
         "summary": "Retrieve a bundle by id",
-        "description": "",
+        "description": "아이디로 번들을 조회한다.",
         "operationId": "getBundle",
         "produces": [
           "application/json"
@@ -2434,7 +3852,7 @@
           "bundles"
         ],
         "summary": "Transfer a bundle to another account",
-        "description": "",
+        "description": "번들을 다른 구매자 계정으로 이전시킨다.(과금 주기 또한 동일하게 이전된다.)",
         "operationId": "transferBundle",
         "consumes": [
           "application/json"
@@ -2516,7 +3934,7 @@
           "bundles"
         ],
         "summary": "Block a bundle",
-        "description": "",
+        "description": "번들을 정지시킨다.",
         "operationId": "addBundleBlockingState",
         "consumes": [
           "application/json"
@@ -2588,8 +4006,8 @@
           "bundles"
         ],
         "summary": "Retrieve bundle custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "번들의 커스텀 필드를 조회한다.",
+        "operationId": "getBundleCustomFields",
         "produces": [
           "application/json"
         ],
@@ -2629,8 +4047,8 @@
           "bundles"
         ],
         "summary": "Add custom fields to bundle",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "번들에 커스텀 필드를 추가한다.",
+        "operationId": "createBundleCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -2686,8 +4104,8 @@
           "bundles"
         ],
         "summary": "Remove custom fields from bundle",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "번들에 부여된 커스텀 필드를 삭제한다.",
+        "operationId": "deleteBundleCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -2740,7 +4158,7 @@
           "bundles"
         ],
         "summary": "Pause a bundle",
-        "description": "",
+        "description": "번들을 일시정지 시킨다.(일시정지 된 번들을 정지 기간동안 과금이 부과되지 않는다.)",
         "operationId": "pauseBundle",
         "consumes": [
           "application/json"
@@ -2807,7 +4225,7 @@
           "bundles"
         ],
         "summary": "Resume a bundle",
-        "description": "",
+        "description": "번들의 일시정지를 해제한다. (해지된 시점부터 과금이 재집행되며, 결제 주기는 정지되기 전과 동일하게 유지된다.)",
         "operationId": "resumeBundle",
         "consumes": [
           "application/json"
@@ -2874,8 +4292,8 @@
           "bundles"
         ],
         "summary": "Retrieve bundle tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "번들의 태그를 조회한다.",
+        "operationId": "getBundleTags",
         "produces": [
           "application/json"
         ],
@@ -2925,8 +4343,8 @@
           "bundles"
         ],
         "summary": "Add tags to bundle",
-        "description": "",
-        "operationId": "createTags",
+        "description": "번들에 태그를 추가한다.",
+        "operationId": "createBundleTags",
         "consumes": [
           "application/json"
         ],
@@ -2977,8 +4395,8 @@
           "bundles"
         ],
         "summary": "Remove tags from bundle",
-        "description": "",
-        "operationId": "deleteTags",
+        "description": "번들에 부여된 태그를 삭제한다.",
+        "operationId": "deleteBundleTags",
         "consumes": [
           "application/json"
         ],
@@ -3031,7 +4449,7 @@
           "credits"
         ],
         "summary": "Create a credit",
-        "description": "",
+        "description": "구매자 계정, 또는 인보이스에 가상 화폐를 추가한다.",
         "operationId": "createCredit",
         "consumes": [
           "application/json"
@@ -3090,7 +4508,7 @@
           "credits"
         ],
         "summary": "Retrieve a credit by id",
-        "description": "",
+        "description": "가장 화폐 (credit) 를 아이디로 조회한다. 구매자 계정의 가상 화폐 잔액은 credit 들의 sum 으로 계산된다.",
         "operationId": "getCredit",
         "produces": [
           "application/json"
@@ -3126,7 +4544,7 @@
           "customFields"
         ],
         "summary": "List custom fields",
-        "description": "",
+        "description": "커스텀 필드를 페이징하여 조회한다.",
         "operationId": "getCustomFields",
         "produces": [
           "application/json"
@@ -3175,7 +4593,7 @@
           "customFields"
         ],
         "summary": "Search custom fields",
-        "description": "",
+        "description": "주어진 검색어로 커스텀 필드를 페이징하여 조회한다.",
         "operationId": "searchCustomFields",
         "produces": [
           "application/json"
@@ -3231,7 +4649,7 @@
           "invoicePayments"
         ],
         "summary": "Retrieve a payment by id",
-        "description": "",
+        "description": "인보이스 결제 이력을 아이디로 조회한다.",
         "operationId": "getInvoicePayment",
         "produces": [
           "application/json"
@@ -3298,7 +4716,7 @@
           "invoicePayments"
         ],
         "summary": "Record a chargebackReversal",
-        "description": "",
+        "description": "주어진 인보이스 결제이력의 chargeback(지불 거절) 요청을 취소한다.",
         "operationId": "createChargebackReversal",
         "consumes": [
           "application/json"
@@ -3357,7 +4775,7 @@
           "invoicePayments"
         ],
         "summary": "Record a chargeback",
-        "description": "",
+        "description": "인보이스 결제이력에 지불거절(chargebacks) 요청을 한다.",
         "operationId": "createChargeback",
         "consumes": [
           "application/json"
@@ -3416,8 +4834,8 @@
           "invoicePayments"
         ],
         "summary": "Retrieve payment custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "인보이스 결제이력의 커스텀 필드를 조회한다.",
+        "operationId": "getInvoicePaymentCustomFields",
         "produces": [
           "application/json"
         ],
@@ -3457,8 +4875,8 @@
           "invoicePayments"
         ],
         "summary": "Add custom fields to payment",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "인보이스 결제이력에 커스텀 필드를 추가한다.",
+        "operationId": "createInvoicePaymentCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -3514,8 +4932,8 @@
           "invoicePayments"
         ],
         "summary": "Remove custom fields from payment",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "인보이스 결제이력에 커스텀 필드를 삭제한다.",
+        "operationId": "deleteInvoicePaymentCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -3568,7 +4986,7 @@
           "invoicePayments"
         ],
         "summary": "Refund a payment, and adjust the invoice if needed",
-        "description": "",
+        "description": "인보이스 결제이력에 환불(refund) 요청을 한다. 환불 요청시, Adjust 할 인보이스 아이템(상세 항목) 및 금액을 정할 수 있다.",
         "operationId": "createRefundWithAdjustments",
         "consumes": [
           "application/json"
@@ -3650,8 +5068,8 @@
           "invoicePayments"
         ],
         "summary": "Retrieve payment tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "인보이스 결제이력의 태그를 조회한다.",
+        "operationId": "getInvoicePaymentTags",
         "produces": [
           "application/json"
         ],
@@ -3711,8 +5129,8 @@
           "invoicePayments"
         ],
         "summary": "Add tags to payment",
-        "description": "",
-        "operationId": "createTags",
+        "description": "인보이스 결제이력에 태그를 추가한다.",
+        "operationId": "createInvoicePaymentTags",
         "consumes": [
           "application/json"
         ],
@@ -3763,8 +5181,8 @@
           "invoicePayments"
         ],
         "summary": "Remove tags from payment",
-        "description": "",
-        "operationId": "deleteTags",
+        "description": "인보이스 결제이력에 태그를 삭제한다.",
+        "operationId": "deleteInvoicePaymentTags",
         "consumes": [
           "application/json"
         ],
@@ -3817,7 +5235,7 @@
           "invoices"
         ],
         "summary": "Trigger an invoice generation",
-        "description": "",
+        "description": "미래에 발급될 인보이스를 앞당겨 발급한다.(인보이스가 실제로 생성,발송되고 결제도 이루어진다.) targetDate 가 마지막 인보이스로부터 다음 결제 예정일보다 이전일 경우 발급되지 않는다.",
         "operationId": "createFutureInvoice",
         "consumes": [
           "application/json"
@@ -3870,76 +5288,13 @@
         }
       }
     },
-    "/rest/v1/invoices/catalogTranslation/{locale}": {
-      "post": {
-        "tags": [
-          "invoices"
-        ],
-        "summary": "Upload the catalog translation for the tenant",
-        "description": "",
-        "operationId": "uploadCatalogTranslation",
-        "consumes": [
-          "text/plain"
-        ],
-        "produces": [
-          "text/plain"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "locale",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": ".*"
-          },
-          {
-            "name": "deleteIfExists",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
     "/rest/v1/invoices/charges/{accountId}": {
       "post": {
         "tags": [
           "invoices"
         ],
         "summary": "Create external charge(s)",
-        "description": "",
+        "description": "구매자에게 임의의 인보이스를 발급한다. 이 인보이스는 플랜과 상관이 없는 독립적인 인보이스이며, 임의이 설명과 함께 구매자에게 발송되며 결제된다. 만일 인보이스 아이디를 지정하게 된다면, 지정된 인보이스에 External charge item 이 추가된다. 인보이스 아이디를 지정할 경우 자동 결제 및 재발송되지 않으므로 결제 및 발송을 수행해주어야 한다.",
         "operationId": "createExternalCharges",
         "consumes": [
           "application/json"
@@ -3953,7 +5308,8 @@
             "name": "body",
             "required": false,
             "schema": {
-              "$ref": "#/definitions/IterableInvoiceItemJson"
+              "type": "array",
+              "$ref": "#/definitions/InvoiceItemJson"
             }
           },
           {
@@ -4049,7 +5405,7 @@
           "invoices"
         ],
         "summary": "Generate a dryRun invoice",
-        "description": "",
+        "description": "미래에 발급될 인보이스를 가상으로 생성해 조회한다.(가상으로 생성된 인보이스는 실제로 발급되지는 않는다.)",
         "operationId": "generateDryRunInvoice",
         "consumes": [
           "application/json"
@@ -4110,137 +5466,13 @@
         }
       }
     },
-    "/rest/v1/invoices/manualPayTemplate": {
-      "post": {
-        "tags": [
-          "invoices"
-        ],
-        "summary": "Upload the manualPay invoice template for the tenant",
-        "description": "",
-        "operationId": "uploadInvoiceMPTemplate",
-        "consumes": [
-          "text/html"
-        ],
-        "produces": [
-          "text/html"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "deleteIfExists",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/rest/v1/invoices/migration/{accountId}": {
-      "post": {
-        "tags": [
-          "invoices"
-        ],
-        "summary": "Create a migration invoice",
-        "description": "",
-        "operationId": "createMigrationInvoice",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/IterableInvoiceItemJson"
-            }
-          },
-          {
-            "name": "accountId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
-          },
-          {
-            "name": "targetDate",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/InvoiceJson"
-            }
-          },
-          "400": {
-            "description": "Invalid account id or target datetime supplied"
-          }
-        }
-      }
-    },
     "/rest/v1/invoices/pagination": {
       "get": {
         "tags": [
           "invoices"
         ],
         "summary": "List invoices",
-        "description": "",
+        "description": "인보이스를 페이징하여 조회한다.",
         "operationId": "getInvoices",
         "produces": [
           "application/json"
@@ -4296,7 +5528,7 @@
           "invoices"
         ],
         "summary": "Search invoices",
-        "description": "",
+        "description": "주어진 검색어로 인보이스를 페이징하여 조회한다.",
         "operationId": "searchInvoices",
         "produces": [
           "application/json"
@@ -4353,132 +5585,13 @@
         }
       }
     },
-    "/rest/v1/invoices/template": {
-      "post": {
-        "tags": [
-          "invoices"
-        ],
-        "summary": "Upload the invoice template for the tenant",
-        "description": "",
-        "operationId": "uploadInvoiceTemplate",
-        "consumes": [
-          "text/html"
-        ],
-        "produces": [
-          "text/html"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "deleteIfExists",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/rest/v1/invoices/translation/{locale}": {
-      "post": {
-        "tags": [
-          "invoices"
-        ],
-        "summary": "Upload the invoice translation for the tenant",
-        "description": "",
-        "operationId": "uploadInvoiceTranslation",
-        "consumes": [
-          "text/plain"
-        ],
-        "produces": [
-          "text/plain"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "locale",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": ".*"
-          },
-          {
-            "name": "deleteIfExists",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
     "/rest/v1/invoices/{invoiceId}": {
       "get": {
         "tags": [
           "invoices"
         ],
         "summary": "Retrieve an invoice by id",
-        "description": "",
+        "description": "아이디 또는 인보이스 넘버에 해당하는 인보이스를 조회한다.",
         "operationId": "getInvoice",
         "produces": [
           "application/json"
@@ -4533,7 +5646,7 @@
           "invoices"
         ],
         "summary": "Adjust an invoice item",
-        "description": "",
+        "description": "인보이스에 포함된 인보이스 아이템 한건을 Adjust(가격 조정) 한다",
         "operationId": "adjustInvoiceItem",
         "consumes": [
           "application/json"
@@ -4598,7 +5711,7 @@
           "invoices"
         ],
         "summary": "Perform the invoice status transition from DRAFT to COMMITTED",
-        "description": "",
+        "description": "인보이스의 status 를 DRAFT 에서 COMMITTED 상태로 전환한다.",
         "operationId": "commitInvoice",
         "consumes": [
           "application/json"
@@ -4646,8 +5759,8 @@
           "invoices"
         ],
         "summary": "Retrieve invoice custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "인보이스의 커스텀 필드를 반환한다.",
+        "operationId": "getInvoiceCustomFields",
         "produces": [
           "application/json"
         ],
@@ -4687,8 +5800,8 @@
           "invoices"
         ],
         "summary": "Add custom fields to invoice",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "인보이스에 커스텀 필드를 추가한다.",
+        "operationId": "createInvoiceCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -4744,8 +5857,8 @@
           "invoices"
         ],
         "summary": "Remove custom fields from invoice",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "인보이스에 커스텀 필드를 삭제한다.",
+        "operationId": "deleteInvoiceCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -4798,7 +5911,7 @@
           "invoices"
         ],
         "summary": "Trigger an email notification for invoice",
-        "description": "",
+        "description": "인보이스를 구매자의 이메일 계정으로 발송한다.",
         "operationId": "triggerEmailNotificationForInvoice",
         "consumes": [
           "application/json"
@@ -4849,7 +5962,7 @@
           "invoices"
         ],
         "summary": "Render an invoice as HTML",
-        "description": "",
+        "description": "인보이스를 HTML 형식으로 출력한다.",
         "operationId": "getInvoiceAsHTML",
         "produces": [
           "text/html"
@@ -4882,8 +5995,8 @@
           "invoices"
         ],
         "summary": "Retrieve payments associated with an invoice",
-        "description": "",
-        "operationId": "getPayments",
+        "description": "인보이스에 관련된 결제 이력을 조회한다.",
+        "operationId": "getInvoicePayments",
         "produces": [
           "application/json"
         ],
@@ -4940,7 +6053,7 @@
           "invoices"
         ],
         "summary": "Trigger a payment for invoice",
-        "description": "",
+        "description": "인보이스의 잔액을 결제한다. 결제금액은 인보이스의 잔액보다 크지 않아야 한다.",
         "operationId": "createInstantPayment",
         "consumes": [
           "application/json"
@@ -4956,6 +6069,13 @@
             "schema": {
               "$ref": "#/definitions/InvoicePaymentJson"
             }
+          },
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
           },
           {
             "name": "externalPayment",
@@ -5009,8 +6129,8 @@
           "invoices"
         ],
         "summary": "Retrieve invoice tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "인보이스의 태그를 조회한다.",
+        "operationId": "getInvoiceTags",
         "produces": [
           "application/json"
         ],
@@ -5060,8 +6180,8 @@
           "invoices"
         ],
         "summary": "Add tags to invoice",
-        "description": "",
-        "operationId": "createTags",
+        "description": "인보이스에 태그를 추가한다.",
+        "operationId": "createInvoiceTags",
         "consumes": [
           "application/json"
         ],
@@ -5112,8 +6232,8 @@
           "invoices"
         ],
         "summary": "Remove tags from invoice",
-        "description": "",
-        "operationId": "deleteTags",
+        "description": "인보이스의 태그를 삭제한다.",
+        "operationId": "deleteInvoiceTags",
         "consumes": [
           "application/json"
         ],
@@ -5166,7 +6286,7 @@
           "invoices"
         ],
         "summary": "Delete a CBA item",
-        "description": "",
+        "description": "인보이스의 가상 화폐(cba) 아이템을 삭제한다.",
         "operationId": "deleteCBA",
         "consumes": [
           "application/json"
@@ -5224,147 +6344,13 @@
         }
       }
     },
-    "/rest/v1/invoices/{invoiceNumber}": {
-      "get": {
-        "tags": [
-          "invoices"
-        ],
-        "summary": "Retrieve an invoice by number",
-        "description": "",
-        "operationId": "getInvoiceByNumber",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "invoiceNumber",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "pattern": "[0-9]+",
-            "format": "int32"
-          },
-          {
-            "name": "withItems",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "withChildrenItems",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "audit",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "default": "NONE"
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Invoice not found"
-          },
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/InvoiceJson"
-            }
-          }
-        }
-      }
-    },
-    "/rest/v1/nodesInfo": {
-      "get": {
-        "tags": [
-          "nodesInfo"
-        ],
-        "summary": "Retrieve all the nodes infos",
-        "description": "",
-        "operationId": "getNodesInfo",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PluginInfoJson"
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "nodesInfo"
-        ],
-        "summary": "Trigger a node command",
-        "description": "",
-        "operationId": "triggerNodeCommand",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/NodeCommandJson"
-            }
-          },
-          {
-            "name": "localNodeOnly",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid node command supplied"
-          }
-        }
-      }
-    },
     "/rest/v1/overdue": {
       "get": {
         "tags": [
           "overdue"
         ],
         "summary": "Retrieve the overdue config as JSON",
-        "description": "",
+        "description": "조직의 연체 규칙을 조회한다.",
         "operationId": "getOverdueConfigJson",
         "produces": [
           "application/json"
@@ -5384,7 +6370,7 @@
           "overdue"
         ],
         "summary": "Upload the full overdue config as JSON",
-        "description": "",
+        "description": "조직의 연체 규칙을 갱신한다.",
         "operationId": "uploadOverdueConfigJson",
         "consumes": [
           "application/json"
@@ -5427,255 +6413,13 @@
         }
       }
     },
-    "/rest/v1/paymentGateways/hosted/form": {
-      "post": {
-        "tags": [
-          "paymentGateways"
-        ],
-        "summary": "Combo API to generate form data to redirect the customer to the gateway",
-        "description": "",
-        "operationId": "buildComboFormDescriptor",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/ComboHostedPaymentPageJson"
-            }
-          },
-          {
-            "name": "controlPluginName",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "pluginProperty",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/HostedPaymentPageFormDescriptorJson"
-            }
-          },
-          "400": {
-            "description": "Invalid data for Account or PaymentMethod"
-          }
-        }
-      }
-    },
-    "/rest/v1/paymentGateways/hosted/form/{accountId}": {
-      "post": {
-        "tags": [
-          "paymentGateways"
-        ],
-        "summary": "Generate form data to redirect the customer to the gateway",
-        "description": "",
-        "operationId": "buildFormDescriptor",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/HostedPaymentPageFieldsJson"
-            }
-          },
-          {
-            "name": "accountId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
-          },
-          {
-            "name": "paymentMethodId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "controlPluginName",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "pluginProperty",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Account not found"
-          },
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/HostedPaymentPageFormDescriptorJson"
-            }
-          },
-          "400": {
-            "description": "Invalid accountId supplied"
-          }
-        }
-      }
-    },
-    "/rest/v1/paymentGateways/notification/{pluginName}": {
-      "post": {
-        "tags": [
-          "paymentGateways"
-        ],
-        "summary": "Process a gateway notification",
-        "description": "The response is built by the appropriate plugin",
-        "operationId": "processNotification",
-        "consumes": [
-          "*/*"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pluginName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": ".*"
-          },
-          {
-            "name": "controlPluginName",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "pluginProperty",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
     "/rest/v1/paymentMethods": {
       "get": {
         "tags": [
           "paymentMethods"
         ],
         "summary": "Retrieve a payment method by external key",
-        "description": "",
+        "description": "external key 로 결제 수단을 조회한다.",
         "operationId": "getPaymentMethodByKey",
         "produces": [
           "application/json"
@@ -5731,7 +6475,7 @@
           "paymentMethods"
         ],
         "summary": "List payment methods",
-        "description": "",
+        "description": "결제 수단을 페이징 하여 조회한다.",
         "operationId": "getPaymentMethods",
         "produces": [
           "application/json"
@@ -5803,7 +6547,7 @@
           "paymentMethods"
         ],
         "summary": "Search payment methods",
-        "description": "",
+        "description": "주어진 검색어로 결제 수단을 페이징 하여 조회한다.",
         "operationId": "searchPaymentMethods",
         "produces": [
           "application/json"
@@ -5882,7 +6626,7 @@
           "paymentMethods"
         ],
         "summary": "Retrieve a payment method by id",
-        "description": "",
+        "description": "아이디로 결제 수단을 조회한다.",
         "operationId": "getPaymentMethod",
         "produces": [
           "application/json"
@@ -5940,7 +6684,7 @@
           "paymentMethods"
         ],
         "summary": "Delete a payment method",
-        "description": "",
+        "description": "결제 수단을 삭제한다.",
         "operationId": "deletePaymentMethod",
         "produces": [
           "application/json"
@@ -6012,8 +6756,8 @@
           "paymentMethods"
         ],
         "summary": "Retrieve payment method custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "결제 수단의 커스텀 필드를 조회한다.",
+        "operationId": "getPaymentMethodCustomFields",
         "produces": [
           "application/json"
         ],
@@ -6053,8 +6797,8 @@
           "paymentMethods"
         ],
         "summary": "Add custom fields to payment method",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "결제 수단에 커스텀 필드를 추가한다.",
+        "operationId": "createPaymentMethodCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -6110,8 +6854,8 @@
           "paymentMethods"
         ],
         "summary": "Remove custom fields from payment method",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "결제 수단의 커스텀 필드를 삭제한다.",
+        "operationId": "deletePaymentMethodCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -6164,7 +6908,7 @@
           "paymentTransactions"
         ],
         "summary": "Mark a pending payment transaction as succeeded or failed",
-        "description": "",
+        "description": "Pending 상태인 결제 트랜잭션을 succeeded 또는 failed 상태로 변경한다.",
         "operationId": "notifyStateChanged",
         "consumes": [
           "application/json"
@@ -6223,8 +6967,8 @@
           "paymentTransactions"
         ],
         "summary": "Retrieve payment transaction custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "결제 트랜잭션의 커스텀 필드를 조회한다.",
+        "operationId": "getPaymentTransactionCustomFields",
         "produces": [
           "application/json"
         ],
@@ -6264,8 +7008,8 @@
           "paymentTransactions"
         ],
         "summary": "Add custom fields to payment transaction",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "결제 트랜잭션에 커스텀 필드를 추가한다.",
+        "operationId": "createPaymentTransactionCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -6321,8 +7065,8 @@
           "paymentTransactions"
         ],
         "summary": "Remove custom fields from payment transaction",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "결제 트랜잭션의 커스텀 필드를 삭제한다.",
+        "operationId": "deletePaymentTransactionCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -6375,8 +7119,8 @@
           "paymentTransactions"
         ],
         "summary": "Retrieve payment transaction tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "결제 트랜잭션의 태그를 조회한다.",
+        "operationId": "getPaymentTransactionTags",
         "produces": [
           "application/json"
         ],
@@ -6426,8 +7170,8 @@
           "paymentTransactions"
         ],
         "summary": "Add tags to payment transaction",
-        "description": "",
-        "operationId": "createTags",
+        "description": "결제 트랜잭션에 태그를 추가한다.",
+        "operationId": "createPaymentTransactionTags",
         "consumes": [
           "application/json"
         ],
@@ -6478,8 +7222,8 @@
           "paymentTransactions"
         ],
         "summary": "Remove tags from payment transaction",
-        "description": "",
-        "operationId": "deleteTags",
+        "description": "결제 트랜잭션에 태그를 삭제한다.",
+        "operationId": "deletePaymentTransactionTags",
         "consumes": [
           "application/json"
         ],
@@ -6532,7 +7276,7 @@
           "payments"
         ],
         "summary": "Retrieve a payment by external key",
-        "description": "",
+        "description": "external key 로 결제 이력을 조회한다.",
         "operationId": "getPaymentByExternalKey",
         "produces": [
           "application/json"
@@ -6593,7 +7337,7 @@
           "payments"
         ],
         "summary": "Capture an existing authorization",
-        "description": "",
+        "description": "paymentExternalKey 사용. PG 사를 통해 Authorization (결제 승인 대기) 중인 결제 이력에 대해, 결제 확인을 한다. 이후 PG 사에서 판매자(조직) 의 구좌에 입금처리가 완료된다.",
         "operationId": "captureAuthorizationByExternalKey",
         "consumes": [
           "application/json"
@@ -6678,7 +7422,7 @@
           "payments"
         ],
         "summary": "Complete an existing transaction",
-        "description": "",
+        "description": "paymentExternalKey 사용. 결제 트랜잭션을 Complete 상태로 전환한다.",
         "operationId": "completeTransactionByExternalKey",
         "consumes": [
           "application/json"
@@ -6763,7 +7507,7 @@
           "payments"
         ],
         "summary": "Void an existing payment",
-        "description": "",
+        "description": "paymentExternalKey 사용. PG 사를 통해 Authorization (결제 승인 대기) 중인 결제 이력에 대해 결제 취소를 한다.",
         "operationId": "voidPaymentByExternalKey",
         "consumes": [
           "application/json"
@@ -6850,7 +7594,7 @@
           "payments"
         ],
         "summary": "Cancels a scheduled payment attempt retry",
-        "description": "",
+        "description": "transactionExternalKey 사용. 결제 재시도 예약중인 결제 트랜잭션을 예약취소 시킨다.",
         "operationId": "cancelScheduledPaymentTransactionByExternalKey",
         "consumes": [
           "application/json"
@@ -6897,7 +7641,7 @@
           "payments"
         ],
         "summary": "Record a chargeback reversal",
-        "description": "",
+        "description": "paymentExternalKey 사용. 결제이력의 chargeback(지불 거절) 요청을 취소한다.",
         "operationId": "chargebackReversalPaymentByExternalKey",
         "consumes": [
           "application/json"
@@ -6984,7 +7728,7 @@
           "payments"
         ],
         "summary": "Record a chargeback",
-        "description": "",
+        "description": "paymentExternalKey 사용. 결제이력에 대해 chargeback(지불 거절) 요청을 한다.",
         "operationId": "chargebackPaymentByExternalKey",
         "consumes": [
           "application/json"
@@ -7071,7 +7815,7 @@
           "payments"
         ],
         "summary": "Combo api to create a new payment transaction on a existing (or not) account ",
-        "description": "",
+        "description": "구매자 생성과 결제 수단 등록, 결제 트랜잭션 생성을 한번에 진행할 수 있도록 한다.",
         "operationId": "createComboPayment",
         "consumes": [
           "application/json"
@@ -7148,7 +7892,7 @@
           "payments"
         ],
         "summary": "Get payments",
-        "description": "",
+        "description": "결제 이력을 페이징 하여 조회한다.",
         "operationId": "getPayments",
         "produces": [
           "application/json"
@@ -7227,7 +7971,7 @@
           "payments"
         ],
         "summary": "Refund an existing payment",
-        "description": "",
+        "description": "paymentExternalKey 사용. 결제 이력에 대해 환불 처리한다.",
         "operationId": "refundPaymentByExternalKey",
         "consumes": [
           "application/json"
@@ -7314,7 +8058,7 @@
           "payments"
         ],
         "summary": "Search payments",
-        "description": "",
+        "description": "주어진 검색어로 결제 이력을 페이징 하여 조회한다.",
         "operationId": "searchPayments",
         "produces": [
           "application/json"
@@ -7400,7 +8144,7 @@
           "payments"
         ],
         "summary": "Retrieve a payment by id",
-        "description": "",
+        "description": "아이디로 결제 이력을 조회한다.",
         "operationId": "getPayment",
         "produces": [
           "application/json"
@@ -7465,7 +8209,7 @@
           "payments"
         ],
         "summary": "Capture an existing authorization",
-        "description": "",
+        "description": "PG 사를 통해 Authorization (결제 승인 대기) 중인 결제 이력에 대해, 결제 확인을 한다. 이후 PG 사에서 판매자(조직) 의 구좌에 입금처리가 완료된다.",
         "operationId": "captureAuthorization",
         "consumes": [
           "application/json"
@@ -7560,7 +8304,7 @@
           "payments"
         ],
         "summary": "Complete an existing transaction",
-        "description": "",
+        "description": "결제 트랜잭션을 Complete 처리 한다.",
         "operationId": "completeTransaction",
         "consumes": [
           "application/json"
@@ -7655,7 +8399,7 @@
           "payments"
         ],
         "summary": "Void an existing payment",
-        "description": "",
+        "description": "PG 사를 통해 Authorization (결제 승인 대기) 중인 결제 이력에 대해, 결제 취소를 한다.",
         "operationId": "voidPayment",
         "consumes": [
           "application/json"
@@ -7752,7 +8496,7 @@
           "payments"
         ],
         "summary": "Record a chargeback reversal",
-        "description": "",
+        "description": "결제이력의 chargeback(지불 거절) 요청을 취소한다.",
         "operationId": "chargebackReversalPayment",
         "consumes": [
           "application/json"
@@ -7849,7 +8593,7 @@
           "payments"
         ],
         "summary": "Record a chargeback",
-        "description": "",
+        "description": "결제이력에 chargeback(지불 거절) 요청을 한다.",
         "operationId": "chargebackPayment",
         "consumes": [
           "application/json"
@@ -7946,8 +8690,8 @@
           "payments"
         ],
         "summary": "Retrieve payment custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "결제 이력의 커스텀 필드를 조회한다.",
+        "operationId": "getPaymentCustomFields",
         "produces": [
           "application/json"
         ],
@@ -7987,8 +8731,8 @@
           "payments"
         ],
         "summary": "Add custom fields to payment",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "결제 이력에 커스텀 필드를 추가한다.",
+        "operationId": "createPaymentCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -8043,9 +8787,9 @@
         "tags": [
           "payments"
         ],
-        "summary": "Remove custom fields from payment payment",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "summary": "Remove custom fields from payment",
+        "description": "결제 이력의 커스텀 필드를 삭제한다.",
+        "operationId": "deletePaymentCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -8098,7 +8842,7 @@
           "payments"
         ],
         "summary": "Refund an existing payment",
-        "description": "",
+        "description": "결제이력에 대해 환불처리를 한다.",
         "operationId": "refundPayment",
         "consumes": [
           "application/json"
@@ -8195,8 +8939,8 @@
           "payments"
         ],
         "summary": "Retrieve payment payment tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "결제 이력의 태그를 조회한다.",
+        "operationId": "getPaymentTags",
         "produces": [
           "application/json"
         ],
@@ -8245,9 +8989,9 @@
         "tags": [
           "payments"
         ],
-        "summary": "Add tags to payment payment",
-        "description": "",
-        "operationId": "createTags",
+        "summary": "Add tags to payment",
+        "description": "결제 이력에 태그를 추가한다.",
+        "operationId": "createPaymentTags",
         "consumes": [
           "application/json"
         ],
@@ -8297,9 +9041,9 @@
         "tags": [
           "payments"
         ],
-        "summary": "Remove tags from payment payment",
-        "description": "",
-        "operationId": "deleteTags",
+        "summary": "Remove tags from payment",
+        "description": "결제 이력의 태그를 삭제한다.",
+        "operationId": "deletePaymentTags",
         "consumes": [
           "application/json"
         ],
@@ -8352,7 +9096,7 @@
           "payments"
         ],
         "summary": "Cancels a scheduled payment attempt retry",
-        "description": "",
+        "description": "결제 재시도 예약중인 결제 트랜잭션을 예약취소 시킨다.",
         "operationId": "cancelScheduledPaymentTransactionById",
         "consumes": [
           "application/json"
@@ -8394,38 +9138,13 @@
         }
       }
     },
-    "/rest/v1/pluginsInfo": {
-      "get": {
-        "tags": [
-          "pluginsInfo"
-        ],
-        "summary": "Retrieve the list of registered plugins",
-        "description": "",
-        "operationId": "getPluginsInfo",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PluginInfoJson"
-              }
-            }
-          }
-        }
-      }
-    },
     "/rest/v1/subscriptions": {
       "post": {
         "tags": [
           "subscriptions"
         ],
         "summary": "Create an entitlement",
-        "description": "",
+        "description": "BASE 또는 ADD_ON 구독을 생성한다.",
         "operationId": "createEntitlement",
         "consumes": [
           "application/json"
@@ -8531,7 +9250,7 @@
           "subscriptions"
         ],
         "summary": "Create an entitlement with addOn products",
-        "description": "",
+        "description": "ADD_ON 구독이 포함된 BASE 구독을 생성한다.",
         "operationId": "createEntitlementWithAddOns",
         "consumes": [
           "application/json"
@@ -8633,7 +9352,7 @@
           "subscriptions"
         ],
         "summary": "Create multiple entitlements with addOn products",
-        "description": "",
+        "description": "ADD_ON 구독이 포함된 BASE 구독을 다수 생성한다.",
         "operationId": "createEntitlementsWithAddOns",
         "consumes": [
           "application/json"
@@ -8735,7 +9454,7 @@
           "subscriptions"
         ],
         "summary": "Retrieve a subscription by id",
-        "description": "",
+        "description": "아이디로 구독을 조회한다.",
         "operationId": "getEntitlement",
         "produces": [
           "application/json"
@@ -8776,7 +9495,7 @@
           "subscriptions"
         ],
         "summary": "Change entitlement plan",
-        "description": "",
+        "description": "구독의 플랜을 변경한다.",
         "operationId": "changeEntitlementPlan",
         "consumes": [
           "application/json"
@@ -8870,7 +9589,7 @@
           "subscriptions"
         ],
         "summary": "Cancel an entitlement plan",
-        "description": "",
+        "description": "구독을 취소(cancel) 한다. 취소된 구독은 완전히 종료된 것으로 재시작 할 수 없다.",
         "operationId": "cancelEntitlementPlan",
         "produces": [
           "application/json"
@@ -8968,7 +9687,7 @@
           "subscriptions"
         ],
         "summary": "Update the BCD associated to a subscription",
-        "description": "",
+        "description": "구독의 결제 주기 날짜를 변경한다.",
         "operationId": "updateSubscriptionBCD",
         "consumes": [
           "application/json"
@@ -9030,7 +9749,7 @@
           "subscriptions"
         ],
         "summary": "Block a subscription",
-        "description": "",
+        "description": "구독의 Block 상태를 설정한다.",
         "operationId": "addSubscriptionBlockingState",
         "consumes": [
           "application/json"
@@ -9102,8 +9821,8 @@
           "subscriptions"
         ],
         "summary": "Retrieve subscription custom fields",
-        "description": "",
-        "operationId": "getCustomFields",
+        "description": "구독의 커스텀 필드를 조회한다.",
+        "operationId": "getSubscriptionCustomFields",
         "produces": [
           "application/json"
         ],
@@ -9143,8 +9862,8 @@
           "subscriptions"
         ],
         "summary": "Add custom fields to subscription",
-        "description": "",
-        "operationId": "createCustomFields",
+        "description": "구독에 커스텀 필드를 추가한다.",
+        "operationId": "createSubscriptionCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -9200,8 +9919,8 @@
           "subscriptions"
         ],
         "summary": "Remove custom fields from subscription",
-        "description": "",
-        "operationId": "deleteCustomFields",
+        "description": "구독에 커스텀 필드를 삭제한다.",
+        "operationId": "deleteSubscriptionCustomFields",
         "consumes": [
           "application/json"
         ],
@@ -9254,8 +9973,8 @@
           "subscriptions"
         ],
         "summary": "Retrieve subscription tags",
-        "description": "",
-        "operationId": "getTags",
+        "description": "구독의 태그를 조회한다.",
+        "operationId": "getSubscriptionTags",
         "produces": [
           "application/json"
         ],
@@ -9305,8 +10024,8 @@
           "subscriptions"
         ],
         "summary": "Add tags to subscription",
-        "description": "",
-        "operationId": "createTags",
+        "description": "구독에 태그를 추가하다.",
+        "operationId": "createSubscriptionTags",
         "consumes": [
           "application/json"
         ],
@@ -9357,8 +10076,8 @@
           "subscriptions"
         ],
         "summary": "Remove tags from subscription",
-        "description": "",
-        "operationId": "deleteTags",
+        "description": "구독에 태그를 삭제한다.",
+        "operationId": "deleteSubscriptionTags",
         "consumes": [
           "application/json"
         ],
@@ -9411,7 +10130,7 @@
           "subscriptions"
         ],
         "summary": "Un-cancel an entitlement",
-        "description": "",
+        "description": "구독 중단(cancel) 요청 예약 상태일때, 예약일이 당도하지 않았다면, 구독 중단 예약을 취소할 수 있다.",
         "operationId": "uncancelEntitlementPlan",
         "produces": [
           "application/json"
@@ -9469,7 +10188,7 @@
           "tagDefinitions"
         ],
         "summary": "List tag definitions",
-        "description": "",
+        "description": "태그 정의 목록을 조회한다. 이 목록에는 빌링 시스템에서 쓰이는 필수 태그 및 사용자 정의 태그들이 포함된다.",
         "operationId": "getTagDefinitions",
         "produces": [
           "application/json"
@@ -9500,7 +10219,7 @@
           "tagDefinitions"
         ],
         "summary": "Create a tag definition",
-        "description": "",
+        "description": "태그 정의를 추가한다.",
         "operationId": "createTagDefinition",
         "consumes": [
           "application/json"
@@ -9549,7 +10268,7 @@
           "tagDefinitions"
         ],
         "summary": "Retrieve a tag definition",
-        "description": "",
+        "description": "아이디로 태그 정의를 조회한다.",
         "operationId": "getTagDefinition",
         "produces": [
           "application/json"
@@ -9587,7 +10306,7 @@
           "tagDefinitions"
         ],
         "summary": "Delete a tag definition",
-        "description": "",
+        "description": "태그 정의를 삭제한다.",
         "operationId": "deleteTagDefinition",
         "produces": [
           "application/json"
@@ -9632,7 +10351,7 @@
           "tags"
         ],
         "summary": "List tags",
-        "description": "",
+        "description": "태그를 페이징하여 조회한다.",
         "operationId": "getTags",
         "produces": [
           "application/json"
@@ -9681,7 +10400,7 @@
           "tags"
         ],
         "summary": "Search tags",
-        "description": "",
+        "description": "주어진 검색어로 태그를 페이징 하여 조회한다.",
         "operationId": "searchTags",
         "produces": [
           "application/json"
@@ -9737,7 +10456,7 @@
           "tenants"
         ],
         "summary": "Retrieve a tenant by its API key",
-        "description": "",
+        "description": "api key 로 테넌트를 조회한다.",
         "operationId": "getTenantByApiKey",
         "produces": [
           "application/json"
@@ -9767,7 +10486,7 @@
           "tenants"
         ],
         "summary": "Create a tenant",
-        "description": "",
+        "description": "테넌트를 생성한다.",
         "operationId": "createTenant",
         "consumes": [
           "application/json"
@@ -9817,116 +10536,13 @@
         }
       }
     },
-    "/rest/v1/tenants/registerNotificationCallback": {
-      "get": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Retrieve a push notification",
-        "description": "",
-        "operationId": "getPushNotificationCallbacks",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/TenantKeyJson"
-            }
-          },
-          "400": {
-            "description": "Invalid tenantId supplied"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Create a push notification",
-        "description": "",
-        "operationId": "registerPushNotificationCallback",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "cb",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid tenantId supplied"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Delete a push notification",
-        "description": "",
-        "operationId": "deletePushNotificationCallbacks",
-        "parameters": [
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid tenantId supplied"
-          }
-        }
-      }
-    },
     "/rest/v1/tenants/uploadPerTenantConfig": {
       "get": {
         "tags": [
           "tenants"
         ],
         "summary": "Retrieve a per tenant configuration (system properties)",
-        "description": "",
+        "description": "테넌트 고유 시스템 프로퍼티를 조회한다.",
         "operationId": "getPerTenantConfiguration",
         "produces": [
           "application/json"
@@ -9949,7 +10565,7 @@
           "tenants"
         ],
         "summary": "Add a per tenant configuration (system properties)",
-        "description": "",
+        "description": "테넌트 고유 시스템 프로퍼티를 추가한다.",
         "operationId": "uploadPerTenantConfiguration",
         "consumes": [
           "text/plain"
@@ -9996,7 +10612,7 @@
           "tenants"
         ],
         "summary": "Delete a per tenant configuration (system properties)",
-        "description": "",
+        "description": "테넌트 고유 시스템 프로퍼티를 삭제한다.",
         "operationId": "deletePerTenantConfiguration",
         "parameters": [
           {
@@ -10031,7 +10647,7 @@
           "tenants"
         ],
         "summary": "Retrieve a per tenant key value based on key prefix",
-        "description": "",
+        "description": "주어진 프로퍼티 키에 해당하는 테넌트 고유 시스템 프로퍼티를 조회한다.",
         "operationId": "getAllPluginConfiguration",
         "produces": [
           "application/json"
@@ -10064,7 +10680,7 @@
           "tenants"
         ],
         "summary": "Retrieve a per tenant configuration for a plugin",
-        "description": "",
+        "description": "테넌트 플러그인 설정값을 조회한다.",
         "operationId": "getPluginConfiguration",
         "produces": [
           "application/json"
@@ -10095,7 +10711,7 @@
           "tenants"
         ],
         "summary": "Add a per tenant configuration for a plugin",
-        "description": "",
+        "description": "테넌트 플러그인 설정값을 추가한다.",
         "operationId": "uploadPluginConfiguration",
         "consumes": [
           "text/plain"
@@ -10149,135 +10765,8 @@
           "tenants"
         ],
         "summary": "Delete a per tenant configuration for a plugin",
-        "description": "",
+        "description": "테넌트 플러그인 설정값을 삭제한다.",
         "operationId": "deletePluginConfiguration",
-        "parameters": [
-          {
-            "name": "pluginName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": ".*"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid tenantId supplied"
-          }
-        }
-      }
-    },
-    "/rest/v1/tenants/uploadPluginPaymentStateMachineConfig/{pluginName}": {
-      "get": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Retrieve a per tenant payment state machine for a plugin",
-        "description": "",
-        "operationId": "getPluginPaymentStateMachineConfig",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "pluginName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": ".*"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/TenantKeyJson"
-            }
-          },
-          "400": {
-            "description": "Invalid tenantId supplied"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Add a per tenant payment state machine for a plugin",
-        "description": "",
-        "operationId": "uploadPluginPaymentStateMachineConfig",
-        "consumes": [
-          "text/plain"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pluginName",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": ".*"
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid tenantId supplied"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Delete a per tenant payment state machine for a plugin",
-        "description": "",
-        "operationId": "deletePluginPaymentStateMachineConfig",
         "parameters": [
           {
             "name": "pluginName",
@@ -10318,7 +10807,7 @@
           "tenants"
         ],
         "summary": "Retrieve a per tenant user key/value",
-        "description": "",
+        "description": "테넌트의 사용자 key value 를 조회한다.",
         "operationId": "getUserKeyValue",
         "produces": [
           "application/json"
@@ -10349,7 +10838,7 @@
           "tenants"
         ],
         "summary": "Add a per tenant user key/value",
-        "description": "",
+        "description": "테넌트의 사용자 key value 를 추가한다.",
         "operationId": "insertUserKeyValue",
         "consumes": [
           "text/plain"
@@ -10403,7 +10892,7 @@
           "tenants"
         ],
         "summary": "Delete  a per tenant user key/value",
-        "description": "",
+        "description": "테넌트의 사용자 key value 를 삭제한다.",
         "operationId": "deleteUserKeyValue",
         "parameters": [
           {
@@ -10445,7 +10934,7 @@
           "tenants"
         ],
         "summary": "Retrieve a tenant by id",
-        "description": "",
+        "description": "아이디로 테넌트를 조회한다.",
         "operationId": "getTenant",
         "produces": [
           "application/json"
@@ -10481,7 +10970,7 @@
           "test"
         ],
         "summary": "Get the current time",
-        "description": "",
+        "description": "빌링 시스템의 현재 시각을 조회한다.",
         "operationId": "getCurrentTime",
         "produces": [
           "application/json"
@@ -10511,7 +11000,7 @@
           "test"
         ],
         "summary": "Set the current time",
-        "description": "",
+        "description": "빌링 시스템의 현재 시각을 설정한다.",
         "operationId": "setTestClockTime",
         "produces": [
           "application/json"
@@ -10555,7 +11044,7 @@
           "test"
         ],
         "summary": "Move the current time",
-        "description": "",
+        "description": "빌링 시스템의 현재 시각을 주어진 값만큼 이동시킨다.",
         "operationId": "updateTestClockTime",
         "produces": [
           "application/json"
@@ -10623,7 +11112,7 @@
           "test"
         ],
         "summary": "Wait for all available bus events and notifications to be processed",
-        "description": "",
+        "description": "빌링 시스템의 모든 큐 작업과 이메일 발송 작업이 끝날때까지 대기한다.",
         "operationId": "waitForQueuesToComplete",
         "parameters": [
           {
@@ -10648,7 +11137,7 @@
           "usages"
         ],
         "summary": "Record usage for a subscription",
-        "description": "",
+        "description": "구독에 usage 사용량을 추가한다.",
         "operationId": "recordUsage",
         "consumes": [
           "application/json"
@@ -10697,7 +11186,7 @@
           "usages"
         ],
         "summary": "Retrieve usage for a subscription",
-        "description": "",
+        "description": "주어진 기간동안의 구독의 모든 usage 사용량을 조회한다.",
         "operationId": "getAllUsage",
         "produces": [
           "application/json"
@@ -10742,7 +11231,7 @@
           "usages"
         ],
         "summary": "Retrieve usage for a subscription and unit type",
-        "description": "",
+        "description": "주어진 unit 과 주어진 기간동안의 구독의 usage 사용량을 조회한다.",
         "operationId": "getUsage",
         "produces": [
           "application/json"
@@ -10824,13 +11313,11 @@
       "type": "object",
       "properties": {
         "unitType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "amount": {
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
         }
       }
     },
@@ -10838,16 +11325,13 @@
       "type": "object",
       "properties": {
         "product": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "plan": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "priceList": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "finalPhaseBillingPeriod": {
           "type": "string",
@@ -10877,73 +11361,58 @@
       "properties": {
         "targetInvoiceId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "paymentId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "paymentNumber": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "paymentExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "authAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "capturedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "purchasedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "refundedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "creditedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "paymentMethodId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "transactions": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PaymentTransactionJson"
           }
         },
         "paymentAttempts": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PaymentAttemptJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -10971,16 +11440,13 @@
       "type": "object",
       "properties": {
         "key": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "value": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "isUpdatable": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         }
       }
@@ -10994,20 +11460,16 @@
       "properties": {
         "tenantId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "externalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "apiKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "apiSecret": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "auditLogs": {
           "type": "array",
@@ -11022,12 +11484,10 @@
       "properties": {
         "initialReevaluationInterval": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         },
         "overdueStates": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/OverdueStateConfigJson"
           }
@@ -11038,21 +11498,17 @@
       "type": "object",
       "properties": {
         "principal": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "isAuthenticated": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "isRemembered": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "session": {
-          "readOnly": true,
           "$ref": "#/definitions/SessionJson"
         }
       }
@@ -11061,75 +11517,60 @@
       "type": "object",
       "properties": {
         "amount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "status": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "creditAdj": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "refundAdj": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "invoiceId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "invoiceDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "targetDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "invoiceNumber": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "balance": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "credits": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/CreditJson"
           }
         },
         "items": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/InvoiceItemJson"
           }
         },
         "isParentInvoice": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -11143,35 +11584,28 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "isClearState": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "condition": {
-          "readOnly": true,
           "$ref": "#/definitions/OverdueConditionJson"
         },
         "externalMessage": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "blockChanges": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "disableEntitlement": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "subscriptionCancellationPolicy": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "END_OF_TERM",
             "IMMEDIATE",
@@ -11180,8 +11614,7 @@
         },
         "autoReevaluationIntervalDays": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         }
       }
     },
@@ -11189,12 +11622,10 @@
       "type": "object",
       "properties": {
         "key": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "value": {
-          "type": "object",
-          "readOnly": true
+          "type": "object"
         }
       }
     },
@@ -11202,29 +11633,23 @@
       "type": "object",
       "properties": {
         "changeType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "changeDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "changedBy": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "reasonCode": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "comments": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "userToken": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         }
       }
     },
@@ -11232,17 +11657,14 @@
       "type": "object",
       "properties": {
         "externalPaymentMethodId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "isDefaultPaymentMethod": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "properties": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PluginPropertyJson"
           }
@@ -11256,12 +11678,10 @@
       "type": "object",
       "properties": {
         "timeSinceEarliestUnpaidInvoiceEqualsOrExceeds": {
-          "readOnly": true,
           "$ref": "#/definitions/DurationJson"
         },
         "controlTagInclusion": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "AUTO_PAY_OFF",
             "AUTO_INVOICING_OFF",
@@ -11274,7 +11694,6 @@
         },
         "controlTagExclusion": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "AUTO_PAY_OFF",
             "AUTO_INVOICING_OFF",
@@ -11287,12 +11706,10 @@
         },
         "numberOfUnpaidInvoicesEqualsOrExceeds": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         },
         "responseForLastFailedPayment": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "string",
             "enum": [
@@ -11310,8 +11727,7 @@
           }
         },
         "totalUnpaidInvoiceBalanceEqualsOrExceeds": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         }
       }
     },
@@ -11320,22 +11736,18 @@
       "properties": {
         "subscriptionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "startDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "endDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "rolledUpUnits": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/RolledUpUnitJson"
           }
@@ -11399,87 +11811,69 @@
       "properties": {
         "invoiceItemId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "invoiceId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "linkedInvoiceItemId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "childAccountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "bundleId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "subscriptionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "planName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "phaseName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "usageName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "itemType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "description": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "startDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "endDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "amount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "childItems": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/InvoiceItemJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -11490,12 +11884,10 @@
       "type": "object",
       "properties": {
         "unitType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "usageRecords": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/UsageRecordJson"
           }
@@ -11510,12 +11902,10 @@
       ],
       "properties": {
         "role": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "permissions": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "string"
           }
@@ -11531,32 +11921,26 @@
       "properties": {
         "id": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "isControlTag": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "name": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "description": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "applicableObjectTypes": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "string"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -11586,39 +11970,31 @@
       ],
       "properties": {
         "creditAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "invoiceId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "invoiceNumber": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "description": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -11630,17 +12006,14 @@
       "properties": {
         "currentUtcTime": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "timeZone": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "localDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         }
       }
     },
@@ -11849,16 +12222,13 @@
       "type": "object",
       "properties": {
         "planId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "productName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "productCategory": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "BASE",
             "ADD_ON",
@@ -11867,7 +12237,6 @@
         },
         "currency": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "AED",
             "AFN",
@@ -12037,12 +12406,10 @@
           ]
         },
         "amount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "billingPeriod": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "DAILY",
             "WEEKLY",
@@ -12058,12 +12425,10 @@
         },
         "trialLength": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         },
         "trialTimeUnit": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "DAYS",
             "MONTHS",
@@ -12073,7 +12438,6 @@
         },
         "availableBaseProducts": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "string"
           }
@@ -12084,33 +12448,26 @@
       "type": "object",
       "properties": {
         "bundleSymbolicName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "pluginKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "pluginName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "version": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "state": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "isSelectedForStart": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "services": {
           "type": "array",
-          "readOnly": true,
           "uniqueItems": true,
           "items": {
             "$ref": "#/definitions/PluginServiceInfoJson"
@@ -12126,7 +12483,6 @@
       "properties": {
         "baseEntitlementAndAddOns": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/SubscriptionJson"
           }
@@ -12141,32 +12497,26 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "bundleId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "externalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "subscriptions": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/SubscriptionJson"
           }
         },
         "timeline": {
-          "readOnly": true,
           "$ref": "#/definitions/BundleTimelineJson"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -12177,27 +12527,22 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "startDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "lastAccessDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "timeout": {
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
         },
         "host": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         }
       }
     },
@@ -12229,27 +12574,22 @@
       "properties": {
         "kbAccountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "formMethod": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "formUrl": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "formFields": {
           "type": "object",
-          "readOnly": true,
           "additionalProperties": {
             "type": "object"
           }
         },
         "properties": {
           "type": "object",
-          "readOnly": true,
           "additionalProperties": {
             "type": "object"
           }
@@ -12398,26 +12738,21 @@
       "properties": {
         "transactionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "transactionExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "paymentId": {
           "type": "string",
           "format": "uuid",
-          "description": "Associated payment id, required when notifying state transitions",
-          "readOnly": true
+          "description": "Associated payment id, required when notifying state transitions"
         },
         "paymentExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "transactionType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "AUTHORIZE",
             "CAPTURE",
@@ -12430,13 +12765,11 @@
         },
         "amount": {
           "type": "number",
-          "description": "Transaction amount, required except for void operations",
-          "readOnly": true
+          "description": "Transaction amount, required except for void operations"
         },
         "currency": {
           "type": "string",
           "description": "Amount currency (account currency unless specified)",
-          "readOnly": true,
           "enum": [
             "AED",
             "AFN",
@@ -12607,21 +12940,17 @@
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "processedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "processedCurrency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "status": {
           "type": "string",
           "description": "Transaction status, required for state change notifications",
-          "readOnly": true,
           "enum": [
             "SUCCESS",
             "UNKNOWN",
@@ -12632,43 +12961,35 @@
           ]
         },
         "gatewayErrorCode": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "gatewayErrorMsg": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "firstPaymentReferenceId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "secondPaymentReferenceId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "properties": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PluginPropertyJson"
           }
         },
         "isAdjusted": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "adjustments": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/InvoiceItemJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -12680,16 +13001,13 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "externalMessage": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "daysBetweenPaymentRetries": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "integer",
             "format": "int32"
@@ -12697,23 +13015,19 @@
         },
         "disableEntitlementAndChangesBlocked": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "blockChanges": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "clearState": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "reevaluationIntervalDays": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         }
       }
     },
@@ -12725,16 +13039,13 @@
       "properties": {
         "systemCommandType": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "nodeCommandType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "nodeCommandProperties": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/NodeCommandPropertyJson"
           }
@@ -12746,68 +13057,54 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "paymentId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "paymentNumber": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "paymentExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "authAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "capturedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "purchasedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "refundedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "creditedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "paymentMethodId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "transactions": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PaymentTransactionJson"
           }
         },
         "paymentAttempts": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PaymentAttemptJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -12823,17 +13120,14 @@
       "properties": {
         "customFieldId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "objectId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "objectType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "ACCOUNT",
             "ACCOUNT_EMAIL",
@@ -12858,16 +13152,13 @@
           ]
         },
         "name": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "value": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -12947,28 +13238,22 @@
       "type": "object",
       "properties": {
         "account": {
-          "readOnly": true,
           "$ref": "#/definitions/AccountJson"
         },
         "paymentMethod": {
-          "readOnly": true,
           "$ref": "#/definitions/PaymentMethodJson"
         },
         "transaction": {
-          "readOnly": true,
           "$ref": "#/definitions/PaymentTransactionJson"
         },
         "paymentMethodPluginProperties": {
-          "readOnly": true,
           "$ref": "#/definitions/IterablePluginPropertyJson"
         },
         "transactionPluginProperties": {
-          "readOnly": true,
           "$ref": "#/definitions/IterablePluginPropertyJson"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -12982,24 +13267,19 @@
       "type": "object",
       "properties": {
         "eventId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "billingPeriod": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "product": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "priceList": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "eventType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "START_ENTITLEMENT",
             "START_BILLING",
@@ -13016,29 +13296,23 @@
         },
         "isBlockedBilling": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "isBlockedEntitlement": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "serviceName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "serviceStateName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "phase": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -13054,30 +13328,24 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "paymentMethodId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "paymentExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "transactionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "transactionExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "transactionType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "AUTHORIZE",
             "CAPTURE",
@@ -13090,22 +13358,18 @@
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "stateName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "amount": {
           "type": "number",
-          "description": "Transaction amount, required except for void operations",
-          "readOnly": true
+          "description": "Transaction amount, required except for void operations"
         },
         "currency": {
           "type": "string",
           "description": "Amount currency (account currency unless specified)",
-          "readOnly": true,
           "enum": [
             "AED",
             "AFN",
@@ -13275,19 +13539,16 @@
           ]
         },
         "pluginName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "pluginProperties": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PluginPropertyJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -13317,16 +13578,13 @@
       "type": "object",
       "properties": {
         "lastSuccessPaymentState": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "currentPaymentStateName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "transactionStatus": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         }
       }
     },
@@ -13335,12 +13593,10 @@
       "properties": {
         "tagId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "objectType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "ACCOUNT",
             "ACCOUNT_EMAIL",
@@ -13366,21 +13622,17 @@
         },
         "objectId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "tagDefinitionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "tagDefinitionName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -13391,12 +13643,10 @@
       "type": "object",
       "properties": {
         "serviceTypeName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "registrationName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         }
       }
     },
@@ -13404,12 +13654,10 @@
       "type": "object",
       "properties": {
         "key": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "values": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "string"
           }
@@ -13451,12 +13699,10 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "email": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "auditLogs": {
           "type": "array",
@@ -13471,26 +13717,21 @@
       "properties": {
         "transactionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "transactionExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "paymentId": {
           "type": "string",
           "format": "uuid",
-          "description": "Associated payment id, required when notifying state transitions",
-          "readOnly": true
+          "description": "Associated payment id, required when notifying state transitions"
         },
         "paymentExternalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "transactionType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "AUTHORIZE",
             "CAPTURE",
@@ -13503,13 +13744,11 @@
         },
         "amount": {
           "type": "number",
-          "description": "Transaction amount, required except for void operations",
-          "readOnly": true
+          "description": "Transaction amount, required except for void operations"
         },
         "currency": {
           "type": "string",
           "description": "Amount currency (account currency unless specified)",
-          "readOnly": true,
           "enum": [
             "AED",
             "AFN",
@@ -13680,21 +13919,17 @@
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "processedAmount": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "processedCurrency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "status": {
           "type": "string",
           "description": "Transaction status, required for state change notifications",
-          "readOnly": true,
           "enum": [
             "SUCCESS",
             "UNKNOWN",
@@ -13705,31 +13940,25 @@
           ]
         },
         "gatewayErrorCode": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "gatewayErrorMsg": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "firstPaymentReferenceId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "secondPaymentReferenceId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "properties": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PluginPropertyJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -13957,20 +14186,16 @@
       "type": "object",
       "properties": {
         "account": {
-          "readOnly": true,
           "$ref": "#/definitions/AccountJson"
         },
         "paymentMethod": {
-          "readOnly": true,
           "$ref": "#/definitions/PaymentMethodJson"
         },
         "paymentMethodPluginProperties": {
-          "readOnly": true,
           "$ref": "#/definitions/IterablePluginPropertyJson"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -13985,7 +14210,6 @@
       "properties": {
         "unit": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "DAYS",
             "MONTHS",
@@ -13995,8 +14219,7 @@
         },
         "number": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         }
       }
     },
@@ -14004,26 +14227,22 @@
       "type": "object",
       "properties": {
         "account": {
-          "readOnly": true,
           "$ref": "#/definitions/AccountJson"
         },
         "bundles": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/BundleJson"
           }
         },
         "invoices": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/InvoiceJson"
           }
         },
         "payments": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/InvoicePaymentJson"
           }
@@ -14039,16 +14258,13 @@
       ],
       "properties": {
         "username": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "password": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "roles": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "type": "string"
           }
@@ -14060,28 +14276,23 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "bundleId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "externalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "events": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/EventSubscriptionJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -14097,16 +14308,13 @@
       "properties": {
         "subscriptionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "trackingId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "unitUsageRecords": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/UnitUsageRecordJson"
           }
@@ -14117,20 +14325,16 @@
       "type": "object",
       "properties": {
         "phaseName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "phaseType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "fixedPrice": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "recurringPrice": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         }
       }
     },
@@ -14139,40 +14343,32 @@
       "properties": {
         "blockedId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "stateName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "service": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "blockChange": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "blockEntitlement": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "blockBilling": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date-time",
-          "readOnly": true
+          "format": "date-time"
         },
         "type": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "SUBSCRIPTION",
             "SUBSCRIPTION_BUNDLE",
@@ -14181,7 +14377,6 @@
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -14192,53 +14387,41 @@
       "type": "object",
       "properties": {
         "dryRunType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "dryRunAction": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "phaseType": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "productName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "productCategory": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "billingPeriod": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "priceListName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "subscriptionId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "bundleId": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "billingPolicy": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "priceOverrides": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PhasePriceOverrideJson"
           }
@@ -14250,13 +14433,11 @@
       "properties": {
         "recordDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "amount": {
           "type": "integer",
-          "format": "int64",
-          "readOnly": true
+          "format": "int64"
         }
       }
     },
@@ -14264,12 +14445,10 @@
       "type": "object",
       "properties": {
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "value": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         }
       }
     },
@@ -14278,12 +14457,10 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "isNotifiedForInvoices": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "auditLogs": {
@@ -14306,35 +14483,28 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "bundleId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "subscriptionId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "externalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "startDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "productName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "productCategory": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "BASE",
             "ADD_ON",
@@ -14343,7 +14513,6 @@
         },
         "billingPeriod": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "DAILY",
             "WEEKLY",
@@ -14359,7 +14528,6 @@
         },
         "phaseType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "TRIAL",
             "DISCOUNT",
@@ -14368,16 +14536,13 @@
           ]
         },
         "priceList": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "planName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "state": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "PENDING",
             "ACTIVE",
@@ -14387,7 +14552,6 @@
         },
         "sourceType": {
           "type": "string",
-          "readOnly": true,
           "enum": [
             "NATIVE",
             "MIGRATED",
@@ -14396,46 +14560,38 @@
         },
         "cancelledDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "chargedThroughDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "billingStartDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "billingEndDate": {
           "type": "string",
-          "format": "date",
-          "readOnly": true
+          "format": "date"
         },
         "billCycleDayLocal": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         },
         "events": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/EventSubscriptionJson"
           }
         },
         "priceOverrides": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/PhasePriceOverrideJson"
           }
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -14447,34 +14603,27 @@
       "properties": {
         "paymentMethodId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "externalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "isDefault": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "pluginName": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "pluginInfo": {
-          "readOnly": true,
           "$ref": "#/definitions/PaymentMethodPluginDetailJson"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
@@ -14486,117 +14635,900 @@
       "properties": {
         "accountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "name": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "firstNameLength": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         },
         "externalKey": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "email": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "billCycleDayLocal": {
           "type": "integer",
-          "format": "int32",
-          "readOnly": true
+          "format": "int32"
         },
         "currency": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "parentAccountId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "isPaymentDelegatedToParent": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "paymentMethodId": {
           "type": "string",
-          "format": "uuid",
-          "readOnly": true
+          "format": "uuid"
         },
         "timeZone": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "address1": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "address2": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "postalCode": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "company": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "city": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "state": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "country": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "locale": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "phone": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "notes": {
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "isMigrated": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "isNotifiedForInvoices": {
           "type": "boolean",
-          "readOnly": true,
           "default": false
         },
         "accountBalance": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "accountCBA": {
-          "type": "number",
-          "readOnly": true
+          "type": "number"
         },
         "auditLogs": {
           "type": "array",
-          "readOnly": true,
           "items": {
             "$ref": "#/definitions/AuditLogJson"
+          }
+        }
+      }
+    },
+    "TokenJson": {
+      "type": "object",
+      "properties": {
+        "expires_in": {
+          "type": "number"
+        },
+        "token_type": {
+          "type": "string",
+          "default": "JWT"
+        },
+        "refresh_token": {
+          "type": "string"
+        },
+        "access_token": {
+          "type": "string"
+        },
+        "status": {
+          "type": "number"
+        }
+      }
+    },
+    "UserJson": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "number"
+        },
+        "docType": {
+          "type": "string",
+          "default": "oauth_user"
+        },
+        "enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "managementId": {
+          "type": "string"
+        },
+        "_rev": {
+          "type": "string"
+        },
+        "regDate": {
+          "type": "number"
+        },
+        "_id": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "updDate": {
+          "type": "number"
+        }
+      }
+    },
+    "OrganizationJson": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "tenant_external_key": {
+          "type": "string"
+        },
+        "tenant_api_key": {
+          "type": "string"
+        },
+        "tenant_api_secret": {
+          "type": "string"
+        },
+        "tenant_api_salt": {
+          "type": "string"
+        },
+        "fax": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "language_code": {
+          "type": "string"
+        },
+        "time_zone": {
+          "type": "string"
+        },
+        "date_format": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "company_name": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state_or_province": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "reg_dt": {
+          "type": "string"
+        }
+      }
+    },
+    "OrganizationEmailJson": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "string"
+        },
+        "is_default": {
+          "type": "string"
+        },
+        "reg_dt": {
+          "type": "string"
+        }
+      }
+    },
+    "NotificationRuleJson": {
+      "type": "object",
+      "properties": {
+        "INVOICE": {
+          "type": "boolean"
+        },
+        "SUCCESSFUL_PAYMENT": {
+          "type": "boolean"
+        },
+        "FAILED_PAYMENT": {
+          "type": "boolean"
+        },
+        "SUBSCRIPTION_CANCELLATION_REQUESTED": {
+          "type": "boolean"
+        },
+        "SUBSCRIPTION_CANCELLATION_EFFECTIVE": {
+          "type": "boolean"
+        },
+        "PAYMENT_REFUND": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RetryRuleJson": {
+      "type": "object",
+      "properties": {
+        "retry": {
+          "type": "string"
+        }
+      }
+    },
+    "billingAlignmentJson": {
+      "type": "object",
+      "properties": {
+        "productCategory": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "billingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "phaseType": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "DISCOUNT",
+            "FIXEDTERM",
+            "EVERGREEN"
+          ]
+        },
+        "billingAlignment": {
+          "type": "string",
+          "enum": [
+            "ACCOUNT",
+            "BUNDLE",
+            "SUBSCRIPTION"
+          ]
+        }
+      }
+    },
+    "createAlignmentJson": {
+      "type": "object",
+      "properties": {
+        "planAlignmentCreate": {
+          "type": "string",
+          "enum": [
+            "START_OF_BUNDLE",
+            "START_OF_SUBSCRIPTION"
+          ]
+        }
+      }
+    },
+    "cancelPolicyJson": {
+      "type": "object",
+      "properties": {
+        "productCategory": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "billingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "phaseType": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "DISCOUNT",
+            "FIXEDTERM",
+            "EVERGREEN"
+          ]
+        },
+        "billingActionPolicy": {
+          "type": "string",
+          "enum": [
+            "START_OF_TERM",
+            "END_OF_TERM",
+            "IMMEDIATE",
+            "ILLEGAL"
+          ]
+        }
+      }
+    },
+    "changePolicyJson": {
+      "type": "object",
+      "properties": {
+        "phaseType": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "DISCOUNT",
+            "FIXEDTERM",
+            "EVERGREEN"
+          ]
+        },
+        "fromProductCategory": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "toProductCategory": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "fromBillingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "toBillingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "billingActionPolicy": {
+          "type": "string",
+          "enum": [
+            "START_OF_TERM",
+            "END_OF_TERM",
+            "IMMEDIATE",
+            "ILLEGAL"
+          ]
+        }
+      }
+    },
+    "changeAlignmentJson": {
+      "type": "object",
+      "properties": {
+        "phaseType": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "DISCOUNT",
+            "FIXEDTERM",
+            "EVERGREEN"
+          ]
+        },
+        "fromProductCategory": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "toProductCategory": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "fromBillingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "toBillingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "planAlignmentChange": {
+          "type": "string",
+          "enum": [
+            "START_OF_BUNDLE",
+            "START_OF_SUBSCRIPTION",
+            "CHANGE_OF_PLAN"
+          ]
+        }
+      }
+    },
+    "BillingRuleJson": {
+      "type": "object",
+      "properties": {
+        "billingAlignment": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/billingAlignmentJson"
+          }
+        },
+        "createAlignment": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/createAlignmentJson"
+          }
+        },
+        "cancelPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cancelPolicyJson"
+          }
+        },
+        "changePolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/changePolicyJson"
+          }
+        },
+        "changeAlignment": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/changeAlignmentJson"
+          }
+        },
+        "recurringBillingMode": {
+          "type": "string",
+          "enum": [
+            "IN_ADVANCE",
+            "IN_ARREAR"
+          ]
+        }
+      }
+    },
+    "ProductJson": {
+      "type": "object",
+      "properties": {
+        "record_id": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "BASE",
+            "ADD_ON"
+          ]
+        },
+        "owner_account_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "redirect_url": {
+          "type": "string"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "plan_seq": {
+          "type": "number"
+        },
+        "usage_seq": {
+          "type": "number"
+        },
+        "reg_dt": {
+          "type": "string"
+        }
+      }
+    },
+    "recurringJson": {
+      "type": "object",
+      "properties": {
+        "billingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "recurringPrice": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriceJson"
+          }
+        }
+      }
+    },
+    "fixedJson": {
+      "type": "object",
+      "properties": {
+        "fixedPrice": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriceJson"
+          }
+        }
+      }
+    },
+    "UsageJson": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "billingMode": {
+          "type": "string",
+          "enum": [
+            "IN_ADVANCE",
+            "IN_ARREAR"
+          ]
+        },
+        "usageType": {
+          "type": "string",
+          "enum": [
+            "CAPACITY",
+            "CONSUMABLE"
+          ]
+        },
+        "billingPeriod": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "THIRTY_DAYS",
+            "MONTHLY",
+            "QUARTERLY",
+            "BIANNUAL",
+            "ANNUAL",
+            "BIENNIAL",
+            "NO_BILLING_PERIOD"
+          ]
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TierJson"
+          }
+        }
+      }
+    },
+    "TierJson": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "prices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriceJson"
+          }
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "PhaseJson": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "DISCOUNT",
+            "FIXEDTERM",
+            "EVERGREEN"
+          ]
+        },
+        "duration": {
+          "$ref": "#/definitions/DurationJson"
+        },
+        "recurring": {
+          "$ref": "#/definitions/recurringJson"
+        },
+        "fixed": {
+          "$ref": "#/definitions/fixedJson"
+        },
+        "usages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UsageJson"
+          }
+        }
+      }
+    },
+    "PlanJson": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "initialPhases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhaseJson"
+          }
+        },
+        "finalPhase": {
+          "$ref": "#/definitions/PhaseJson"
+        },
+        "number_of_subscriptions_referenced_by_version": {
+          "type": "number"
+        },
+        "number_of_subscriptions": {
+          "type": "number"
+        }
+      }
+    },
+    "ProductVersionJson": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "number"
+        },
+        "effective_date": {
+          "type": "string"
+        },
+        "is_current": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PlanJson"
+          }
+        },
+        "reg_dt": {
+          "type": "string"
+        }
+      }
+    },
+    "TemplateJson": {
+      "type": "object",
+      "properties": {
+        "record_id": {
+          "type": "number"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "tenant_record_id": {
+          "type": "number"
+        },
+        "notification_type": {
+          "type": "string",
+          "enum": [
+            "INVOICE",
+            "SUCCESSFUL_PAYMENT",
+            "FAILED_PAYMENT",
+            "SUBSCRIPTION_CANCELLATION_REQUESTED",
+            "SUBSCRIPTION_CANCELLATION_EFFECTIVE",
+            "PAYMENT_REFUND"
+          ]
+        },
+        "locale": {
+          "type": "string"
+        },
+        "is_default": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "reg_dt": {
+          "type": "string"
+        }
+      }
+    },
+    "TemplatePerNotificationJson": {
+      "type": "object",
+      "properties": {
+        "FAILED_PAYMENT": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateJson"
+          }
+        },
+        "PAYMENT_REFUND": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateJson"
+          }
+        },
+        "SUBSCRIPTION_CANCELLATION_REQUESTED": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateJson"
+          }
+        },
+        "SUBSCRIPTION_CANCELLATION_EFFECTIVE": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateJson"
+          }
+        },
+        "SUCCESSFUL_PAYMENT": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateJson"
+          }
+        },
+        "INVOICE": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateJson"
           }
         }
       }
