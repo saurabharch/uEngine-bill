@@ -333,6 +333,10 @@ public class KBRestFilter implements Filter {
                         result_user_type = "CHANGE";
                         result = resultBody;
                         map = JsonUtils.unmarshal(result);
+
+                        //구독 변경일 경우에는, 변경 예약일 경우 변경전의 subscription plan_name 이 리턴된다.
+                        //그러므로 원 요청의 plan_name 으로 교체하도록 한다.
+                        map.put("planName", plan_names.get(0).toString());
                         createdSubscriptions.add(map);
                     } else {
                         throw new Exception("Failed to get subscription result AfterIntercept.");
@@ -528,7 +532,6 @@ public class KBRestFilter implements Filter {
 
         Map requiredHeaders = new HashMap();
         requiredHeaders.put("Authorization", "Basic " + encode);
-        requiredHeaders.put("Accept", "application/json");
         requiredHeaders.put("X-Killbill-CreatedBy", "uEngine");
         requiredHeaders.put("X-Killbill-ApiKey", tenant_api_key);
         requiredHeaders.put("X-Killbill-ApiSecret", tenant_api_secret);
@@ -538,6 +541,13 @@ public class KBRestFilter implements Filter {
             requiredHeaders.put("Content-Type", contentHeader);
         } else {
             requiredHeaders.put("Content-Type", "application/json");
+        }
+
+        String acceptHeader = request.getHeader("Accept");
+        if (!StringUtils.isEmpty(acceptHeader)) {
+            requiredHeaders.put("Accept", acceptHeader);
+        } else {
+            requiredHeaders.put("Accept", "application/json");
         }
 
         ProxyRequest proxyRequest = new ProxyRequest();

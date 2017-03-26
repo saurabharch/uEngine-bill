@@ -5306,10 +5306,9 @@
           {
             "in": "body",
             "name": "body",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "array",
-              "$ref": "#/definitions/InvoiceItemJson"
+              "$ref": "#/definitions/ListInvoiceItemJson"
             }
           },
           {
@@ -10480,60 +10479,6 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "tenants"
-        ],
-        "summary": "Create a tenant",
-        "description": "테넌트를 생성한다.",
-        "operationId": "createTenant",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/TenantJson"
-            }
-          },
-          {
-            "name": "useGlobalDefault",
-            "in": "query",
-            "required": false,
-            "type": "boolean",
-            "default": true
-          },
-          {
-            "name": "X-Killbill-CreatedBy",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Reason",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "X-Killbill-Comment",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "500": {
-            "description": "Tenant already exists"
-          }
-        }
       }
     },
     "/rest/v1/tenants/uploadPerTenantConfig": {
@@ -11278,37 +11223,7 @@
     }
   },
   "definitions": {
-    "TieredBlock": {
-      "type": "object",
-      "properties": {
-        "max": {
-          "type": "number",
-          "format": "double"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "VANILLA",
-            "TOP_UP",
-            "TIERED"
-          ]
-        },
-        "size": {
-          "type": "number",
-          "format": "double"
-        },
-        "unit": {
-          "$ref": "#/definitions/Unit"
-        },
-        "price": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "minTopUpCredit": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
+
     "RolledUpUnitJson": {
       "type": "object",
       "properties": {
@@ -11318,41 +11233,6 @@
         "amount": {
           "type": "integer",
           "format": "int64"
-        }
-      }
-    },
-    "PlanDetailJson": {
-      "type": "object",
-      "properties": {
-        "product": {
-          "type": "string"
-        },
-        "plan": {
-          "type": "string"
-        },
-        "priceList": {
-          "type": "string"
-        },
-        "finalPhaseBillingPeriod": {
-          "type": "string",
-          "enum": [
-            "DAILY",
-            "WEEKLY",
-            "BIWEEKLY",
-            "THIRTY_DAYS",
-            "MONTHLY",
-            "QUARTERLY",
-            "BIANNUAL",
-            "ANNUAL",
-            "BIENNIAL",
-            "NO_BILLING_PERIOD"
-          ]
-        },
-        "finalPhaseRecurringPrice": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PriceJson"
-          }
         }
       }
     },
@@ -11419,23 +11299,6 @@
         }
       }
     },
-    "HostedPaymentPageFieldsJson": {
-      "type": "object",
-      "properties": {
-        "auditLogs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AuditLogJson"
-          }
-        },
-        "customFields": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PluginPropertyJson"
-          }
-        }
-      }
-    },
     "PluginPropertyJson": {
       "type": "object",
       "properties": {
@@ -11491,25 +11354,6 @@
           "items": {
             "$ref": "#/definitions/OverdueStateConfigJson"
           }
-        }
-      }
-    },
-    "SubjectJson": {
-      "type": "object",
-      "properties": {
-        "principal": {
-          "type": "string"
-        },
-        "isAuthenticated": {
-          "type": "boolean",
-          "default": false
-        },
-        "isRemembered": {
-          "type": "boolean",
-          "default": false
-        },
-        "session": {
-          "$ref": "#/definitions/SessionJson"
         }
       }
     },
@@ -11615,17 +11459,6 @@
         "autoReevaluationIntervalDays": {
           "type": "integer",
           "format": "int32"
-        }
-      }
-    },
-    "NodeCommandPropertyJson": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "object"
         }
       }
     },
@@ -11754,54 +11587,6 @@
         }
       }
     },
-    "Listing": {
-      "type": "object",
-      "properties": {
-        "priceList": {
-          "$ref": "#/definitions/PriceList"
-        },
-        "plan": {
-          "$ref": "#/definitions/Plan"
-        }
-      }
-    },
-    "Product": {
-      "type": "object",
-      "properties": {
-        "catalogName": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string",
-          "enum": [
-            "BASE",
-            "ADD_ON",
-            "STANDALONE"
-          ]
-        },
-        "available": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Product"
-          }
-        },
-        "included": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Product"
-          }
-        },
-        "limits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Limit"
-          }
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
     "InvoiceItemJson": {
       "type": "object",
       "required": [
@@ -11894,24 +11679,6 @@
         }
       }
     },
-    "RoleDefinitionJson": {
-      "type": "object",
-      "required": [
-        "permissions",
-        "role"
-      ],
-      "properties": {
-        "role": {
-          "type": "string"
-        },
-        "permissions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "TagDefinitionJson": {
       "type": "object",
       "required": [
@@ -11943,21 +11710,6 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/AuditLogJson"
-          }
-        }
-      }
-    },
-    "InternationalPrice": {
-      "type": "object",
-      "properties": {
-        "zero": {
-          "type": "boolean",
-          "default": false
-        },
-        "prices": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Price"
           }
         }
       }
@@ -12017,464 +11769,6 @@
         }
       }
     },
-    "Tier": {
-      "type": "object",
-      "properties": {
-        "fixedPrice": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "recurringPrice": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "limits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Limit"
-          }
-        },
-        "tieredBlocks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TieredBlock"
-          }
-        }
-      }
-    },
-    "Price": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "number"
-        },
-        "currency": {
-          "type": "string",
-          "enum": [
-            "AED",
-            "AFN",
-            "ALL",
-            "AMD",
-            "ANG",
-            "AOA",
-            "ARS",
-            "AUD",
-            "AWG",
-            "AZN",
-            "BAM",
-            "BBD",
-            "BDT",
-            "BGN",
-            "BHD",
-            "BIF",
-            "BMD",
-            "BND",
-            "BOB",
-            "BRL",
-            "BSD",
-            "BTN",
-            "BWP",
-            "BYR",
-            "BZD",
-            "CAD",
-            "CDF",
-            "CHF",
-            "CLP",
-            "CNY",
-            "COP",
-            "CRC",
-            "CUC",
-            "CUP",
-            "CVE",
-            "CZK",
-            "DJF",
-            "DKK",
-            "DOP",
-            "DZD",
-            "EGP",
-            "ERN",
-            "ETB",
-            "EUR",
-            "FJD",
-            "FKP",
-            "GBP",
-            "GEL",
-            "GGP",
-            "GHS",
-            "GIP",
-            "GMD",
-            "GNF",
-            "GTQ",
-            "GYD",
-            "HKD",
-            "HNL",
-            "HRK",
-            "HTG",
-            "HUF",
-            "IDR",
-            "ILS",
-            "IMP",
-            "INR",
-            "IQD",
-            "IRR",
-            "ISK",
-            "JEP",
-            "JMD",
-            "JOD",
-            "JPY",
-            "KES",
-            "KGS",
-            "KHR",
-            "KMF",
-            "KPW",
-            "KRW",
-            "KWD",
-            "KYD",
-            "KZT",
-            "LAK",
-            "LBP",
-            "LKR",
-            "LRD",
-            "LSL",
-            "LTL",
-            "LVL",
-            "LYD",
-            "MAD",
-            "MDL",
-            "MGA",
-            "MKD",
-            "MMK",
-            "MNT",
-            "MOP",
-            "MRO",
-            "MUR",
-            "MVR",
-            "MWK",
-            "MXN",
-            "MYR",
-            "MZN",
-            "NAD",
-            "NGN",
-            "NIO",
-            "NOK",
-            "NPR",
-            "NZD",
-            "OMR",
-            "PAB",
-            "PEN",
-            "PGK",
-            "PHP",
-            "PKR",
-            "PLN",
-            "PYG",
-            "QAR",
-            "RON",
-            "RSD",
-            "RUB",
-            "RWF",
-            "SAR",
-            "SBD",
-            "SCR",
-            "SDG",
-            "SEK",
-            "SGD",
-            "SHP",
-            "SLL",
-            "SOS",
-            "SPL",
-            "SRD",
-            "STD",
-            "SVC",
-            "SYP",
-            "SZL",
-            "THB",
-            "TJS",
-            "TMT",
-            "TND",
-            "TOP",
-            "TRY",
-            "TTD",
-            "TVD",
-            "TWD",
-            "TZS",
-            "UAH",
-            "UGX",
-            "USD",
-            "UYU",
-            "UZS",
-            "VEF",
-            "VND",
-            "VUV",
-            "WST",
-            "XAF",
-            "XCD",
-            "XDR",
-            "XOF",
-            "XPF",
-            "YER",
-            "ZAR",
-            "ZMW",
-            "ZWD",
-            "BTC"
-          ]
-        }
-      }
-    },
-    "SimplePlanJson": {
-      "type": "object",
-      "properties": {
-        "planId": {
-          "type": "string"
-        },
-        "productName": {
-          "type": "string"
-        },
-        "productCategory": {
-          "type": "string",
-          "enum": [
-            "BASE",
-            "ADD_ON",
-            "STANDALONE"
-          ]
-        },
-        "currency": {
-          "type": "string",
-          "enum": [
-            "AED",
-            "AFN",
-            "ALL",
-            "AMD",
-            "ANG",
-            "AOA",
-            "ARS",
-            "AUD",
-            "AWG",
-            "AZN",
-            "BAM",
-            "BBD",
-            "BDT",
-            "BGN",
-            "BHD",
-            "BIF",
-            "BMD",
-            "BND",
-            "BOB",
-            "BRL",
-            "BSD",
-            "BTN",
-            "BWP",
-            "BYR",
-            "BZD",
-            "CAD",
-            "CDF",
-            "CHF",
-            "CLP",
-            "CNY",
-            "COP",
-            "CRC",
-            "CUC",
-            "CUP",
-            "CVE",
-            "CZK",
-            "DJF",
-            "DKK",
-            "DOP",
-            "DZD",
-            "EGP",
-            "ERN",
-            "ETB",
-            "EUR",
-            "FJD",
-            "FKP",
-            "GBP",
-            "GEL",
-            "GGP",
-            "GHS",
-            "GIP",
-            "GMD",
-            "GNF",
-            "GTQ",
-            "GYD",
-            "HKD",
-            "HNL",
-            "HRK",
-            "HTG",
-            "HUF",
-            "IDR",
-            "ILS",
-            "IMP",
-            "INR",
-            "IQD",
-            "IRR",
-            "ISK",
-            "JEP",
-            "JMD",
-            "JOD",
-            "JPY",
-            "KES",
-            "KGS",
-            "KHR",
-            "KMF",
-            "KPW",
-            "KRW",
-            "KWD",
-            "KYD",
-            "KZT",
-            "LAK",
-            "LBP",
-            "LKR",
-            "LRD",
-            "LSL",
-            "LTL",
-            "LVL",
-            "LYD",
-            "MAD",
-            "MDL",
-            "MGA",
-            "MKD",
-            "MMK",
-            "MNT",
-            "MOP",
-            "MRO",
-            "MUR",
-            "MVR",
-            "MWK",
-            "MXN",
-            "MYR",
-            "MZN",
-            "NAD",
-            "NGN",
-            "NIO",
-            "NOK",
-            "NPR",
-            "NZD",
-            "OMR",
-            "PAB",
-            "PEN",
-            "PGK",
-            "PHP",
-            "PKR",
-            "PLN",
-            "PYG",
-            "QAR",
-            "RON",
-            "RSD",
-            "RUB",
-            "RWF",
-            "SAR",
-            "SBD",
-            "SCR",
-            "SDG",
-            "SEK",
-            "SGD",
-            "SHP",
-            "SLL",
-            "SOS",
-            "SPL",
-            "SRD",
-            "STD",
-            "SVC",
-            "SYP",
-            "SZL",
-            "THB",
-            "TJS",
-            "TMT",
-            "TND",
-            "TOP",
-            "TRY",
-            "TTD",
-            "TVD",
-            "TWD",
-            "TZS",
-            "UAH",
-            "UGX",
-            "USD",
-            "UYU",
-            "UZS",
-            "VEF",
-            "VND",
-            "VUV",
-            "WST",
-            "XAF",
-            "XCD",
-            "XDR",
-            "XOF",
-            "XPF",
-            "YER",
-            "ZAR",
-            "ZMW",
-            "ZWD",
-            "BTC"
-          ]
-        },
-        "amount": {
-          "type": "number"
-        },
-        "billingPeriod": {
-          "type": "string",
-          "enum": [
-            "DAILY",
-            "WEEKLY",
-            "BIWEEKLY",
-            "THIRTY_DAYS",
-            "MONTHLY",
-            "QUARTERLY",
-            "BIANNUAL",
-            "ANNUAL",
-            "BIENNIAL",
-            "NO_BILLING_PERIOD"
-          ]
-        },
-        "trialLength": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "trialTimeUnit": {
-          "type": "string",
-          "enum": [
-            "DAYS",
-            "MONTHS",
-            "YEARS",
-            "UNLIMITED"
-          ]
-        },
-        "availableBaseProducts": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "PluginInfoJson": {
-      "type": "object",
-      "properties": {
-        "bundleSymbolicName": {
-          "type": "string"
-        },
-        "pluginKey": {
-          "type": "string"
-        },
-        "pluginName": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "isSelectedForStart": {
-          "type": "boolean",
-          "default": false
-        },
-        "services": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/definitions/PluginServiceInfoJson"
-          }
-        }
-      }
-    },
     "BulkBaseSubscriptionAndAddOnsJson": {
       "type": "object",
       "required": [
@@ -12520,216 +11814,6 @@
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
-        }
-      }
-    },
-    "SessionJson": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "startDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "lastAccessDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "timeout": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "host": {
-          "type": "string"
-        }
-      }
-    },
-    "Recurring": {
-      "type": "object",
-      "properties": {
-        "recurringPrice": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "billingPeriod": {
-          "type": "string",
-          "enum": [
-            "DAILY",
-            "WEEKLY",
-            "BIWEEKLY",
-            "THIRTY_DAYS",
-            "MONTHLY",
-            "QUARTERLY",
-            "BIANNUAL",
-            "ANNUAL",
-            "BIENNIAL",
-            "NO_BILLING_PERIOD"
-          ]
-        }
-      }
-    },
-    "HostedPaymentPageFormDescriptorJson": {
-      "type": "object",
-      "properties": {
-        "kbAccountId": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "formMethod": {
-          "type": "string"
-        },
-        "formUrl": {
-          "type": "string"
-        },
-        "formFields": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object"
-          }
-        },
-        "properties": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object"
-          }
-        },
-        "auditLogs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AuditLogJson"
-          }
-        }
-      }
-    },
-    "Fixed": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "ONE_TIME"
-          ]
-        },
-        "price": {
-          "$ref": "#/definitions/InternationalPrice"
-        }
-      }
-    },
-    "Limit": {
-      "type": "object",
-      "properties": {
-        "unit": {
-          "$ref": "#/definitions/Unit"
-        },
-        "min": {
-          "type": "number",
-          "format": "double"
-        },
-        "max": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "Plan": {
-      "type": "object",
-      "properties": {
-        "product": {
-          "$ref": "#/definitions/Product"
-        },
-        "priceListName": {
-          "type": "string"
-        },
-        "plansAllowedInBundle": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "recurringBillingPeriod": {
-          "type": "string",
-          "enum": [
-            "DAILY",
-            "WEEKLY",
-            "BIWEEKLY",
-            "THIRTY_DAYS",
-            "MONTHLY",
-            "QUARTERLY",
-            "BIANNUAL",
-            "ANNUAL",
-            "BIENNIAL",
-            "NO_BILLING_PERIOD"
-          ]
-        },
-        "allPhases": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PlanPhase"
-          }
-        },
-        "effectiveDateForExistingSubscriptions": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "initialPhases": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PlanPhase"
-          }
-        },
-        "initialPhaseIterator": {
-          "$ref": "#/definitions/IteratorPlanPhase"
-        },
-        "finalPhase": {
-          "$ref": "#/definitions/PlanPhase"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "PlanPhase": {
-      "type": "object",
-      "properties": {
-        "phaseType": {
-          "type": "string",
-          "enum": [
-            "TRIAL",
-            "DISCOUNT",
-            "FIXEDTERM",
-            "EVERGREEN"
-          ]
-        },
-        "fixed": {
-          "$ref": "#/definitions/Fixed"
-        },
-        "recurring": {
-          "$ref": "#/definitions/Recurring"
-        },
-        "duration": {
-          "$ref": "#/definitions/Duration"
-        },
-        "usages": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Usage"
-          }
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "PriceList": {
-      "type": "object",
-      "properties": {
-        "plans": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Plan"
-          }
-        },
-        "name": {
-          "type": "string"
         }
       }
     },
@@ -13031,27 +12115,6 @@
         }
       }
     },
-    "IteratorPlanPhase": {
-      "type": "object"
-    },
-    "NodeCommandJson": {
-      "type": "object",
-      "properties": {
-        "systemCommandType": {
-          "type": "boolean",
-          "default": false
-        },
-        "nodeCommandType": {
-          "type": "string"
-        },
-        "nodeCommandProperties": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/NodeCommandPropertyJson"
-          }
-        }
-      }
-    },
     "PaymentJson": {
       "type": "object",
       "properties": {
@@ -13162,75 +12225,6 @@
           "items": {
             "$ref": "#/definitions/AuditLogJson"
           }
-        }
-      }
-    },
-    "Unit": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "Usage": {
-      "type": "object",
-      "properties": {
-        "fixedPrice": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "recurringPrice": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "billingPeriod": {
-          "type": "string",
-          "enum": [
-            "DAILY",
-            "WEEKLY",
-            "BIWEEKLY",
-            "THIRTY_DAYS",
-            "MONTHLY",
-            "QUARTERLY",
-            "BIANNUAL",
-            "ANNUAL",
-            "BIENNIAL",
-            "NO_BILLING_PERIOD"
-          ]
-        },
-        "limits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Limit"
-          }
-        },
-        "usageType": {
-          "type": "string",
-          "enum": [
-            "CAPACITY",
-            "CONSUMABLE"
-          ]
-        },
-        "tiers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Tier"
-          }
-        },
-        "billingMode": {
-          "type": "string",
-          "enum": [
-            "IN_ADVANCE",
-            "IN_ARREAR"
-          ]
-        },
-        "blocks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Block"
-          }
-        },
-        "name": {
-          "type": "string"
         }
       }
     },
@@ -13556,38 +12550,6 @@
       },
       "description": "Payment attempt"
     },
-    "Duration": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "unit": {
-          "type": "string",
-          "enum": [
-            "DAYS",
-            "MONTHS",
-            "YEARS",
-            "UNLIMITED"
-          ]
-        }
-      }
-    },
-    "AdminPaymentJson": {
-      "type": "object",
-      "properties": {
-        "lastSuccessPaymentState": {
-          "type": "string"
-        },
-        "currentPaymentStateName": {
-          "type": "string"
-        },
-        "transactionStatus": {
-          "type": "string"
-        }
-      }
-    },
     "TagJson": {
       "type": "object",
       "properties": {
@@ -13639,17 +12601,6 @@
         }
       }
     },
-    "PluginServiceInfoJson": {
-      "type": "object",
-      "properties": {
-        "serviceTypeName": {
-          "type": "string"
-        },
-        "registrationName": {
-          "type": "string"
-        }
-      }
-    },
     "TenantKeyJson": {
       "type": "object",
       "properties": {
@@ -13661,33 +12612,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "Block": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "VANILLA",
-            "TOP_UP",
-            "TIERED"
-          ]
-        },
-        "size": {
-          "type": "number",
-          "format": "double"
-        },
-        "unit": {
-          "$ref": "#/definitions/Unit"
-        },
-        "price": {
-          "$ref": "#/definitions/InternationalPrice"
-        },
-        "minTopUpCredit": {
-          "type": "number",
-          "format": "double"
         }
       }
     },
@@ -13966,245 +12890,6 @@
       },
       "description": "Payment transaction"
     },
-    "StaticCatalog": {
-      "type": "object",
-      "properties": {
-        "catalogName": {
-          "type": "string"
-        },
-        "recurringBillingMode": {
-          "type": "string",
-          "enum": [
-            "IN_ADVANCE",
-            "IN_ARREAR"
-          ]
-        },
-        "effectiveDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "availableBasePlanListings": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Listing"
-          }
-        },
-        "currentProducts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Product"
-          }
-        },
-        "currentUnits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Unit"
-          }
-        },
-        "currentSupportedCurrencies": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "AED",
-              "AFN",
-              "ALL",
-              "AMD",
-              "ANG",
-              "AOA",
-              "ARS",
-              "AUD",
-              "AWG",
-              "AZN",
-              "BAM",
-              "BBD",
-              "BDT",
-              "BGN",
-              "BHD",
-              "BIF",
-              "BMD",
-              "BND",
-              "BOB",
-              "BRL",
-              "BSD",
-              "BTN",
-              "BWP",
-              "BYR",
-              "BZD",
-              "CAD",
-              "CDF",
-              "CHF",
-              "CLP",
-              "CNY",
-              "COP",
-              "CRC",
-              "CUC",
-              "CUP",
-              "CVE",
-              "CZK",
-              "DJF",
-              "DKK",
-              "DOP",
-              "DZD",
-              "EGP",
-              "ERN",
-              "ETB",
-              "EUR",
-              "FJD",
-              "FKP",
-              "GBP",
-              "GEL",
-              "GGP",
-              "GHS",
-              "GIP",
-              "GMD",
-              "GNF",
-              "GTQ",
-              "GYD",
-              "HKD",
-              "HNL",
-              "HRK",
-              "HTG",
-              "HUF",
-              "IDR",
-              "ILS",
-              "IMP",
-              "INR",
-              "IQD",
-              "IRR",
-              "ISK",
-              "JEP",
-              "JMD",
-              "JOD",
-              "JPY",
-              "KES",
-              "KGS",
-              "KHR",
-              "KMF",
-              "KPW",
-              "KRW",
-              "KWD",
-              "KYD",
-              "KZT",
-              "LAK",
-              "LBP",
-              "LKR",
-              "LRD",
-              "LSL",
-              "LTL",
-              "LVL",
-              "LYD",
-              "MAD",
-              "MDL",
-              "MGA",
-              "MKD",
-              "MMK",
-              "MNT",
-              "MOP",
-              "MRO",
-              "MUR",
-              "MVR",
-              "MWK",
-              "MXN",
-              "MYR",
-              "MZN",
-              "NAD",
-              "NGN",
-              "NIO",
-              "NOK",
-              "NPR",
-              "NZD",
-              "OMR",
-              "PAB",
-              "PEN",
-              "PGK",
-              "PHP",
-              "PKR",
-              "PLN",
-              "PYG",
-              "QAR",
-              "RON",
-              "RSD",
-              "RUB",
-              "RWF",
-              "SAR",
-              "SBD",
-              "SCR",
-              "SDG",
-              "SEK",
-              "SGD",
-              "SHP",
-              "SLL",
-              "SOS",
-              "SPL",
-              "SRD",
-              "STD",
-              "SVC",
-              "SYP",
-              "SZL",
-              "THB",
-              "TJS",
-              "TMT",
-              "TND",
-              "TOP",
-              "TRY",
-              "TTD",
-              "TVD",
-              "TWD",
-              "TZS",
-              "UAH",
-              "UGX",
-              "USD",
-              "UYU",
-              "UZS",
-              "VEF",
-              "VND",
-              "VUV",
-              "WST",
-              "XAF",
-              "XCD",
-              "XDR",
-              "XOF",
-              "XPF",
-              "YER",
-              "ZAR",
-              "ZMW",
-              "ZWD",
-              "BTC"
-            ]
-          }
-        },
-        "currentPlans": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Plan"
-          }
-        }
-      }
-    },
-    "ComboHostedPaymentPageJson": {
-      "type": "object",
-      "properties": {
-        "account": {
-          "$ref": "#/definitions/AccountJson"
-        },
-        "paymentMethod": {
-          "$ref": "#/definitions/PaymentMethodJson"
-        },
-        "paymentMethodPluginProperties": {
-          "$ref": "#/definitions/IterablePluginPropertyJson"
-        },
-        "auditLogs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AuditLogJson"
-          }
-        },
-        "hostedPaymentPageFieldsJson": {
-          "$ref": "#/definitions/HostedPaymentPageFieldsJson"
-        }
-      }
-    },
     "DurationJson": {
       "type": "object",
       "properties": {
@@ -14245,28 +12930,6 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/InvoicePaymentJson"
-          }
-        }
-      }
-    },
-    "UserRolesJson": {
-      "type": "object",
-      "required": [
-        "password",
-        "roles",
-        "username"
-      ],
-      "properties": {
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "roles": {
-          "type": "array",
-          "items": {
-            "type": "string"
           }
         }
       }
@@ -15531,6 +14194,12 @@
             "$ref": "#/definitions/TemplateJson"
           }
         }
+      }
+    },
+    "ListInvoiceItemJson":{
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/InvoiceItemJson"
       }
     }
   }
