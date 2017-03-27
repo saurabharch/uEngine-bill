@@ -31,34 +31,31 @@ public class MailAsyncService implements ConsumerNameAware, Consumer<Event<Map>>
      */
     private Logger logger = LoggerFactory.getLogger(MailAsyncService.class);
 
-    @Value("#{config['mail.from.name']}")
+    @Value("#{systemProperties['org.killbill.mail.fromname']}")
     private String fromName;
 
-    @Value("#{config['mail.from.address']}")
+    @Value("#{systemProperties['org.killbill.mail.from']}")
     private String fromAddress;
 
-    @Value("#{config['mail.html']}")
-    private boolean html = false;
-
-    @Value("#{config['mail.username']}")
+    @Value("#{systemProperties['org.killbill.mail.smtp.user']}")
     private String account;
 
-    @Value("#{config['mail.password']}")
+    @Value("#{systemProperties['org.killbill.mail.smtp.password']}")
     private String password;
 
-    @Value("#{config['mail.host']}")
+    @Value("#{systemProperties['org.killbill.mail.smtp.host']}")
     private String host;
 
-    @Value("#{config['mail.port']}")
+    @Value("#{systemProperties['org.killbill.mail.smtp.port']}")
     private String port;
 
-    @Value("#{config['mail.smtp.auth']}")
+    @Value("#{systemProperties['org.killbill.mail.smtp.auth']}")
     private boolean auth = true;
 
-    @Value("#{config['mail.smtp.starttls.enable']}")
+    @Value("#{systemProperties['org.killbill.mail.useSSL']}")
     private boolean starttls = true;
 
-    @Value("#{config['mail.redirect.address']}")
+    @Value("#{systemProperties['org.killbill.mail.redirect.address']}")
     private String redirectAddress;
 
     @Autowired

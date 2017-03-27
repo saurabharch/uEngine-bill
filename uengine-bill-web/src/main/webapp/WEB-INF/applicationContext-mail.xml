@@ -5,15 +5,15 @@
     <!-- ========================= JAVAMAIL DEFINITION ========================= -->
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${mail.host}"/>
-        <property name="username" value="${mail.username}"/>
-        <property name="password" value="${mail.password}"/>
-        <property name="port" value="${mail.port}"/>
+        <property name="host" value="#{systemProperties['org.killbill.mail.smtp.host']}"/>
+        <property name="username" value="#{systemProperties['org.killbill.mail.smtp.user']}"/>
+        <property name="password" value="#{systemProperties['org.killbill.mail.smtp.password']}"/>
+        <property name="port" value="#{systemProperties['org.killbill.mail.smtp.port']}"/>
         <property name="javaMailProperties">
             <props>
-                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
-                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
-                <prop key="mail.smtp.ssl.trust">${mail.host}</prop>
+                <prop key="mail.smtp.auth">#{systemProperties['org.killbill.mail.smtp.auth']}</prop>
+                <prop key="mail.smtp.starttls.enable">#{systemProperties['org.killbill.mail.useSSL']}</prop>
+                <prop key="mail.smtp.ssl.trust">#{systemProperties['org.killbill.mail.smtp.host']}</prop>
             </props>
         </property>
     </bean>

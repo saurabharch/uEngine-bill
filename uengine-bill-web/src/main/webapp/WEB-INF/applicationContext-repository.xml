@@ -72,12 +72,12 @@
     </bean>
 
     <bean id="pooledDataSource" class="com.zaxxer.hikari.HikariDataSource">
-        <property name="driverClassName" value="${jdbc.driver}"/>
-        <property name="jdbcUrl" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-        <property name="minimumIdle" value="${jdbc.min.pool}"/>
-        <property name="maximumPoolSize" value="${jdbc.max.pool}"/>
+        <property name="driverClassName" value="#{systemProperties['jdbc.driver']}"/>
+        <property name="jdbcUrl" value="#{systemProperties['org.killbill.dao.url']}"/>
+        <property name="username" value="#{systemProperties['org.killbill.dao.user']}"/>
+        <property name="password" value="#{systemProperties['org.killbill.dao.password']}"/>
+        <property name="minimumIdle" value="3"/>
+        <property name="maximumPoolSize" value="30"/>
         <property name="connectionTestQuery" value="select 1"/>
         <property name="registerMbeans" value="true"/>
         <property name="dataSourceProperties">

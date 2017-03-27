@@ -233,7 +233,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
         Registe registe = new Registe();
         registe.setUser_id(user.get_id());
 
-        String fromUser = config.getProperty("mail.contacts.address");
+        String fromUser = System.getProperty("org.killbill.mail.from");
         String token = new String(Base64.encode(String.valueOf(System.currentTimeMillis()).getBytes()));
         registe.setToken(token);
 

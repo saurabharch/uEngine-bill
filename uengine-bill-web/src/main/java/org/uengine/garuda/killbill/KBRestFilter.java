@@ -444,9 +444,9 @@ public class KBRestFilter implements Filter {
         ConfigurationHelper configurationHelper = context.getBean(ConfigurationHelper.class);
         String tenant_api_key = organization.getTenant_api_key();
         String tenant_api_secret = organization.getTenant_api_secret();
-        String kbusername = configurationHelper.get("killbill.user");
-        String kbpassword = configurationHelper.get("killbill.password");
-        String uri = configurationHelper.get("killbill.url") + endPoint;
+        String kbusername = System.getProperty("killbill.user");
+        String kbpassword = System.getProperty("killbill.password");
+        String uri = System.getProperty("killbill.url") + endPoint;
         String method = "GET";
 
         String auth = kbusername + ":" + kbpassword;
@@ -483,9 +483,9 @@ public class KBRestFilter implements Filter {
         ConfigurationHelper configurationHelper = context.getBean(ConfigurationHelper.class);
         String tenant_api_key = organization.getTenant_api_key();
         String tenant_api_secret = organization.getTenant_api_secret();
-        String kbusername = configurationHelper.get("killbill.user");
-        String kbpassword = configurationHelper.get("killbill.password");
-        String uri = configurationHelper.get("killbill.url") + request.getRequestURI().replace("/rest/v1", "/1.0/kb");
+        String kbusername = System.getProperty("killbill.user");
+        String kbpassword = System.getProperty("killbill.password");
+        String uri = System.getProperty("killbill.url") + request.getRequestURI().replace("/rest/v1", "/1.0/kb");
         if (request.getQueryString() != null) {
             uri = uri + "?" + request.getQueryString();
         }
@@ -519,8 +519,8 @@ public class KBRestFilter implements Filter {
         }
         String tenant_api_key = role.getOrganization().getTenant_api_key();
         String tenant_api_secret = role.getOrganization().getTenant_api_secret();
-        String kbusername = configurationHelper.get("killbill.user");
-        String kbpassword = configurationHelper.get("killbill.password");
+        String kbusername = System.getProperty("killbill.user");
+        String kbpassword = System.getProperty("killbill.password");
 
         String auth = kbusername + ":" + kbpassword;
         BASE64Encoder encoder = new BASE64Encoder();
@@ -550,7 +550,7 @@ public class KBRestFilter implements Filter {
         proxyRequest.setRequest(request);
         proxyRequest.setResponse(response);
 
-        proxyRequest.setHost(configurationHelper.get("killbill.url"));
+        proxyRequest.setHost(System.getProperty("killbill.url"));
         proxyRequest.setPath(request.getRequestURI().replace("/rest/v1", "/1.0/kb"));
         proxyRequest.setHeaders(requiredHeaders);
 

@@ -37,7 +37,7 @@ public class RegisteServiceImpl implements RegisteService {
 
         String email = user.get("email").toString();
 
-        String fromUser = config.getProperty("mail.contacts.address");
+        String fromUser = System.getProperty("org.killbill.mail.from");
         String token = new String(Base64.encode(String.valueOf(System.currentTimeMillis()).getBytes()));
         registe.setToken(token);
 

@@ -20,13 +20,13 @@ public class KBServiceFactory {
     @Qualifier("config")
     private Properties config;
 
-    @Value("#{config['killbill.url']}")
+    @Value("#{systemProperties['killbill.url']}")
     private String url;
 
-    @Value("#{config['killbill.user']}")
+    @Value("#{systemProperties['killbill.user']}")
     private String user;
 
-    @Value("#{config['killbill.password']}")
+    @Value("#{systemProperties['killbill.password']}")
     private String password;
 
     /**

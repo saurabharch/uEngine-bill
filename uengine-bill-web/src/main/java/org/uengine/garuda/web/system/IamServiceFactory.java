@@ -21,16 +21,16 @@ public class IamServiceFactory {
     @Qualifier("config")
     private Properties config;
 
-    @Value("#{config['iam.trust.client.key']}")
+    @Value("#{systemProperties['iam.trust.client.key']}")
     private String trustKey;
 
-    @Value("#{config['iam.trust.client.secret']}")
+    @Value("#{systemProperties['iam.trust.client.secret']}")
     private String trustSecret;
 
-    @Value("#{config['iam.host']}")
+    @Value("#{systemProperties['iam.host']}")
     private String host;
 
-    @Value("#{config['iam.port']}")
+    @Value("#{systemProperties['iam.port']}")
     private int port;
 
     /**
