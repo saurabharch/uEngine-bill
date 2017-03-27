@@ -27,10 +27,11 @@ rbenv rehash
 sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get -y update
 sudo apt-get install -y oracle-java8-installer oracle-java8-set-default
-sduo apt-get install maven
+sudo apt-get install maven
 
 
 
+sudo add-apt-repository ppa:ondrej/mysql-5.6;sudo apt-get update
 sudo apt-get install mysql-client-5.6 mysql-server-5.6
 mysql -uroot
 

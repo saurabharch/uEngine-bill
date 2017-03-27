@@ -16,13 +16,6 @@
 
     <dependencies>
 
-        <!--killbill-->
-        <dependency>
-            <groupId>org.kill-bill.billing</groupId>
-            <artifactId>killbill-catalog</artifactId>
-            <version>0.18.2-SNAPSHOT</version>
-        </dependency>
-
         <!-- ================== -->
         <!--  Jwt  -->
         <!-- ================== -->
