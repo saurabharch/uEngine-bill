@@ -51,12 +51,13 @@
                     <li name="list-menu-setting-integration"><a href="/setting/integration">Integrations</a></li>
                 </ul>
             </li>
-            <li name="list-menu-apidoc">
-                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label">Api Docs</span><span
+            <li name="list-menu-api">
+                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label">Api</span><span
                         class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li name="list-menu-setting-organization"><a href="/apidoc">Api Console</a></li>
-                    <li name="list-menu-setting-user"><a href="/resources/slate/swagger.html">Api Document</a></li>
+                    <li name="list-menu-api-console"><a href="/apidoc">Api Console</a></li>
+                    <li name="list-menu-api-slate"><a href="/resources/slate/swagger.html">Api Document</a></li>
+                    <li name="list-menu-api-clients"><a href="/clients">Download Clients</a></li>
                 </ul>
             </li>
         </ul>

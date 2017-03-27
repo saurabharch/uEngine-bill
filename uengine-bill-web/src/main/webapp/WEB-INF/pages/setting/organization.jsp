@@ -39,6 +39,11 @@
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-2 control-label">Organization ID</label>
+
+                                <div class="col-sm-10"><input type="text" class="form-control" name="id" readonly>
+                                </div>
+                            </div>
                             <div class="form-group"><label class="col-sm-2 control-label">Organization Name</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="name" required>

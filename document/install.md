@@ -50,7 +50,7 @@ sudo vi /etc/mysql/my.cnf
 # bind-address          = 127.0.0.1 주석처리
 
 max_allowed_packet      = 500M
-max_connections        = 10000
+max_connections        = 1000
 
 $ sudo service mysql restart
 

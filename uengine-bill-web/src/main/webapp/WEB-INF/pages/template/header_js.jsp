@@ -133,7 +133,7 @@
                                 currentOrg = response[i];
                             }
                         }
-                        if (!isCorrect) {
+                        if (!isCorrect && response && response.length) {
                             uBilling.setDefaultOrganization(response[0].id);
                             currentOrg = response[0];
                         }
