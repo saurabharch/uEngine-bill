@@ -101,7 +101,7 @@
     var organizations;
     var currentUser;
     var currentOrg;
-    var uBilling = new uBilling('localhost', 18080);
+    var uBilling = new uBilling(null, null);
 
     //로그인,회원가입 관련 페이지가 아닌 경우 토큰 밸리데이팅을 수행한다.
     var pathname = window.location.pathname;

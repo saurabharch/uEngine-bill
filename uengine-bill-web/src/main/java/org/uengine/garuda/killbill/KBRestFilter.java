@@ -446,9 +446,7 @@ public class KBRestFilter implements Filter {
         String tenant_api_secret = organization.getTenant_api_secret();
         String kbusername = configurationHelper.get("killbill.user");
         String kbpassword = configurationHelper.get("killbill.password");
-        String host = configurationHelper.get("killbill.host");
-        String port = configurationHelper.get("killbill.port");
-        String uri = "http://" + host + ":" + port + endPoint;
+        String uri = configurationHelper.get("killbill.url") + endPoint;
         String method = "GET";
 
         String auth = kbusername + ":" + kbpassword;
@@ -487,9 +485,7 @@ public class KBRestFilter implements Filter {
         String tenant_api_secret = organization.getTenant_api_secret();
         String kbusername = configurationHelper.get("killbill.user");
         String kbpassword = configurationHelper.get("killbill.password");
-        String host = configurationHelper.get("killbill.host");
-        String port = configurationHelper.get("killbill.port");
-        String uri = "http://" + host + ":" + port + request.getRequestURI().replace("/rest/v1", "/1.0/kb");
+        String uri = configurationHelper.get("killbill.url") + request.getRequestURI().replace("/rest/v1", "/1.0/kb");
         if (request.getQueryString() != null) {
             uri = uri + "?" + request.getQueryString();
         }
@@ -553,7 +549,8 @@ public class KBRestFilter implements Filter {
         ProxyRequest proxyRequest = new ProxyRequest();
         proxyRequest.setRequest(request);
         proxyRequest.setResponse(response);
-        proxyRequest.setHost("http://" + configurationHelper.get("killbill.host") + ":" + configurationHelper.get("killbill.port"));
+
+        proxyRequest.setHost(configurationHelper.get("killbill.url"));
         proxyRequest.setPath(request.getRequestURI().replace("/rest/v1", "/1.0/kb"));
         proxyRequest.setHeaders(requiredHeaders);
 

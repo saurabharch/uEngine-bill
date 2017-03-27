@@ -20,11 +20,8 @@ public class KBServiceFactory {
     @Qualifier("config")
     private Properties config;
 
-    @Value("#{config['killbill.host']}")
-    private String host;
-
-    @Value("#{config['killbill.port']}")
-    private int port;
+    @Value("#{config['killbill.url']}")
+    private String url;
 
     @Value("#{config['killbill.user']}")
     private String user;
@@ -38,10 +35,10 @@ public class KBServiceFactory {
     private Logger logger = LoggerFactory.getLogger(KBServiceFactory.class);
 
     public KillbillApi apiClient() {
-        return new KillbillApi(host, port, user, password, null, null);
+        return new KillbillApi(url, user, password, null, null);
     }
 
     public KillbillApi apiClient(String apiKey, String apiSecret) {
-        return new KillbillApi(host, port, user, password, apiKey, apiSecret);
+        return new KillbillApi(url, user, password, apiKey, apiSecret);
     }
 }

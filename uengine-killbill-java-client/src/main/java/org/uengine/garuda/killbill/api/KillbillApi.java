@@ -17,8 +17,7 @@ import java.util.Map;
 public class KillbillApi {
 
     private HttpUtils httpUtils;
-    private String host;
-    private int port;
+    private String url;
     private String user;
     private String password;
     private String apiKey;
@@ -32,20 +31,12 @@ public class KillbillApi {
         this.httpUtils = httpUtils;
     }
 
-    public String getHost() {
-        return host;
+    public String getUrl() {
+        return url;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUser() {
@@ -97,8 +88,7 @@ public class KillbillApi {
     }
 
     private KillbillApi copyOptions(KillbillApi killbillApi) {
-        killbillApi.setHost(host);
-        killbillApi.setPort(port);
+        killbillApi.setUrl(url);
         killbillApi.setUser(user);
         killbillApi.setPassword(password);
         killbillApi.setApiKey(apiKey);
@@ -107,9 +97,8 @@ public class KillbillApi {
         return killbillApi;
     }
 
-    public KillbillApi(String host, int port, String user, String password, String apiKey, String apiSecret) {
-        this.host = host;
-        this.port = port;
+    public KillbillApi(String url, String user, String password, String apiKey, String apiSecret) {
+        this.url = url;
         this.user = user;
         this.password = password;
         this.apiKey = apiKey;
@@ -140,8 +129,7 @@ public class KillbillApi {
 
         requiredHeaders.putAll(headers);
 
-        String url = "http://" + this.host + ":" + this.port + path;
-
+        String url = this.url + path;
         HttpResponse httpResponse = httpUtils.makeRequest(method, url, data, requiredHeaders);
         return httpResponse;
     }
