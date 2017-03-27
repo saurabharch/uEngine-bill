@@ -16,7 +16,6 @@
  */
 package org.uengine.garuda.web.product.event;
 
-import org.killbill.billing.entitlement.api.SubscriptionEvent;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

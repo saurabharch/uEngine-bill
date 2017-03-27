@@ -20,6 +20,8 @@
             <artifactId>uengine-bill-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
     </dependencies>
 
 </project>

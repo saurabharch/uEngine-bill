@@ -2,7 +2,6 @@ package org.uengine.garuda.web.product.version;
 
 import com.google.common.base.Enums;
 import org.apache.commons.lang.enums.EnumUtils;
-import org.killbill.billing.catalog.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
