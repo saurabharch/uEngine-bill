@@ -52,7 +52,12 @@
                 </ul>
             </li>
             <li name="list-menu-apidoc">
-                <a href="/apidoc"><i class="fa fa-gears"></i> <span class="nav-label">Api Docs</span></a>
+                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label">Api Docs</span><span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li name="list-menu-setting-organization"><a href="/apidoc">Api Console</a></li>
+                    <li name="list-menu-setting-user"><a href="/resources/slate/swagger.html">Api Document</a></li>
+                </ul>
             </li>
         </ul>
 
