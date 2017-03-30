@@ -1,16 +1,88 @@
 {
-  "header": {
-    "title": "유엔진 빌링 플랫폼을 사용해주셔서 감사합니다.",
-    "form": {
-      "testDate": {
-        "title": "현재 시각 변경",
-        "date": "현재 시각"
+  "template": {
+    "header": {
+      "title": "유엔진 플랫폼을 사용해 주셔서 감사합니다.",
+      "form": {
+        "testDate": {
+          "title": "현재 시각 변경",
+          "date": "현재 시각"
+        }
+      }
+    },
+    "nav": {
+      "dashboards": "대쉬보드",
+      "products": "상품관리",
+      "accounts": "구매자관리",
+      "subscriptions": "구독관리",
+      "invoices": "인보이스",
+      "events": "이벤트",
+      "reports": "보고서",
+      "settings": {
+        "top": "설정",
+        "profile": "조직 프로필",
+        "users": "권한 관리",
+        "billing": "결제 규칙",
+        "overdue": "연체 규칙",
+        "retry": "결제 재시도 규칙",
+        "currency": "환율",
+        "notification": "이메일 알림",
+        "integration": "PG 연동"
+      },
+      "api": {
+        "top": "Api",
+        "console": "Api 테스트",
+        "document": "Api 문서",
+        "clients": "클라이언트 다운로드"
       }
     }
   },
-  "nav": {
-    "dashboards": "대쉬보드",
-    "products": "상품관리",
-    "accounts": "구매자관리"
+  "account": {
+    "new": {
+      "title": "Edit account",
+      "form": {
+        "name": "Account Name",
+        "company": "Company Name",
+        "email": "Customer Email",
+        "phone": "account Phone",
+        "tab": {
+          "other": "Other",
+          "address": "Address",
+          "custom": "Custom",
+          "notes": "Notes"
+        },
+        "timeZone": "Time Zone",
+        "currency": "Currency",
+        "locale": "Locale(Language)",
+        "billCycleDayLocal": "Payment Terms",
+        "addressTitle": "BILLING ADDRESS",
+        "address1": "Street",
+        "city": "City",
+        "state": "State",
+        "postalCode": "ZIP Code",
+        "country": "Country"
+      }
+    },
+    "index": {
+      "title": "accounts",
+      "tool": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive",
+        "noneSubscribers": "None subscribers",
+        "import": "Import accounts",
+        "export": "Export accounts",
+        "refresh": "Refresh list"
+      },
+      "error": "Can't find account list.",
+      "button": {
+        "delete": {
+          "success": "account deleted.",
+          "fail": "Can't remove account cause by subscription of payment transaction exist"
+        },
+        "edit": {
+          "warning": "Choice one account to edit."
+        }
+      }
+    }
   }
 }
