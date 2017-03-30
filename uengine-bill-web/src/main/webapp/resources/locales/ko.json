@@ -1,0 +1,16 @@
+{
+  "header": {
+    "title": "유엔진 빌링 플랫폼을 사용해주셔서 감사합니다.",
+    "form": {
+      "testDate": {
+        "title": "현재 시각 변경",
+        "date": "현재 시각"
+      }
+    }
+  },
+  "nav": {
+    "dashboards": "대쉬보드",
+    "products": "상품관리",
+    "accounts": "구매자관리"
+  }
+}

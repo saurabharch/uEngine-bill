@@ -16,48 +16,48 @@
                 </div>
             </li>
             <li name="list-menu-index">
-                <a href="/index"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span></a>
+                <a href="/index"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboards">Dashboards</span></a>
             </li>
             <li name="list-menu-product">
-                <a href="/product"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Products</span></a>
+                <a href="/product"><i class="fa fa-shopping-cart"></i> <span class="nav-label" data-i18n="nav.products">Products</span></a>
             </li>
             <li name="list-menu-account">
-                <a href="/account"><i class="fa fa-user"></i> <span class="nav-label">Accounts</span></a>
+                <a href="/account"><i class="fa fa-user"></i> <span class="nav-label" data-i18n="nav.accounts">Accounts</span></a>
             </li>
             <li name="list-menu-subscription">
                 <a href="/subscription"><i class="fa fa-clock-o"></i> <span
-                        class="nav-label">Subscriptions</span></a>
+                        class="nav-label" data-i18n="nav.subscriptions">Subscriptions</span></a>
             </li>
             <li name="list-menu-invoice">
-                <a href="/invoice"><i class="fa fa-file-text-o"></i> <span class="nav-label">Invoices</span></a>
+                <a href="/invoice"><i class="fa fa-file-text-o"></i> <span class="nav-label" data-i18n="nav.invoices">Invoices</span></a>
             </li>
             <li name="list-menu-events">
-                <a href="/events"><i class="fa fa-calendar-o"></i> <span class="nav-label">Events</span></a>
+                <a href="/events"><i class="fa fa-calendar-o"></i> <span class="nav-label" data-i18n="nav.events">Events</span></a>
             </li>
             <li name="list-menu-report">
-                <a href="/report"><i class="fa fa-line-chart"></i> <span class="nav-label">Reports</span></a>
+                <a href="/report"><i class="fa fa-line-chart"></i> <span class="nav-label" data-i18n="nav.reports">Reports</span></a>
             </li>
             <li name="list-menu-setting">
-                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label">Settings</span><span
+                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label" data-i18n="nav.settings.top">Settings</span><span
                         class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li name="list-menu-setting-organization"><a href="/setting/organization">Organization Profile</a></li>
-                    <li name="list-menu-setting-user"><a href="/setting/user">Users</a></li>
-                    <li name="list-menu-setting-billing"><a href="/setting/billing">Billing Settings</a></li>
-                    <li name="list-menu-setting-overdue"><a href="/setting/overdue">Overdue Settings</a></li>
-                    <li name="list-menu-setting-retry"><a href="/setting/retry">Retry Settings</a></li>
-                    <li name="list-menu-setting-currencie"><a href="/setting/currency">Currencies</a></li>
-                    <li name="list-menu-setting-notification"><a href="/setting/notification">Email Notifications</a></li>
-                    <li name="list-menu-setting-integration"><a href="/setting/integration">Integrations</a></li>
+                    <li name="list-menu-setting-organization"><a href="/setting/organization" data-i18n="nav.settings.profile">Organization Profile</a></li>
+                    <li name="list-menu-setting-user"><a href="/setting/user" data-i18n="nav.settings.users">Users</a></li>
+                    <li name="list-menu-setting-billing"><a href="/setting/billing" data-i18n="nav.settings.billing">Billing Settings</a></li>
+                    <li name="list-menu-setting-overdue"><a href="/setting/overdue" data-i18n="nav.settings.overdue">Overdue Settings</a></li>
+                    <li name="list-menu-setting-retry"><a href="/setting/retry" data-i18n="nav.settings.retry">Retry Settings</a></li>
+                    <li name="list-menu-setting-currencie"><a href="/setting/currency" data-i18n="nav.settings.currency">Currencies</a></li>
+                    <li name="list-menu-setting-notification"><a href="/setting/notification" data-i18n="nav.settings.notification">Email Notifications</a></li>
+                    <li name="list-menu-setting-integration"><a href="/setting/integration" data-i18n="nav.settings.integration">Integrations</a></li>
                 </ul>
             </li>
             <li name="list-menu-api">
-                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label">Api</span><span
+                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label" data-i18n="nav.api.top">Api</span><span
                         class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li name="list-menu-api-console"><a href="/apidoc">Api Console</a></li>
-                    <li name="list-menu-api-slate"><a href="/resources/slate/swagger.html">Api Document</a></li>
-                    <li name="list-menu-api-clients"><a href="/clients">Download Clients</a></li>
+                    <li name="list-menu-api-console"><a href="/apidoc" data-i18n="nav.api.console">Api Console</a></li>
+                    <li name="list-menu-api-slate"><a href="/resources/slate/swagger.html" data-i18n="nav.api.document">Api Document</a></li>
+                    <li name="list-menu-api-clients"><a href="/clients" data-i18n="nav.api.clients">Download Clients</a></li>
                 </ul>
             </li>
         </ul>

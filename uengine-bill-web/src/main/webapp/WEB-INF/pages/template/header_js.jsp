@@ -75,7 +75,6 @@
 <!-- config && message -->
 <script type="text/javascript" src="/config/js.json"></script>
 <script type="text/javascript">
-    var lang = config['default.locale'];
     var testMode = config['system.test.mode'];
     if (testMode == 'true') {
         testMode = true;
@@ -83,7 +82,9 @@
         testMode = false;
     }
 </script>
-<script type="text/javascript" src="/resources/js/bundle.js"></script>
+
+<!-- i18next -->
+<script src="/resources/js/plugins/i18next/i18next.min.js"></script>
 
 <script src="/resources/js/plugins/deserialize/jquery.serializeObject.js"></script>
 <script src="/resources/js/plugins/deserialize/jquery.deserialize.js"></script>
@@ -143,8 +144,32 @@
             });
     }
 
+    //현재 조직의 언어를 선택하여 번들을 불러와 i18n 을 활성화한다. (sync 로드)
+    var lang = currentOrg ? currentOrg['language_code'] : 'en';
+    $.ajax({
+        type: "GET",
+        url: '/resources/locales/' + lang + '.json',
+        dataType: "json",
+        async: false,
+        success: function (bundle) {
+            var resources = {};
+            resources[lang] = {
+                translation: bundle
+            };
+            $.i18n.init({
+                resStore: resources,
+                fallbackLng: false,
+                lng: lang
+            }, function () {
+                $('body').i18n();
+            });
+        }
+    });
+
 
     $(function () {
+        //다국어 변환한다.
+        $('body').i18n();
 
         //상단 헤더에 조직 선택 리스트를 생성한다.
         if (organizations && organizations.length) {
@@ -173,7 +198,7 @@
 
         //테스트 모드일경우, 테스트 시간 변경 버튼을 생성한다.
         if (organizations && organizations.length && testMode) {
-            var drawTestDate = function(){
+            var drawTestDate = function () {
                 var testDate = $('[name=change-test-date]');
                 uBilling.getClock()
                     .done(function (clock) {
@@ -224,7 +249,7 @@
                             modal.modal('show');
                         })
                     })
-                    .fail(function(){
+                    .fail(function () {
                         testDate.hide();
                     })
             }

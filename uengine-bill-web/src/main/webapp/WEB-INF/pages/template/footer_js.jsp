@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!-- Mainly scripts -->
 <script src="/resources/js/bootstrap.min.js"></script>
@@ -40,7 +40,7 @@
 <!-- Sparkline -->
 <script src="/resources/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
-<!-- Sparkline demo data  -->
+<!-- Sparkline demo data -->
 <script src="/resources/js/demo/sparkline-demo.js"></script>
 
 <!-- ChartJS-->
@@ -66,13 +66,6 @@
 
 <script>
     $(document).ready(function () {
-//        $('.i-checks').iCheck({
-//            checkboxClass: 'icheckbox_square-green',
-//            radioClass: 'iradio_square-green'
-//        });
-//
-//        $('.chosen-select').chosen({width: "100%"});
-//
-//        $('.summernote').summernote();
+
     });
 </script>

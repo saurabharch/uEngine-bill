@@ -32,29 +32,29 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Edit account</h5>
+                        <h5 data-i18n="account.form.account.title">Edit account</h5>
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal">
-                            <div class="form-group"><label class="col-sm-2 control-label">Primary Contact</label>
+                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="account.form.account.name">Account Name</label>
 
                                 <div class="col-sm-3"><input type="text" class="form-control" name="first_name"
                                                              placeholder="First Name" required></div>
                                 <div class="col-sm-3"><input type="text" class="form-control" name="last_name"
                                                              placeholder="Last Name" required></div>
                             </div>
-                            <div class="form-group"><label class="col-sm-2 control-label">Company Name</label>
+                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="account.form.account.company">Company Name</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="company">
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-2 control-label">Cutomer Email</label>
+                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="account.form.account.email">Customer Email</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="email" required>
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">account Phone</label>
+                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="account.form.account.phone">account Phone</label>
 
                                 <div class="col-sm-5"><input type="text" class="form-control" name="phone"
                                                              placeholder="Mobile or Work Phone">
@@ -65,19 +65,19 @@
 
                             <div class="tabs-container">
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">Other
+                                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true" data-i18n="account.form.account.tab.other">Other
                                         Details</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">Address</a>
+                                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false" data-i18n="account.form.account.tab.address">Address</a>
                                     </li>
-                                    <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">Custom
+                                    <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" data-i18n="account.form.account.tab.custom">Custom
                                         Fields</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false">Notes</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false" data-i18n="account.form.account.tab.notes">Notes</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div id="tab-1" class="tab-pane active">
                                         <div class="panel-body">
 
-                                            <div class="form-group"><label class="col-sm-2 control-label">Time
+                                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="account.form.account.timeZone">Time
                                                 Zone</label>
                                                 <div class="col-md-5">
                                                     <select class="chosen-select" tabindex="2" name="timeZone" required>
@@ -87,7 +87,7 @@
                                             </div>
 
                                             <div class="form-group"><label
-                                                    class="col-sm-2 control-label">Currency</label>
+                                                    class="col-sm-2 control-label" data-i18n="account.form.account.currency">Currency</label>
                                                 <div class="col-md-5">
                                                     <select class="chosen-select" tabindex="2" name="currency" required>
                                                         <%@include file="../template/currencyList.jsp" %>
@@ -96,7 +96,7 @@
                                             </div>
 
                                             <div class="form-group"><label
-                                                    class="col-sm-2 control-label">Locale(Language)</label>
+                                                    class="col-sm-2 control-label" data-i18n="account.form.account.locale">Locale(Language)</label>
 
                                                 <div class="col-sm-5">
                                                     <select class="chosen-select" tabindex="2" name="locale" required>
@@ -105,7 +105,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group"><label class="col-sm-2 control-label">Payment
+                                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="account.form.account.billCycleDayLocal">Payment
                                                 Terms</label>
                                                 <div class="col-sm-5">
                                                     <select class="form-control" name="billCycleDayLocal" required>
@@ -150,36 +150,36 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-sm-6 b-r">
-                                                    <h3 class="m-t-none m-b">BILLING ADDRESS</h3>
+                                                    <h3 class="m-t-none m-b" data-i18n="account.form.account.addressTitle">BILLING ADDRESS</h3>
                                                     <div class="form-group"><label
-                                                            class="col-sm-4 control-label">Street</label>
+                                                            class="col-sm-4 control-label" data-i18n="account.form.account.address1">Street</label>
 
                                                         <div class="col-sm-8"><textarea rows="3" class="form-control"
                                                                                         name="address1"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group"><label
-                                                            class="col-sm-4 control-label">City</label>
+                                                            class="col-sm-4 control-label" data-i18n="account.form.account.city">City</label>
 
                                                         <div class="col-sm-8"><input type="text" class="form-control"
                                                                                      name="city">
                                                         </div>
                                                     </div>
                                                     <div class="form-group"><label
-                                                            class="col-sm-4 control-label">State</label>
+                                                            class="col-sm-4 control-label" data-i18n="account.form.account.state">State</label>
 
                                                         <div class="col-sm-8"><input type="text" class="form-control"
                                                                                      name="state">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group"><label class="col-sm-4 control-label">ZIP
+                                                    <div class="form-group"><label class="col-sm-4 control-label" data-i18n="account.form.account.postalCode">ZIP
                                                         Code</label>
 
                                                         <div class="col-sm-8"><input type="text" class="form-control"
                                                                                      name="postalCode">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group"><label class="col-sm-4 control-label">Country</label>
+                                                    <div class="form-group"><label class="col-sm-4 control-label" data-i18n="account.form.account.country">Country</label>
 
                                                         <div class="col-sm-5">
                                                             <select class="chosen-select" name="country" required>
