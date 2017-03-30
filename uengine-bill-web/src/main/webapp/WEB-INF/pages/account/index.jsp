@@ -32,30 +32,31 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>accounts</h5>
+                        <h5 data-i18n="account.index.title">accounts</h5>
 
                         <div class="ibox-tools">
                             <a href="./account/new" type="button" class="btn btn-primary btn-sm">New +</a>
                             <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#"><i
                                     class="fa fa-bars"></i></a>
                             <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">All</a>
+                                <li><a href="#" data-i18n="account.index.tool.all">All</a>
                                 </li>
-                                <li><a href="#">Active</a>
+                                <li><a href="#" data-i18n="account.index.tool.active">Active</a>
                                 </li>
-                                <li><a href="#">Inactive</a>
+                                <li><a href="#" data-i18n="account.index.tool.inactive">Inactive</a>
                                 </li>
-                                <li><a href="#">None subscribers</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Import accounts</a>
-                                </li>
+                                <li><a href="#" data-i18n="account.index.tool.noneSubscribers">None subscribers</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#">Export accounts</a>
+                                <li><a href="#" data-i18n="account.index.tool.import">Import accounts</a>
+                                </li>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#"><i class="fa fa-refresh"> Refresh list</i></a>
+                                <li><a href="#" data-i18n="account.index.tool.export">Export accounts</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-refresh" data-i18n="account.index.tool.refresh"> Refresh
+                                    list</i></a>
                                 </li>
                             </ul>
                         </div>
@@ -133,11 +134,11 @@
                             var accountId = selected[i]['accountId'];
                             uBilling.deleteAccount(accountId)
                                 .done(function () {
-                                    toastr.success("account deleted.");
+                                    toastr.success(i18n.t('account.index.button.delete.success'));
                                     dt.getDt().ajax.reload();
                                 })
                                 .fail(function () {
-                                    toastr.error("Can't remove account cause by subscription of payment transaction exist");
+                                    toastr.error(i18n.t('account.index.button.delete.fail'));
                                 });
                         }
                     }
@@ -146,12 +147,12 @@
                     text: 'Edit',
                     action: function () {
                         var selected = dt.getDt().rows({selected: true}).data();
-                        if(!selected.length){
+                        if (!selected.length) {
                             return;
                         }
-                        if(selected.length > 1){
-                            toastr.warning("Choice one account to edit.");
-                        }else{
+                        if (selected.length > 1) {
+                            toastr.warning(i18n.t('account.index.button.edit.warning'));
+                        } else {
                             var accountId = selected[0]['accountId'];
                             window.location.href = '/account/' + accountId + '/edit';
                         }
@@ -194,7 +195,7 @@
                         });
                     })
                     .fail(function () {
-                        toastr.error("Can't find account list.");
+                        toastr.error(i18n.t('account.index.error'));
                     });
             }
         });

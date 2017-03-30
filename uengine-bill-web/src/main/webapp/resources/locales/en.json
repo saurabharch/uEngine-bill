@@ -1,16 +1,88 @@
 {
-  "header": {
-    "title": "Welcome to uEngine Billing",
-    "form": {
-      "testDate": {
-        "title": "Change Test Date",
-        "date": "Test date"
+  "template": {
+    "header": {
+      "title": "Welcome to uEngine Billing",
+      "form": {
+        "testDate": {
+          "title": "Change Test Date",
+          "date": "Test date"
+        }
+      }
+    },
+    "nav": {
+      "dashboards": "Dashboards",
+      "products": "Products",
+      "accounts": "Accounts",
+      "subscriptions": "Subscriptions",
+      "invoices": "Invoices",
+      "events": "Events",
+      "reports": "Reports",
+      "settings": {
+        "top": "Settings",
+        "profile": "Organization Profile",
+        "users": "Users",
+        "billing": "Billing Settings",
+        "overdue": "Overdue Settings",
+        "retry": "Retry Settings",
+        "currency": "Currencies",
+        "notification": "Email Notifications",
+        "integration": "Integrations"
+      },
+      "api": {
+        "top": "Api",
+        "console": "Api Console",
+        "document": "Api Document",
+        "clients": "Download Clients"
       }
     }
   },
-  "nav": {
-    "dashboards": "Dashboards",
-    "products": "Products",
-    "accounts": "Accounts"
+  "account": {
+    "new": {
+      "title": "Edit account",
+      "form": {
+        "name": "Account Name",
+        "company": "Company Name",
+        "email": "Customer Email",
+        "phone": "account Phone",
+        "tab": {
+          "other": "Other",
+          "address": "Address",
+          "custom": "Custom",
+          "notes": "Notes"
+        },
+        "timeZone": "Time Zone",
+        "currency": "Currency",
+        "locale": "Locale(Language)",
+        "billCycleDayLocal": "Payment Terms",
+        "addressTitle": "BILLING ADDRESS",
+        "address1": "Street",
+        "city": "City",
+        "state": "State",
+        "postalCode": "ZIP Code",
+        "country": "Country"
+      }
+    },
+    "index": {
+      "title": "accounts",
+      "tool": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive",
+        "noneSubscribers": "None subscribers",
+        "import": "Import accounts",
+        "export": "Export accounts",
+        "refresh": "Refresh list"
+      },
+      "error": "Can't find account list.",
+      "button": {
+        "delete": {
+          "success": "account deleted.",
+          "fail": "Can't remove account cause by subscription of payment transaction exist"
+        },
+        "edit": {
+          "warning": "Choice one account to edit."
+        }
+      }
+    }
   }
 }

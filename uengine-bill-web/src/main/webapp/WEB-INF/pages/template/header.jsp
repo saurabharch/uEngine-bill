@@ -17,7 +17,7 @@
         </div>
         <ul class="nav navbar-top-links navbar-right">
             <li>
-                <span class="m-r-sm text-muted welcome-message" data-i18n="header.title">Welcome to uEngine Billing</span>
+                <span class="m-r-sm text-muted welcome-message" data-i18n="template.header.title">Welcome to uEngine Billing</span>
             </li>
             <li style="display: none">
                 <button type="button" class="btn btn-default btn-sm" name="change-test-date">Date</button>
@@ -85,14 +85,14 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="modal-title" data-i18n="header.form.testDate.title">Change Test Date</h4>
+                <h4 class="modal-title" name="modal-title" data-i18n="template.header.form.testDate.title">Change Test Date</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form class="form">
                             <div class="form-group" id="test-date-group">
-                                <label class="font-noraml" data-i18n="header.form.testDate.date">Test date</label>
+                                <label class="font-noraml" data-i18n="template.header.form.testDate.date">Test date</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
