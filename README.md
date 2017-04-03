@@ -251,6 +251,7 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 -Dorg.killbill.mail.useSSL=true
 -Dorg.killbill.mail.redirect.address=http://localhost
 -Dorg.killbill.invoice.emailNotificationsEnabled=true
+-Dorg.killbill.invoice.globalLock.retries=200
 -Dkillbill.url=http://localhost/killbill
 -Dkillbill.user=admin
 -Dkillbill.password=password
@@ -290,6 +291,7 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 | org.killbill.mail.useSSL                              | 이메일 ssl 사용 여부                                                                                                                   | TRUE                                 |
 | org.killbill.mail.redirect.address                    | 이메일 링크 클릭시 리다이렉트 되는 호스트 (실제 서비스 호스트 등록 추천)                                                               | http://localhost                     |
 | org.killbill.invoice.emailNotificationsEnabled        | 시스템의 인보이스 이메일 발송 기능 사용 여부                                                                                           | TRUE                                 |
+| org.killbill.invoice.globalLock.retries        | 시스템의 인보이스 생성 리트라이 (1회당 100ms 대기, 지정된 회수 대기 후 시스템 락)                                                                                           | 200                                 |
 | killbill.url                                          | 킬빌 서버 주소 (킬빌과 유엔진빌링이 같은 was 를 사용하기 때문에, http://localhost:<was포트>/<killbill war 콘텍스트> 로 설정하면 된다.) | http://localhost/killbill            |
 | killbill.user                                         | 킬빌 서버 기본 사용자 (admin 고정)                                                                                                     | admin                                |
 | killbill.password                                     | 킬빌 서버 기본 사용자 패스워드 (password 고정)                                                                                         | password                             |
