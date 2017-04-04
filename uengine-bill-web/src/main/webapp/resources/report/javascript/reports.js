@@ -1,4 +1,5 @@
-function Reports() {
+function Reports(dashboard) {
+    this.dashboard = dashboard;
     this.protocol = 'http';
     this.host = '127.0.0.1';
     this.port = 8080;
@@ -10,6 +11,7 @@ function Reports() {
     this.reports = {};
     // Map position -> smoothing function
     this.smoothingFunctions = {};
+    this.__layersOrLines = {};
 
     // Standard sets of reports
     this.ANALYTICS_REPORTS = {
@@ -34,7 +36,7 @@ function Reports() {
     this.loadFromFilePath = false;
 }
 
-Reports.prototype.init = function() {
+Reports.prototype.init = function () {
     var url = $.url();
     // Infer Kill Bill's address by looking at the current address,
     // except if we're loading the file directly (file:///).
@@ -46,33 +48,14 @@ Reports.prototype.init = function() {
         this.loadFromFilePath = true;
     }
     this.basePath = url.attr('path');
-
-    var params = url.param();
-    for (var key in params) {
-        if (key == 'startDate') {
-            this.startDate = params[key];
-        } else if (key == 'endDate') {
-            this.endDate = params[key];
-        } else if (key.startsWith('smooth')) {
-            var position = key.split('smooth')[1];
-            this.smoothingFunctions[position] = params[key];
-        } else if (key.startsWith('report')) {
-            var position = key.split('report')[1];
-            if (!(params[key] instanceof Array)) {
-                this.reports[position] = [params[key]];
-            } else {
-                this.reports[position] = params[key];
-            }
-        }
-    }
 }
 
-Reports.prototype.hasReport = function(val) {
+Reports.prototype.hasReport = function (val) {
     var found = false;
 
     var that = this;
-    $.each(Object.keys(this.reports), function(i, position) {
-        $.each(that.reports[position], function(j, reportName) {
+    $.each(Object.keys(this.reports), function (i, position) {
+        $.each(that.reports[position], function (j, reportName) {
             if (reportName === val) {
                 found = true;
                 return;
@@ -83,41 +66,44 @@ Reports.prototype.hasReport = function(val) {
     return found;
 }
 
-Reports.prototype.availableReports = function(callback) {
+Reports.prototype.availableReports = function (callback) {
     var url = this.buildBaseURL('/plugins/killbill-analytics/reports');
-    this.doGet(url, function(allReports) { callback(allReports); });
-}
-
-Reports.prototype.getDataForReport = function(position, callback) {
-    var url = this.buildDataURL(position);
-
-    return this.doGet(url,
-            function(data) {
-                callback(position, data);
-            },
-            function(jqXHR, textStatus, errorThrown) {
-                if (jqXHR.responseText) {
-                    try {
-                        errors = $.parseJSON(jqXHR.responseText);
-                        if (errors['message']) {
-                            displayError('Error generating report nb. ' + position + ':\n' + errors['message']);
-                        } else {
-                            displayError('Error generating report nb. ' + position + ':\n' + errors);
-                        }
-                    } catch (err) {
-                        displayError('Error generating report nb. ' + position + ':\n' + jqXHR.responseText);
-                    }
-                } else {
-                    if (errorThrown) {
-                        displayError('Error generating report nb. ' + position + ':\n' + errorThrown);
-                    } else {
-                        displayError('Error generating report nb. ' + position + ':\n' + textStatus + ' (status '+ jqXHR.status + ')');
-                    }
-                }
+    this.doGet(url, function (allReports) {
+        callback(allReports);
     });
 }
 
-Reports.prototype.getDataForReports = function(callback) {
+Reports.prototype.getDataForReport = function (position, callback) {
+    var me = this;
+    var url = this.buildDataURL(position);
+
+    return this.doGet(url,
+        function (data) {
+            callback(position, data);
+        },
+        function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                try {
+                    errors = $.parseJSON(jqXHR.responseText);
+                    if (errors['message']) {
+                        me.dashboard.displayError('Error generating report nb. ' + position + ':\n' + errors['message']);
+                    } else {
+                        me.dashboard.displayError('Error generating report nb. ' + position + ':\n' + errors);
+                    }
+                } catch (err) {
+                    me.dashboard.displayError('Error generating report nb. ' + position + ':\n' + jqXHR.responseText);
+                }
+            } else {
+                if (errorThrown) {
+                    me.dashboard.displayError('Error generating report nb. ' + position + ':\n' + errorThrown);
+                } else {
+                    me.dashboard.displayError('Error generating report nb. ' + position + ':\n' + textStatus + ' (status ' + jqXHR.status + ')');
+                }
+            }
+        });
+}
+
+Reports.prototype.getDataForReports = function (callback) {
     // Array of all deferreds
     var futures = []
     // Array of all the data, the index being the report position (starts at zero)
@@ -125,7 +111,7 @@ Reports.prototype.getDataForReports = function(callback) {
 
     for (var position in this.reports) {
         // Fetch the data
-        var future = this.getDataForReport(position, function(zePosition, reportsData) {
+        var future = this.getDataForReport(position, function (zePosition, reportsData) {
             if (!(reportsData instanceof Array) || reportsData.length == 0 || reportsData[0].data.length == 0) {
                 log.debug('Report at position ' + (zePosition - 1) + ' has not data')
                 // Skip, to avoid confusing the graphing library
@@ -139,27 +125,34 @@ Reports.prototype.getDataForReports = function(callback) {
     }
 
     // Apply callback on join (and remove skipped reports, with no data)
-    $.when.apply(null, futures).done(function() { callback($.grep(futuresData, function(e) { return e; })); });
+    $.when.apply(null, futures)
+        .done(function () {
+            callback($.grep(futuresData, function (e) {
+                return e;
+            }));
+        });
 }
 
-Reports.prototype.buildRefreshURLForNewSmooth = function(position, newSmooth) {
-    var newReports = $.extend(true, {}, this);
-    newReports.smoothingFunctions[position] = newSmooth;
-    return newReports.buildRefreshURL();
+Reports.prototype.refreshForNewSmooth = function (position, newSmooth) {
+    var me = this;
+    me.smoothingFunctions[position] = newSmooth;
+    me.refresh();
 }
 
-Reports.prototype.buildRefreshURL = function(newReports, newStartDate, newEndDate) {
+Reports.prototype.refresh = function (newReports, newStartDate, newEndDate) {
+    var me = this;
+    $('#chartAnchor').children().remove();
     if (!newReports) {
         newReports = this.reports;
     }
 
     // Make sure to respect the current ordering if there is no change in reports
     var currentReportsSet = [];
-    $.each(this.reports, function(position, reportName) {
+    $.each(this.reports, function (position, reportName) {
         currentReportsSet = currentReportsSet.concat(reportName);
     });
     var newReportsSet = [];
-    $.each(newReports, function(position, reportName) {
+    $.each(newReports, function (position, reportName) {
         newReportsSet = newReportsSet.concat(reportName);
     });
 
@@ -168,22 +161,31 @@ Reports.prototype.buildRefreshURL = function(newReports, newStartDate, newEndDat
         newReports = this.reports;
     }
 
-    var url = !this.loadFromFilePath ? this.buildBaseURL(this.basePath) : this.basePath;
-    url += '?startDate=' + (newStartDate ? newStartDate : this.startDate);
-    url += '&endDate=' + (newEndDate ? newEndDate : this.endDate);
+    me.startDate = newStartDate ? newStartDate : me.startDate;
+    me.endDate = newEndDate ? newEndDate : me.endDate;
+    me.reports = newReports;
 
-    for (var position in newReports) {
-        var joinKey = '&report' + position + '=';
-        url += joinKey + newReports[position].join(joinKey);
-        if (this.smoothingFunctions[position]) {
-            url += '&smooth' + position + '=' + this.smoothingFunctions[position];
+    //me.dashboard.drawData();
+    me.getDataForReports(function (dataForAllReports) {
+        // As a hint the AJAX requests are done, accelerate the spinner
+        me.dashboard.spinOptions['speed'] = 4;
+        $('#loading-spinner').spin(me.dashboard.spinOptions);
+
+        try {
+            if (dataForAllReports.length == 0) {
+                me.dashboard.displayInfo("Use the menu to select reports");
+            } else {
+                var reportsGraphs = new ReportsGraphs(me);
+                reportsGraphs.drawAll(dataForAllReports);
+            }
+        } finally {
+            // Hide the loading indicator
+            $('#loading-spinner').spin(false);
         }
-    }
-
-    return url;
+    });
 };
 
-Reports.prototype.buildDataURL = function(position, format) {
+Reports.prototype.buildDataURL = function (position, format) {
     var url = this.buildBaseURL('/plugins/killbill-analytics/reports');
     url += '?format=' + (format ? format : 'json')
     url += '&startDate=' + this.startDate;
@@ -196,25 +198,18 @@ Reports.prototype.buildDataURL = function(position, format) {
     return url;
 }
 
-Reports.prototype.buildBaseURL = function(path) {
+Reports.prototype.buildBaseURL = function (path) {
     return this.protocol + '://' + this.host + ':' + this.port + path;
 }
 
-Reports.prototype.doGet = function(url, doneCallback, failCallback) {
-    console.log(parent.currentOrg);
+Reports.prototype.doGet = function (url, doneCallback, failCallback) {
     var apiKey = $.url().param('apiKey') || 'bob';
     var apiSecret = $.url().param('apiSecret') || 'lazar';
-    var token = localStorage.getItem('uengine-billing-access_token');
-    var organizationId = localStorage.getItem('uengine-billing-organization_id');
-    // xhr.setRequestHeader('Authorization', token);
-    // xhr.setRequestHeader('X-organization-id', organizationId);
+
     return $.ajax({
         type: 'GET',
         contentType: 'application/json',
-        //headers: { 'X-Killbill-ApiKey': apiKey, 'X-Killbill-ApiSecret': apiSecret },
-        headers: {
-            'Authorization': token, 'X-organization-id': organizationId
-        },
+        headers: {'X-Killbill-ApiKey': apiKey, 'X-Killbill-ApiSecret': apiSecret},
         dataType: 'json',
         url: url
     }).done(doneCallback).fail(failCallback);

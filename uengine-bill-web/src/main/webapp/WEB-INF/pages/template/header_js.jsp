@@ -145,7 +145,7 @@
     }
 
     //현재 조직의 언어를 선택하여 번들을 불러와 i18n 을 활성화한다. (sync 로드)
-    var lang = currentOrg ? currentOrg['language_code'] : 'en';
+    var lang = (currentOrg && currentOrg['language_code']) ? currentOrg['language_code'] : 'en';
     $.ajax({
         type: "GET",
         url: '/resources/locales/' + lang + '.json',

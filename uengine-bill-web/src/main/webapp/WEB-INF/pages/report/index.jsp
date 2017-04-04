@@ -32,7 +32,44 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <iframe height="600px" width="100%" frameborder="none" src="/resources/report/analytics.html"></iframe>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="ibox-tools">
+
+                            <form class="form-inline pull-left" role="form">
+                                <div class="form-group">
+                                    <input id="start-date" type="text" placeholder="Start date" class="form-control input-sm"
+                                           data-provide="datepicker">
+                                </div>
+                                <div class="form-group">
+                                    <input id="end-date" type="text" placeholder="End date" class="form-control input-sm"
+                                           data-provide="datepicker">
+                                </div>
+                                <button type="button" class="btn btn-default btn-sm" id="refresh-graphs">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </button>
+                            </form>
+
+                            <button type="button" class="btn btn-default btn-sm" id="standard-analytics-dashboards">Analytics</button>
+                            <button type="button" class="btn btn-default btn-sm" id="standard-system-dashboards">System</button>
+                            <button type="button" class="dropdown-toggle btn btn-default btn-sm"
+                                    data-toggle="dropdown"
+                                    href="Javascript:void(0)">Custom
+                            </button>
+                            <ul class="dropdown-menu dropdown-user" id="custom-dashboard-builder">
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div id="alert-info" class="alert alert-info" style="display: none;"></div>
+                            <div id="alert-error" class="alert alert-danger" style="display: none;"></div>
+                            <div id='loading-spinner'></div>
+                            <div id="chartAnchor"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -41,6 +78,31 @@
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
+<script type="text/javascript" src="/resources/report/javascript/log4javascript.js"></script>
+<script type="text/javascript">
+    var consoleAppender = new log4javascript.BrowserConsoleAppender();
+    consoleAppender.setThreshold(log4javascript.Level.INFO);
+    var layout = new log4javascript.PatternLayout("%d [%-5p] %m{5}");
+    consoleAppender.setLayout(layout);
+    window.log = log4javascript.getLogger();
+    window.log.addAppender(consoleAppender);
+
+</script>
+
+<script type="text/javascript" src="/resources/report/javascript/d3.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/purl.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/moment.min.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/spin.min.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/jquery.spin.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/killbill.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/reports.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/reports.dataTables.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/reports.graphs.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/reports.urls.js"></script>
+<script type="text/javascript" src="/resources/report/javascript/dashboard.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="/resources/report/styles/dashboard.css" media="screen"/>
 
 </body>
 </html>

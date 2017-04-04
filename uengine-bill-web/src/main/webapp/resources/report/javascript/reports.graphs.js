@@ -1,9 +1,10 @@
 function ReportsGraphs(reports) {
     // To build the data tables
+    this.reports = reports;
     this.reportsDataTables = new ReportsDataTables(reports);
 }
 
-ReportsGraphs.prototype.getTitle = function(defaultTitle, position) {
+ReportsGraphs.prototype.getTitle = function (defaultTitle, position) {
     var overridenTitle = $.url().param('title' + position);
     if (!overridenTitle) {
         return defaultTitle;
@@ -12,9 +13,11 @@ ReportsGraphs.prototype.getTitle = function(defaultTitle, position) {
     }
 }
 
-ReportsGraphs.prototype.getMappingType = function(inputType, position) {
+ReportsGraphs.prototype.getMappingType = function (inputType, position) {
+    var me = this;
     if (inputType == 'TIMELINE') {
-        var layersOrLines = $.url().param('__layersOrLines' + position);
+        var layersOrLines = me.reports['__layersOrLines'][position];
+        //var layersOrLines = $.url().param('__layersOrLines' + position);
         if (!layersOrLines || layersOrLines != 'layers') {
             return 'lines';
         } else {
@@ -27,7 +30,7 @@ ReportsGraphs.prototype.getMappingType = function(inputType, position) {
     }
 }
 
-ReportsGraphs.prototype.doDrawAll = function(input) {
+ReportsGraphs.prototype.doDrawAll = function (input) {
     var inputData = input.data;
 
     var nbGraphs = inputData.length + 1;
@@ -41,7 +44,7 @@ ReportsGraphs.prototype.doDrawAll = function(input) {
 
     graphStructure.setupDomStructure();
     var canvas = graphStructure.createCanvas([input.topMargin, input.rightMargin, input.bottomMargin, input.leftMargin],
-            input.canvasWidth, canvasHeigthWithMargins);
+        input.canvasWidth, canvasHeigthWithMargins);
 
 
     var curTranslateY = input.topMargin;
@@ -91,14 +94,15 @@ ReportsGraphs.prototype.doDrawAll = function(input) {
     }
 }
 
-ReportsGraphs.prototype.addSubtitle = function(input, data, i, yOffset, curType) {
+ReportsGraphs.prototype.addSubtitle = function (input, data, i, yOffset, curType) {
+    var me = this;
     if (curType != 'lines' && curType != 'layers') {
         return;
     }
 
     var subtitle = $('<div/>').attr('id', 'subtitle-' + i)
-                              .css('position', 'absolute')
-                              .css('top', yOffset + 'px');
+        .css('position', 'absolute')
+        .css('top', yOffset + 'px');
 
     // Reports position starts at 1
     var position = i + 1;
@@ -120,19 +124,20 @@ ReportsGraphs.prototype.addSubtitle = function(input, data, i, yOffset, curType)
     }
 
     var modal = $('<div/>').attr('class', 'modal fade')
-                           .attr('id', 'dataTablesModalWrapper-' + i)
-                           .attr('tabindex', '-1')
-                           .attr('role', 'dialog')
-                           .attr('aria-labelledby', 'RawData')
-                           .attr('aria-hidden', 'true')
-                           .append($('<div/>').attr('class', 'modal-dialog')
-                                              .append($('<div/>').attr('class', 'modal-content')
-                                                                 .append(modalBody)));
+        .attr('id', 'dataTablesModalWrapper-' + i)
+        .attr('tabindex', '-1')
+        .attr('role', 'dialog')
+        .attr('aria-labelledby', 'RawData')
+        .attr('aria-hidden', 'true')
+        .append($('<div/>').attr('class', 'modal-dialog')
+            .append($('<div/>').attr('class', 'modal-content')
+                .append(modalBody)));
     subtitle.append(modal);
     $('#dataTablesModalWrapper-' + i).modal();
 
+
     var dataTablesLink = $('<a/>').text('View data').css('cursor', 'pointer');
-    dataTablesLink.click(function() {
+    dataTablesLink.click(function () {
         $('#dataTablesModalWrapper-' + i).modal('toggle');
     });
     subtitle.append(dataTablesLink);
@@ -140,41 +145,70 @@ ReportsGraphs.prototype.addSubtitle = function(input, data, i, yOffset, curType)
     subtitle.append("&nbsp;|&nbsp;");
 
     // Add style link
-    var layersOrLines = $.url().param('__layersOrLines' + position);
+    var layersOrLines = me.reports['__layersOrLines'][position];
     if (!layersOrLines || layersOrLines != 'layers') {
-        var layersOrLinesLink = $('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURL() + '&__layersOrLines' + position + '=layers').text('Switch to layers');
+        var layersOrLinesLink = $('<a/>').text('Switch to layers');
+        layersOrLinesLink.click(function () {
+            me.reports['__layersOrLines'][position] = 'layers';
+            me.reports.refresh();
+        })
     } else {
-        var layersOrLinesLink = $('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURL() + '&__layersOrLines' + position + '=lines').text('Switch to lines');
+        var layersOrLinesLink = $('<a/>').text('Switch to lines');
+        layersOrLinesLink.click(function () {
+            me.reports['__layersOrLines'][position] = 'lines';
+            me.reports.refresh();
+        })
     }
     subtitle.append(layersOrLinesLink);
 
     // Add smoothing links
     var firstLink = true;
-    var smooth = $.url().param('smooth' + position);
+    var smooth = me.reports['smoothingFunctions'][position];
+    //var smooth = $.url().param('smooth' + position);
     if (smooth) {
         firstLink ? subtitle.append("&nbsp;|&nbsp;") : subtitle.append("&nbsp;/&nbsp;");
         firstLink = false;
-        subtitle.append($('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURLForNewSmooth(position)).text('Raw data'));
+        var smoothLink = $('<a/>').text('Raw data');
+        smoothLink.click(function () {
+            me.reports.refreshForNewSmooth(position, null);
+        })
+        subtitle.append(smoothLink);
     }
     if (smooth != 'AVERAGE_WEEKLY') {
         firstLink ? subtitle.append("&nbsp;|&nbsp;") : subtitle.append("&nbsp;/&nbsp;");
         firstLink = false;
-        subtitle.append($('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURLForNewSmooth(position, 'AVERAGE_WEEKLY')).text('Weekly average'));
+        var smoothLink = $('<a/>').text('Weekly average');
+        smoothLink.click(function () {
+            me.reports.refreshForNewSmooth(position, 'AVERAGE_WEEKLY');
+        })
+        subtitle.append(smoothLink);
     }
     if (smooth != 'AVERAGE_MONTHLY') {
         firstLink ? subtitle.append("&nbsp;|&nbsp;") : subtitle.append("&nbsp;/&nbsp;");
         firstLink = false;
-        subtitle.append($('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURLForNewSmooth(position, 'AVERAGE_MONTHLY')).text('Monthly average'));
+        var smoothLink = $('<a/>').text('Monthly average');
+        smoothLink.click(function () {
+            me.reports.refreshForNewSmooth(position, 'AVERAGE_MONTHLY');
+        })
+        subtitle.append(smoothLink);
     }
     if (smooth != 'SUM_WEEKLY') {
         firstLink ? subtitle.append("&nbsp;|&nbsp;") : subtitle.append("&nbsp;/&nbsp;");
         firstLink = false;
-        subtitle.append($('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURLForNewSmooth(position, 'SUM_WEEKLY')).text('Weekly sum'));
+        var smoothLink = $('<a/>').text('Weekly sum');
+        smoothLink.click(function () {
+            me.reports.refreshForNewSmooth(position, 'SUM_WEEKLY');
+        })
+        subtitle.append(smoothLink);
     }
     if (smooth != 'SUM_MONTHLY') {
         firstLink ? subtitle.append("&nbsp;|&nbsp;") : subtitle.append("&nbsp;/&nbsp;");
         firstLink = false;
-        subtitle.append($('<a/>').attr('href', this.reportsDataTables.reports.buildRefreshURLForNewSmooth(position, 'SUM_MONTHLY')).text('Monthly sum'));
+        var smoothLink = $('<a/>').text('Monthly sum');
+        smoothLink.click(function () {
+            me.reports.refreshForNewSmooth(position, 'SUM_MONTHLY');
+        })
+        subtitle.append(smoothLink);
     }
 
     $('#charts').append(subtitle);
@@ -182,7 +216,7 @@ ReportsGraphs.prototype.addSubtitle = function(input, data, i, yOffset, curType)
     subtitle.css('left', (input.leftMargin + input.canvasWidth / 2 - subtitle.width() / 2) + 'px')
 }
 
-ReportsGraphs.prototype.drawAll = function(dataForAllReports) {
+ReportsGraphs.prototype.drawAll = function (dataForAllReports) {
     var input = new killbillGraph.KBInputGraphs(800, 400, 80, 80, 80, 80, 160, dataForAllReports);
     this.doDrawAll(input);
 }
