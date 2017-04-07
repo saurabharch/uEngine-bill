@@ -521,7 +521,7 @@ uBilling.prototype = {
             url: '/rest/v1/accounts/' + accountId + '/tags?tagList=' + tags.join(),
             //data: null,
             contentType: "application/json",
-            dataType: 'json'
+            dataType: 'text'
         };
         return this.send(options);
     },
@@ -578,7 +578,7 @@ uBilling.prototype = {
             url: '/rest/v1/accounts/' + account_id + '/paymentMethods?isDefault=' + isDefault + '&payAllUnpaidInvoices=false',
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: 'json'
+            dataType: 'text'
         };
         return this.send(options);
     },
