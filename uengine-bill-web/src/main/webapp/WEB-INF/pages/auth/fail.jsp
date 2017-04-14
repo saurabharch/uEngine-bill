@@ -28,17 +28,17 @@
             <h1 class="logo-name">uEngine</h1>
 
         </div>
-        <h3>Welcome to uEngine Billing</h3>
+        <h3 data-i18n="auth.fail.welcome">Welcome to uEngine Billing</h3>
 
-        <p>uEngine Billing is a powerful subscription management software which handles recurring billing and payments
+        <p data-i18n="auth.fail.signUpText">uEngine Billing is a powerful subscription management software which handles recurring billing and payments
             efficiently.Sign up for a free test account.
         </p>
 
-        <div class="alert alert-danger">
+        <div class="alert alert-danger" data-i18n="auth.fail.retry">
             Failed to login. Retry please.
         </div>
 
-        <p>Login in. To see it in action.</p>
+        <p data-i18n="auth.fail.loginAction">Login in. To see it in action.</p>
 
         <form id="login_form" class="m-t" role="form">
             <input type="hidden" name="scope" value="uEngineSubscriptions/subscriptionsapi">
@@ -49,16 +49,16 @@
             <div class="form-group">
                 <input type="password" name="password" class="form-control" placeholder="Password" required="">
             </div>
-            <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+            <button type="submit" class="btn btn-primary block full-width m-b" data-i18n="auth.fail.login">Login</button>
 
             <a href="#">
-                <small>Forgot password?</small>
+                <small data-i18n="auth.fail.password">Forgot password?</small>
             </a>
 
             <p class="text-muted text-center">
-                <small>Do not have an account?</small>
+                <small data-i18n="auth.fail.notAccount">Do not have an account?</small>
             </p>
-            <a class="btn btn-sm btn-white btn-block" href="/registe/register">Create an account</a>
+            <a class="btn btn-sm btn-white btn-block" href="/registe/register" data-i18n="auth.fail.createAccount">Create an account</a>
         </form>
         <p class="m-t">
             <small>uEngine subscription billing app &copy; 2016</small>

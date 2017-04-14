@@ -22,12 +22,12 @@
 <body class="gray-bg">
 
 <div class="middle-box text-center animated fadeInDown">
-    <h1>401</h1>
-    <h3 class="font-bold">Method Not Allowed</h3>
+    <h1>405</h1>
+    <h3 class="font-bold" data-i18n="auth.error405.methodNotAllowed">Method Not Allowed</h3>
 
     <div class="error-desc">
-        The server encountered something unexpected that didn't allow it to complete the request. We apologize.<br/>
-        You can go back to main page: <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
+        <span data-i18n="auth.error405.sorry">The server encountered something unexpected that didn't allow it to complete the request. We apologize.</span><br/>
+        <span data-i18n="goback">You can go back to main page:</span> <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
     </div>
 </div>
 

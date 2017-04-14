@@ -23,11 +23,11 @@
 
 <div class="middle-box text-center animated fadeInDown">
     <h1>401</h1>
-    <h3 class="font-bold">Deny access</h3>
+    <h3 class="font-bold" data-i18n="auth.error401.denyaccess">Deny access</h3>
 
     <div class="error-desc">
-        Sorry, you don't have permission about this page. We apologize.<br/>
-        You can go back to main page: <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
+        <span data-i18n="auth.error401.sorry">Sorry, you don't have permission about this page. We apologize.</span><br/>
+        <span data-i18n="auth.error401.goback">You can go back to main page: <span><br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
     </div>
 </div>
 

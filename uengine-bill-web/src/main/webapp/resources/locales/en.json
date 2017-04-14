@@ -84,5 +84,232 @@
         }
       }
     }
+  },
+  "auth": {
+    "error401": {
+      "denyaccess": "Deny access",
+      "sorry" : "Sorry, you don't have permission about this page. We apologize.",
+      "goback": "You can go back to main page:"
+    },
+    "error404": {
+      "pageNotFound": "Page Not Found",
+      "sorry" : "Sorry, but the page you are looking for has note been found. We apologize.",
+      "goback": "You can go back to main page:"
+    },
+    "error405": {
+      "methodNotAllowed": "Method Not Allowed",
+      "sorry" : "The server encountered something unexpected that didn't allow it to complete the request. We apologize.",
+      "goback": "You can go back to main page:"
+    },
+    "error500": {
+      "internal": "Internal Server Error",
+      "sorry" :"The server encountered something unexpected that didn't allow it to complete the request. We apologize.",
+      "goback":"You can go back to main page:",
+    },
+    "fail": {
+      "welcome": "Welcome to uEngine Billing",
+      "signUpText": "uEngine Billing is a powerful subscription management software which handles recurring billing and payments
+          efficiently.Sign up for a free test account.",
+      "retry": "Failed to login. Retry please.",
+      "loginAction": "Login in. To see it in action",
+      "login": "Login",
+      "password": "password",
+      "notAccount": "Do not have an account?",
+      "createAccount": "Create an account"
+    },
+    "login": {
+      "loginText": "uEngine Billing is a powerful subscription management software which handles recurring billing and payments
+          efficiently.Sign up for a free test account.",
+      "loginAction": "Login in. To see it in action",
+      "login": "Login",
+      "forgotPasswd": "Forgot password?",
+      "notAccount": "Do not have an account?",
+      "createAccount": "Create an account"
+    },
+    "sendPasswdSuccess": {
+      "already": "Already Signed up? Click",
+      "signin" : "Sign In",
+      "login"  : "to login your account."
+    }
+  },
+  "invoice": {
+    "index": {
+      "invoices": "Invoices"
+    }
+  },
+  "management": {
+    "edit": {
+      "breadCrumb": {
+        "left": {
+          "management": "Management Group"
+        },
+        "right": {
+          "management": "Management Group"
+        }
+      },
+      "content": {
+        "title": "Edit Management Group",
+        "failed": "Management edit failed.",
+        "name": "Name",
+        "description": "Description",
+        "loginCheck": "Login Check Lifetime",
+        "scopeCheck": "Scope Check Lifetime",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "list": {
+      "breadCrumb": {
+        "left": {
+          "management": "Management Group"
+        },
+        "right": {
+          "management": "Management Group"
+        }
+      },
+      "content": {
+        "createManagement": "Create Management",
+        "search": "Search :",
+        "groupname": "Management Group Name",
+        "description": "Description"
+      }
+    },
+    "new": {
+      "breadCrumb": {
+        "left": {
+          "management": "Management Group"
+        },
+        "right": {
+          "management": "Management Group"
+        }
+      },
+      "content": {
+        "title": "Create Management Group",
+        "failed": "Management edit failed.",
+        "name": "Name",
+        "description": "Description",
+        "loginCheck": "Login Check Lifetime",
+        "scopeCheck": "Scope Check Lifetime",
+        "create": "Create Management Group"
+      }
+    }
+  },
+  "organization": {
+    "create":{
+      "loginColumns":{
+        "title": "Create your organization",
+        "text1": "Click",
+        "text2": "Sign In",
+        "text3": "to login other account.",
+        "name" : "Organization Name",
+        "language": "Language",
+        "option": {
+          "en": "Engilsh",
+          "ko": "Korean",
+          "ja": "Japanese",
+          "zh": "Chinese"
+        },
+        "country": "Country",
+        "timeZone": "Time Zone",
+        "currency": "Currency",
+        "create": "Create organization"
+      }
+    }
+  },
+  "product": {
+    "sub": {
+      "product": {
+        "detail": {
+          "feed": {
+            "active": "Active",
+            "associated": "Associated Usages : ",
+            "initial": "Initial Plan Phases: ",
+            "final": "Final Plan Phase: ",
+            "action": {
+              "edit": "Edit",
+              "mark": "Mark as Inactive",
+              "delete": "Delete",
+              "view": "View Plan URL",
+              "copy": {
+                "this": "Copy to this version",
+                "another": "Copy to another version",
+                "plancode": "Copy with plan code to another version"
+              },
+              "right":{
+                "final": "Final phase price"
+              }
+            }
+          },
+          "item": {
+            "duration": {
+              "unit": "Unit",
+              "option": {
+                "days": "DAYS",
+                "months": "MONTHS",
+                "years": "YEARS",
+                "unlimited": "UNLIMITED"
+              },
+              "number": "number",
+            },
+            "recurring": {
+              "recurring": "Use recurring billing in this phase.",
+              "period": "Billing Period",
+              "noPeriod": "NO_BILLING_PERIOD",
+              "option": {
+                "daily": "DAILY",
+                "weekly": "WEEKLY",
+                "biweekly": "BIWEEKLY",
+                "thirty": "THIRTY_DAYS",
+                "monthly": "MONTHLY",
+                "quarterly": "QUARTERLY",
+                "biannual": "BIANNUAL",
+                "annual": "ANNUAL",
+                "biennial": "BIENNIAL"
+              },
+              "priceadd" : "+ Add price"
+            },
+            "fixed": {
+              "fixed": "Use fixed price in this phase.",
+              "price": "Fixed Price",
+              "add": "+ Add price"
+            },
+            "tier" : {
+              "unit": "UNIT",
+              "size": "SIZE",
+              "max": "MAX"
+            },
+            "usage": {
+              "title": "Usage",
+              "delete": "Delete",
+              "code": "Usage Code",
+              "displayname": "Display Name",
+              "billingmode": "Billing Mode",
+              "modeoption": {
+                "arrear": "IN_ARREAR",
+                "advance": "IN_ADVANCE"
+              },
+              "type": "Usage Type",
+              "typeoption": {
+                "consumable": "CONSUMABLE",
+                "capacity": "CAPACITY"
+              },
+              "period": "Billing Period",
+              "periodoption": {
+                "nobilling": "NO_BILLING_PERIOD",
+                "daily": "DAILY",
+                "weekly": "WEEKLY",
+                "biweekly": "BIWEEKLY",
+                "thirtydays": "THIRTY_DAYS",
+                "monthly": "MONTHLY",
+                "quarterly": "QUARTERLY",
+                "biannual": "BIANNUAL",
+                "annual": "ANNUAL",
+                "biennial": "BIENNIAL"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

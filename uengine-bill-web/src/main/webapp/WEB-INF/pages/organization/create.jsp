@@ -23,31 +23,31 @@
 
 <div class="loginColumns animated fadeInDown">
     <div>
-        <h3>Create your organization</h3>
-        <p>Click <a href="#" id="logoutbtn">Sign In</a> to login other account.</p>
+        <h3 data-i18n="organization.create.loginColumns.title">Create your organization</h3>
+          <p> <span data-i18n="organization.create.loginColumns.text1">Click </span> <a href="#" id="logoutbtn" data-i18n="organization.create.loginColumns.text2">Sign In</a> <span data-i18n="organization.create.loginColumns.text3">to login other account.</span></p>
 
         <form method="get" class="form-horizontal" id="organization-form">
 
-            <div class="form-group"><label class="col-sm-2 control-label">Organization Name</label>
+            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="organization.create.loginColumns.name">Organization Name</label>
 
                 <div class="col-sm-10"><input type="text" class="form-control" name="name" required>
                 </div>
             </div>
 
-            <div class="form-group"><label class="col-sm-2 control-label">Language</label>
+            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="organization.create.loginColumns.language">Language</label>
 
                 <div class="col-sm-10">
                     <select data-placeholder="" class="chosen-select"
                             tabindex="2" name="language_code" required>
-                        <option value="en">English</option>
-                        <option value="ko">Korean</option>
-                        <option value="ja">Japanese</option>
-                        <option value="zh">Chinese</option>
+                        <option value="en" data-i18n="organization.create.loginColumns.option.en">English</option>
+                        <option value="ko" data-i18n="organization.create.loginColumns.option.ko">Korean</option>
+                        <option value="ja" data-i18n="organization.create.loginColumns.option.ja">Japanese</option>
+                        <option value="zh" data-i18n="organization.create.loginColumns.option.zh">Chinese</option>
                     </select>
                 </div>
             </div>
 
-            <div class="form-group"><label class="col-sm-2 control-label">Country</label>
+            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="organization.create.loginColumns.country">Country</label>
 
                 <div class="col-sm-10">
                     <select data-placeholder="" class="chosen-select"
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="form-group"><label class="col-sm-2 control-label">Time Zone</label>
+            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="organization.create.loginColumns.timeZone">Time Zone</label>
 
                 <div class="col-sm-10">
                     <select data-placeholder="" class="chosen-select"
@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <div class="form-group"><label class="col-sm-2 control-label">Currency</label>
+            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="organization.create.loginColumns.currency">Currency</label>
 
                 <div class="col-sm-10">
                     <select data-placeholder="" class="chosen-select"
@@ -81,7 +81,7 @@
             <div class="form-group">
                 <div class="col-sm-4">
                     <button class="btn btn-white">Cancel</button>
-                    <button class="btn btn-primary" type="submit">Create organization</button>
+                    <button class="btn btn-primary" type="submit" data-i18n="organization.create.loginColumns.create">Create organization</button>
                 </div>
             </div>
         </form>

@@ -36,10 +36,10 @@
     <!--=== Breadcrumbs ===-->
     <div class="breadcrumbs">
         <div class="container">
-            <h1 class="pull-left">Management Group</h1>
+            <h1 class="pull-left" data-i18n="management.new.breadCrumb.left.management">Management Group</h1>
             <ul class="pull-right breadcrumb">
                 <li><a href="index.html">HOME</a></li>
-                <li class="active">Management Group</li>
+                <li class="active" data-i18n="management.new.breadCrumb.right.management">Management Group</li>
             </ul>
         </div>
     </div>
@@ -52,16 +52,16 @@
                 <form action="/management/create" class="form-horizontal"
                       role="form"
                       id="managementForm" method="post">
-                    <h4>Create New Management Group </h4>
+                    <h4 data-i18n="management.new.content.title">Create New Management Group </h4>
 
                     <c:choose>
                         <c:when test="${failed}">
-                            <h4 style="color: #ff0000">Management create failed. </h4>
+                            <h4 style="color: #ff0000" data-i18n="management.new.content.failed">Management create failed. </h4>
                         </c:when>
                     </c:choose>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Name <span class="color-red">*</span></label>
+                        <label class="col-md-2 control-label" data-i18n="management.new.content.name">Name <span class="color-red">*</span></label>
 
                         <div class="col-md-6">
                             <input name="managementName" type="text" class="form-control" value="">
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Description <span class="color-red">*</span></label>
+                        <label class="col-md-2 control-label" data-i18n="management.new.content.description">Description <span class="color-red">*</span></label>
 
                         <div class="col-md-6">
                             <textarea rows="8" name="description" class="form-control"></textarea>
@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Login Check Lifetime <span
+                        <label class="col-md-2 control-label" data-i18n="management.new.content.loginCheck">Login Check Lifetime <span
                                 class="color-red">*</span></label>
 
                         <div class="col-md-6">
@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Scope Check Lifetime <span
+                        <label class="col-md-2 control-label" data-i18n="management.new.content.scopeCheck">Scope Check Lifetime <span
                                 class="color-red">*</span></label>
 
                         <div class="col-md-6">
@@ -96,7 +96,7 @@
 
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <button id="submitBtn" type="submit" class="btn-u btn-u-primary">Create Management Group
+                            <button id="submitBtn" type="submit" class="btn-u btn-u-primary" data-i18n="management.new.content.create">Create Management Group
                             </button>
                         </div>
                     </div>

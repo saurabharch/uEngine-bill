@@ -36,10 +36,10 @@
     <!--=== Breadcrumbs ===-->
     <div class="breadcrumbs">
         <div class="container">
-            <h1 class="pull-left">Management Group</h1>
+            <h1 class="pull-left" data-i18n="management.edit.breadCrumb.left.management">Management Group</h1>
             <ul class="pull-right breadcrumb">
                 <li><a href="index.html">HOME</a></li>
-                <li class="active">Management Group</li>
+                <li class="active" data-i18n="management.edit.breadCrumb.right.management">Management Group</li>
             </ul>
         </div>
     </div>
@@ -52,18 +52,18 @@
                 <form action="/management/update" class="form-horizontal"
                       role="form"
                       id="managementForm" method="post">
-                    <h4>Edit Management Group </h4>
+                    <h4 data-i18n="management.edit.content.title">Edit Management Group </h4>
 
                     <c:choose>
                         <c:when test="${failed}">
-                            <h4 style="color: #ff0000">Management edit failed. </h4>
+                            <h4 style="color: #ff0000" data-i18n="management.edit.content.failed">Management edit failed. </h4>
                         </c:when>
                     </c:choose>
 
                     <input type="hidden" id="_id" name="_id" value="${management._id}">
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Name <span class="color-red">*</span></label>
+                        <label class="col-md-2 control-label" data-i18n="management.edit.content.name">Name <span class="color-red">*</span></label>
 
                         <div class="col-md-6">
                             <input name="managementName" type="text" class="form-control" value="${management.managementName}">
@@ -71,7 +71,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Description <span class="color-red">*</span></label>
+                        <label class="col-md-2 control-label"data-i18n="management.edit.content.description">Description <span class="color-red">*</span></label>
 
                         <div class="col-md-6">
                             <textarea rows="8" name="description"
@@ -80,7 +80,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Login Check Lifetime <span
+                        <label class="col-md-2 control-label" data-i18n="management.edit.content.loginCheck">Login Check Lifetime <span
                                 class="color-red">*</span></label>
 
                         <div class="col-md-6">
@@ -89,7 +89,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Scope Check Lifetime <span
+                        <label class="col-md-2 control-label" data-i18n="management.edit.content.scopeCheck">Scope Check Lifetime <span
                                 class="color-red">*</span></label>
 
                         <div class="col-md-6">
@@ -99,10 +99,10 @@
 
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <button id="submitBtn" type="submit" class="btn-u btn-u-primary">Edit
+                            <button id="submitBtn" type="submit" class="btn-u btn-u-primary" data-i18n="management.edit.content.edit">Edit
                             </button>
 
-                            <a class="btn-u btn-u-primary" id="deleteBtn">Delete </a>
+                            <a class="btn-u btn-u-primary" id="deleteBtn" data-i18n="management.edit.content.delete">Delete </a>
                         </div>
                     </div>
                 </form>

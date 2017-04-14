@@ -93,10 +93,10 @@
     <!--=== Breadcrumbs ===-->
     <div class="breadcrumbs">
         <div class="container">
-            <h1 class="pull-left">Management Group</h1>
+            <h1 class="pull-left" data-i18n="management.list.breadCrumb.left.management">Management Group</h1>
             <ul class="pull-right breadcrumb">
                 <li><a href="index.html">HOME</a></li>
-                <li class="active">Management Group</li>
+                <li class="active" data-i18n="management.list.breadCrumb.right.management">Management Group</li>
             </ul>
         </div>
     </div>
@@ -108,19 +108,19 @@
     <div class="container content profile">
         <div class="row">
             <div class="col-md-12">
-                <a class="btn-u btn-u-primary" href="/management/new">Create Management</a>
+                <a class="btn-u btn-u-primary" href="/management/new" data-i18n="management.list.content.createManagement">Create Management</a>
 
                 <br>
                 <br>
 
                 <div class="margin-bottom-10">
                     <div class="table-responsive">
-                        <div style="float: right"> Search : <input type="text" id="customSearch" onKeyDown="javascript: search($('#managements').dataTable(), this.value)" /> </div>
+                        <div style="float: right" data-i18n="management.list.content.search"> Search : <input type="text" id="customSearch" onKeyDown="javascript: search($('#managements').dataTable(), this.value)" /> </div>
                         <table id="managements" class="display table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Management Group Name</th>
-                                <th>Description</th>
+                                <th data-i18n="management.list.content.groupname">Management Group Name</th>
+                                <th data-i18n="management.list.content.description">Description</th>
                                 <th></th>
                             </tr>
                             </thead>

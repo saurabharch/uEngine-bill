@@ -48,8 +48,8 @@
                     <div class="reg-header">
                         <h2><uengine:message code="login.sendpasswd.success1"></uengine:message> </h2>
 
-                        <p>Already Signed Up? Click <a href="/auth/login" class="color-green">Sign In</a> to login
-                            your account.</p>
+                        <p><span data-i18n="auth.sendPasswdSuccess.already">Already Signed Up? Click</span> <a href="/auth/login" class="color-green" data-i18n="auth.sendPasswdSuccess.already">Sign In</a> <span data-i18n="auth.sendPasswdSuccess.login">to login
+                            your account.</span></p>
                         <br>
 
                         <p><uengine:message code="login.sendpasswd.success5"></uengine:message> </p>
