@@ -23,11 +23,12 @@
 
 <div class="middle-box text-center animated fadeInDown">
     <h1>405</h1>
-    <h3 class="font-bold" data-i18n="auth.error405.methodNotAllowed">Method Not Allowed</h3>
+    <h3 class="font-bold" data-i18n="auth.error405.title">Method Not Allowed</h3>
 
     <div class="error-desc">
-        <span data-i18n="auth.error405.sorry">The server encountered something unexpected that didn't allow it to complete the request. We apologize.</span><br/>
-        <span data-i18n="goback">You can go back to main page:</span> <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
+        <span data-i18n="auth.error405.description">The server encountered something unexpected that didn't allow it to complete the request. We apologize.</span><br/>
+        <span data-i18n="back">You can go back to main page:</span>
+        <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
     </div>
 </div>
 
@@ -37,7 +38,7 @@
 
 
 <script>
-    $(function(){
+    $(function () {
 
     })
 </script>

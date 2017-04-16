@@ -92,8 +92,7 @@
     <div name="price-item" id="price-item"
          style="position:relative;width: 100px;float: left;margin-right: 15px;margin-bottom: 10px;">
         <select class="chosen-select" name="currency">
-            <%@include
-                    file="../../template/currencyList.jsp" %>
+            <%@include file="../../template/currencyList.jsp" %>
         </select>
         <input type="number" step="0.01" min="0" class="form-control" name="value">
         <i style="cursor:pointer;position: absolute;top:10px;right: -11px"
@@ -103,20 +102,20 @@
     <div id="duration-form-item">
         <form class="form-horizontal" name="duration-form">
             <div class="form-group"><label
-                    class="col-sm-2 control-label">Unit</label>
+                    class="col-sm-2 control-label" data-i18n="product.duration.unit">Unit</label>
                 <div class="col-md-5">
                     <select class="chosen-select" tabindex="2"
                             name="unit" required>
-                        <option value="DAYS">DAYS</option>
-                        <option value="MONTHS">MONTHS</option>
-                        <option value="YEARS">YEARS</option>
-                        <option value="UNLIMITED">UNLIMITED</option>
+                        <option value="DAYS" data-i18n="product.duration.days">DAYS</option>
+                        <option value="MONTHS" data-i18n="product.duration.months">MONTHS</option>
+                        <option value="YEARS" data-i18n="product.duration.years">YEARS</option>
+                        <option value="UNLIMITED" data-i18n="product.duration.unlimited">UNLIMITED</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group" name="duration-number"><label
-                    class="col-sm-2 control-label">Number</label>
+                    class="col-sm-2 control-label" data-i18n="product.duration.number">Number</label>
 
                 <div class="col-sm-5">
                     <input type="number" class="form-control"
@@ -132,32 +131,33 @@
                 <div class="col-sm-5">
                     <label>
                         <input type="checkbox" name="recurring" value="true">
-                        <span>Use recurring billing in this phase.</span>
+                        <small class="text-muted" data-i18n="product.recurring.use">Use recurring billing in this phase.</small>
                     </label>
                 </div>
             </div>
             <div name="recurring-use">
                 <div class="form-group"><label
-                        class="col-sm-2 control-label">Billing Period</label>
+                        class="col-sm-2 control-label" data-i18n="product.recurring.period">Billing Period</label>
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
                                 name="billingPeriod" required>
-                            <option value="DAILY">DAILY</option>
-                            <option value="WEEKLY">WEEKLY</option>
-                            <option value="BIWEEKLY">BIWEEKLY</option>
-                            <option value="THIRTY_DAYS">THIRTY_DAYS</option>
-                            <option value="MONTHLY">MONTHLY</option>
-                            <option value="QUARTERLY">QUARTERLY</option>
-                            <option value="BIANNUAL">BIANNUAL</option>
-                            <option value="ANNUAL">ANNUAL</option>
-                            <option value="BIENNIAL">BIENNIAL</option>
+                            <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
+                            <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
+                            <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY</option>
+                            <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS</option>
+                            <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
+                            <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY</option>
+                            <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL</option>
+                            <option value="ANNUAL" data-i18n="product.recurring.annual">ANNUAL</option>
+                            <option value="BIENNIAL" data-i18n="product.recurring.biennial">BIENNIAL</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">
-                        <div>Recurring Price</div>
-                        <a href="Javascript:void(0)" name="price-add">+ Add price</a>
+                        <div data-i18n="product.recurring.price">Recurring Price</div>
+                        <a href="Javascript:void(0)" name="price-add" data-i18n="product.recurring.addPrice">+ Add
+                            price</a>
                     </label>
                     <div class="col-md-5" name="price-item-list">
 
@@ -173,15 +173,15 @@
                 <div class="col-sm-5">
                     <label>
                         <input type="checkbox" name="fixed" value="true">
-                        <span>Use fixed price in this phase. </span>
+                        <small class="text-muted" data-i18n="product.fixed.use">Use fixed price in this phase. </small>
                     </label>
                 </div>
             </div>
             <div name="fixed-use">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">
-                        <div>Fixed Price</div>
-                        <a href="Javascript:void(0)" name="price-add">+ Add price</a>
+                        <div data-i18n="product.fixed.price">Fixed Price</div>
+                        <a href="Javascript:void(0)" name="price-add" data-i18n="product.fixed.addPrice">+ Add price</a>
                     </label>
                     <div class="col-md-5" name="price-item-list">
 
@@ -193,10 +193,11 @@
 
     <div class="form-group" id="tier-item" name="tier-item">
         <div class="col-sm-2 control-label">
-            <button type="button" class="btn btn-default btn-sm" name="tier-item-delete">Delete Tier
+            <button type="button" class="btn btn-default btn-sm" name="tier-item-delete"
+                    data-i18n="product.tier.delete">Delete Tier
             </button>
             <br>
-            <a href="Javascript:void(0)" name="price-add">+ Add price</a>
+            <a href="Javascript:void(0)" name="price-add" data-i18n="product.tier.addPrice">+ Add price</a>
         </div>
         <div class="col-md-5">
             <div class="hr-line-dashed"></div>
@@ -239,10 +240,10 @@
 
     <div class="ibox float-e-margins" id="usage-item" name="usage-item">
         <div class="ibox-title">
-            <h5>Usage</h5>
+            <h5 data-i18n="product.usage.title">Usage</h5>
             <div class="ibox-tools">
                 <button type="button"
-                        class="btn btn-default btn-sm" name="usage-item-delete">Delete
+                        class="btn btn-default btn-sm" name="usage-item-delete" data-i18n="product.usage.delete">Delete
                 </button>
                 <a class="collapse-link">
                     <i class="fa fa-chevron-up"></i>
@@ -252,7 +253,7 @@
         <div class="ibox-content">
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Usage
+                    <label class="col-sm-2 control-label" data-i18n="product.usage.code">Usage
                         Code</label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control"
@@ -260,67 +261,68 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Display Name</label>
+                    <label class="col-sm-2 control-label" data-i18n="product.usage.display">Display Name</label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control"
                                name="display_name" value="">
+                        <small class="text-muted" data-i18n="product.usage.displayDesc">송장 항목에 보여지는 이름입니다.</small>
                     </div>
                 </div>
 
                 <div class="form-group"><label
-                        class="col-sm-2 control-label">Billing
+                        class="col-sm-2 control-label" data-i18n="product.usage.mode">Billing
                     Mode</label>
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
                                 name="billingMode" required>
-                            <option value="IN_ARREAR">IN_ARREAR
+                            <option value="IN_ARREAR" data-i18n="product.usage.arrear">IN_ARREAR
                             </option>
-                            <option value="IN_ADVANCE">IN_ADVANCE
+                            <option value="IN_ADVANCE" data-i18n="product.usage.advance">IN_ADVANCE
                             </option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group"><label
-                        class="col-sm-2 control-label">Usage Type
+                        class="col-sm-2 control-label" data-i18n="product.usage.type">Usage Type
                 </label>
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
                                 name="usageType" required>
-                            <option value="CONSUMABLE">CONSUMABLE
+                            <option value="CONSUMABLE" data-i18n="product.usage.consumable">CONSUMABLE
                             </option>
-                            <option value="CAPACITY">CAPACITY
+                            <option value="CAPACITY" data-i18n="product.usage.capacity">CAPACITY
                             </option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group"><label
-                        class="col-sm-2 control-label">Billing
+                        class="col-sm-2 control-label" data-i18n="product.recurring.period">Billing
                     Period</label>
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
                                 name="billingPeriod" required>
-                            <option value="DAILY">DAILY</option>
-                            <option value="WEEKLY">WEEKLY</option>
-                            <option value="BIWEEKLY">BIWEEKLY
+                            <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
+                            <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
+                            <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY
                             </option>
-                            <option value="THIRTY_DAYS">THIRTY_DAYS
+                            <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS
                             </option>
-                            <option value="MONTHLY">MONTHLY</option>
-                            <option value="QUARTERLY">QUARTERLY
+                            <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
+                            <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY
                             </option>
-                            <option value="BIANNUAL">BIANNUAL
+                            <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL
                             </option>
-                            <option value="ANNUAL">ANNUAL</option>
-                            <option value="BIENNIAL">BIENNIAL
+                            <option value="ANNUAL" data-i18n="product.recurring.annual">ANNUAL</option>
+                            <option value="BIENNIAL" data-i18n="product.recurring.biennial">BIENNIAL
                             </option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Pricing
+                    <label class="col-sm-2 control-label" data-i18n="product.usage.scheme">Pricing
                         Scheme</label>
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
@@ -328,8 +330,13 @@
                             <option value="TIER" selected>TIER
                             </option>
                         </select>
-                        <small class="text-muted">사용량 구매 단가는 구입 한 사용량의 수량에 따라 다릅니다.
-                            예를 들어 판매 단위(SIZE) 가 10개이며 , 5  우표는 각각 5 달러이고 10 장 이상의 우표는 3 달러입니다. 6 스탬프의 경우 고객은 30 달러 (6 * 5 달러)를 지불해야하지만 15 스탬프의 경우 가격은 45 달러 (15 * 3 달러)입니다.Tier 단위는</small>
+                        <small class="text-muted" data-i18n="product.usage.tierDesc">
+                            Tier 의 구매 가격은 각 가격 책정의 단가에 따라 계산됩니다.
+                            예를 들어 1-30(Size 10 * max 3) 장의 우표에 6달러, 31-100(Size 10 * max 10) 우표에 5달러일 경우
+                            50 장의 우표를 사려면 $ 280 (30 * $6 + 20 * $5) 의 비용이 듭니다.
+                            Size 는 최소 구매 단위이며, 만일 최소 구매 단위가 10 이고 15개를 구매하였을 경우 20개로 계산됩니다.
+                            또한 max 값 이상의 구매량은 청구되지 않으니, 충분한 max 수량을 책정하도록 하세요.
+                        </small>
                     </div>
                 </div>
 
@@ -339,7 +346,8 @@
                 <div class="form-group"><label
                         class="col-sm-2 control-label"></label>
                     <div class="col-md-5">
-                        <a href="Javascript:void(0)" name="add-tier">+ Add new tier</a>
+                        <a href="Javascript:void(0)" name="add-tier" data-i18n="product.usage.addTier">+ Add new
+                            tier</a>
                     </div>
                 </div>
             </form>
@@ -348,23 +356,33 @@
 
     <div class="ibox float-e-margins" name="phase-card" id="phase-card">
         <div class="ibox-title">
-            <h5 name="phase-title"></h5>
+            <h5>
+                <span name="phase-title-initial" data-i18n="product.phase.titleInitial">Initial Phase - </span>
+                <span name="phase-title-final" data-i18n="product.phase.titleFinal">Final Phase - </span>
+                <span name="phase-title"></span>
+            </h5>
             <div class="ibox-tools">
                 <button type="button" class="dropdown-toggle btn btn-default btn-sm"
                         data-toggle="dropdown"
-                        href="Javascript:void(0)">Change Phase type
+                        href="Javascript:void(0)" data-i18n="product.phase.changeType">Change Phase type
                 </button>
                 <ul class="dropdown-menu dropdown-user" name="change-phase-list">
-                    <li><a href="Javascript:void(0)" data-phase="TRIAL" name="change-phase">TRIAL</a>
+                    <li><a href="Javascript:void(0)" data-phase="TRIAL" name="change-phase"
+                           data-i18n="product.phase.trial">TRIAL</a>
                     </li>
-                    <li><a href="Javascript:void(0)" data-phase="DISCOUNT" name="change-phase">DISCOUNT</a>
+                    <li><a href="Javascript:void(0)" data-phase="DISCOUNT" name="change-phase"
+                           data-i18n="product.phase.discount">DISCOUNT</a>
                     </li>
-                    <li><a href="Javascript:void(0)" data-phase="FIXEDTERM" name="change-phase">FIXEDTERM</a>
+                    <li><a href="Javascript:void(0)" data-phase="FIXEDTERM" name="change-phase"
+                           data-i18n="product.phase.fixedTerm">FIXED TERM</a>
                     </li>
-                    <li><a href="Javascript:void(0)" data-phase="EVERGREEN" name="change-phase">EVERGREEN</a>
+                    <li><a href="Javascript:void(0)" data-phase="EVERGREEN" name="change-phase"
+                           data-i18n="product.phase.evergreen">EVERGREEN</a>
                     </li>
                 </ul>
-                <button type="button" class="btn btn-default btn-sm" name="phase-delete">Delete</button>
+                <button type="button" class="btn btn-default btn-sm" name="phase-delete"
+                        data-i18n="product.phase.delete">Delete
+                </button>
                 <a class="collapse-link">
                     <i class="fa fa-chevron-up"></i>
                 </a>
@@ -375,14 +393,18 @@
             <div class="tabs-container">
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href=""
-                                          aria-expanded="true" data-tab="duration" name="card-tab">Duration</a></li>
+                                          aria-expanded="true" data-tab="duration" name="card-tab"
+                                          data-i18n="product.phase.duration">Duration</a></li>
                     <li class=""><a data-toggle="tab" href=""
-                                    aria-expanded="false" data-tab="recurring" name="card-tab">Recurring</a>
+                                    aria-expanded="false" data-tab="recurring" name="card-tab"
+                                    data-i18n="product.phase.recurring">Recurring</a>
                     </li>
                     <li class=""><a data-toggle="tab" href=""
-                                    aria-expanded="false" data-tab="fixed" name="card-tab">Fixed</a></li>
+                                    aria-expanded="false" data-tab="fixed" name="card-tab"
+                                    data-i18n="product.phase.fixed">Fixed</a></li>
                     <li class=""><a data-toggle="tab" href=""
-                                    aria-expanded="false" data-tab="usages" name="card-tab">Usages</a></li>
+                                    aria-expanded="false" data-tab="usages" name="card-tab"
+                                    data-i18n="product.phase.usages">Usages</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane active" name="duration-tab">
@@ -402,7 +424,8 @@
                     </div>
                     <div id="tab-4" class="tab-pane" name="usages-tab">
                         <div class="panel-body">
-                            <button type="button" class="btn btn-default btn-sm" name="add-usage">+ Add
+                            <button type="button" class="btn btn-default btn-sm" name="add-usage"
+                                    data-i18n="product.phase.addUsage">+ Add
                                 Usage
                             </button>
 

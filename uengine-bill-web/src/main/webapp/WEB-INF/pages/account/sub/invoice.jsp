@@ -1,15 +1,28 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
     <div id="invoice-detail-page">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5 name="title" style="float: none"></h5>
                 <div class="text-muted" style="float: none" name="invoiceId"></div>
-                <div class="text-muted" style="float: none" name="invoiceDate"></div>
-                <div class="text-muted" style="float: none" name="targetDate"></div>
+                <div class="text-muted" style="float: none">
+                    <span data-i18n="account.invoice.page.invoiceDate">Invoice date: </span>
+                    <span name="invoiceDate"></span>
+                </div>
+                <div class="text-muted" style="float: none">
+                    <span data-i18n="account.invoice.page.targetDate">Target date: </span>
+                    <span name="targetDate"></span>
+                </div>
                 <div class="ibox-tools">
-                    <button type="button" class="btn btn-default btn-sm" name="add-credit">Add credit</button>
-                    <button type="button" class="btn btn-default btn-sm" name="create-charge">Create charge</button>
-                    <button type="button" class="btn btn-default btn-sm" name="make-payment">Make payment</button>
+                    <button type="button" class="btn btn-default btn-sm" name="add-credit"
+                            data-i18n="account.invoice.page.addCredit">Add credit
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" name="create-charge"
+                            data-i18n="account.invoice.page.createCharge">Create charge
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" name="make-payment"
+                            data-i18n="account.invoice.page.makePayment">Make payment
+                    </button>
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
                     </a>
@@ -25,19 +38,19 @@
                     <table class="table pull-right" style="width: 300px;text-align: right">
                         <tbody>
                         <tr>
-                            <td>INVOICE TOTAL:</td>
+                            <td data-i18n="account.invoice.page.total">INVOICE TOTAL:</td>
                             <td name="invoice-total"></td>
                         </tr>
                         <tr>
-                            <td>CREDITS:</td>
+                            <td data-i18n="account.invoice.page.credits">CREDITS:</td>
                             <td name="invoice-credits"></td>
                         </tr>
                         <tr>
-                            <td>REFUNDED:</td>
+                            <td data-i18n="account.invoice.page.refunded">REFUNDED:</td>
                             <td name="invoice-refunded"></td>
                         </tr>
                         <tr>
-                            <td>BALANCE:</td>
+                            <td data-i18n="account.invoice.page.balance">BALANCE:</td>
                             <td name="invoice-balance"></td>
                         </tr>
                         </tbody>
@@ -66,34 +79,43 @@
                     <div class="ibox-content no-padding">
                         <form method="get" class="form-horizontal">
 
-                            <div class="form-group"><label class="col-sm-3 control-label">Amount</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.invoice.modal.amount">Amount</label>
 
                                 <div class="col-sm-9">
                                     <input type="number" class="form-control" name="amount">
-                                    <div class="text-muted">Currency: <span class="text-success" name="currency"></span>
+                                    <div class="text-muted"><span
+                                            data-i18n="account.invoice.modal.currency">Currency: </span>
+                                        <span class="text-success" name="currency"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group"><label class="col-sm-3 control-label"
-                                                           name="product-label">Payment Method</label>
+                                                           name="product-label"
+                                                           data-i18n="account.invoice.modal.pm">Payment
+                                Method</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="paymentMethodId" required>
                                         <option value=""></option>
                                     </select>
-                                    <div class="text-muted">Leave blank to use account's default</div>
+                                    <div class="text-muted" data-i18n="account.invoice.modal.blank">Leave blank to use
+                                        account's default
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-3 control-label">Description</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.invoice.modal.description">Description</label>
 
                                 <div class="col-sm-9">
                                     <textarea rows="4" class="form-control" name="description"></textarea>
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-3 control-label">Request Date</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.invoice.modal.reqDate">Request Date</label>
 
                                 <div class="col-sm-9">
                                     <div class="input-group date">
@@ -105,7 +127,8 @@
 
                                     <div>
                                         <label>
-                                            <input type="checkbox" name="useDate" value="false"> Use Request Date
+                                            <input type="checkbox" name="useDate" value="false">
+                                            <span data-i18n="account.invoice.modal.uesReqDate">Use Request Date</span>
                                         </label>
                                     </div>
                                 </div>
@@ -207,7 +230,7 @@
 
 
             if (action == 'createInvoiceCredit') {
-                title.html('Create Invoice Credit');
+                title.html(i18n.t('account.invoice.modal.creditTitle'));
                 amount.val(null);
                 amount.closest('.form-group').show();
                 paymentMethodId.closest('.form-group').hide();
@@ -237,7 +260,7 @@
                 });
             }
             if (action == 'createInvoiceCharge') {
-                title.html('Create Invoice Charge');
+                title.html(i18n.t('account.invoice.modal.chargeTitle'));
                 amount.val(null);
                 amount.closest('.form-group').show();
                 paymentMethodId.closest('.form-group').hide();
@@ -276,7 +299,7 @@
                 });
             }
             if (action == 'createInvoicePayment') {
-                title.html('Create Invoice Payment');
+                title.html(i18n.t('account.invoice.modal.paymentTitle'));
                 amount.val(me.invoice['balance']);
                 amount.closest('.form-group').show();
                 paymentMethodId.closest('.form-group').show();
@@ -329,7 +352,7 @@
             }
 
             if (action == 'adjustInvoiceItem') {
-                title.html('Adjust Invoice Item');
+                title.html(i18n.t('account.invoice.modal.adjustTitle'));
                 amount.val(object['amount']);
                 amount.closest('.form-group').show();
                 paymentMethodId.closest('.form-group').hide();
@@ -455,8 +478,8 @@
 
             me.panel.find('[name=title]').html('Invoice ' + me.invoice['invoiceNumber']);
             me.panel.find('[name=invoiceId]').html('ID: ' + me.invoice['invoiceId']);
-            me.panel.find('[name=invoiceDate]').html('Invoice date: ' + me.invoice['invoiceDate']);
-            me.panel.find('[name=targetDate]').html('Target date ' + me.invoice['targetDate']);
+            me.panel.find('[name=invoiceDate]').html(me.invoice['invoiceDate']);
+            me.panel.find('[name=targetDate]').html(me.invoice['targetDate']);
 
             var currencyLabel = '<small class="text-success">' + me.invoice['currency'] + '</small>';
             var total = '<span>' + me.invoice['amount'] + '</span> ' + currencyLabel;

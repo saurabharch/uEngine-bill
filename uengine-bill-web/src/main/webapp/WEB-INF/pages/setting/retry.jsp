@@ -59,7 +59,23 @@
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
-<%@include file="../subpages/billing-case.jsp" %>
+
+<div style="display: none">
+    <div id="retry-template">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">
+                <a name="retry-delete"><i class="fa fa-trash"></i></a> <span name="alignment"></span>
+            </label>
+            <div class="col-sm-4">
+                <input type="number" min="1" class="form-control" name="days" required>
+                </input>
+                <span>days after previous attempt, if it fails</span>
+            </div>
+        </div>
+
+        <div class="hr-line-dashed"></div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {
@@ -87,9 +103,9 @@
             labelAlignment();
         };
 
-        var labelAlignment = function(){
+        var labelAlignment = function () {
             form.find('.retry-template').each(function (index) {
-                $(this).find('[name=alignment]').html((index+1) + ' st retry');
+                $(this).find('[name=alignment]').html((index + 1) + ' st retry');
             });
         };
 
@@ -111,7 +127,7 @@
             form.find('.retry-template').each(function () {
                 var overdueDiv = $(this);
                 var days = overdueDiv.find('[name=days]').val();
-                if(days > 0){
+                if (days > 0) {
                     retries.push(days);
                 }
             });

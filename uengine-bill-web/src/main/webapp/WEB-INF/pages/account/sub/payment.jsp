@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
     <div id="payment-detail-page">
         <div class="ibox float-e-margins">
@@ -5,16 +6,20 @@
                 <h5 name="title" style="float: none"></h5>
                 <div class="text-muted" style="float: none" name="paymentId"></div>
                 <div class="ibox-tools">
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="REFUND" name="payment">
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="REFUND" name="payment"
+                            data-i18n="account.payment.page.refund">
                         Refund
                     </button>
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="CHARGEBACK" name="payment">
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="CHARGEBACK" name="payment"
+                            data-i18n="account.payment.page.chargeback">
                         Charge back
                     </button>
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="CAPTURE" name="payment">
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="CAPTURE" name="payment"
+                            data-i18n="account.payment.page.capture">
                         Capture
                     </button>
-                    <button type="button" class="btn btn-default btn-sm" data-transaction="VOID" name="payment">Void
+                    <button type="button" class="btn btn-default btn-sm" data-transaction="VOID" name="payment"
+                            data-i18n="account.payment.page.void">Void
                     </button>
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
@@ -33,7 +38,10 @@
     <div class="ibox float-e-margins" name="payment-detail-method-item" id="payment-detail-method-item">
         <div class="ibox-title">
             <div>
-                <h5 style="float:left;" name="pluginName"></h5>
+                <h5 style="float:left;">
+                    <span data-i18n="account.payment.pm.title">Payment Method: </span>
+                    <span name="pluginName"></span>
+                </h5>
                 <span class="label label-primary" name="isDefaultPaymentMethod">Default</span>
             </div>
             <div class="ibox-tools">
@@ -70,7 +78,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="title">Process Transaction</h4>
+                <h4 class="modal-title" name="title" data-i18n="account.payment.trModal.title">Process Transaction</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
@@ -81,30 +89,46 @@
                                     class="col-sm-3 control-label"></label>
 
                                 <div class="col-sm-9">
-                                    <div><label> <input type="radio" checked="" value="false" name="adjustment"> No
-                                        Invoice Adjustment </label></div>
-                                    <div><label> <input type="radio" value="true" name="adjustment"> Invoice Item
-                                        Adjustment </label></div>
+                                    <div>
+                                        <label> <input type="radio" checked="" value="false" name="adjustment">
+                                            <span data-i18n="account.payment.trModal.adjustmentNo">No Invoice Adjustment</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="true" name="adjustment">
+                                            <span data-i18n="account.payment.trModal.adjustmentUse">Invoice Item Adjustment </span>
+                                        </label>
+                                    </div>
                                     <div name="adjustment-group-list"></div>
 
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Transaction Type</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.payment.trModal.type">Transaction
+                                Type</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="transactionType" required>
-                                        <option value="CAPTURE">CAPTURE</option>
-                                        <option value="CHARGEBACK">CHARGEBACK</option>
-                                        <option value="REFUND">REFUND</option>
-                                        <option value="VOID">VOID</option>
+                                        <option value="CAPTURE" data-i18n="account.payment.trModal.capture">CAPTURE
+                                        </option>
+                                        <option value="CHARGEBACK" data-i18n="account.payment.trModal.chargeback">
+                                            CHARGEBACK
+                                        </option>
+                                        <option value="REFUND" data-i18n="account.payment.trModal.refund">REFUND
+                                        </option>
+                                        <option value="VOID" data-i18n="account.payment.trModal.void">VOID</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Amount</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.payment.trModal.amount">Amount</label>
 
                                 <div class="col-sm-9">
                                     <input type="number" class="form-control" name="amount">
-                                    <div class="text-muted">Currency: <span class="text-success" name="currency"></span>
+                                    <div class="text-muted">
+                                        <span data-i18n="account.payment.trModal.currency">Currency: </span>
+                                        <span class="text-success" name="currency"></span>
                                     </div>
                                 </div>
                             </div>
@@ -408,7 +432,6 @@
                     amount.show();
                     adjustmentGroup.hide();
                 }
-                title.html('Process Transaction');
 
             };
             setFormByTransactionType(transaction);

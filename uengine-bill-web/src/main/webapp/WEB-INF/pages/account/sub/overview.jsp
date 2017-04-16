@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
     <div id="overview-page">
         <div class="col-md-4">
@@ -12,7 +13,7 @@
                             <span>External Key : <span class="text-muted" name="externalKey"></span></span><br><br>
                         </div>
 
-                        <span>Tag as :</span><br>
+                        <span data-i18n="account.overview.tag.title">Tag as :</span><br>
 
                         <form class="form-horizontal">
                             <div class="form-group">
@@ -20,7 +21,8 @@
 
                                 </div>
                                 <div class="col-sm-12">
-                                    <button type="button" class="btn btn-default btn-xs" name="save-tag">Save Tags
+                                    <button type="button" class="btn btn-default btn-xs" name="save-tag"
+                                            data-i18n="account.overview.tag.save">Save Tags
                                     </button>
                                 </div>
                             </div>
@@ -34,7 +36,7 @@
                             <i style="font-size: 20px;" class="fa fa-map-marker"></i>
                         </div>
                         <div class="col-md-10">
-                            <strong>Billing Address</strong>
+                            <strong data-i18n="account.overview.address">Billing Address</strong>
                             <div name="billing-address">
 
                             </div>
@@ -48,13 +50,14 @@
                             <i style="font-size: 20px;" class="fa fa-user"></i>
                         </div>
                         <div class="col-md-10">
-                            <strong>Contact Persons</strong>
+                            <strong data-i18n="account.overview.contact.title">Contact Persons</strong>
                             <br>
                             <div name="account-email-list">
 
                             </div>
-                            <span name="account-email-no">There are no additional contact persons found.</span><br>
-                            <a name="account-email-add">+ Add Contact Person</a>
+                            <span name="account-email-no" data-i18n="account.overview.contact.no">There are no additional contact persons found.</span><br>
+                            <a name="account-email-add" data-i18n="account.overview.contact.add">+ Add Contact
+                                Person</a>
                         </div>
                     </div>
                 </div>
@@ -65,37 +68,40 @@
                             <i style="font-size: 20px;" class="fa fa-pencil"></i>
                         </div>
                         <div class="col-md-10">
-                            <strong>Notes</strong>
+                            <strong data-i18n="account.overview.note.title">Notes</strong>
                             <br>
                             <div name="notes"></div>
                             <div name="notes-none">
-                                <span>There are no additional notes found.</span><br>
+                                <span data-i18n="account.overview.note.no">There are no additional notes found.</span><br>
                             </div>
-                            <a name="add-notes">+ Add Notes</a>
+                            <a name="add-notes" data-i18n="account.overview.note.add">+ Add Notes</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <i class="fa fa-info-circle"></i> Info Panel
+                        <i class="fa fa-info-circle"></i> <span
+                            data-i18n="account.overview.portal.title">Info Panel</span>
                     </div>
                     <div class="panel-body">
-                                                        <span>Client Portal allows your accounts to keep track of all the transactions between them and your business.<a
-                                                                href="#">Learn More</a></span>
-                        <button type="button" class="btn btn-default btn-sm">Enable
-                            Portal
+                        <span data-i18n="account.overview.portal.no">Client Portal allows your accounts to keep track of all the transactions between them and your business.
+                            <a href="#" data-i18n="account.overview.portal.learn">Learn More</a></span>
+                        <button type="button" class="btn btn-default btn-sm" data-i18n="account.overview.portal.enable">
+                            Enable Portal
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             <div>
-                <h3>Billing Info</h3>
-                <button type="button" class="btn btn-default btn-xs" name="credit-add">Add Credit</button>
-                <button type="button" class="btn btn-default btn-xs" name="create-charge">Create Charge
+                <h3 data-i18n="account.overview.billing.title">Billing Info</h3>
+                <button type="button" class="btn btn-default btn-xs" name="credit-add"
+                        data-i18n="account.overview.billing.addCredit">Add Credit
+                </button>
+                <button type="button" class="btn btn-default btn-xs" name="create-charge"
+                        data-i18n="account.overview.billing.createCharge">Create Charge
                 </button>
 
                 <div class="feed-activity-list">
@@ -103,7 +109,7 @@
                         <div class="media-body" name="billing-info">
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
-                                    <span class="text-muted">Account balance</span>
+                                    <span class="text-muted" data-i18n="account.overview.billing.balance">Account balance</span>
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="text-success" name="accountBalance"></h4>
@@ -111,7 +117,8 @@
                             </div>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
-                                    <span class="text-muted">Account credit</span>
+                                    <span class="text-muted"
+                                          data-i18n="account.overview.billing.credit">Account credit</span>
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="text-success" name="accountCBA"></h4>
@@ -119,7 +126,8 @@
                             </div>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
-                                    <span class="text-muted">Overdue status</span>
+                                    <span class="text-muted"
+                                          data-i18n="account.overview.billing.overdue">Overdue status</span>
                                 </div>
                                 <div class="col-md-6">
                                     <span class="label label-primary" name="status"></span>
@@ -128,7 +136,8 @@
 
                             <div class="col-md-12 row" style="margin-top: 10px;">
                                 <div class="col-md-6">
-                                    <span class="text-muted">Bill cycle day</span>
+                                    <span class="text-muted"
+                                          data-i18n="account.overview.billing.bcd">Bill cycle day</span>
                                 </div>
                                 <div class="col-md-6">
                                     <span name="billCycleDayLocal"></span>
@@ -136,15 +145,15 @@
                             </div>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
-                                    <span class="text-muted">Next Invoice Date</span>
+                                    <span class="text-muted" data-i18n="account.overview.billing.nextInvoice">Next Invoice Date</span>
                                 </div>
                                 <div class="col-md-6">
-                                    <span name="nextInvoiceDate">2017-05-17</span>
+                                    <span name="nextInvoiceDate"></span>
                                 </div>
                             </div>
                             <div class="col-md-12 row" style="margin-top: 10px;">
                                 <div class="col-md-6">
-                                    <span class="text-muted">Notified For Invoice</span><br>
+                                    <span class="text-muted" data-i18n="account.overview.billing.notified">Notified For Invoice</span><br>
                                     <button type="button" class="btn btn-default btn-xs"
                                             name="isNotifiedForInvoices-mark"></button>
                                 </div>
@@ -160,20 +169,24 @@
             <br><br>
 
             <div>
-                <h3>Payment Methods</h3>
-                <button type="button" class="btn btn-default btn-xs" name="payment-method-add">Add Payment Method
+                <h3 data-i18n="account.overview.pm.title">Payment Methods</h3>
+                <button type="button" class="btn btn-default btn-xs" name="payment-method-add"
+                        data-i18n="account.overview.pm.add">Add Payment Method
                 </button>
 
                 <div name="payment-method-append">
 
                 </div>
                 <div class="well" name="payment-method-no">
-                    <h3>
+                    <h3 data-i18n="account.overview.pm.no">
                         Account doesn't have any payment method yet.
                     </h3>
-                    To make a payment method, click
-                    <a href="Javascript:void(0)" name="payment-method-add">Create New</a> or
-                    <a href="Javascript:void(0)" name="payment-method-request">Request Payment Method</a>
+                    <span data-i18n="account.overview.pm.newText1">To make a payment method, click</span>
+                    <a href="Javascript:void(0)" name="payment-method-add" data-i18n="account.overview.pm.create">Create
+                        New</a>
+                    <span data-i18n="account.overview.pm.newText2">or</span>
+                    <a href="Javascript:void(0)" name="payment-method-request" data-i18n="account.overview.pm.request">Request
+                        Payment Method</a>
                 </div>
             </div>
         </div>
@@ -194,22 +207,26 @@
         <div class="ibox-title">
             <div>
                 <h5 style="float:left;" name="pluginName"></h5>
-                <span class="label label-primary" name="isDefaultPaymentMethod">Default</span>
+                <span class="label label-primary" name="isDefaultPaymentMethod"
+                      data-i18n="account.overview.pmItem.default">Default</span>
                 <a style="margin-left: 15px" name="setDefaultPaymentMethod">
-                    <small>Mark as default</small>
+                    <small data-i18n="account.overview.pmItem.setDefault">Mark as default</small>
                 </a>
             </div>
             <div class="ibox-tools">
                 <button type="button" class="dropdown-toggle btn btn-default btn-sm"
                         data-toggle="dropdown"
-                        href="Javascript:void(0)">Payment
+                        href="Javascript:void(0)" data-i18n="account.overview.pmItem.payment">Payment
                 </button>
                 <ul class="dropdown-menu dropdown-user" name="change-phase-list">
-                    <li><a href="Javascript:void(0)" data-transaction="AUTHORIZE" name="payment">AUTHORIZE</a>
+                    <li><a href="Javascript:void(0)" data-transaction="AUTHORIZE" name="payment"
+                           data-i18n="account.overview.pmItem.authorize">AUTHORIZE</a>
                     </li>
-                    <li><a href="Javascript:void(0)" data-transaction="PURCHASE" name="payment">PURCHASE</a>
+                    <li><a href="Javascript:void(0)" data-transaction="PURCHASE" name="payment"
+                           data-i18n="account.overview.pmItem.purchase">PURCHASE</a>
                     </li>
-                    <li><a href="Javascript:void(0)" data-transaction="CREDIT" name="payment">CREDIT</a>
+                    <li><a href="Javascript:void(0)" data-transaction="CREDIT" name="payment"
+                           data-i18n="account.overview.pmItem.credit">CREDIT</a>
                     </li>
                 </ul>
                 <button type="button" class="btn btn-default btn-sm" name="payment-method-delete">Delete</button>
@@ -313,7 +330,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">Add Payment Method</h4>
+                <h4 class="modal-title" data-i18n="account.overview.pmAddModal.title">Add Payment Method</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
@@ -324,7 +341,9 @@
                                 <div class="col-sm-9"><input type="text" class="form-control" name="externalKey">
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Plugin Name</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmAddModal.name">Plugin
+                                Name</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2"
@@ -334,6 +353,10 @@
                                         <option value="killbill-paypal-express">killbill-paypal-express</option>
                                         <option value="killbill-stripe">killbill-stripe</option>
                                     </select>
+                                    <small class="text-muted" data-i18n="account.overview.pmAddModal.external">
+                                        __EXTERNAL_PAYMENT__ is a test plug-in that will process
+                                        success for all payment requests.
+                                    </small>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -352,7 +375,8 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <label>
-                                        <input type="checkbox" name="isDefault" value="true"> is Default?
+                                        <input type="checkbox" name="isDefault" value="true">
+                                        <span data-i18n="account.overview.pmAddModal.isDefault">is Default?</span>
                                     </label>
                                 </div>
                             </div>
@@ -375,32 +399,46 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="title">Process Transaction</h4>
+                <h4 class="modal-title" name="title" data-i18n="account.overview.pmTrModal.title">Process
+                    Transaction</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form method="get" class="form-horizontal">
-                            <div class="form-group"><label class="col-sm-3 control-label">Transaction Type</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmTrModal.type">Transaction
+                                Type</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="transactionType" required>
-                                        <option value="AUTHORIZE">AUTHORIZE</option>
-                                        <option value="CAPTURE">CAPTURE</option>
-                                        <option value="CHARGEBACK">CHARGEBACK</option>
-                                        <option value="CREDIT">CREDIT</option>
-                                        <option value="PURCHASE">PURCHASE</option>
-                                        <option value="REFUND">REFUND</option>
-                                        <option value="VOID">VOID</option>
+                                        <option value="AUTHORIZE" data-i18n="account.overview.pmTrModal.authorize">
+                                            AUTHORIZE
+                                        </option>
+                                        <option value="CAPTURE" data-i18n="account.overview.pmTrModal.capture">CAPTURE
+                                        </option>
+                                        <option value="CHARGEBACK" data-i18n="account.overview.pmTrModal.chargeback">
+                                            CHARGEBACK
+                                        </option>
+                                        <option value="CREDIT" data-i18n="account.overview.pmTrModal.credit">CREDIT
+                                        </option>
+                                        <option value="PURCHASE" data-i18n="account.overview.pmTrModal.purchase">
+                                            PURCHASE
+                                        </option>
+                                        <option value="REFUND" data-i18n="account.overview.pmTrModal.refund">REFUND
+                                        </option>
+                                        <option value="VOID" data-i18n="account.overview.pmTrModal.void">VOID</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Amount</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmTrModal.amount">Amount</label>
 
                                 <div class="col-sm-9"><input type="number" class="form-control" name="amount">
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Currency</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmTrModal.currency">Currency</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="currency" required>
@@ -408,18 +446,23 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Payment Key</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmTrModal.paymentKey">Payment
+                                Key</label>
 
                                 <div class="col-sm-9"><input type="text" class="form-control" name="paymentExternalKey">
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Transaction Key</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmTrModal.transactionKey">Transaction
+                                Key</label>
 
                                 <div class="col-sm-9"><input type="text" class="form-control"
                                                              name="transactionExternalKey">
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Description</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.overview.pmTrModal.description">Description</label>
 
                                 <div class="col-sm-9"><textarea rows="8" class="form-control"
                                                                 name="description"></textarea>
@@ -562,7 +605,7 @@
             var me = this;
             var sendToPaymentUrl = function (result) {
                 if (result['paymentId']) {
-                    window.location.href = '/account/'+me.account_id+'/payments/' + result['paymentId'];
+                    window.location.href = '/account/' + me.account_id + '/payments/' + result['paymentId'];
                 } else {
                     toastr.error("Failed to create Payment : " + result['error']);
                 }
@@ -664,9 +707,9 @@
                 var chargeData = [data];
                 uBilling.addCharge(me.account_id, chargeData)
                     .done(function (response) {
-                        if(response && response.length){
+                        if (response && response.length) {
                             var invoiceId = response[0]['invoiceId'];
-                            window.location.href = '/account/'+me.account_id+'/invoices/' + invoiceId;
+                            window.location.href = '/account/' + me.account_id + '/invoices/' + invoiceId;
                         }
                     })
                     .fail(function (response) {
@@ -754,9 +797,9 @@
 
                 //title
                 if (transactionType == 'ADD_CREDIT') {
-                    title.html('Add New Credit')
+                    title.html(i18n.t('account.overview.pmTrModal.creditTitle'))
                 } else if (transactionType == 'ADD_CHARGE') {
-                    title.html('Add New Charge')
+                    title.html(i18n.t('account.overview.pmTrModal.chargeTitle'))
                 } else {
                     title.html('Process Transaction')
                 }

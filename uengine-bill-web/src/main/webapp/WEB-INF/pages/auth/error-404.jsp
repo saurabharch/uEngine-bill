@@ -23,11 +23,12 @@
 
 <div class="middle-box text-center animated fadeInDown">
     <h1>404</h1>
-    <h3 class="font-bold" data-i18n="auth.error404.pageNotFound">Page Not Found</h3>
+    <h3 class="font-bold" data-i18n="auth.error404.title">Page Not Found</h3>
 
     <div class="error-desc">
-        <span data-i18n="auth.error404.sorry">Sorry, but the page you are looking for has note been found. We apologize.</span><br/>
-        <span data-i18n="auth.error404.goback">You can go back to main page: <span><br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
+        <span data-i18n="auth.error404.description">Sorry, but the page you are looking for has note been found. We apologize.</span><br/>
+        <span data-i18n="auth.error404.back">You can go back to main page: </span><br/>
+        <a href="/index" class="btn btn-primary m-t">Dashboard</a>
     </div>
 </div>
 
@@ -37,7 +38,7 @@
 
 
 <script>
-    $(function(){
+    $(function () {
 
     })
 </script>

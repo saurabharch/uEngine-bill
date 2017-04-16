@@ -1,42 +1,53 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div class="modal inmodal fade" id="product-new-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">New Product</h4>
+                <h4 class="modal-title" data-i18n="product.new.title">New Product</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form method="get" class="form-horizontal">
-                            <div class="form-group"><label class="col-sm-2 control-label">Name</label>
+                            <div class="form-group"><label class="col-sm-2 control-label" data-i18n="product.new.name">Name</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="name">
                                 </div>
                             </div>
-                            <div class="form-group onNew"><label class="col-sm-2 control-label">Category</label>
+                            <div class="form-group onNew"><label class="col-sm-2 control-label"
+                                                                 data-i18n="product.new.category">Category</label>
                                 <div class="col-sm-5">
                                     <select class="chosen-select" name="category" required>
-                                        <option value="BASE" selected>BASE</option>
-                                        <option value="ADD_ON">ADD_ON</option>
+                                        <option value="BASE" selected data-i18n="product.new.base">BASE</option>
+                                        <option value="ADD_ON" data-i18n="product.new.addon">ADD_ON</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group onUpdate"><label class="col-sm-2 control-label">Category</label>
+                            <div class="form-group onUpdate"><label class="col-sm-2 control-label"
+                                                                    data-i18n="product.new.category">Category</label>
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control" readonly value="ADD_ON">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">Description</label>
+                                <label class="col-sm-2 control-label"
+                                       data-i18n="product.new.description">Description</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" name="description"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-2 control-label">Redirect url</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="product.new.redirect">Redirect url</label>
 
-                                <div class="col-sm-10"><input type="text" class="form-control" name="redirect_url">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="redirect_url">
+                                    <small class="text-muted" data-i18n="product.new.redirectInfo">
+                                        A redirect url is an address that a buyer completes a purchase through a hosted
+                                        page and is redirected with the result of the purchase action. Usually you will
+                                        use the seller's application address.
+                                    </small>
                                 </div>
                             </div>
 
@@ -45,6 +56,11 @@
                                 <div class="col-sm-10">
                                     <span name="is_active" class="label label-primary">Active</span>
                                     <a name="mark_as">Mark as Inactive</a>
+                                    <br>
+                                    <small class="text-muted" data-i18n="product.new.inactiveInfo">
+                                        If in the Inactive state, you customer will not be able to subscribe or change a
+                                        product, but your existing purchasing customer will remain in service.
+                                    </small>
                                 </div>
                             </div>
                         </form>

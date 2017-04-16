@@ -1,11 +1,13 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
     <div id="subscription-page">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Subscription Bundles</h5>
+                <h5 data-i18n="account.subscription.page.title">Subscription Bundles</h5>
 
                 <div class="ibox-tools">
-                    <button type="button" class="btn btn-default btn-sm" name="add-bundle">
+                    <button type="button" class="btn btn-default btn-sm" name="add-bundle"
+                            data-i18n="account.subscription.page.add">
                         Add Subscription Bundle
                     </button>
                 </div>
@@ -17,10 +19,16 @@
     </div>
     <div class="ibox float-e-margins" name="bundle-card" id="bundle-card">
         <div class="ibox-title">
-            <h5 name="title" style="float: none">Bundle ID: </h5>
+            <h5 style="float: none">
+                <span>Bundle ID: </span>
+                <span name="title"></span>
+            </h5>
             <div class="ibox-tools">
-                <button type="button" class="btn btn-default btn-sm" name="add-add-on">Add add-on</button>
-                <button type="button" class="btn btn-default btn-sm" name="transfer-ownership">Transfer Ownership
+                <button type="button" class="btn btn-default btn-sm" name="add-add-on"
+                        data-i18n="account.subscription.bundle.add">Add add-on
+                </button>
+                <button type="button" class="btn btn-default btn-sm" name="transfer-ownership"
+                        data-i18n="account.subscription.bundle.transfer">Transfer Ownership
                 </button>
                 <a class="collapse-link">
                     <i class="fa fa-chevron-up"></i>
@@ -43,7 +51,8 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="title">Change Subscription</h4>
+                <h4 class="modal-title" name="title" data-i18n="account.subscription.chModal.title">Change
+                    Subscription</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
@@ -52,8 +61,11 @@
 
                             <input type="hidden" name="category" value="BASE">
 
-                            <div class="form-group"><label class="col-sm-3 control-label"
-                                                           name="product-label">Product</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    <span data-i18n="account.subscription.chModal.product">Product: </span>
+                                    <span name="product-label"></span>
+                                </label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="product" required>
@@ -61,7 +73,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Plan</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.chModal.plan">Plan</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="plan" required>
@@ -74,31 +87,41 @@
                                 <div class="col-sm-9">
                                     <div>
                                         <label>
-                                            <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediately
+                                            <input type="radio" checked="" value="IMMEDIATE" name="type">
+                                            <span data-i18n="account.subscription.chModal.select.immediately">Immediately</span>
                                         </label>
                                     </div>
                                     <div>
                                         <label>
-                                            <input type="radio" value="POLICY" name="type"> Specify Policy
+                                            <input type="radio" value="POLICY" name="type">
+                                            <span data-i18n="account.subscription.chModal.select.policy">Specify Policy</span>
                                         </label>
                                     </div>
                                     <div>
                                         <label>
-                                            <input type="radio" value="DATE" name="type"> Specify a date
+                                            <input type="radio" value="DATE" name="type">
+                                            <span data-i18n="account.subscription.chModal.select.date">Specify a date</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Policy</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.chModal.policy.label">Policy</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="policy" required>
-                                        <option value="IMMEDIATE">IMMEDIATE</option>
-                                        <option value="END_OF_TERM">END_OF_TERM</option>
+                                        <option value="IMMEDIATE"
+                                                data-i18n="account.subscription.chModal.policy.immediate">IMMEDIATE
+                                        </option>
+                                        <option value="END_OF_TERM"
+                                                data-i18n="account.subscription.chModal.policy.endOfTerm">END_OF_TERM
+                                        </option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Change Date</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.chModal.date">Change
+                                Date</label>
 
                                 <div class="col-sm-9">
                                     <div class="input-group date">
@@ -137,8 +160,10 @@
 
                             <input type="hidden" name="category" value="BASE">
 
-                            <div class="form-group"><label class="col-sm-3 control-label"
-                                                           name="product-label">Product</label>
+                            <div class="form-group"><label class="col-sm-3 control-label">
+                                <span data-i18n="account.subscription.addModal.product">Product: </span>
+                                <span name="product-label"></span>
+                            </label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="product" required>
@@ -146,7 +171,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Plan</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.addModal.plan">Plan</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="plan" required>
@@ -159,17 +185,20 @@
                                 <div class="col-sm-9">
                                     <div>
                                         <label>
-                                            <input type="radio" checked="" value="IMMEDIATE" name="type"> Immediately
+                                            <input type="radio" checked="" value="IMMEDIATE" name="type">
+                                            <span data-i18n="account.subscription.addModal.select.immediately">Immediately</span>
                                         </label>
                                     </div>
                                     <div>
                                         <label>
-                                            <input type="radio" value="DATE" name="type"> Specify a date
+                                            <input type="radio" value="DATE" name="type">
+                                            <span data-i18n="account.subscription.addModal.select.date">Specify a date</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-3 control-label">Date</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.addModal.date">Date</label>
 
                                 <div class="col-sm-9">
                                     <div class="input-group date">
@@ -199,14 +228,17 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="title">Transfer Ownership</h4>
+                <h4 class="modal-title" name="title" data-i18n="account.subscription.transferModal.title">Transfer
+                    Ownership</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form method="get" class="form-horizontal">
 
-                            <div class="form-group"><label class="col-sm-3 control-label">Account ID</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.transferModal.accountId">Account
+                                ID</label>
 
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" name="accountId">
@@ -231,14 +263,16 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">Change Subscription bill cycle day</h4>
+                <h4 class="modal-title" data-i18n="account.subscription.bcdModal.title">Change Subscription bill cycle
+                    day</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form method="get" class="form-horizontal">
 
-                            <div class="form-group"><label class="col-sm-3 control-label">Date</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.bcdModal.date">Date</label>
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" name="billCycleDayLocal" required>
@@ -295,19 +329,29 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">Cancel Subscription</h4>
+                <h4 class="modal-title" data-i18n="account.subscription.cancelModal.title">Cancel Subscription</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form method="get" class="form-horizontal">
 
-                            <div class="form-group"><label class="col-sm-3 control-label">Cancel</label>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.cancelModal.cancel">Cancel</label>
                                 <div class="col-sm-9">
                                     <select class="chosen-select" name="policy" required>
-                                        <option value="DEFAULT" selected>Cancel (default policy)</option>
-                                        <option value="IMMEDIATE">Cancel immediately (generate proration)</option>
-                                        <option value="END_OF_TERM">Cancel end of term</option>
+                                        <option value="DEFAULT" selected
+                                                data-i18n="account.subscription.cancelModal.default">Cancel (default
+                                            policy)
+                                        </option>
+                                        <option value="IMMEDIATE"
+                                                data-i18n="account.subscription.cancelModal.immediately">Cancel
+                                            immediately (generate prorated)
+                                        </option>
+                                        <option value="END_OF_TERM"
+                                                data-i18n="account.subscription.cancelModal.endOfTerm">Cancel end of
+                                            term
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -358,6 +402,12 @@
             var me = this;
             var modal = $('#add-bundle-modal');
             var form = modal.find('form');
+            var title = modal.find('[name=title]');
+            if (category == 'ADD_ON') {
+                title.html(i18n.t('account.subscription.addModal.addonTitle'));
+            } else {
+                title.html(i18n.t('account.subscription.addModal.baseTile'));
+            }
             me.clearPlanSearch(category, 'add-subscription');
 
             modal.find('[name=save]').unbind('click');
@@ -413,7 +463,7 @@
                 planSelect.trigger("chosen:updated");
 
                 form.find('[name=category]').val(category);
-                form.find('[name=product-label]').html('Product (' + category + ')');
+                form.find('[name=product-label]').html(category);
 
                 var policyField = form.find('[name=policy]');
                 var dateField = form.find('[name=date]');
@@ -696,7 +746,7 @@
             });
             modal.modal('show');
         },
-        unCancelSubscription: function(subscription){
+        unCancelSubscription: function (subscription) {
             var me = this;
             uBilling.unCancelSubscription(subscription['subscriptionId'])
                 .done(function (response) {
@@ -729,7 +779,7 @@
                     me.transferOwnership(bundle['bundleId']);
                 });
 
-                card.find('[name=title]').html('Bundle ID: ' + bundle['bundleId']);
+                card.find('[name=title]').html(bundle['bundleId']);
 
                 card.find('.collapse-link').on('click', function () {
                     var ibox = $(this).closest('div.ibox');
@@ -763,7 +813,7 @@
                         else if (action == 'cancel') {
                             me.cancelSubscription(subscription);
                         }
-                        else if(action == 'reinstate'){
+                        else if (action == 'reinstate') {
                             me.unCancelSubscription(subscription);
                         }
                     }
@@ -826,25 +876,25 @@
                         dom: '<"html5buttons"B>lTfgitp',
                         buttons: [
                             {
-                                text: 'Reinstate',
+                                text: i18n.t('account.subscription.bundle.reinstate'),
                                 action: function () {
                                     subscriptionControl('reinstate');
                                 }
                             },
                             {
-                                text: 'Change Bcd',
+                                text: i18n.t('account.subscription.bundle.changeBcd'),
                                 action: function () {
                                     subscriptionControl('changeBcd');
                                 }
                             },
                             {
-                                text: 'Change',
+                                text: i18n.t('account.subscription.bundle.change'),
                                 action: function () {
                                     subscriptionControl('change');
                                 }
                             },
                             {
-                                text: 'Cancel',
+                                text: i18n.t('account.subscription.bundle.cancel'),
                                 action: function () {
                                     subscriptionControl('cancel');
                                 }
@@ -902,7 +952,7 @@
                             buttons.css('opacity', '0.5');
                         }
                         //중단 대기 상태일경우 Reinstate 만 활성화
-                        else if(data['pendingCancel']){
+                        else if (data['pendingCancel']) {
                             buttons.css('opacity', '0.5');
                             buttons.eq(0).css('opacity', '1');
                         }

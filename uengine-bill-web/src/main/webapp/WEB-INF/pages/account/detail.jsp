@@ -33,16 +33,14 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div name="account-title-info">
-                            <span><h5 name="name">darkgodarkgo</h5>
+                            <span><h5 name="name"></h5>
                             <span class="label label-success" name="currency">USD</span>
                             <span class="label label-info" name="timeZone">UTC</span>
                         </span>
                         </div>
 
                         <div class="ibox-tools">
-                            <button type="button" class="btn btn-default btn-sm" id="account-edit">Edit</button>
-                            <a href="../subscription/new" type="button" class="btn btn-success btn-sm">New
-                                Subscription</a>
+                            <button type="button" class="btn btn-success btn-sm" id="account-edit">Edit</button>
                             <button type="button" class="btn btn-default btn-sm" id="account-delete">Delete</button>
                         </div>
                     </div>
@@ -50,19 +48,24 @@
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
                                 <li class="" data-page="overview" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-1" aria-expanded="true">Overview</a>
+                                    <a data-toggle="tab" href="#tab-1" aria-expanded="true"
+                                       data-i18n="account.detail.tab.overview">Overview</a>
                                 </li>
                                 <li class="" data-page="subscriptions" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-2" aria-expanded="false">Subscriptions</a>
+                                    <a data-toggle="tab" href="#tab-2" aria-expanded="false"
+                                       data-i18n="account.detail.tab.subscriptions">Subscriptions</a>
                                 </li>
                                 <li class="" data-page="invoices" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-3" aria-expanded="false">Invoices</a>
+                                    <a data-toggle="tab" href="#tab-3" aria-expanded="false"
+                                       data-i18n="account.detail.tab.invoices">Invoices</a>
                                 </li>
                                 <li class="" data-page="payments" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-4" aria-expanded="false">Payments</a>
+                                    <a data-toggle="tab" href="#tab-4" aria-expanded="false"
+                                       data-i18n="account.detail.tab.payments">Payments</a>
                                 </li>
                                 <li class="" data-page="timeline" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-5" aria-expanded="false">Timeline</a>
+                                    <a data-toggle="tab" href="#tab-5" aria-expanded="false"
+                                       data-i18n="account.detail.tab.timeline">Timeline</a>
                                 </li>
                             </ul>
                             <div class="tab-content">

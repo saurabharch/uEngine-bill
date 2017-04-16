@@ -144,32 +144,50 @@
             });
     }
 
-    //현재 조직의 언어를 선택하여 번들을 불러와 i18n 을 활성화한다. (sync 로드)
-    var lang = (currentOrg && currentOrg['language_code']) ? currentOrg['language_code'] : 'en';
-    $.ajax({
-        type: "GET",
-        url: '/resources/locales/' + lang + '.json',
-        dataType: "json",
-        async: false,
-        success: function (bundle) {
-            var resources = {};
-            resources[lang] = {
-                translation: bundle
-            };
-            $.i18n.init({
-                resStore: resources,
-                fallbackLng: false,
-                lng: lang
-            }, function () {
-                $('body').i18n();
-            });
-        }
-    });
-
 
     $(function () {
-        //다국어 변환한다.
-        $('body').i18n();
+        var refreshLang = function (language) {
+            $.ajax({
+                type: "GET",
+                url: '/resources/locales/' + language + '.json',
+                dataType: "json",
+                //async: false,
+                success: function (bundle) {
+                    var resources = {};
+                    resources[language] = {
+                        translation: bundle
+                    };
+                    $.i18n.init({
+                        resStore: resources,
+                        fallbackLng: false,
+                        lng: language
+                    }, function () {
+                        $('body').i18n();
+                    });
+                }
+            });
+        };
+        //현재 조직의 언어를 선택하여 번들을 불러와 i18n 을 활성화한다. (sync 로드)
+        var lang = window.localStorage.getItem('uengine-billing-locale');
+        if (!lang) {
+            lang = 'en';
+            window.localStorage.setItem('uengine-billing-locale', lang);
+        }
+        refreshLang(lang);
+        if(lang == 'ko'){
+            $('#lang-select').text('Korean');
+        }else if(lang == 'en'){
+            $('#lang-select').text('English');
+        }
+
+        //랭귀지를 변경하였을 경우 번들이 다시 불러온다.
+        $('[name=lang-item]').click(function () {
+            var selectedLang = $(this).data('lang');
+            var selectedLangDisplayName = $(this).text();
+            window.localStorage.setItem('uengine-billing-locale', selectedLang);
+            $('#lang-select').text(selectedLangDisplayName);
+            refreshLang(selectedLang);
+        });
 
         //상단 헤더에 조직 선택 리스트를 생성한다.
         if (organizations && organizations.length) {

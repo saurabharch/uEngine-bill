@@ -33,14 +33,20 @@
                     <div class="ibox-title">
                         <h5 id="product-title"></h5>
                         <div class="ibox-tools">
-                            <button type="button" class="btn btn-default btn-sm" name="change-effective-date">Change
+                            <button type="button" class="btn btn-default btn-sm" name="change-effective-date"
+                                    data-i18n="product.version.changeDate">Change
                                 Effective date
                             </button>
-                            <button type="button" class="btn btn-default btn-sm" name="create-new-version">Create New
+                            <button type="button" class="btn btn-default btn-sm" name="create-new-version"
+                                    data-i18n="product.version.newVersion">Create New
                                 Version From this
                             </button>
-                            <button type="button" class="btn btn-default btn-sm" name="edit-product">Edit</button>
-                            <button type="button" class="btn btn-default btn-sm" name="add-plan">Add Plan</button>
+                            <button type="button" class="btn btn-default btn-sm" name="edit-product"
+                                    data-i18n="product.version.edit">Edit
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm" name="add-plan"
+                                    data-i18n="product.version.addPlan">Add Plan
+                            </button>
                             <button type="button" class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown"
                                     href="#">MORE
                             </button>
@@ -63,8 +69,13 @@
                                             <span id="version-title"></span>
                                             <span id="version-code" class="text-muted"></span>
                                         </h5>
-                                        <span style="display: none" id="is_current" class="label label-primary">Current Version</span>
-                                        <span>Effective dates : <span class="text-navy" id="effective_date">since 2017-01-03 - to 2017-01-09</span></span>
+                                        <span style="display: none" id="is_current" class="label label-primary"
+                                              data-i18n="product.version.current">Current Version</span>
+                                        <span>
+                                            <span data-i18n="product.version.dates">Effective dates : </span>
+                                            <span class="text-navy"
+                                                  id="effective_date">since 2017-01-03 - to 2017-01-09</span>
+                                        </span>
                                     </div>
                                     <div style="width: 300px" class="form-group">
                                         <select id="version-list" class="chosen-select">
@@ -75,17 +86,18 @@
                             </div>
                         </div>
                         <div class="well" id="version-box-no">
-                            <h3>
+                            <h3 data-i18n="product.version.noPlan">
                                 You don't have any plans for activate yet.
                             </h3>
-                            Make your first plan as <a href="Javascript:void(0)" name="add-plan">click here</a>
+                            <span data-i18n="product.version.make">Make your first plan as </span>
+                            <a href="Javascript:void(0)" name="add-plan">click here</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Plans</h5>
+                        <h5 data-i18n="product.version.plans">Plans</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -106,7 +118,12 @@
                     <div class="ibox-title">
                         <span>
                             <a class="btn btn-default btn-sm" name="goBack"><i class="fa fa-arrow-left"></i></a>
-                            <span id="plan-panel-title" style="font-size: 18px">New Plan</span><br>
+                            <span id="plan-panel-new" style="font-size: 18px"
+                                  data-i18n="product.plan.new">New Plan</span>
+                            <span id="plan-panel-edit" style="font-size: 18px"
+                                  data-i18n="product.plan.edit">Edit Plan</span>
+                            <small class="text-muted" id="plan-panel-name"></small>
+                            <br>
                             <div class="form-group row">
                                 <div class="col-md-5">
                                     <input placeholder="Display Name" type="text" class="form-control"
@@ -124,19 +141,21 @@
 
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <h5>Initial Phases</h5>
+                                <h5 data-i18n="product.plan.initialTitle">Initial Phases</h5>
                                 <div class="ibox-tools">
                                     <button type="button" class="dropdown-toggle btn btn-default btn-sm"
                                             data-toggle="dropdown"
-                                            href="Javascript:void(0)">Add phase
+                                            href="Javascript:void(0)" data-i18n="product.plan.addPhase">Add phase
                                     </button>
                                     <ul class="dropdown-menu dropdown-user">
-                                        <li><a href="Javascript:void(0)" data-phase="TRIAL" name="add-phase">TRIAL</a>
+                                        <li><a href="Javascript:void(0)" data-phase="TRIAL" name="add-phase"
+                                               data-i18n="product.plan.trial">TRIAL</a>
                                         </li>
                                         <li><a href="Javascript:void(0)" data-phase="DISCOUNT"
-                                               name="add-phase">DISCOUNT</a>
+                                               name="add-phase" data-i18n="product.plan.discount">DISCOUNT</a>
                                         </li>
-                                        <li><a href="Javascript:void(0)" data-phase="FIXEDTERM" name="add-phase">FIXED
+                                        <li><a href="Javascript:void(0)" data-phase="FIXEDTERM" name="add-phase"
+                                               data-i18n="product.plan.fixedTerm">FIXED
                                             TERM</a>
                                         </li>
                                     </ul>
@@ -147,13 +166,16 @@
                             </div>
                             <div class="ibox-content">
                                 <div class="well" id="initial-phase-no" style="display: none">
-                                    <h3>
+                                    <h3 data-i18n="product.plan.noinitial">
                                         You don't have any initial phase in this plan.
                                     </h3>
-                                    Make your first initial phase,
-                                    <a href="Javascript:void(0)" data-phase="TRIAL" name="add-phase">TRIAL</a> or
-                                    <a href="Javascript:void(0)" data-phase="DISCOUNT" name="add-phase">DISCOUNT</a> or
-                                    <a href="Javascript:void(0)" data-phase="FIXEDTERM" name="add-phase">FIXEDTERM</a>
+                                    <span data-i18n="product.plan.makeFirst">Make your first initial phase, </span>
+                                    <a href="Javascript:void(0)" data-phase="TRIAL" name="add-phase"
+                                       data-i18n="product.plan.trial">TRIAL</a> or
+                                    <a href="Javascript:void(0)" data-phase="DISCOUNT" name="add-phase"
+                                       data-i18n="product.plan.discount">DISCOUNT</a> or
+                                    <a href="Javascript:void(0)" data-phase="FIXEDTERM" name="add-phase"
+                                       data-i18n="product.plan.fixedTerm">FIXEDTERM</a>
                                 </div>
 
                                 <div id="initial-phase-list">
@@ -298,7 +320,7 @@
                     dateFormat: 'mm/dd/yy'
                 }).datepicker("setDate", pickerValue);
 
-                modal.find('[name=modal-title]').html('Change Effective Date');
+                modal.find('[name=modal-title]').html(i18n.t('product.version.changeDate'));
                 modal.find('[name=save]').unbind('click');
                 modal.find('[name=save]').bind('click', function () {
                     var value = $('#effective-date-group').find('input').val();
@@ -341,7 +363,7 @@
                     dateFormat: 'mm/dd/yy'
                 }).datepicker("setDate", new Date());
 
-                modal.find('[name=modal-title]').html('Set Effective Date');
+                modal.find('[name=modal-title]').html(i18n.t('product.version.setDate'));
                 modal.find('[name=save]').unbind('click');
                 modal.find('[name=save]').bind('click', function () {
                     var value = $('#effective-date-group').find('input').val();
@@ -468,10 +490,9 @@
 
                 //subscription count
                 card.find('[name=number-of-subscriptions]')
-                    .html('NUMBER OF SUBSCRIPTIONS : ' + plan['number_of_subscriptions']);
+                    .html(plan['number_of_subscriptions']);
                 card.find('[name=number-of-subscriptions-referenced-by-version]')
-                    .html('NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION :' + plan['number_of_subscriptions_referenced_by_version']);
-
+                    .html(plan['number_of_subscriptions_referenced_by_version']);
                 //plan code
                 card.find('[name=plan-code]').html('Plan Code: ' + plan['name']);
 
@@ -633,11 +654,17 @@
                 $('#plan-panel').find('[name=phase-card]').remove();
 
                 //Edit or New
-                var planPanelTitle = $('#plan-panel-title');
+                var planPanelNew = $('#plan-panel-new');
+                var planPanelEdit = $('#plan-panel-edit');
+                var planPanelName = $('#plan-panel-name');
                 if (me.currentPlan['name']) {
-                    planPanelTitle.html('Edit Plan ' + '<small class="text-muted">' + me.currentPlan['name'] + '</small>');
+                    planPanelNew.hide();
+                    planPanelEdit.show();
+                    planPanelName.html(me.currentPlan['name']);
                 } else {
-                    planPanelTitle.html('New Plan');
+                    planPanelNew.show();
+                    planPanelEdit.hide();
+                    planPanelName.html('');
                 }
 
                 //display_name
@@ -895,14 +922,14 @@
                 //버젼 정보가 있을경우 버젼에 업데이트한다.
                 else {
                     var versionData = JSON.parse(JSON.stringify(me.version));
-                    if(planData['name']){
+                    if (planData['name']) {
                         for (var i = 0; i < versionData['plans'].length; i++) {
                             var existPlan = versionData['plans'][i];
                             if (existPlan['name'] == planData['name']) {
                                 versionData['plans'][i] = planData;
                             }
                         }
-                    }else{
+                    } else {
                         versionData['plans'].push(planData);
                     }
                     blockSubmitStart();
@@ -944,10 +971,16 @@
                 //phase-title
                 var drawTitle = function (phaseType) {
                     var phaseTitle = card.find('[name=phase-title]');
+                    var initialTitle = card.find('[name=phase-title-initial]');
+                    var finalTitle = card.find('[name=phase-title-final]');
                     if (is_initial) {
-                        phaseTitle.html('Initial Phase - ' + phaseType);
+                        initialTitle.show();
+                        finalTitle.hide();
+                        phaseTitle.html(phaseType);
                     } else {
-                        phaseTitle.html('Final Phase - ' + phaseType);
+                        initialTitle.hide();
+                        finalTitle.show();
+                        phaseTitle.html(phaseType);
                     }
                 };
                 drawTitle(phase['type']);

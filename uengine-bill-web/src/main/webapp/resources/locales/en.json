@@ -83,53 +83,226 @@
           "warning": "Choice one account to edit."
         }
       }
+    },
+    "detail": {
+      "tab": {
+        "overview": "Overview",
+        "subscriptions": "Subscriptions",
+        "invoices": "Invoices",
+        "payments": "Payments",
+        "timeline": "Timeline"
+      }
+    },
+    "overview": {
+      "tag": {
+        "title": "Tag as :",
+        "save": "Save Tags"
+      },
+      "address": "Billing Address",
+      "contact": {
+        "title": "Contact Persons",
+        "no": "There are no additional contact persons found.",
+        "add": "+ Add Contact Person"
+      },
+      "note": {
+        "title": "Notes",
+        "no": "There are no additional notes found.",
+        "add": "+ Add Notes"
+      },
+      "portal": {
+        "title": "Info Panel",
+        "no": "Client Portal allows your accounts to keep track of all the transactions between them and your business.",
+        "learn": "Learn More",
+        "enable": "Enable Portal"
+      },
+      "billing": {
+        "title": "Billing Info",
+        "addCredit": "Add Credit",
+        "createCharge": "Create Charge",
+        "balance": "Account balance",
+        "credit": "Account credit",
+        "overdue": "Overdue status",
+        "bcd": "Bill cycle day",
+        "nextInvoice": "Next Invoice Date",
+        "notified": "Notified For Invoice"
+      },
+      "pm": {
+        "title": "Payment Methods",
+        "add": "Add Payment Method",
+        "no": "Account doesn't have any payment method yet.",
+        "newText1": "To make a payment method, click",
+        "newText2": "or",
+        "create": "Create New",
+        "request": "Request Payment Method"
+      },
+      "pmItem": {
+        "default": "Default",
+        "setDefault": "Mark as default",
+        "payment": "Payment",
+        "authorize": "AUTHORIZE",
+        "purchase": "PURCHASE",
+        "credit": "CREDIT"
+      },
+      "pmAddModal": {
+        "title": "Add Payment Method",
+        "name": "Plugin Name",
+        "external": "__EXTERNAL_PAYMENT__ is a test plug-in that will process success for all payment requests.",
+        "isDefault": "is Default?"
+      },
+      "pmTrModal": {
+        "title": "Process Transaction",
+        "creditTitle": "Add New Credit",
+        "chargeTitle": "Add New Charge",
+        "type": "Transaction Type",
+        "authorize": "AUTHORIZE",
+        "capture": "CAPTURE",
+        "chargeback": "CHARGEBACK",
+        "credit": "CREDIT",
+        "purchase": "PURCHASE",
+        "refund": "REFUND",
+        "void": "VOID",
+        "amount": "Amount",
+        "currency": "Currency",
+        "paymentKey": "Payment Key",
+        "transactionKey": "Transaction Key",
+        "description": "Description"
+      }
+    },
+    "invoice": {
+      "page": {
+        "invoiceDate": "Invoice date: ",
+        "targetDate": "Target date: ",
+        "addCredit": "Add credit",
+        "createCharge": "Create charge",
+        "makePayment": "Make payment",
+        "total": "INVOICE TOTAL:",
+        "credits": "CREDITS:",
+        "refunded": "REFUNDED:",
+        "balance": "BALANCE:"
+      },
+      "modal": {
+        "creditTitle": "Create Invoice Credit",
+        "chargeTitle": "Create Invoice Charge",
+        "paymentTitle": "Create Invoice Payment",
+        "adjustTitle": "Adjust Invoice Item",
+        "amount": "Amount",
+        "currency": "Currency: ",
+        "pm": "Payment Method",
+        "blank": "Leave blank to use account's default",
+        "description": "Description",
+        "reqDate": "Request Date",
+        "uesReqDate": " Use Request Date"
+      }
+    },
+    "payment": {
+      "page": {
+        "refund": "Refund",
+        "chargeback": "Charge back",
+        "capture": "Capture",
+        "void": "Void"
+      },
+      "pm": {
+        "title": "Payment Method: "
+      },
+      "trModal": {
+        "title": "Process Transaction",
+        "adjustmentNo": "No Invoice Adjustment",
+        "adjustmentUse": "Invoice Item Adjustment",
+        "type": "Transaction Type",
+        "capture": "CAPTURE",
+        "chargeback": "CHARGEBACK",
+        "refund": "REFUND",
+        "void": "VOID",
+        "amount": "Amount",
+        "currency": "Currency: "
+      }
+    },
+    "subscription": {
+      "page": {
+        "title": "Subscription Bundles",
+        "add": "Add Subscription Bundle"
+      },
+      "bundle": {
+        "add": "Add add-on",
+        "transfer": "Transfer Ownership",
+        "reinstate": "Reinstate",
+        "changeBcd": "Change Bcd",
+        "change": "Change",
+        "cancel": "Cancel"
+      },
+      "chModal": {
+        "title": "Change Subscription",
+        "product": "Product: ",
+        "plan": "Plan",
+        "select": {
+          "immediately": "Immediately",
+          "policy": "Specify Policy",
+          "date": "Specify a date"
+        },
+        "policy": {
+          "label": "Policy",
+          "immediate": "IMMEDIATE",
+          "endOfTerm": "END_OF_TERM"
+        },
+        "date": "Change Date"
+      },
+      "addModal": {
+        "baseTile": "Add Subscription Bundle",
+        "addonTitle": "Add ADD_ON",
+        "product": "Product: ",
+        "plan": "Plan",
+        "select": {
+          "immediately": "Immediately",
+          "date": "Specify a date"
+        },
+        "date": "Change Date"
+      },
+      "transferModal": {
+        "title": "Transfer Ownership",
+        "accountId": "Account ID"
+      },
+      "bcdModal": {
+        "title": "Change Subscription bill cycle day",
+        "date": "Date"
+      },
+      "cancelModal": {
+        "title": "Cancel Subscription",
+        "cancel": "Cancel",
+        "default": "Cancel (default policy)",
+        "immediately": "Cancel immediately (generate prorated)",
+        "endOfTerm": "Cancel end of term"
+      }
     }
   },
   "auth": {
     "error401": {
-      "denyaccess": "Deny access",
-      "sorry" : "Sorry, you don't have permission about this page. We apologize.",
-      "goback": "You can go back to main page:"
+      "title": "Deny access",
+      "description": "Sorry, you don't have permission about this page. We apologize.",
+      "back": "You can go back to main page:"
     },
     "error404": {
-      "pageNotFound": "Page Not Found",
-      "sorry" : "Sorry, but the page you are looking for has note been found. We apologize.",
-      "goback": "You can go back to main page:"
+      "title": "Page Not Found",
+      "description": "Sorry, but the page you are looking for has note been found. We apologize.",
+      "back": "You can go back to main page:"
     },
     "error405": {
-      "methodNotAllowed": "Method Not Allowed",
-      "sorry" : "The server encountered something unexpected that didn't allow it to complete the request. We apologize.",
-      "goback": "You can go back to main page:"
+      "title": "Method Not Allowed",
+      "description": "The server encountered something unexpected that didn't allow it to complete the request. We apologize.",
+      "back": "You can go back to main page:"
     },
     "error500": {
-      "internal": "Internal Server Error",
-      "sorry" :"The server encountered something unexpected that didn't allow it to complete the request. We apologize.",
-      "goback":"You can go back to main page:",
-    },
-    "fail": {
-      "welcome": "Welcome to uEngine Billing",
-      "signUpText": "uEngine Billing is a powerful subscription management software which handles recurring billing and payments
-          efficiently.Sign up for a free test account.",
-      "retry": "Failed to login. Retry please.",
-      "loginAction": "Login in. To see it in action",
-      "login": "Login",
-      "password": "password",
-      "notAccount": "Do not have an account?",
-      "createAccount": "Create an account"
+      "title": "Internal Server Error",
+      "description": "The server encountered something unexpected that didn't allow it to complete the request. We apologize.",
+      "back": "You can go back to main page:"
     },
     "login": {
-      "loginText": "uEngine Billing is a powerful subscription management software which handles recurring billing and payments
-          efficiently.Sign up for a free test account.",
+      "welcome": "Welcome to uEngine Billing",
+      "description": "uEngine Billing is a powerful subscription management software which handles recurring billing and payments efficiently.Sign up for a free test account.",
+      "retry": "Failed to login. Retry please.",
       "loginAction": "Login in. To see it in action",
-      "login": "Login",
-      "forgotPasswd": "Forgot password?",
+      "forgot": "Forgot password?",
       "notAccount": "Do not have an account?",
       "createAccount": "Create an account"
-    },
-    "sendPasswdSuccess": {
-      "already": "Already Signed up? Click",
-      "signin" : "Sign In",
-      "login"  : "to login your account."
     }
   },
   "invoice": {
@@ -137,78 +310,14 @@
       "invoices": "Invoices"
     }
   },
-  "management": {
-    "edit": {
-      "breadCrumb": {
-        "left": {
-          "management": "Management Group"
-        },
-        "right": {
-          "management": "Management Group"
-        }
-      },
-      "content": {
-        "title": "Edit Management Group",
-        "failed": "Management edit failed.",
-        "name": "Name",
-        "description": "Description",
-        "loginCheck": "Login Check Lifetime",
-        "scopeCheck": "Scope Check Lifetime",
-        "edit": "Edit",
-        "delete": "Delete"
-      }
-    },
-    "list": {
-      "breadCrumb": {
-        "left": {
-          "management": "Management Group"
-        },
-        "right": {
-          "management": "Management Group"
-        }
-      },
-      "content": {
-        "createManagement": "Create Management",
-        "search": "Search :",
-        "groupname": "Management Group Name",
-        "description": "Description"
-      }
-    },
-    "new": {
-      "breadCrumb": {
-        "left": {
-          "management": "Management Group"
-        },
-        "right": {
-          "management": "Management Group"
-        }
-      },
-      "content": {
-        "title": "Create Management Group",
-        "failed": "Management edit failed.",
-        "name": "Name",
-        "description": "Description",
-        "loginCheck": "Login Check Lifetime",
-        "scopeCheck": "Scope Check Lifetime",
-        "create": "Create Management Group"
-      }
-    }
-  },
   "organization": {
-    "create":{
-      "loginColumns":{
+    "create": {
+      "form": {
         "title": "Create your organization",
         "text1": "Click",
-        "text2": "Sign In",
-        "text3": "to login other account.",
-        "name" : "Organization Name",
+        "text2": "to login other account.",
+        "name": "Organization Name",
         "language": "Language",
-        "option": {
-          "en": "Engilsh",
-          "ko": "Korean",
-          "ja": "Japanese",
-          "zh": "Chinese"
-        },
         "country": "Country",
         "timeZone": "Time Zone",
         "currency": "Currency",
@@ -217,99 +326,128 @@
     }
   },
   "product": {
-    "sub": {
-      "product": {
-        "detail": {
-          "feed": {
-            "active": "Active",
-            "associated": "Associated Usages : ",
-            "initial": "Initial Plan Phases: ",
-            "final": "Final Plan Phase: ",
-            "action": {
-              "edit": "Edit",
-              "mark": "Mark as Inactive",
-              "delete": "Delete",
-              "view": "View Plan URL",
-              "copy": {
-                "this": "Copy to this version",
-                "another": "Copy to another version",
-                "plancode": "Copy with plan code to another version"
-              },
-              "right":{
-                "final": "Final phase price"
-              }
-            }
-          },
-          "item": {
-            "duration": {
-              "unit": "Unit",
-              "option": {
-                "days": "DAYS",
-                "months": "MONTHS",
-                "years": "YEARS",
-                "unlimited": "UNLIMITED"
-              },
-              "number": "number",
-            },
-            "recurring": {
-              "recurring": "Use recurring billing in this phase.",
-              "period": "Billing Period",
-              "noPeriod": "NO_BILLING_PERIOD",
-              "option": {
-                "daily": "DAILY",
-                "weekly": "WEEKLY",
-                "biweekly": "BIWEEKLY",
-                "thirty": "THIRTY_DAYS",
-                "monthly": "MONTHLY",
-                "quarterly": "QUARTERLY",
-                "biannual": "BIANNUAL",
-                "annual": "ANNUAL",
-                "biennial": "BIENNIAL"
-              },
-              "priceadd" : "+ Add price"
-            },
-            "fixed": {
-              "fixed": "Use fixed price in this phase.",
-              "price": "Fixed Price",
-              "add": "+ Add price"
-            },
-            "tier" : {
-              "unit": "UNIT",
-              "size": "SIZE",
-              "max": "MAX"
-            },
-            "usage": {
-              "title": "Usage",
-              "delete": "Delete",
-              "code": "Usage Code",
-              "displayname": "Display Name",
-              "billingmode": "Billing Mode",
-              "modeoption": {
-                "arrear": "IN_ARREAR",
-                "advance": "IN_ADVANCE"
-              },
-              "type": "Usage Type",
-              "typeoption": {
-                "consumable": "CONSUMABLE",
-                "capacity": "CAPACITY"
-              },
-              "period": "Billing Period",
-              "periodoption": {
-                "nobilling": "NO_BILLING_PERIOD",
-                "daily": "DAILY",
-                "weekly": "WEEKLY",
-                "biweekly": "BIWEEKLY",
-                "thirtydays": "THIRTY_DAYS",
-                "monthly": "MONTHLY",
-                "quarterly": "QUARTERLY",
-                "biannual": "BIANNUAL",
-                "annual": "ANNUAL",
-                "biennial": "BIENNIAL"
-              }
-            }
-          }
-        }
-      }
+    "index": {
+      "title": "Products",
+      "new": "New +",
+      "all" : "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "none" : "None subscriptions",
+      "import": "Import Products",
+      "export": "Export Products",
+      "refresh": "Refresh list"
+    },
+    "new": {
+      "title": "New Product",
+      "name": "Name",
+      "category": "Category",
+      "base": "BASE",
+      "addon": "ADD_ON",
+      "description": "Description",
+      "redirect": "Redirect url",
+      "redirectInfo": "A redirect url is an address that a buyer completes a purchase through a hosted page and is redirected with the result of the purchase action. Usually you will use the seller's application address.",
+      "inactiveInfo": "If in the Inactive state, you customer will not be able to subscribe or change a product, but your existing purchasing customer will remain in service."
+    },
+    "version":{
+      "changeDate": "Change Effective date",
+      "setDate":"Set Effective Date",
+      "newVersion": "Create New Version From this",
+      "edit": "Edit",
+      "addPlan": "Add Plan",
+      "current": "Current Version",
+      "dates": "Effective dates : ",
+      "plans": "Plans",
+      "noPlan": "You don't have any plans for activate yet.",
+      "make" :"Make your first plan as "
+    },
+    "plan":{
+      "new": "New Plan",
+      "edit": "Edit Plan",
+      "initialTitle": "Initial Phases",
+      "addPhase": "Add phase",
+      "trial" : "TRIAL",
+      "discount" : "DISCOUNT",
+      "fixedTerm" : "FIXED TERM",
+      "evergreen": "EVERGREEN",
+      "noinitial": "You don't have any initial phase in this plan.",
+      "makeFirst" : "Make your first initial phase, "
+    },
+    "planCard": {
+      "numSub":"NUMBER OF SUBSCRIPTIONS : ",
+      "numRef":"NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION : ",
+      "usages": "Associated Usages : ",
+      "initials":"Initial Plan Phases: ",
+      "final":"Final Plan Phase: ",
+      "edit": "Edit",
+      "delete" :"Delete",
+      "url":"View Plan URL",
+      "copy": "Copy to this version",
+      "copyAnother": "Copy to another version",
+      "copyAnotherWithCode": "Copy with plan code to another version",
+      "price" : "Final phase price"
+    },
+    "duration": {
+      "unit": "Unit",
+      "days": "DAYS",
+      "months": "MONTHS",
+      "years": "YEARS",
+      "unlimited": "UNLIMITED",
+      "number": "Number"
+    },
+    "recurring": {
+      "use": "Use recurring billing in this phase.",
+      "period":"Billing Period",
+      "daily" : "DAILY",
+      "weekly" : "WEEKLY",
+      "biweekly" : "BIWEEKLY",
+      "thirty_days" : "THIRTY_DAYS",
+      "monthly" : "MONTHLY",
+      "quarterly" : "QUARTERLY",
+      "biannual" : "BIANNUAL",
+      "annual" : "ANNUAL",
+      "biennial" : "BIENNIAL",
+      "price": "Recurring Price",
+      "addPrice": "+ Add price"
+    },
+    "fixed": {
+      "use" :"Use fixed price in this phase. ",
+      "price": "Fixed Price",
+      "addPrice": "+ Add price"
+    },
+    "tier": {
+      "delete" : "Delete Tier",
+      "addPrice": "+ Add price"
+    },
+    "usage": {
+      "title" : "Usage",
+      "delete" : "Delete",
+      "code": "Usage Code",
+      "display" : "Display Name",
+      "displayDesc": "The name shown in the invoice item.",
+      "mode" : "Billing Mode",
+      "arrear": "IN_ARREAR",
+      "advance":"IN_ADVANCE",
+      "type": "Usage Type",
+      "consumable": "CONSUMABLE",
+      "capacity": "CAPACITY",
+      "scheme":"Pricing Scheme",
+      "tierDesc" : "The purchase price of the tier is calculated according to the unit price of each pricing. For example, if a stamp is $ 6 for 1-30 (Size 10 * max 3) and $ 5 for 31-100 (Size 10 * max 10), It costs $ 280 (30 * $ 6 + 20 * $ 5) to buy 50 stamps. Size is the minimum purchase unit. If the minimum purchase unit is 10 and 15 units are purchased, 20 units will be counted. Also, it will not be charged more than the max value, so be sure to set a sufficient max amount.",
+      "addTier": "+ Add new tier"
+    },
+    "phase": {
+      "titleInitial": "Initial Phase - ",
+      "titleFinal": "Final Phase - ",
+      "changeType": "Change Phase type",
+      "trial" : "TRIAL",
+      "discount" : "DISCOUNT",
+      "fixedTerm" : "FIXED TERM",
+      "evergreen": "EVERGREEN",
+      "delete" : "Delete",
+      "duration":"Duration",
+      "recurring":"Recurring",
+      "fixed":"Fixed",
+      "usages":"Usages",
+      "addUsage": "+ Add Usage"
     }
   }
 }

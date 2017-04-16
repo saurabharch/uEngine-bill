@@ -32,30 +32,34 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Products</h5>
+                        <h5 data-i18n="product.index.title">Products</h5>
 
                         <div class="ibox-tools">
-                            <a id="createNewProduct" href="#" type="button" class="btn btn-primary btn-sm">New +</a>
-                            <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#"><i
-                                    class="fa fa-bars"></i></a>
+                            <a id="createNewProduct" href="#" type="button" class="btn btn-primary btn-sm"
+                               data-i18n="product.index.new">New +</a>
+                            <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bars"></i></a>
                             <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">All</a>
+                                <li><a href="#" data-i18n="product.index.all">All</a>
                                 </li>
-                                <li><a href="#">Active</a>
+                                <li><a href="#" data-i18n="product.index.active">Active</a>
                                 </li>
-                                <li><a href="#">Inactive</a>
+                                <li><a href="#" data-i18n="product.index.inactive">Inactive</a>
                                 </li>
-                                <li><a href="#">None subscriptions</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Import Products</a>
-                                </li>
+                                <li><a href="#" data-i18n="product.index.none">None subscriptions</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#">Export Products</a>
+                                <li><a href="#" data-i18n="product.index.import">Import Products</a>
+                                </li>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="#"><i class="fa fa-refresh"> Refresh list</i></a>
+                                <li><a href="#" data-i18n="product.index.export">Export Products</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-refresh" data-i18n="product.index.refresh">Refresh list</i>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -142,12 +146,12 @@
                     text: 'Edit',
                     action: function () {
                         var selected = dt.getDt().rows({selected: true}).data();
-                        if(!selected.length){
+                        if (!selected.length) {
                             return;
                         }
-                        if(selected.length > 1){
+                        if (selected.length > 1) {
                             toastr.warning("Choice one product to edit.");
-                        }else{
+                        } else {
                             var product_id = selected[0]['id'];
                             productController.open(product_id, $('#product-table'));
                         }
@@ -182,9 +186,9 @@
                         for (var i = 0; i < response.data.length; i++) {
                             response.data[i].name = '<a>' + response.data[i].name + '</a>';
                             var isActive = response.data[i]['is_active'];
-                            if(isActive == 'Y'){
+                            if (isActive == 'Y') {
                                 response.data[i]['is_active'] = '<span class="label label-primary">Active</span>'
-                            }else{
+                            } else {
                                 response.data[i]['is_active'] = '<span class="label label-warning">Inactive</span>'
                             }
                         }
@@ -226,10 +230,10 @@
         };
         tableButtonCss();
 
-        $('#createNewProduct').click(function(){
-            productController.open(null , $('#product-table'));
+        $('#createNewProduct').click(function () {
+            productController.open(null, $('#product-table'));
         });
-        $('#product-table').on('updated',function(){
+        $('#product-table').on('updated', function () {
             dt.getDt().ajax.reload();
         });
     });

@@ -22,22 +22,19 @@
 <body class="gray-bg">
 
 <div id="wrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <iframe src="/resources/d3/world/index.html" frameborder="no" scrolling="no" style="width: 100%;height: 450px;"></iframe>
-            </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <iframe src="/resources/d3/world/index.html" frameborder="no" scrolling="no"
+                    style="width: 100%;height: 450px;"></iframe>
         </div>
+    </div>
 </div>
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
-        <%--<div>--%>
+        <h3 data-i18n="auth.login.welcome">Welcome to uEngine Billing</h3>
 
-            <%--<h1 class="logo-name">uEngine</h1>--%>
-
-        <%--</div>--%>
-        <h3>Welcome to uEngine Billing</h3>
-
-        <p data-i18n="auth.login.loginText">uEngine Billing is a powerful subscription management software which handles recurring billing and payments
+        <p data-i18n="auth.login.description">uEngine Billing is a powerful subscription management software which handles
+            recurring billing and payments
             efficiently.Sign up for a free test account.
         </p>
 
@@ -52,16 +49,18 @@
             <div class="form-group">
                 <input type="password" name="password" class="form-control" placeholder="Password" required="">
             </div>
-            <button type="submit" class="btn btn-primary block full-width m-b" data-i18n="auth.login.login">Login</button>
+            <button type="submit" class="btn btn-primary block full-width m-b">Login
+            </button>
 
             <a href="#">
-                <small data-i18n="auth.login.forgotPasswd">Forgot password?</small>
+                <small data-i18n="auth.login.forgot">Forgot password?</small>
             </a>
 
             <p class="text-muted text-center">
                 <small data-i18n="auth.login.notAccount">Do not have an account?</small>
             </p>
-            <a class="btn btn-sm btn-white btn-block" href="/registe/register" data-i18n="auth.login.createAccount">Create an account</a>
+            <a class="btn btn-sm btn-white btn-block" href="/registe/register" data-i18n="auth.login.createAccount">Create
+                an account</a>
         </form>
         <p class="m-t">
             <small>uEngine subscription billing app &copy; 2016</small>
@@ -80,12 +79,12 @@
             event.preventDefault();
             var data = $(this).serializeObject();
             uBilling.login(data)
-                    .done(function () {
-                        window.location.href = '/';
-                    })
-                    .fail(function () {
-                        window.location.href = '/auth/fail';
-                    })
+                .done(function () {
+                    window.location.href = '/';
+                })
+                .fail(function () {
+                    window.location.href = '/auth/fail';
+                })
         });
     })
 </script>

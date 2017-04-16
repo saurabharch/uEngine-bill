@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
     <div id="timeline-page">
         <div class="table-responsive">

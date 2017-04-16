@@ -31,6 +31,15 @@
                 </ul>
             </li>
 
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" id="lang-select">
+                </a>
+                <ul class="dropdown-menu dropdown-messages">
+                    <li><a href="#" name="lang-item" data-lang="en">English</a></li>
+                    <li><a href="#" name="lang-item" data-lang="ko">Korean</a></li>
+                </ul>
+            </li>
+
             <li>
                 <a href="#" id="logoutbtn">
                     <i class="fa fa-sign-out"></i> Log out
@@ -85,14 +94,16 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="modal-title" data-i18n="template.header.form.testDate.title">Change Test Date</h4>
+                <h4 class="modal-title" name="modal-title" data-i18n="template.header.form.testDate.title">Change Test
+                    Date</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <form class="form">
                             <div class="form-group" id="test-date-group">
-                                <label class="font-noraml" data-i18n="template.header.form.testDate.date">Test date</label>
+                                <label class="font-noraml" data-i18n="template.header.form.testDate.date">Test
+                                    date</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon">
                                         <i class="fa fa-calendar"></i>

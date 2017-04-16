@@ -23,11 +23,12 @@
 
 <div class="middle-box text-center animated fadeInDown">
     <h1>500</h1>
-    <h3 class="font-bold" data-i18n="auth.error500.internal">Internal Server Error</h3>
+    <h3 class="font-bold" data-i18n="auth.error500.title">Internal Server Error</h3>
 
     <div class="error-desc">
-        <span>The server encountered something unexpected that didn't allow it to complete the request. We apologize.</span><br/>
-        <span>You can go back to main page:</span> <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
+        <span data-i18n="auth.error500.description">The server encountered something unexpected that didn't allow it to complete the request. We apologize.</span><br/>
+        <span data-i18n="auth.error500.back">You can go back to main page:</span>
+        <br/><a href="/index" class="btn btn-primary m-t">Dashboard</a>
     </div>
 </div>
 
@@ -37,7 +38,7 @@
 
 
 <script>
-    $(function(){
+    $(function () {
 
     })
 </script>
