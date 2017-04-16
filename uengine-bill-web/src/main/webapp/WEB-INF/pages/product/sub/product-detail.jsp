@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
     <div id="plan-card">
         <div>
@@ -6,9 +7,19 @@
                     <div class="media-body ">
                         <div class="col-md-10">
                             <div class="pull-right">
-                                <small class="text-navy" name="number-of-subscriptions"></small>
+                                <small class="text-navy" data-i18n="product.planCard.numSub">
+                                    NUMBER OF SUBSCRIPTIONS :
+                                </small>
+                                <small class="text-navy" name="number-of-subscriptions">
+
+                                </small>
                                 <br>
-                                <small class="text-navy" name="number-of-subscriptions-referenced-by-version"></small>
+                                <small class="text-navy" data-i18n="product.planCard.numRef">
+                                    NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION :
+                                </small>
+                                <small class="text-navy" name="number-of-subscriptions-referenced-by-version">
+
+                                </small>
                             </div>
 
                             <strong name="plan-display-name"></strong>
@@ -16,37 +27,49 @@
                             <p class="text-muted" name="plan-code"></p>
                             <span name="is_active" class="label label-primary">Active</span>
                             <br>
-                            <span>Associated Usages : <span class="text-navy" name="associated-usages"></span></span>
+                            <span>
+                                <span data-i18n="product.planCard.usages">Associated Usages : </span>
+                                <span class="text-navy" name="associated-usages"></span>
+                            </span>
                             <br>
-                            <span>Initial Plan Phases: <span
-                                    class="text-navy" name="initial-plan-phases"></span></span>
+                            <span>
+                                <span data-i18n="product.planCard.initials">Initial Plan Phases: </span>
+                                <span class="text-navy" name="initial-plan-phases"></span>
+                            </span>
                             <br>
-                            <span>Final Plan Phase: <span class="text-navy" name="final-plan-phase"></span></span>
+                            <span>
+                                <span data-i18n="product.planCard.final">Final Plan Phase: </span>
+                                <span class="text-navy" name="final-plan-phase"></span>
+                            </span>
                             <div class="actions">
-                                <button type="button" class="btn btn-default btn-xs" name="edit">Edit</button>
+                                <button type="button" class="btn btn-default btn-xs" name="edit"
+                                        data-i18n="product.planCard.edit">Edit
+                                </button>
                                 <button type="button" class="btn btn-default btn-xs" name="mark">Mark as Inactive
                                 </button>
-                                <button type="button" class="btn btn-default btn-xs" name="delete">Delete</button>
-                                <button type="button" class="btn btn-default btn-xs" name="view-plan-url">View Plan URL
+                                <button type="button" class="btn btn-default btn-xs" name="delete"
+                                        data-i18n="product.planCard.delete">Delete
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" name="view-plan-url"
+                                        data-i18n="product.planCard.url">View Plan URL
                                 </button>
                                 <br>
-                                <button type="button" class="btn btn-default btn-xs" name="copy-to-this-version">Copy to
-                                    this
-                                    version
+                                <button type="button" class="btn btn-default btn-xs" name="copy-to-this-version"
+                                        data-i18n="product.planCard.copy">Copy to this version
                                 </button>
-                                <button type="button" class="btn btn-default btn-xs" name="copy-to-another-version">Copy
-                                    to
-                                    another version
+                                <button type="button" class="btn btn-default btn-xs" name="copy-to-another-version"
+                                        data-i18n="product.planCard.copyAnother">Copy to another version
                                 </button>
                                 <button type="button" class="btn btn-default btn-xs"
-                                        name="copy-with-plan-code-to-another-version">Copy with plan code to another
+                                        name="copy-with-plan-code-to-another-version"
+                                        data-i18n="product.planCard.copyAnotherWithCode">Copy with plan code to another
                                     version
                                 </button>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="pull-right" style="text-align: right">
-                                <p>Final phase price</p>
+                                <p data-i18n="product.planCard.price">Final phase price</p>
                                 <div name="final-phase-price">
 
                                 </div>
@@ -107,21 +130,18 @@
         <form class="form-horizontal" name="recurring-form">
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label> <input type="checkbox" name="recurring"
-                                   value="true"> Use recurring billing
-                        in this phase. </label>
+                    <label>
+                        <input type="checkbox" name="recurring" value="true">
+                        <span>Use recurring billing in this phase.</span>
+                    </label>
                 </div>
             </div>
             <div name="recurring-use">
                 <div class="form-group"><label
-                        class="col-sm-2 control-label">Billing
-                    Period</label>
+                        class="col-sm-2 control-label">Billing Period</label>
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
                                 name="billingPeriod" required>
-                            <option value="NO_BILLING_PERIOD">
-                                NO_BILLING_PERIOD
-                            </option>
                             <option value="DAILY">DAILY</option>
                             <option value="WEEKLY">WEEKLY</option>
                             <option value="BIWEEKLY">BIWEEKLY</option>
@@ -151,9 +171,10 @@
         <form class="form-horizontal" name="fixed-form">
             <div class="form-group">
                 <div class="col-sm-5">
-                    <label> <input type="checkbox" name="fixed"
-                                   value="true"> Use fixed price in this
-                        phase. </label>
+                    <label>
+                        <input type="checkbox" name="fixed" value="true">
+                        <span>Use fixed price in this phase. </span>
+                    </label>
                 </div>
             </div>
             <div name="fixed-use">
@@ -172,10 +193,7 @@
 
     <div class="form-group" id="tier-item" name="tier-item">
         <div class="col-sm-2 control-label">
-            <button type="button"
-                    class="btn btn-default btn-sm" name="tier-item-delete">
-                Delete
-                Tier
+            <button type="button" class="btn btn-default btn-sm" name="tier-item-delete">Delete Tier
             </button>
             <br>
             <a href="Javascript:void(0)" name="price-add">+ Add price</a>
@@ -185,25 +203,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
-                        UNIT
-                    </div>
-                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
-                        SIZE
-                    </div>
-                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
-                        MAX
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                        <span>UNIT</span>
                         <input type="text"
                                class="form-control"
                                name="unit"
                                value="">
                     </div>
                     <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                        <span>SIZE</span>
                         <input type="number"
                                class="form-control"
                                min="0"
@@ -211,6 +218,7 @@
                                value="">
                     </div>
                     <div style="position:relative;width: 80px;float: left;margin-right: 15px;margin-bottom: 10px;">
+                        <span>MAX</span>
                         <input type="number"
                                class="form-control"
                                min="0"
@@ -293,9 +301,6 @@
                     <div class="col-md-5">
                         <select class="chosen-select" tabindex="2"
                                 name="billingPeriod" required>
-                            <option value="NO_BILLING_PERIOD">
-                                NO_BILLING_PERIOD
-                            </option>
                             <option value="DAILY">DAILY</option>
                             <option value="WEEKLY">WEEKLY</option>
                             <option value="BIWEEKLY">BIWEEKLY
@@ -322,9 +327,9 @@
                                 name="scheme" required>
                             <option value="TIER" selected>TIER
                             </option>
-                            <%--<option value="BLOCK">BLOCK</option>--%>
-                            <%--<option value="LIMIT">LIMIT</option>--%>
                         </select>
+                        <small class="text-muted">사용량 구매 단가는 구입 한 사용량의 수량에 따라 다릅니다.
+                            예를 들어 판매 단위(SIZE) 가 10개이며 , 5  우표는 각각 5 달러이고 10 장 이상의 우표는 3 달러입니다. 6 스탬프의 경우 고객은 30 달러 (6 * 5 달러)를 지불해야하지만 15 스탬프의 경우 가격은 45 달러 (15 * 3 달러)입니다.Tier 단위는</small>
                     </div>
                 </div>
 
