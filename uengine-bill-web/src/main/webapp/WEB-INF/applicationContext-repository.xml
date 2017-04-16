@@ -73,7 +73,7 @@
 
     <bean id="pooledDataSource" class="com.zaxxer.hikari.HikariDataSource">
         <property name="driverClassName" value="#{systemProperties['jdbc.driver']}"/>
-        <property name="jdbcUrl" value="#{systemProperties['org.killbill.dao.url']}"/>
+        <property name="jdbcUrl" value="#{systemProperties['org.killbill.dao.url']}?useUnicode=yes&amp;characterEncoding=utf8"/>
         <property name="username" value="#{systemProperties['org.killbill.dao.user']}"/>
         <property name="password" value="#{systemProperties['org.killbill.dao.password']}"/>
         <property name="minimumIdle" value="3"/>
