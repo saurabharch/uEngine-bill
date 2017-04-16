@@ -363,6 +363,7 @@ uBilling.prototype = {
         return this.send(options);
     },
     updateProduct: function (product_id, data) {
+        console.log(data);
         var options = {
             type: "PUT",
             url: '/rest/v1/product/' + product_id,
@@ -612,8 +613,8 @@ uBilling.prototype = {
         } else {
             url = '/rest/v1/accounts/' + account_id + '/payments';
         }
-        var getPaymentId = function (xhr) {
-            var locationHeader = xhr.getResponseHeader('Location');
+        var getPaymentId = function (response, xhr) {
+            var locationHeader = xhr ? xhr.getResponseHeader('Location') : null;
             if (locationHeader && locationHeader.length > 0) {
                 return {
                     paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
@@ -631,7 +632,7 @@ uBilling.prototype = {
             contentType: "application/json",
             dataType: 'text',
             resolve: function (response, status, xhr) {
-                return getPaymentId(xhr);
+                return getPaymentId(response, xhr);
             },
             reject: function (response, status, errorThrown) {
                 return getPaymentId(response);
@@ -640,8 +641,8 @@ uBilling.prototype = {
         return this.send(options);
     },
     capturePayment: function (data) {
-        var getPaymentId = function (xhr) {
-            var locationHeader = xhr.getResponseHeader('Location');
+        var getPaymentId = function (response, xhr) {
+            var locationHeader = xhr ? xhr.getResponseHeader('Location') : null;
             if (locationHeader && locationHeader.length > 0) {
                 return {
                     paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
@@ -659,7 +660,7 @@ uBilling.prototype = {
             contentType: "application/json",
             dataType: 'text',
             resolve: function (response, status, xhr) {
-                return getPaymentId(xhr);
+                return getPaymentId(response, xhr);
             },
             reject: function (response, status, errorThrown) {
                 return getPaymentId(response);
@@ -668,8 +669,8 @@ uBilling.prototype = {
         return this.send(options);
     },
     chargebackPayment: function (data) {
-        var getPaymentId = function (xhr) {
-            var locationHeader = xhr.getResponseHeader('Location');
+        var getPaymentId = function (response, xhr) {
+            var locationHeader = xhr ? xhr.getResponseHeader('Location') : null;
             if (locationHeader && locationHeader.length > 0) {
                 return {
                     paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
@@ -687,7 +688,7 @@ uBilling.prototype = {
             contentType: "application/json",
             dataType: 'text',
             resolve: function (response, status, xhr) {
-                return getPaymentId(xhr);
+                return getPaymentId(response, xhr);
             },
             reject: function (response, status, errorThrown) {
                 return getPaymentId(response);
@@ -696,8 +697,8 @@ uBilling.prototype = {
         return this.send(options);
     },
     refundPayment: function (data) {
-        var getPaymentId = function (xhr) {
-            var locationHeader = xhr.getResponseHeader('Location');
+        var getPaymentId = function (response, xhr) {
+            var locationHeader = xhr ? xhr.getResponseHeader('Location') : null;
             if (locationHeader && locationHeader.length > 0) {
                 return {
                     paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
@@ -715,7 +716,7 @@ uBilling.prototype = {
             contentType: "application/json",
             dataType: 'text',
             resolve: function (response, status, xhr) {
-                return getPaymentId(xhr);
+                return getPaymentId(response, xhr);
             },
             reject: function (response, status, errorThrown) {
                 return getPaymentId(response);
@@ -724,8 +725,8 @@ uBilling.prototype = {
         return this.send(options);
     },
     voidPayment: function (data) {
-        var getPaymentId = function (xhr) {
-            var locationHeader = xhr.getResponseHeader('Location');
+        var getPaymentId = function (response, xhr) {
+            var locationHeader = xhr ? xhr.getResponseHeader('Location') : null;
             if (locationHeader && locationHeader.length > 0) {
                 return {
                     paymentId: locationHeader.substring(locationHeader.lastIndexOf('payments/') + 9)
@@ -743,7 +744,7 @@ uBilling.prototype = {
             contentType: "application/json",
             dataType: 'text',
             resolve: function (response, status, xhr) {
-                return getPaymentId(xhr);
+                return getPaymentId(response, xhr);
             },
             reject: function (response, status, errorThrown) {
                 return getPaymentId(response);
