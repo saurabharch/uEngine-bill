@@ -35,22 +35,25 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Organization Profile</h5>
+                        <h5 data-i18n="setting.profile.title">Organization Profile</h5>
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal">
-                            <div class="form-group"><label class="col-sm-2 control-label">Organization ID</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.id">Organization ID</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="id" readonly>
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-2 control-label">Organization Name</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.name">Organization Name</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="name" required>
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">Language</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.lang">Language</label>
 
                                 <div class="col-sm-10">
                                     <select data-placeholder="" class="chosen-select"
@@ -63,59 +66,67 @@
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">Time Zone</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.timeZone">Time Zone</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="time_zone" required
                                                               readonly>
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">Currency</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.currency">Currency</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control" name="currency" required
                                                               readonly>
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">Primary Contact</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.contact">Primary Contact</label>
 
                                 <div class="col-sm-10">
                                     <span id="primary-email"></span><br>
-                                    <a id="configure-email">Configure Emails <i class="fa fa-info-circle"></i></a>
+                                    <a id="configure-email" data-i18n="setting.profile.configMail">Configure Emails <i
+                                            class="fa fa-info-circle"></i></a>
                                 </div>
                             </div>
 
                             <div class="hr-line-dashed"></div>
 
-                            <h3 class="m-t-none m-b">Company Address</h3>
-                            <div class="form-group"><label class="col-sm-2 control-label">Company Name</label>
+                            <h3 class="m-t-none m-b" data-i18n="setting.profile.addressTitle">Company Address</h3>
 
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" data-i18n="setting.profile.companyName">Company
+                                    Name</label>
                                 <div class="col-sm-10"><input type="text" class="form-control" name="company_name">
                                 </div>
                             </div>
 
                             <div class="form-group"><label
-                                    class="col-sm-2 control-label">Street</label>
+                                    class="col-sm-2 control-label" data-i18n="setting.profile.street">Street</label>
 
                                 <div class="col-sm-10"><textarea rows="3" class="form-control"
                                                                  name="address1"></textarea>
                                 </div>
                             </div>
                             <div class="form-group"><label
-                                    class="col-sm-2 control-label">City</label>
+                                    class="col-sm-2 control-label" data-i18n="setting.profile.city">City</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
                                                               name="city">
                                 </div>
                             </div>
                             <div class="form-group"><label
-                                    class="col-sm-2 control-label">State or Province</label>
+                                    class="col-sm-2 control-label" data-i18n="setting.profile.state">State or
+                                Province</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
                                                               name="state_or_province">
                                 </div>
                             </div>
-                            <div class="form-group"><label class="col-sm-2 control-label">ZIP
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.zip">ZIP
                                 Code</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
@@ -123,7 +134,8 @@
                                 </div>
                             </div>
 
-                            <div class="form-group"><label class="col-sm-2 control-label">Country</label>
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="setting.profile.country">Country</label>
 
                                 <div class="col-sm-10">
                                     <select data-placeholder="" class="chosen-select"
@@ -134,7 +146,7 @@
                             </div>
 
                             <div class="form-group"><label
-                                    class="col-sm-2 control-label">Phone</label>
+                                    class="col-sm-2 control-label" data-i18n="setting.profile.phone">Phone</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
                                                               name="phone">
@@ -142,7 +154,7 @@
                             </div>
 
                             <div class="form-group"><label
-                                    class="col-sm-2 control-label">Fax</label>
+                                    class="col-sm-2 control-label" data-i18n="setting.profile.fax">Fax</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
                                                               name="fax">
@@ -150,7 +162,7 @@
                             </div>
 
                             <div class="form-group"><label
-                                    class="col-sm-2 control-label">Website</label>
+                                    class="col-sm-2 control-label" data-i18n="setting.profile.web">Website</label>
 
                                 <div class="col-sm-10"><input type="text" class="form-control"
                                                               name="website">
@@ -183,7 +195,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">Organization Contacts</h4>
+                <h4 class="modal-title" data-i18n="setting.profile.modal.title">Organization Contacts</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
@@ -193,7 +205,7 @@
                                    class="table table-hover" style="width: 100%">
                             </table>
                         </div>
-                        <a id="new-contact">+ Add Additional Contact</a>
+                        <a id="new-contact" data-i18n="setting.profile.modal.add">+ Add Additional Contact</a>
                     </div>
                 </div>
             </div>
@@ -213,13 +225,13 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">Email</h4>
+                <h4 class="modal-title" data-i18n="setting.profile.newModal.title">Email</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
                         <div class="form-group">
-                            <label>Email address</label>
+                            <label data-i18n="setting.profile.newModal.email">Email address</label>
                             <input name="email" type="email" placeholder="Enter your email" class="form-control"></div>
                     </div>
                 </div>
@@ -385,7 +397,7 @@
         };
         drawEmails();
 
-        $('#configure-email').click(function(){
+        $('#configure-email').click(function () {
             $('#contact-email-modal').modal('show');
         });
     });

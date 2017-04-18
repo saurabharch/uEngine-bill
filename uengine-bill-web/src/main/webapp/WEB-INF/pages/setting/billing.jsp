@@ -35,25 +35,26 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Billing Settings</h5>
+                        <h5 data-i18n="setting.billing.title">Billing Settings</h5>
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal" id="billing-rule-form" novalidate>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">
-                                    <h3>RECURRING MODE</h3>
+                                    <h3 data-i18n="setting.billing.mode">RECURRING MODE</h3>
                                 </label>
 
                                 <div class="col-sm-4">
                                     <select data-placeholder="" class="chosen-select"
                                             tabindex="2" name="recurringBillingMode" required>
-                                        <option value="IN_ADVANCE">IN_ADVANCE</option>
-                                        <option value="IN_ARREAR">IN_ARREAR</option>
+                                        <option value="IN_ADVANCE" data-i18n="setting.billing.advance">IN_ADVANCE
+                                        </option>
+                                        <option value="IN_ARREAR" data-i18n="setting.billing.arrear">IN_ARREAR</option>
                                     </select>
                                 </div>
-                                <div class="hr-line-dashed"></div>
                             </div>
+                            <div class="hr-line-dashed"></div>
 
                             <div id="box-before"></div>
 
@@ -77,11 +78,18 @@
 
 <div style="display: none">
     <div id="rule-template">
-        <span>
-            <h3 class="m-t-none m-b" name="box-title"></h3>
-            <a name="add-case">+ Add Case</a>
-        </span>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">
+                <h3 class="m-t-none m-b" name="box-title"></h3>
+                <a name="add-case" data-i18n="setting.billing.addCase">+ Add Case</a>
+            </label>
 
+            <div class="col-sm-6">
+                <small class="text-muted" name="description"></small>
+            </div>
+        </div>
+
+        <br>
         <div name="case-before"></div>
         <div class="hr-line-dashed"></div>
     </div>
@@ -89,10 +97,10 @@
     <div id="case-default-template">
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>DEFAULT CASE</span>
+                <span data-i18n="setting.billing.defaultCase">DEFAULT CASE</span>
             </label>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <select data-placeholder="" class="chosen-select"
                         tabindex="2" name="action" required>
                 </select>
@@ -107,16 +115,16 @@
             <label class="col-sm-2 control-label">
                                     <span>
                                         <a name="case-delete"><i class="fa fa-trash"></i></a> <span
-                                            name="case-name">CASE</span></span>
+                                            name="case-name" data-i18n="setting.billing.case">CASE</span></span>
                 <br>
-                <a name="add-condition">+ Add Condition</a>
+                <a name="add-condition" data-i18n="setting.billing.addCondition">+ Add Condition</a>
             </label>
 
             <div class="col-sm-8">
 
                 <br name="condition-before">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-8">
                         <select data-placeholder="" class="chosen-select"
                                 tabindex="2" name="action" required>
                         </select>
@@ -154,26 +162,30 @@
         var caseMap = {
             rules: {
                 billingAlignment: {
-                    title: "BILLING ALIGNMENT",
+                    title: i18n.t('setting.billing.rules.billingAlignment'),
+                    description: i18n.t('setting.billing.desc.billingAlignment'),
                     condition: [
                         "productCategory", "billingPeriod", "phaseType"
                     ],
                     action: "billingAlignment"
                 },
                 createAlignment: {
-                    title: "CREATE ALIGNMENT",
+                    title: i18n.t('setting.billing.rules.createAlignment'),
+                    description: i18n.t('setting.billing.desc.createAlignment'),
                     condition: [],
                     action: "planAlignmentCreate"
                 },
                 cancelPolicy: {
-                    title: "CANCEL POLICY",
+                    title: i18n.t('setting.billing.rules.cancelPolicy'),
+                    description: i18n.t('setting.billing.desc.cancelPolicy'),
                     condition: [
                         "productCategory", "billingPeriod", "phaseType"
                     ],
                     action: "billingActionPolicy"
                 },
                 changePolicy: {
-                    title: "CHANGE POLICY",
+                    title: i18n.t('setting.billing.rules.changePolicy'),
+                    description: i18n.t('setting.billing.desc.changePolicy'),
                     condition: [
                         "phaseType", "fromProductCategory", "fromBillingPeriod",
                         "toProductCategory", "toBillingPeriod"
@@ -181,7 +193,8 @@
                     action: "billingActionPolicy"
                 },
                 changeAlignment: {
-                    title: "CHANGE ALIGNMENT",
+                    title: i18n.t('setting.billing.rules.changeAlignment'),
+                    description: i18n.t('setting.billing.desc.changeAlignment'),
                     condition: [
                         "phaseType", "fromProductCategory", "fromBillingPeriod",
                         "toProductCategory", "toBillingPeriod"
@@ -191,111 +204,113 @@
             },
             ref: {
                 productCategory: {
-                    display: "PRODUCT CATEGORY",
-                    holder: "Select product category",
+                    display: i18n.t('setting.billing.condition.productCategory.display'),
+                    holder: i18n.t('setting.billing.condition.productCategory.holder'),
                     options: [
-                        "BASE", "ADD_ON"
+                        ["BASE", i18n.t('setting.billing.option.base')],
+                        ["ADD_ON", i18n.t('setting.billing.option.addon')]
                     ]
                 },
                 fromProductCategory: {
-                    display: "FROM PRODUCT CATEGORY",
-                    holder: "Select product category",
+                    display: i18n.t('setting.billing.condition.fromProductCategory.display'),
+                    holder: i18n.t('setting.billing.condition.fromProductCategory.holder'),
                     options: [
-                        "BASE", "ADD_ON"
+                        ["BASE", i18n.t('setting.billing.option.addon')],
+                        ["ADD_ON", i18n.t('setting.billing.option.addon')]
                     ]
                 },
                 toProductCategory: {
-                    display: "TO PRODUCT CATEGORY",
-                    holder: "Select product category",
+                    display: i18n.t('setting.billing.condition.toProductCategory.display'),
+                    holder: i18n.t('setting.billing.condition.toProductCategory.holder'),
                     options: [
-                        "BASE", "ADD_ON"
+                        ["BASE", i18n.t('setting.billing.option.addon')],
+                        ["ADD_ON", i18n.t('setting.billing.option.addon')]
                     ]
                 },
                 fromBillingPeriod: {
-                    display: "FROM BILLING PERIOD",
-                    holder: "Select billing period",
+                    display: i18n.t('setting.billing.condition.fromBillingPeriod.display'),
+                    holder: i18n.t('setting.billing.condition.fromBillingPeriod.holder'),
                     options: [
-                        "DAILY",
-                        "WEEKLY",
-                        "BIWEEKLY",
-                        "THIRTY_DAYS",
-                        "MONTHLY",
-                        "QUARTERLY",
-                        "BIANNUAL",
-                        "ANNUAL",
-                        "BIENNIAL"
+                        ["DAILY", i18n.t('setting.billing.option.daily')],
+                        ["WEEKLY", i18n.t('setting.billing.option.weekly')],
+                        ["BIWEEKLY", i18n.t('setting.billing.option.biweekly')],
+                        ["THIRTY_DAYS", i18n.t('setting.billing.option.thirty_days')],
+                        ["MONTHLY", i18n.t('setting.billing.option.monthly')],
+                        ["QUARTERLY", i18n.t('setting.billing.option.quarterly')],
+                        ["BIANNUAL", i18n.t('setting.billing.option.biannual')],
+                        ["ANNUAL", i18n.t('setting.billing.option.annual')],
+                        ["BIENNIAL", i18n.t('setting.billing.option.biennial')]
                     ]
                 },
                 toBillingPeriod: {
-                    display: "TO BILLING PERIOD",
-                    holder: "Select billing period",
+                    display: i18n.t('setting.billing.condition.toBillingPeriod.display'),
+                    holder: i18n.t('setting.billing.condition.toBillingPeriod.holder'),
                     options: [
-                        "DAILY",
-                        "WEEKLY",
-                        "BIWEEKLY",
-                        "THIRTY_DAYS",
-                        "MONTHLY",
-                        "QUARTERLY",
-                        "BIANNUAL",
-                        "ANNUAL",
-                        "BIENNIAL"
+                        ["DAILY", i18n.t('setting.billing.option.daily')],
+                        ["WEEKLY", i18n.t('setting.billing.option.weekly')],
+                        ["BIWEEKLY", i18n.t('setting.billing.option.biweekly')],
+                        ["THIRTY_DAYS", i18n.t('setting.billing.option.thirty_days')],
+                        ["MONTHLY", i18n.t('setting.billing.option.monthly')],
+                        ["QUARTERLY", i18n.t('setting.billing.option.quarterly')],
+                        ["BIANNUAL", i18n.t('setting.billing.option.biannual')],
+                        ["ANNUAL", i18n.t('setting.billing.option.annual')],
+                        ["BIENNIAL", i18n.t('setting.billing.option.biennial')]
                     ]
                 },
                 billingPeriod: {
-                    display: "BILLING PERIOD",
-                    holder: "Select billing period",
+                    display: i18n.t('setting.billing.condition.billingPeriod.display'),
+                    holder: i18n.t('setting.billing.condition.billingPeriod.holder'),
                     options: [
-                        "DAILY",
-                        "WEEKLY",
-                        "BIWEEKLY",
-                        "THIRTY_DAYS",
-                        "MONTHLY",
-                        "QUARTERLY",
-                        "BIANNUAL",
-                        "ANNUAL",
-                        "BIENNIAL"
+                        ["DAILY", i18n.t('setting.billing.option.daily')],
+                        ["WEEKLY", i18n.t('setting.billing.option.weekly')],
+                        ["BIWEEKLY", i18n.t('setting.billing.option.biweekly')],
+                        ["THIRTY_DAYS", i18n.t('setting.billing.option.thirty_days')],
+                        ["MONTHLY", i18n.t('setting.billing.option.monthly')],
+                        ["QUARTERLY", i18n.t('setting.billing.option.quarterly')],
+                        ["BIANNUAL", i18n.t('setting.billing.option.biannual')],
+                        ["ANNUAL", i18n.t('setting.billing.option.annual')],
+                        ["BIENNIAL", i18n.t('setting.billing.option.biennial')]
                     ]
                 },
                 phaseType: {
-                    display: "PHASE TYPE",
-                    holder: "Select phase type",
+                    display: i18n.t('setting.billing.condition.phaseType.display'),
+                    holder: i18n.t('setting.billing.condition.phaseType.holder'),
                     options: [
-                        "TRIAL",
-                        "DISCOUNT",
-                        "FIXEDTERM",
-                        "EVERGREEN"
+                        ["TRIAL", i18n.t('setting.billing.option.trial')],
+                        ["DISCOUNT", i18n.t('setting.billing.option.discount')],
+                        ["FIXEDTERM", i18n.t('setting.billing.option.fixedTerm')],
+                        ["EVERGREEN", i18n.t('setting.billing.option.evergreen')]
                     ]
                 },
                 billingAlignment: {
-                    holder: "Select billing alignment",
+                    holder: i18n.t('setting.billing.action.billingAlignment'),
                     options: [
-                        "ACCOUNT",
-                        "BUNDLE",
-                        "SUBSCRIPTION"
+                        ["ACCOUNT", i18n.t('setting.billing.option.account')],
+                        ["BUNDLE", i18n.t('setting.billing.option.bundle')],
+                        ["SUBSCRIPTION", i18n.t('setting.billing.option.subscription')]
                     ]
                 },
                 planAlignmentCreate: {
-                    holder: "Select plan alignment create",
+                    holder: i18n.t('setting.billing.action.planAlignmentCreate'),
                     options: [
-                        "START_OF_BUNDLE",
-                        "START_OF_SUBSCRIPTION"
+                        ["START_OF_BUNDLE", i18n.t('setting.billing.option.START_OF_BUNDLE')],
+                        ["START_OF_SUBSCRIPTION", i18n.t('setting.billing.option.START_OF_SUBSCRIPTION')]
                     ]
                 },
                 billingActionPolicy: {
-                    holder: "Select billing action policy",
+                    holder: i18n.t('setting.billing.action.billingActionPolicy'),
                     options: [
-                        "START_OF_TERM",
-                        "END_OF_TERM",
-                        "IMMEDIATE",
-                        "ILLEGAL"
+                        ["END_OF_TERM", i18n.t('setting.billing.option.END_OF_TERM')],
+                        ["IMMEDIATE", i18n.t('setting.billing.option.IMMEDIATE')],
+                        ["ILLEGAL", i18n.t('setting.billing.option.ILLEGAL')]
                     ]
                 },
                 planAlignmentChange: {
-                    holder: "Select plan alignment change",
+                    holder: i18n.t('setting.billing.action.planAlignmentChange'),
                     options: [
-                        "START_OF_BUNDLE",
-                        "START_OF_SUBSCRIPTION",
-                        "CHANGE_OF_PLAN"
+                        ["START_OF_BUNDLE", i18n.t('setting.billing.option.START_OF_BUNDLE')],
+                        ["START_OF_SUBSCRIPTION", i18n.t('setting.billing.option.START_OF_SUBSCRIPTION')],
+                        ["CHANGE_OF_PLAN", i18n.t('setting.billing.option.CHANGE_OF_PLAN')]
                     ]
                 }
             }
@@ -320,12 +335,14 @@
                     var ruleData = rule[key];
                     var ruleBox = caseMap.rules[key];
                     var ruleBoxTitle = ruleBox.title;
+                    var ruleDescription = ruleBox.description;
                     var ruleBoxDiv = $('#rule-template').clone();
                     ruleBoxDiv.removeAttr('id');
                     if (!ruleBox.condition || !ruleBox.condition.length) {
                         ruleBoxDiv.find('[name=add-case]').hide();
                     }
                     ruleBoxDiv.find('[name=box-title]').html(ruleBoxTitle);
+                    ruleBoxDiv.find('[name=description]').html(ruleDescription);
                     $('#box-before').before(ruleBoxDiv);
 
                     for (var i = 0; i < ruleData.length; i++) {
@@ -364,7 +381,7 @@
             var options = caseMap.ref[action].options;
             caseBox.find('select').append('<option value="" disabled selected>' + placeHolder + '</option>');
             for (var i = 0; i < options.length; i++) {
-                caseBox.find('select').append('<option value="' + options[i] + '">' + options[i] + '</option>');
+                caseBox.find('select').append('<option value="' + options[i][0] + '">' + options[i][1] + '</option>');
             }
 
             if (ruleBoxDiv.find('.case-default-template').length > 0) {
@@ -444,7 +461,7 @@
             conditionValueBox.find('option').remove();
             conditionValueBox.append('<option value="" disabled selected>' + holder + '</option>');
             for (var i = 0; i < options.length; i++) {
-                conditionValueBox.append('<option value="' + options[i] + '">' + options[i] + '</option>');
+                conditionValueBox.append('<option value="' + options[i][0] + '">' + options[i][1] + '</option>');
             }
             if (conditionValue) {
                 conditionValueBox.val(conditionValue).trigger("chosen:updated");

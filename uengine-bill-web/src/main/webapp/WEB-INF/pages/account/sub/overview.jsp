@@ -14,6 +14,7 @@
                         </div>
 
                         <span data-i18n="account.overview.tag.title">Tag as :</span><br>
+                        <a name="tagDescription">How is work with tag?</a>
 
                         <form class="form-horizontal">
                             <div class="form-group">
@@ -469,6 +470,41 @@
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal fade" id="tag-description-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title" data-i18n="account.overview.tagModal.title" data-i18n="account.overview.tag.modal.title">About
+                    Tag</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <p data-i18n="account.overview.tag.modal.AUTO_PAY_OFF">AUTO_PAY_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt to trigger automatic payments after invoices have been generated. After this tag has been removed, the system will immediately attempt to issue the payments that were not made.</p>
+
+                        <p data-i18n="account.overview.tag.modal.AUTO_INVOICING_OFF">AUTO_INVOICING_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt to invoice the customer. After this tag has been removed, the system will immediately attempt to issue invoice the account.</p>
+
+                        <p data-i18n="account.overview.tag.modal.OVERDUE_ENFORCEMENT_OFF">OVERDUE_ENFORCEMENT_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt transition the account into an overdue state regardless of his potential failed payments. After this tag has been removed, the system will immediately recompute the current overdue state.</p>
+
+                        <p data-i18n="account.overview.tag.modal.WRITTEN_OFF">WRITTEN_OFF: This tag can only be associated to a specific invoice in such a way that it its balance is ignore by the system.</p>
+
+                        <p data-i18n="account.overview.tag.modal.TEST">TEST: This tag can only be associated to an account, and it is used by analytics plugin so as to not be included set of accounts.</p>
+
+                        <p data-i18n="account.overview.tag.modal.PARTNER">PARTNER: This tag can only be associated to an account, and it is used by analytics plugin so as to be interpreted differently.</p>
                     </div>
                 </div>
             </div>
@@ -995,6 +1031,14 @@
         },
         drawTags: function () {
             var me = this;
+            var trigger = me.panel.find('[name=tagDescription]');
+            var modal = $('#tag-description-modal');
+            trigger.unbind('click');
+            trigger.bind('click',function(){
+                modal.modal('show')
+            })
+
+
             var fillTags = function (tagDefinitions) {
                 for (var i = 0; i < tagDefinitions.length; i++) {
                     var tag = tagDefinitions[i];

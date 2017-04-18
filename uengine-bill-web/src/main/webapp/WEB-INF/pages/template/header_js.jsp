@@ -144,49 +144,58 @@
             });
     }
 
+    /**
+     * 번들파일을 불러와서 i18n 객체에 번들정보를 저장한다. 동작은 sync 이다.
+     * @param language
+     * @param callback
+     */
+    var refreshLang = function (language, callback) {
+        $.ajax({
+            type: "GET",
+            url: '/resources/locales/' + language + '.json',
+            dataType: "json",
+            async: false,
+            success: function (bundle) {
+                var resources = {};
+                resources[language] = {
+                    translation: bundle
+                };
+                $.i18n.init({
+                    resStore: resources,
+                    fallbackLng: false,
+                    lng: language
+                }, function () {
+                    if (callback) {
+                        callback();
+                    }
+                });
+            }
+        });
+    };
+    //현재 조직의 언어를 선택하여 번들을 불러와 i18n 을 활성화한다.
+    var lang = window.localStorage.getItem('uengine-billing-locale');
+    if (!lang) {
+        lang = 'en';
+        window.localStorage.setItem('uengine-billing-locale', lang);
+    }
+    refreshLang(lang);
+
 
     $(function () {
-        var refreshLang = function (language) {
-            $.ajax({
-                type: "GET",
-                url: '/resources/locales/' + language + '.json',
-                dataType: "json",
-                //async: false,
-                success: function (bundle) {
-                    var resources = {};
-                    resources[language] = {
-                        translation: bundle
-                    };
-                    $.i18n.init({
-                        resStore: resources,
-                        fallbackLng: false,
-                        lng: language
-                    }, function () {
-                        $('body').i18n();
-                    });
-                }
-            });
-        };
-        //현재 조직의 언어를 선택하여 번들을 불러와 i18n 을 활성화한다. (sync 로드)
-        var lang = window.localStorage.getItem('uengine-billing-locale');
-        if (!lang) {
-            lang = 'en';
-            window.localStorage.setItem('uengine-billing-locale', lang);
-        }
-        refreshLang(lang);
-        if(lang == 'ko'){
+        //페이지가 모두 불려온 후, 번들 변환을 시행한다.
+        if (lang == 'ko') {
             $('#lang-select').text('Korean');
-        }else if(lang == 'en'){
+        } else if (lang == 'en') {
             $('#lang-select').text('English');
         }
+        $('body').i18n();
 
-        //랭귀지를 변경하였을 경우 번들이 다시 불러온다.
+        //랭귀지를 변경하였을 경우 페이지를 새로고침한다.
         $('[name=lang-item]').click(function () {
             var selectedLang = $(this).data('lang');
             var selectedLangDisplayName = $(this).text();
             window.localStorage.setItem('uengine-billing-locale', selectedLang);
-            $('#lang-select').text(selectedLangDisplayName);
-            refreshLang(selectedLang);
+            window.location.reload();
         });
 
         //상단 헤더에 조직 선택 리스트를 생성한다.

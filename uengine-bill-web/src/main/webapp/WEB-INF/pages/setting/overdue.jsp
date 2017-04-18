@@ -35,7 +35,8 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Overdue Settings</h5>&nbsp;<a name="add-state">+ Add State</a>
+                        <h5 data-i18n="setting.overdue.title">Overdue Settings</h5>
+                        &nbsp;<a name="add-state" data-i18n="setting.overdue.add">+ Add State</a>
                     </div>
                     <div class="ibox-content">
                         <form method="get" class="form-horizontal" id="overdue-form">
@@ -62,11 +63,13 @@
 
 <div style="display: none">
     <div id="overdue-template">
-        <h3 class="m-t-none m-b" name="box-title"><a name="state-delete"><i class="fa fa-trash"></i></a>
-            STATE</h3>
+        <h3 class="m-t-none m-b" name="box-title">
+            <a name="state-delete"><i class="fa fa-trash"></i></a>
+            <span data-i18n="setting.overdue.state">STATE</span>
+        </h3>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>State Name</span>
+                <span data-i18n="setting.overdue.name">State Name</span>
             </label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="name" required>
@@ -75,7 +78,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>External Message</span>
+                <span data-i18n="setting.overdue.external">External Message</span>
             </label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="externalMessage" required>
@@ -84,7 +87,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>Days Since Earliest Unpaid Invoice</span>
+                <span data-i18n="setting.overdue.sinceUnpaid">Days Since Earliest Unpaid Invoice</span>
             </label>
             <div class="col-sm-2">
                 <input min="1" type="number" class="form-control"
@@ -94,7 +97,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>Number Of Unpaid Invoices</span>
+                <span data-i18n="setting.overdue.numberUnpaid">Number Of Unpaid Invoices</span>
             </label>
             <div class="col-sm-2">
                 <input min="1" type="number" class="form-control"
@@ -104,7 +107,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>Total Unpaid Invoice Balance</span>
+                <span data-i18n="setting.overdue.totalUnpaid">Total Unpaid Invoice Balance</span>
             </label>
             <div class="col-sm-2">
                 <input min="1" type="number" class="form-control"
@@ -114,33 +117,37 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>Block</span>
+                <span data-i18n="setting.overdue.block">Block</span>
             </label>
 
             <div class="col-sm-4">
-                <div><label> <input type="checkbox" name="blockChanges" value="true"> Prevents plan
+                <div><label> <input type="checkbox" name="blockChanges" value="true" data-i18n="setting.overdue.planChange"> Prevents plan
                     changes. </label></div>
-                <div><label> <input type="checkbox" name="disableEntitlement" value="true">
-                    Subscription will be suspended, and payments and invoices will be discontinued.
-                    It will be restarted from the date of repayment. </label></div>
+                <div>
+                    <label>
+                        <input type="checkbox" name="disableEntitlement" value="true">
+                        <span data-i18n="setting.overdue.disableEntitlement">Subscription will be suspended, and payments and invoices will be discontinued.
+                    It will be restarted from the date of repayment. </span>
+                    </label>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>Subscription Cancellation Policy</span>
+                <span data-i18n="setting.overdue.cancel.label">Subscription Cancellation Policy</span>
             </label>
             <div class="col-sm-4">
                 <select data-placeholder="" class="chosen-select"
                         tabindex="2" name="subscriptionCancellationPolicy" required>
-                    <option value="NONE">NONE</option>
-                    <option value="IMMEDIATE">IMMEDIATE</option>
-                    <option value="END_OF_TERM">END_OF_TERM</option>
+                    <option value="NONE" data-i18n="setting.overdue.cancel.NONE">NONE</option>
+                    <option value="IMMEDIATE" data-i18n="setting.overdue.cancel.IMMEDIATE">IMMEDIATE</option>
+                    <option value="END_OF_TERM" data-i18n="setting.overdue.cancel.END_OF_TERM">END_OF_TERM</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                <span>Auto Reevaluation Interval Days</span>
+                <span data-i18n="setting.overdue.interval">Auto Reevaluation Interval Days</span>
             </label>
             <div class="col-sm-2">
                 <input min="1" type="number" class="form-control"

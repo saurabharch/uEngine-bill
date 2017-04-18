@@ -96,7 +96,16 @@
     "overview": {
       "tag": {
         "title": "Tag as :",
-        "save": "Save Tags"
+        "save": "Save Tags",
+        "modal": {
+          "title":"About Tag",
+          "AUTO_PAY_OFF": "AUTO_PAY_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt to trigger automatic payments after invoices have been generated. After this tag has been removed, the system will immediately attempt to issue the payments that were not made.",
+          "AUTO_INVOICING_OFF": "AUTO_INVOICING_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt to invoice the customer. After this tag has been removed, the system will immediately attempt to issue invoice the account.",
+          "OVERDUE_ENFORCEMENT_OFF": "OVERDUE_ENFORCEMENT_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt transition the account into an overdue state regardless of his potential failed payments. After this tag has been removed, the system will immediately recompute the current overdue state.",
+          "MANUAL_PAY":"MANUAL_PAY: This tag can only be associated to an account, and when set it means that the system will not attempt to trigger automatic payments after invoices have been generated. The intent here is to have the customer make his payment outside of Billing System.",
+          "TEST": "TEST: This tag can only be associated to an account, and it is used by analytics plugin so as to not be included set of accounts.",
+          "PARTNER": "PARTNER: This tag can only be associated to an account, and it is used by analytics plugin so as to be interpreted differently."
+        }
       },
       "address": "Billing Address",
       "contact": {
@@ -329,10 +338,10 @@
     "index": {
       "title": "Products",
       "new": "New +",
-      "all" : "All",
+      "all": "All",
       "active": "Active",
       "inactive": "Inactive",
-      "none" : "None subscriptions",
+      "none": "None subscriptions",
       "import": "Import Products",
       "export": "Export Products",
       "refresh": "Refresh list"
@@ -348,9 +357,9 @@
       "redirectInfo": "A redirect url is an address that a buyer completes a purchase through a hosted page and is redirected with the result of the purchase action. Usually you will use the seller's application address.",
       "inactiveInfo": "If in the Inactive state, you customer will not be able to subscribe or change a product, but your existing purchasing customer will remain in service."
     },
-    "version":{
+    "version": {
       "changeDate": "Change Effective date",
-      "setDate":"Set Effective Date",
+      "setDate": "Set Effective Date",
       "newVersion": "Create New Version From this",
       "edit": "Edit",
       "addPlan": "Add Plan",
@@ -358,33 +367,33 @@
       "dates": "Effective dates : ",
       "plans": "Plans",
       "noPlan": "You don't have any plans for activate yet.",
-      "make" :"Make your first plan as "
+      "make": "Make your first plan as "
     },
-    "plan":{
+    "plan": {
       "new": "New Plan",
       "edit": "Edit Plan",
       "initialTitle": "Initial Phases",
       "addPhase": "Add phase",
-      "trial" : "TRIAL",
-      "discount" : "DISCOUNT",
-      "fixedTerm" : "FIXED TERM",
+      "trial": "TRIAL",
+      "discount": "DISCOUNT",
+      "fixedTerm": "FIXED TERM",
       "evergreen": "EVERGREEN",
       "noinitial": "You don't have any initial phase in this plan.",
-      "makeFirst" : "Make your first initial phase, "
+      "makeFirst": "Make your first initial phase, "
     },
     "planCard": {
-      "numSub":"NUMBER OF SUBSCRIPTIONS : ",
-      "numRef":"NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION : ",
+      "numSub": "NUMBER OF SUBSCRIPTIONS : ",
+      "numRef": "NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION : ",
       "usages": "Associated Usages : ",
-      "initials":"Initial Plan Phases: ",
-      "final":"Final Plan Phase: ",
+      "initials": "Initial Plan Phases: ",
+      "final": "Final Plan Phase: ",
       "edit": "Edit",
-      "delete" :"Delete",
-      "url":"View Plan URL",
+      "delete": "Delete",
+      "url": "View Plan URL",
       "copy": "Copy to this version",
       "copyAnother": "Copy to another version",
       "copyAnotherWithCode": "Copy with plan code to another version",
-      "price" : "Final phase price"
+      "price": "Final phase price"
     },
     "duration": {
       "unit": "Unit",
@@ -396,58 +405,200 @@
     },
     "recurring": {
       "use": "Use recurring billing in this phase.",
-      "period":"Billing Period",
-      "daily" : "DAILY",
-      "weekly" : "WEEKLY",
-      "biweekly" : "BIWEEKLY",
-      "thirty_days" : "THIRTY_DAYS",
-      "monthly" : "MONTHLY",
-      "quarterly" : "QUARTERLY",
-      "biannual" : "BIANNUAL",
-      "annual" : "ANNUAL",
-      "biennial" : "BIENNIAL",
+      "period": "Billing Period",
+      "daily": "DAILY",
+      "weekly": "WEEKLY",
+      "biweekly": "BIWEEKLY",
+      "thirty_days": "THIRTY_DAYS",
+      "monthly": "MONTHLY",
+      "quarterly": "QUARTERLY",
+      "biannual": "BIANNUAL",
+      "annual": "ANNUAL",
+      "biennial": "BIENNIAL",
       "price": "Recurring Price",
       "addPrice": "+ Add price"
     },
     "fixed": {
-      "use" :"Use fixed price in this phase. ",
+      "use": "Use fixed price in this phase. ",
       "price": "Fixed Price",
       "addPrice": "+ Add price"
     },
     "tier": {
-      "delete" : "Delete Tier",
+      "delete": "Delete Tier",
       "addPrice": "+ Add price"
     },
     "usage": {
-      "title" : "Usage",
-      "delete" : "Delete",
+      "title": "Usage",
+      "delete": "Delete",
       "code": "Usage Code",
-      "display" : "Display Name",
+      "display": "Display Name",
       "displayDesc": "The name shown in the invoice item.",
-      "mode" : "Billing Mode",
+      "mode": "Billing Mode",
       "arrear": "IN_ARREAR",
-      "advance":"IN_ADVANCE",
+      "advance": "IN_ADVANCE",
       "type": "Usage Type",
       "consumable": "CONSUMABLE",
       "capacity": "CAPACITY",
-      "scheme":"Pricing Scheme",
-      "tierDesc" : "The purchase price of the tier is calculated according to the unit price of each pricing. For example, if a stamp is $ 6 for 1-30 (Size 10 * max 3) and $ 5 for 31-100 (Size 10 * max 10), It costs $ 280 (30 * $ 6 + 20 * $ 5) to buy 50 stamps. Size is the minimum purchase unit. If the minimum purchase unit is 10 and 15 units are purchased, 20 units will be counted. Also, it will not be charged more than the max value, so be sure to set a sufficient max amount.",
+      "scheme": "Pricing Scheme",
+      "tierDesc": "The purchase price of the tier is calculated according to the unit price of each pricing. For example, if a stamp is $ 6 for 1-30 (Size 10 * max 3) and $ 5 for 31-100 (Size 10 * max 10), It costs $ 280 (30 * $ 6 + 20 * $ 5) to buy 50 stamps. Size is the minimum purchase unit. If the minimum purchase unit is 10 and 15 units are purchased, 20 units will be counted. Also, it will not be charged more than the max value, so be sure to set a sufficient max amount.",
       "addTier": "+ Add new tier"
     },
     "phase": {
       "titleInitial": "Initial Phase - ",
       "titleFinal": "Final Phase - ",
       "changeType": "Change Phase type",
-      "trial" : "TRIAL",
-      "discount" : "DISCOUNT",
-      "fixedTerm" : "FIXED TERM",
+      "trial": "TRIAL",
+      "discount": "DISCOUNT",
+      "fixedTerm": "FIXED TERM",
       "evergreen": "EVERGREEN",
-      "delete" : "Delete",
-      "duration":"Duration",
-      "recurring":"Recurring",
-      "fixed":"Fixed",
-      "usages":"Usages",
+      "delete": "Delete",
+      "duration": "Duration",
+      "recurring": "Recurring",
+      "fixed": "Fixed",
+      "usages": "Usages",
       "addUsage": "+ Add Usage"
+    }
+  },
+  "setting": {
+    "profile": {
+      "title": "Organization Profile",
+      "id": "Organization ID",
+      "name": "Organization Name",
+      "lang": "Language",
+      "timeZone": "Time Zone",
+      "currency": "Currency",
+      "contact": "Primary Contact",
+      "configMail": "Configure Emails ",
+      "addressTitle": "Company Address",
+      "companyName": "Company Name",
+      "street": "Street",
+      "city": "City",
+      "state": "State or Province",
+      "zip": "ZIP Code",
+      "country": "Country",
+      "phone": "Phone",
+      "fax": "Fax",
+      "web": "Website",
+      "modal": {
+        "title": "Organization Contacts",
+        "add": "+ Add Additional Contact"
+      },
+      "newModal": {
+        "title": "Email",
+        "email": "Email address"
+      }
+    },
+    "billing": {
+      "title": "Billing Settings",
+      "mode": "RECURRING MODE",
+      "advance": "IN_ADVANCE",
+      "arrear": "IN_ARREAR",
+      "addCase": "+ Add Case",
+      "defaultCase": "DEFAULT CASE",
+      "case": "CASE",
+      "addCondition": "+ Add Condition",
+      "rules": {
+        "billingAlignment": "BILLING ALIGNMENT",
+        "createAlignment": "CREATE ALIGNMENT",
+        "cancelPolicy": "CANCEL POLICY",
+        "changePolicy": "CHANGE POLICY",
+        "changeAlignment": "CHANGE ALIGNMENT"
+      },
+      "desc": {
+        "billingAlignment": "This rule uses the Creation Context and configures type of billing alignment used with a subscription. There are three kinds of alignment available:<br><br>ACCOUNT - this means that the billing cycle of the subscription will be lined up with the bill cycle day of the account. In some cases this is undesirable because it means that a proration charge will be applied on first billing to line up the cycles.<br><br>SUBSCRIPTION - this alignment will cause the subscriptions bill cycle to line up with the first bill day of the subscription plan. So, if the subscription starts on January 3rd and has a 15 day free trial, the first billed day with be January 18th and the bill cycle day for the subscription will be set to 18.<br><br>BUNDLE - setting the alignment to bundle is useful for add-ons because it sets the bill cycle day to be aligned with whatever the base plan is using.",
+        "createAlignment": "This rule also uses the Creation Context and determines how the phases of an Add-On plan aligns with an existing subscription.<br><br>There are two choices (illustrated above):<br><br>START_OF_BUNDLE - causes the phases of the addon to start on the date when the base plan was first created. This is for instance useful if you want to allow add-on trials during the trial phase of the base plan only. The addon plans must have a trial of the same length as the base plan and then the trials will expire at the same time whenever the add-on is created.<br><br>START_OF_SUBSCRIPTION - this causes the phases of the add-on to start when the add-on subscription is created. This is for instance useful if you want to allow add-ons to have trials that are occur independently of the base plan.",
+        "cancelPolicy": "This rule uses the Phase Context and is used to specify when a cancellation should occur.<br><br>There are two options (illustrated above):<br><br>END_OF_TERM - meaning that the cancellation will be applied at the end of the billed period. This is typical in a situation where we want to avoid generating credits.<br><br>IMMEDIATE - meaning that the cancellation will be applied immediately and the customer credited with the balance of the subscription that they have paid for but not yet used.",
+        "changePolicy": "This rule uses the Change Context and, like the cancellation rule above, specifies when a plan change should occur.<br><br>There are three options (two of which are illustrated above):<br><br>END_OF_TERM - specifies that the change should happen at the end of the current billed period.<br><br>IMMEDIATE - specifies that the change should happen when requested.<br><br>ILLEGAL - plan change is not allowed (not illustrated).",
+        "changeAlignment": "This rule, which uses the Change Context, specifies how the phases of a new plan should align with the phases of the existing plan when a plan is changed.<br><br>There are three options:<br><br>START_OF_SUBSCRIPTION - The plan phases start with the start of the subscription. This is the most common alignment and applies in most situations.<br><br>START_OF_BUNDLE - The plan phases should align with the start of the base subscription. This is only meaningful for addons.<br><br>CHANGE_OF_PLAN - The plan phases start at the time of the change"
+      },
+      "condition": {
+        "productCategory": {
+          "display": "PRODUCT CATEGORY",
+          "holder": "Select product category"
+        },
+        "fromProductCategory": {
+          "display": "FROM PRODUCT CATEGORY",
+          "holder": "Select product category"
+        },
+        "toProductCategory": {
+          "display": "TO PRODUCT CATEGORY",
+          "holder": "Select product category"
+        },
+        "fromBillingPeriod": {
+          "display": "FROM BILLING PERIOD",
+          "holder": "Select billing period"
+        },
+        "toBillingPeriod": {
+          "display": "TO BILLING PERIOD",
+          "holder": "Select billing period"
+        },
+        "billingPeriod": {
+          "display": "BILLING PERIOD",
+          "holder": "Select billing period"
+        },
+        "phaseType": {
+          "display": "PHASE TYPE",
+          "holder": "Select phase type"
+        }
+      },
+      "action": {
+        "billingAlignment": "Select billing alignment",
+        "planAlignmentCreate": "Select plan alignment create",
+        "billingActionPolicy": "Select billing action policy",
+        "planAlignmentChange": "Select plan alignment change"
+      },
+      "option": {
+        "base": "BASE",
+        "addon": "ADD_ON",
+        "daily": "DAILY",
+        "weekly": "WEEKLY",
+        "biweekly": "BIWEEKLY",
+        "thirty_days": "THIRTY_DAYS",
+        "monthly": "MONTHLY",
+        "quarterly": "QUARTERLY",
+        "biannual": "BIANNUAL",
+        "annual": "ANNUAL",
+        "biennial": "BIENNIAL",
+        "trial": "TRIAL",
+        "discount": "DISCOUNT",
+        "fixedTerm": "FIXED TERM",
+        "evergreen": "EVERGREEN",
+        "account": "ACCOUNT",
+        "bundle": "BUNDLE",
+        "subscription": "SUBSCRIPTION",
+        "START_OF_BUNDLE": "START_OF_BUNDLE",
+        "START_OF_SUBSCRIPTION": "START_OF_SUBSCRIPTION",
+        "START_OF_TERM": "START_OF_TERM",
+        "END_OF_TERM": "END_OF_TERM",
+        "IMMEDIATE": "IMMEDIATE",
+        "ILLEGAL": "ILLEGAL",
+        "CHANGE_OF_PLAN": "CHANGE_OF_PLAN"
+      }
+    },
+    "overdue": {
+      "title":"Overdue Settings",
+      "add": "+ Add State",
+      "state": "STATE",
+      "name": "State Name",
+      "external": "External Message",
+      "sinceUnpaid": "Days Since Earliest Unpaid Invoice",
+      "numberUnpaid": "Number Of Unpaid Invoices",
+      "totalUnpaid": "Total Unpaid Invoice Balance",
+      "block": "Block",
+      "planChange": "Prevents plan changes.",
+      "disableEntitlement": "Subscription will be suspended, and payments and invoices will be discontinued. It will be restarted from the date of repayment.",
+      "cancel":{
+        "label": "Subscription Cancellation Policy",
+        "NONE": "NONE",
+        "IMMEDIATE": "IMMEDIATE",
+        "END_OF_TERM": "END_OF_TERM"
+      },
+      "interval":"Auto Reevaluation Interval Days"
     }
   }
 }
+
+
+
+
+
