@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.system.UserService;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -85,12 +86,35 @@ public class AuthenticationServiceImpl implements AuthenticationService, Initial
                 return authInformation;
             }
 
-            Map tokenInfo = userService.tokenInfo(token);
-            if (tokenInfo.containsKey("error")) {
-                authInformation.setError(tokenInfo.get("error").toString());
-                authInformation.setError_description(tokenInfo.get("error_description").toString());
-                return authInformation;
+            Map tokenInfo = null;
+            //여기서, Basic Auth 판별 로직 추가하기.
+            if (token.startsWith("Basic ")) {
+                BASE64Decoder decoder = new BASE64Decoder();
+                String replace = token.replace("Basic ", "");
+                byte[] bytes = decoder.decodeBuffer(replace);
+                String userPassword = new String(bytes, "UTF-8");
+                String[] split = userPassword.split(":");
+                String username = split[0];
+                String password = split[1];
+                Map map = userService.accessToken(username, password, configurationHelper.get("authorization.scope"));
+                String access_token = map.get("access_token").toString();
+
+                tokenInfo = userService.tokenInfo(access_token);
+                if (tokenInfo.containsKey("error")) {
+                    authInformation.setError(tokenInfo.get("error").toString());
+                    authInformation.setError_description(tokenInfo.get("error_description").toString());
+                    return authInformation;
+                }
+
+            } else {
+                tokenInfo = userService.tokenInfo(token);
+                if (tokenInfo.containsKey("error")) {
+                    authInformation.setError(tokenInfo.get("error").toString());
+                    authInformation.setError_description(tokenInfo.get("error_description").toString());
+                    return authInformation;
+                }
             }
+
 
             OauthUser oauthUser = null;
             OauthClient oauthClient = null;

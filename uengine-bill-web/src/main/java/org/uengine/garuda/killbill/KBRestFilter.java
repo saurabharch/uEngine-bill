@@ -510,7 +510,6 @@ public class KBRestFilter implements Filter {
         ApplicationContext context = ApplicationContextRegistry.getApplicationContext();
         ProxyService proxyService = context.getBean(ProxyService.class);
         OrganizationService organizationService = context.getBean(OrganizationService.class);
-        ConfigurationHelper configurationHelper = context.getBean(ConfigurationHelper.class);
 
         OrganizationRole role = organizationService.getOrganizationRole(request, "MEMBER");
         if (!role.getAccept()) {
