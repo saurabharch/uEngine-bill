@@ -5,13 +5,13 @@
     <parent>
         <artifactId>uengine-bill</artifactId>
         <groupId>org.uengine.garuda</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uengine-bill-web</artifactId>
     <packaging>war</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>uEngine Billing Web Page - Personal</name>
     <url>http://www.oceiam.org</url>
 

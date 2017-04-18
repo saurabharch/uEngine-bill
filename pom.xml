@@ -5,7 +5,7 @@
     <groupId>org.uengine.garuda</groupId>
     <artifactId>uengine-bill</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>uEngine Billing Package</name>
     <url>http://www.uengine.org/</url>

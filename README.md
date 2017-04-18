@@ -1,4 +1,4 @@
-# Install Guide (0.0.1 - Killbill 0.18.2)
+# Install Guide (1.0.1 - Killbill 0.18.7)
 
 
 ## Java Install && Download sources
@@ -14,9 +14,10 @@ $ sudo yum install wget
 
 $ cd
 $ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/bundles.zip
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/killbill-profiles-killbill-0.18.2-SNAPSHOT.war
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/killbill-profiles-killbill-0.18.7-SNAPSHOT.war
 $ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/uengine-bill-all.sql
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/uengine-bill-web-0.0.1-SNAPSHOT.war
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/reports.zip
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/uengine-bill-web-1.0.1-SNAPSHOT.war
 $ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/0.0.1/apache-tomcat-8.0.42.tar.gz
 
 $ sudo yum install unzip
@@ -363,4 +364,31 @@ $ sudo bin/startup.sh
 ## Analytics Settings
 
 다음은 통계분석 플러그인 모듈을 위한 데이터베이스 세팅입니다.
+
+다운로드 받은 reports.zip 의 압축을 풀면, seed_reports.sh 파일이 있습니다.
+
+```
+#!/usr/bin/env bash
+
+HERE=`cd \`dirname $0\`; pwd`
+
+MYSQL_HOST=${MYSQL_HOST-"127.0.0.1"}
+MYSQL_USER=${MYSQL_USER-"killbill"}
+MYSQL_PASSWORD=${MYSQL_PASSWORD-"killbill"}
+MYSQL_DATABASE=${MYSQL_DATABASE-"killbill"}
+
+.
+.
+```
+
+seed_reports.sh 를 실행하게 될 경우 통계 분석에 필요한 뷰 테이블들이 데이터 베이스에 생성되게 됩니다.
+
+데이터 베이스의 세팅을 환경에 맞게 설정하여 주신 후, 스크립트를 실행하도록 합니다.
+
+```
+$ sh ./seed_reports.sh
+```
+
+
+
 
