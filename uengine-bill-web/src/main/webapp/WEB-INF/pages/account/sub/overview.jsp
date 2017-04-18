@@ -116,15 +116,15 @@
                                     <h4 class="text-success" name="accountBalance"></h4>
                                 </div>
                             </div>
-                            <div class="col-md-12 row">
-                                <div class="col-md-6">
-                                    <span class="text-muted"
-                                          data-i18n="account.overview.billing.credit">Account credit</span>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4 class="text-success" name="accountCBA"></h4>
-                                </div>
-                            </div>
+                            <%--<div class="col-md-12 row">--%>
+                                <%--<div class="col-md-6">--%>
+                                    <%--<span class="text-muted"--%>
+                                          <%--data-i18n="account.overview.billing.credit">Account credit</span>--%>
+                                <%--</div>--%>
+                                <%--<div class="col-md-6">--%>
+                                    <%--<h4 class="text-success" name="accountCBA"></h4>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
                                     <span class="text-muted"
@@ -1273,7 +1273,7 @@
                     accountBalance.removeClass('text-danger');
                 }
 
-                accountCBA.html(account.accountCBA + ' ' + account.currency);
+                //accountCBA.html(account.accountCBA + ' ' + account.currency);
                 billCycleDayLocal.html(account.billCycleDayLocal + ' (user timezone)');
 
                 //알림
