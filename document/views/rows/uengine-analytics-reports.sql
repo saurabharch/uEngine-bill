@@ -1,3 +1,5 @@
+DELETE FROM analytics_reports;
+
 INSERT INTO `analytics_reports` (`record_id`,`report_name`,`report_pretty_name`,`report_type`,`source_table_name`,`refresh_procedure_name`,`refresh_frequency`,`refresh_hour_of_day_gmt`) VALUES (1,'accounts_summary','Account summary','COUNTERS','v_report_accounts_summary',NULL,NULL,NULL);
 INSERT INTO `analytics_reports` (`record_id`,`report_name`,`report_pretty_name`,`report_type`,`source_table_name`,`refresh_procedure_name`,`refresh_frequency`,`refresh_hour_of_day_gmt`) VALUES (2,'active_by_product_term_monthly','Active subscriptions','TIMELINE','v_report_active_by_product_term_monthly',NULL,NULL,NULL);
 INSERT INTO `analytics_reports` (`record_id`,`report_name`,`report_pretty_name`,`report_type`,`source_table_name`,`refresh_procedure_name`,`refresh_frequency`,`refresh_hour_of_day_gmt`) VALUES (3,'cancellations_count_daily','Cancellations','TIMELINE','v_report_cancellations_count_daily',NULL,NULL,NULL);

@@ -7,6 +7,7 @@ MYSQL_USER=${MYSQL_USER-"killbill"}
 MYSQL_PASSWORD=${MYSQL_PASSWORD-"killbill"}
 MYSQL_DATABASE=${MYSQL_DATABASE-"killbill"}
 
+ROWS=$HERE/rows
 REPORTS=$HERE/reports
 SYSTEM=$HERE/system
 
@@ -14,6 +15,8 @@ function install_ddl() {
     local ddl=$1
     mysql -h$MYSQL_HOST -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e "source $ddl"
 }
+
+install_ddl $ROWS/uengine-analytics-reports.sql
 
 # Install the DDL - the calendar table needs to be first
 install_ddl $REPORTS/calendar.sql

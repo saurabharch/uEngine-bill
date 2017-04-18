@@ -358,3 +358,9 @@ $ sudo systemctl start haveged
 ```
 $ sudo bin/startup.sh
 ```
+
+
+## Analytics Settings
+
+다음은 통계분석 플러그인 모듈을 위한 데이터베이스 세팅입니다.
+
