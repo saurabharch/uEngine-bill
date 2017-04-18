@@ -20,5 +20,5 @@ install_ddl $ROWS/uengine-analytics-reports.sql
 
 # Install the DDL - the calendar table needs to be first
 install_ddl $REPORTS/calendar.sql
-for r in `find $REPORTS -type f -name '*.sql' -o -name '*.ddl' -maxdepth 1`; do install_ddl $r; done
-for r in `find $SYSTEM -type f -name '*.sql' -o -name '*.ddl' -maxdepth 1`; do install_ddl $r; done
+for r in `find $REPORTS -type f -name '*.sql' -o -name '*.ddl' -maxdepth 2`; do install_ddl $r; done
+for r in `find $SYSTEM -type f -name '*.sql' -o -name '*.ddl' -maxdepth 2`; do install_ddl $r; done
