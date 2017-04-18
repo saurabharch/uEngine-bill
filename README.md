@@ -25,8 +25,8 @@ $ sudo mkdir /var/tmp/bundles
 $ sudo unzip bundles.zip -d /var/tmp/bundles
 
 $ tar -xvf apache-tomcat-8.0.42.tar.gz
-$ cp killbill-profiles-killbill-0.18.2-SNAPSHOT.war apache-tomcat-8.0.42/webapps/killbill.war
-$ cp uengine-bill-web-0.0.1-SNAPSHOT.war apache-tomcat-8.0.42/webapps/ROOT.war 
+$ cp killbill-profiles-killbill-0.18.7-SNAPSHOT.war apache-tomcat-8.0.42/webapps/killbill.war
+$ cp uengine-bill-web-1.0.1-SNAPSHOT.war apache-tomcat-8.0.42/webapps/ROOT.war 
 $ chmod +x apache-tomcat-8.0.42/webapps/killbill.war
 $ chmod +x apache-tomcat-8.0.42/webapps/ROOT.war
 $ rm -rf apache-tomcat-8.0.42/webapps/ROOT
