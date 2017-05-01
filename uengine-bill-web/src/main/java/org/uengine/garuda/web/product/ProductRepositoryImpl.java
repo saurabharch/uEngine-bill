@@ -16,20 +16,19 @@
  */
 package org.uengine.garuda.web.product;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.common.repository.PersistentRepositoryImpl;
-import org.uengine.garuda.model.Authority;
-import org.uengine.garuda.model.Organization;
-import org.uengine.garuda.model.OrganizationEmail;
-import org.uengine.garuda.model.Product;
+import org.uengine.garuda.model.*;
+import org.uengine.garuda.util.JsonUtils;
 import org.uengine.garuda.web.organization.OrganizationRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Seungpil PARK
@@ -47,8 +46,33 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
 
+    private ProductDao toDao(Product product) {
+        try {
+            Map map = JsonUtils.convertValue(product, Map.class);
+            if (map.get("vendors") != null) {
+                map.put("vendors", JsonUtils.marshal(product.getVendors()));
+            }
+            return JsonUtils.convertValue(map, ProductDao.class);
+        } catch (IOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    private Product toModel(ProductDao productDao) {
+        try {
+            Map map = JsonUtils.convertValue(productDao, Map.class);
+            if (map.get("vendors") != null) {
+                map.put("vendors", JsonUtils.unmarshalToList(map.get("vendors").toString()));
+            }
+            Product product = JsonUtils.convertValue(map, Product.class);
+            return product;
+        } catch (IOException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
     @Override
-    public Map selectProductByCondition(String organization_id, String is_active,String category, String searchKey, Long offset, Long limit) {
+    public Map selectProductByCondition(String organization_id, String is_active, String category, String searchKey, Long offset, Long limit) {
         Map map = new HashMap();
         map.put("searchKey", searchKey);
         map.put("category", category);
@@ -56,13 +80,17 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
         map.put("limit", limit);
         map.put("organization_id", organization_id);
         map.put("is_active", is_active);
-        List<Product> list = this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectProductByCondition", map);
+        ArrayList<Product> products = new ArrayList<>();
+        List<ProductDao> list = this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectProductByCondition", map);
+        for (ProductDao productDao : list) {
+            products.add(this.toModel(productDao));
+        }
 
         Long total = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductByConditionCount", map);
         Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductCount", map);
 
         Map result = new HashMap();
-        result.put("list", list);
+        result.put("list", products);
         result.put("total", total + "");
         result.put("max", max + "");
         result.put("offset", offset + "");
@@ -74,13 +102,15 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
         Map map = new HashMap();
         map.put("organization_id", organization_id);
         map.put("id", id);
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductById", map);
+        ProductDao dao = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductById", map);
+        return toModel(dao);
     }
 
     @Override
     public Product insertProduct(Product product) {
-        this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertProduct", product);
-        Long record_id = product.getRecord_id();
+        ProductDao productDao = toDao(product);
+        this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertProduct", productDao);
+        Long record_id = productDao.getRecord_id();
         String id = "PRD_" + String.format("%010d", record_id);
 
         this.updateProductId(record_id, id);
@@ -89,7 +119,7 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
 
     @Override
     public Product updateProductById(Product product) {
-        this.getSqlSessionTemplate().update(this.getNamespace() + ".updateProductById", product);
+        this.getSqlSessionTemplate().update(this.getNamespace() + ".updateProductById", toDao(product));
         return this.selectProductById(product.getOrganization_id(), product.getId());
     }
 

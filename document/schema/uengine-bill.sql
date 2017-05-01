@@ -131,6 +131,8 @@ CREATE TABLE product (
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 
+ALTER TABLE product ADD vendors LONGTEXT;
+
 DROP TABLE IF EXISTS product_version;
 CREATE TABLE product_version (
     id INT(11) NOT NULL AUTO_INCREMENT,
@@ -167,21 +169,6 @@ CREATE TABLE subscription_events_ext (
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS product_provider;
-CREATE TABLE product_provider (
-    id VARCHAR(36) NOT NULL,
-    product_id VARCHAR(36) NOT NULL,
-    account_id VARCHAR(36) NOT NULL,
-    organization_id VARCHAR(36),
-    tenant_id VARCHAR(36),
-    account_record_id BIGINT(20),
-    tenant_record_id BIGINT(20),
-    distribution DECIMAL(15,9) DEFAULT 0,
-    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id)
-)
-  ENGINE=InnoDB
-  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS product_distribution_history;
 CREATE TABLE product_distribution_history (
@@ -207,6 +194,7 @@ CREATE TABLE product_distribution_history (
 )
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;
+
 
 
 

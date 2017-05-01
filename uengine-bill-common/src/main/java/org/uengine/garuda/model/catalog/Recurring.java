@@ -1,4 +1,5 @@
 package org.uengine.garuda.model.catalog;
+import org.uengine.garuda.model.Vendor;
 
 import java.util.List;
 
@@ -8,6 +9,7 @@ import java.util.List;
 public class Recurring {
     private String billingPeriod;
     private List<Price> recurringPrice;
+    private List<Vendor> overwriteVendors;
 
     public String getBillingPeriod() {
         return billingPeriod;
@@ -23,5 +25,13 @@ public class Recurring {
 
     public void setRecurringPrice(List<Price> recurringPrice) {
         this.recurringPrice = recurringPrice;
+    }
+
+    public List<Vendor> getOverwriteVendors() {
+        return overwriteVendors;
+    }
+
+    public void setOverwriteVendors(List<Vendor> overwriteVendors) {
+        this.overwriteVendors = overwriteVendors;
     }
 }

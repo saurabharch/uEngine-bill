@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.uengine.garuda.common.repository.PersistentRepositoryImpl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +49,13 @@ public class KBRepositoryImpl extends PersistentRepositoryImpl<String, Object> i
     @Override
     public Map getAccountById(String id) {
         return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".getAccountById", id);
+    }
+
+    @Override
+    public List<Map> getAccountByIds(List<String> ids) {
+        Map map = new HashMap();
+        map.put("ids", ids);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".getAccountByIds", map);
     }
 
     @Override

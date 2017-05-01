@@ -1,5 +1,7 @@
 package org.uengine.garuda.model.catalog;
 
+import org.uengine.garuda.model.Vendor;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ public class Usage {
     private String usageType;
     private String billingPeriod;
     private List<Tier> tiers;
+    private List<Vendor> overwriteVendors;
 
     public String getName() {
         return name;
@@ -59,5 +62,13 @@ public class Usage {
 
     public void setTiers(List<Tier> tiers) {
         this.tiers = tiers;
+    }
+
+    public List<Vendor> getOverwriteVendors() {
+        return overwriteVendors;
+    }
+
+    public void setOverwriteVendors(List<Vendor> overwriteVendors) {
+        this.overwriteVendors = overwriteVendors;
     }
 }

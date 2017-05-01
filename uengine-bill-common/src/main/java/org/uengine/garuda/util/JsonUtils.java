@@ -17,7 +17,9 @@
  */
 package org.uengine.garuda.util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.uengine.garuda.common.exception.ServiceException;
 
 import java.io.IOException;
@@ -37,7 +39,17 @@ public class JsonUtils {
     /**
      * Jackson JSON Object Mapper
      */
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper =
+            new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+
+    public static ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    public static <T> T convertValue(Object obj, Class<T> T){
+        return objectMapper.convertValue(obj,T);
+    }
 
     /**
      * 지정한 Object를 Jackson JSON Object Mapper를 이용하여 JSON으로 변환한다.

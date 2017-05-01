@@ -230,6 +230,16 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getAccountIds: function (ids) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accountsByIds',
+            data: JSON.stringify(ids),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
     getAccountSearch: function (searchKey, offset, limit) {
         var data = {
             offset: offset ? offset : 0,
@@ -363,7 +373,6 @@ uBilling.prototype = {
         return this.send(options);
     },
     updateProduct: function (product_id, data) {
-        console.log(data);
         var options = {
             type: "PUT",
             url: '/rest/v1/product/' + product_id,
@@ -970,7 +979,7 @@ uBilling.prototype = {
             url: '/rest/v1/invoicePayments/' + payment_id + '/refunds',
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: 'json'
+            dataType: 'text'
         };
         return this.send(options);
     },

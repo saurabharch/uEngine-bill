@@ -1,12 +1,11 @@
 package org.uengine.garuda.model;
 
 import java.sql.Date;
-import java.util.List;
 
 /**
- * Created by uengine on 2017. 1. 25..
+ * Created by uengine on 2017. 4. 28..
  */
-public class Product {
+public class ProductDao {
 
     private Long record_id;
     private String id;
@@ -20,7 +19,7 @@ public class Product {
     private String is_active;
     private Long plan_seq;
     private Long usage_seq;
-    private List<Vendor> vendors;
+    private String vendors;
     private Date reg_dt;
 
     public Long getRecord_id() {
@@ -119,11 +118,11 @@ public class Product {
         this.usage_seq = usage_seq;
     }
 
-    public List<Vendor> getVendors() {
+    public String getVendors() {
         return vendors;
     }
 
-    public void setVendors(List<Vendor> vendors) {
+    public void setVendors(String vendors) {
         this.vendors = vendors;
     }
 

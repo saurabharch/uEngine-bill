@@ -63,6 +63,17 @@
                                     </small>
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    <span data-i18n="product.new.vendor">Vendor </span>
+                                    <a href="Javascript:void(0)" name="vendor-add">+ add</a>
+                                </label>
+
+                                <div class="col-sm-10" name="vendor-item-list">
+
+                                </div>
+                            </div>
                         </form>
 
                     </div>
@@ -77,8 +88,27 @@
     </div>
 </div>
 
-<script>
+<div style="display: none">
+    <div id="vendor-item" name="vendor-item" class="row">
+        <div class="col-sm-7" style="padding-right: 0">
+            <small class="text-muted">Vendor</small>
+            <select class="chosen-select" tabindex="2" name="account_id" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="col-sm-3" style="padding: 0">
+            <small class="text-muted">Ratio (%)</small>
+            <input name="ratio" type="number" step="0.01" min="0" class="form-control" value="">
+        </div>
+        <div class="col-sm-2">
+            <small>&nbsp;</small>
+            <br>
+            <a class="fa fa-trash-o" name="delete"> del</a>
+        </div>
+    </div>
+</div>
 
+<script>
     var productController = {
         isFist: true,
         modal: null,
@@ -105,6 +135,7 @@
                 this.form.find('.onUpdate').hide();
                 this.modal.find('.modal-title').html('New Product');
                 this.mark();
+                me.setVendor();
             } else {
                 this.product_id = product_id;
                 uBilling.getProduct(product_id)
@@ -117,11 +148,95 @@
                         me.form.find('.onUpdate').find('input').val(product.category);
                         me.modal.find('.modal-title').html('Edit Product');
                         me.mark(product);
+                        me.setVendor(product);
                     })
                     .fail(function () {
                         toastr.error("Failed to get product information.");
                     })
             }
+        },
+        setVendor: function (product) {
+            var me = this;
+            var appender = me.form.find('[name=vendor-item-list]');
+            var addBtn = me.form.find('[name=vendor-add]');
+            appender.find('[name=vendor-item]').remove();
+
+            var addVendor = function (vendor, accounts) {
+                var item = $('#vendor-item').clone();
+                item.removeAttr('id');
+                item.find('[name=delete]').click(function () {
+                    item.remove();
+                })
+                appender.append(item);
+
+                var accountSelect = item.find('[name=account_id]');
+                var ratio = item.find('[name=ratio]');
+                accountSelect.chosen({width: "100%"});
+                if (vendor) {
+                    var account_id = vendor['account_id'];
+                    var account;
+                    for (var i in accounts) {
+                        if (accounts[i]['id'] == account_id) {
+                            account = accounts[i];
+                        }
+                    }
+                    if (account) {
+                        ratio.val(vendor.ratio);
+                        accountSelect.append('<option selected value="' + account['id'] + '">' + account['name'] + '</option>');
+                        accountSelect.trigger("chosen:updated");
+                    }
+                }
+
+                accountSelect.parent().find('input').autocomplete({
+                    source: function (request, response) {
+                        accountSelect.find('option').remove();
+                        accountSelect.append('<option></option>');
+                        uBilling.getAccountSearch(request.term, 0, 10)
+                            .done(function (accounts) {
+                                for (var i = 0; i < accounts['data'].length; i++) {
+                                    var account = accounts['data'][i];
+                                    accountSelect.append('<option value="' + account['accountId'] + '">' + account['name'] + '</option>');
+                                }
+                            })
+                            .always(function () {
+                                accountSelect.trigger("chosen:updated");
+                                accountSelect.parent().find('input').val(request.term);
+                            })
+                    }
+                });
+            }
+            addBtn.unbind('click').bind('click', function () {
+                addVendor();
+            });
+
+            if (product && product.vendors) {
+                var ids = [];
+                $.each(product.vendors, function (index, vendor) {
+                    ids.push(vendor['account_id']);
+                });
+                uBilling.getAccountIds(ids)
+                    .done(function (accounts) {
+                        $.each(product.vendors, function (index, vendor) {
+                            addVendor(vendor, accounts);
+                        })
+                    })
+            }
+        },
+        getVendor: function () {
+            var me = this;
+            var vendors = [];
+            me.form.find('[name=vendor-item]').each(function () {
+                var item = $(this);
+                var account_id = item.find('[name=account_id]').val();
+                var ratio = item.find('[name=ratio]').val();
+                if (account_id && account_id.length > 0 && ratio) {
+                    vendors.push({
+                        account_id: account_id,
+                        ratio: ratio
+                    })
+                }
+            })
+            return vendors;
         },
         reset: function () {
             this.form[0].reset();
@@ -132,6 +247,7 @@
             var product_id = me.product_id;
             if (product_id) {
                 var data = me.form.serializeObject();
+                data.vendors = me.getVendor();
                 uBilling.updateProduct(product_id, data)
                     .done(function (product) {
                         toastr.success("Product updated.");
@@ -145,6 +261,7 @@
                     });
             } else {
                 var data = me.form.serializeObject();
+                data.vendors = me.getVendor();
                 uBilling.createProduct(data)
                     .done(function (product_id) {
                         window.location.href = '/product/' + product_id + '/version/current/detail';
@@ -201,8 +318,4 @@
                 });
         }
     };
-    //conditionKeyBox.val(conditionKey).trigger("chosen:updated");
-    //var data = $(this).serializeObject();
-    //$('form').deserialize(currentOrg);
-    //toastr.success("Billing rule updated.")
 </script>

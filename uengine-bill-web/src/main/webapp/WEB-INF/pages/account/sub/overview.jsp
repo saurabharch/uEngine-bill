@@ -500,7 +500,7 @@
 
                         <p data-i18n="account.overview.tag.modal.OVERDUE_ENFORCEMENT_OFF">OVERDUE_ENFORCEMENT_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt transition the account into an overdue state regardless of his potential failed payments. After this tag has been removed, the system will immediately recompute the current overdue state.</p>
 
-                        <p data-i18n="account.overview.tag.modal.WRITTEN_OFF">WRITTEN_OFF: This tag can only be associated to a specific invoice in such a way that it its balance is ignore by the system.</p>
+                        <p data-i18n="account.overview.tag.modal.MANUAL_PAY">MANUAL_PAY: This tag can only be associated to an account, and when set it means that the system will not attempt to trigger automatic payments after invoices have been generated. The intent here is to have the customer make his payment outside of Billing System.</p>
 
                         <p data-i18n="account.overview.tag.modal.TEST">TEST: This tag can only be associated to an account, and it is used by analytics plugin so as to not be included set of accounts.</p>
 

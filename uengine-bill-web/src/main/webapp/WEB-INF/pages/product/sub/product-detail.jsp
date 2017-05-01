@@ -99,27 +99,47 @@
            class="fa fa-trash-o" name="price-item-delete"></i>
     </div>
 
+
+    <div class="form-group" id="vendor-form-item">
+        <div class="col-sm-12">
+            <label>
+                <input type="checkbox" value="true" name="vendor">
+                <small class="text-muted">공급 업체 계약을 변경합니다.</small>
+            </label>
+        </div>
+        <div name="vendor-use">
+            <div class="col-sm-12" name="vendor-item-list">
+
+            </div>
+            <div class="col-sm-12">
+                <a href="Javascript:void(0)" name="vendor-add">+ add</a>
+            </div>
+        </div>
+    </div>
+
     <div id="duration-form-item">
         <form class="form-horizontal" name="duration-form">
-            <div class="form-group"><label
-                    class="col-sm-2 control-label" data-i18n="product.duration.unit">Unit</label>
-                <div class="col-md-5">
-                    <select class="chosen-select" tabindex="2"
-                            name="unit" required>
-                        <option value="DAYS" data-i18n="product.duration.days">DAYS</option>
-                        <option value="MONTHS" data-i18n="product.duration.months">MONTHS</option>
-                        <option value="YEARS" data-i18n="product.duration.years">YEARS</option>
-                        <option value="UNLIMITED" data-i18n="product.duration.unlimited">UNLIMITED</option>
-                    </select>
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" data-i18n="product.duration.unit">Unit</label>
+                    <div class="col-md-9">
+                        <select class="chosen-select" tabindex="2"
+                                name="unit" required>
+                            <option value="DAYS" data-i18n="product.duration.days">DAYS</option>
+                            <option value="MONTHS" data-i18n="product.duration.months">MONTHS</option>
+                            <option value="YEARS" data-i18n="product.duration.years">YEARS</option>
+                            <option value="UNLIMITED" data-i18n="product.duration.unlimited">UNLIMITED</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group" name="duration-number"><label
-                    class="col-sm-2 control-label" data-i18n="product.duration.number">Number</label>
+                <div class="form-group" name="duration-number"><label
+                        class="col-sm-3 control-label" data-i18n="product.duration.number">Number</label>
 
-                <div class="col-sm-5">
-                    <input type="number" class="form-control"
-                           name="number">
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control"
+                               name="number">
+                    </div>
                 </div>
             </div>
         </form>
@@ -127,79 +147,89 @@
 
     <div id="recurring-form-item">
         <form class="form-horizontal" name="recurring-form">
-            <div class="form-group">
-                <div class="col-sm-5">
-                    <label>
-                        <input type="checkbox" name="recurring" value="true">
-                        <small class="text-muted" data-i18n="product.recurring.use">Use recurring billing in this phase.</small>
-                    </label>
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label>
+                            <input type="checkbox" name="recurring" value="true">
+                            <small class="text-muted" data-i18n="product.recurring.use">Use recurring billing in this phase.</small>
+                        </label>
+                    </div>
+                </div>
+                <div name="recurring-use">
+                    <div class="form-group"><label
+                            class="col-sm-3 control-label" data-i18n="product.recurring.period">Billing Period</label>
+                        <div class="col-md-9">
+                            <select class="chosen-select" tabindex="2"
+                                    name="billingPeriod" required>
+                                <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
+                                <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
+                                <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY</option>
+                                <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS</option>
+                                <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
+                                <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY</option>
+                                <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL</option>
+                                <option value="ANNUAL" data-i18n="product.recurring.annual">ANNUAL</option>
+                                <option value="BIENNIAL" data-i18n="product.recurring.biennial">BIENNIAL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            <div data-i18n="product.recurring.price">Recurring Price</div>
+                            <a href="Javascript:void(0)" name="price-add" data-i18n="product.recurring.addPrice">+ Add
+                                price</a>
+                        </label>
+                        <div class="col-md-9" name="price-item-list">
+
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div name="recurring-use">
-                <div class="form-group"><label
-                        class="col-sm-2 control-label" data-i18n="product.recurring.period">Billing Period</label>
-                    <div class="col-md-5">
-                        <select class="chosen-select" tabindex="2"
-                                name="billingPeriod" required>
-                            <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
-                            <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
-                            <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY</option>
-                            <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS</option>
-                            <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
-                            <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY</option>
-                            <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL</option>
-                            <option value="ANNUAL" data-i18n="product.recurring.annual">ANNUAL</option>
-                            <option value="BIENNIAL" data-i18n="product.recurring.biennial">BIENNIAL</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">
-                        <div data-i18n="product.recurring.price">Recurring Price</div>
-                        <a href="Javascript:void(0)" name="price-add" data-i18n="product.recurring.addPrice">+ Add
-                            price</a>
-                    </label>
-                    <div class="col-md-5" name="price-item-list">
+            <div name="vendor-form" class="col-sm-5" style="border-left: 1px dashed #e7eaec;">
 
-                    </div>
-                </div>
             </div>
         </form>
     </div>
 
     <div id="fixed-form-item">
         <form class="form-horizontal" name="fixed-form">
-            <div class="form-group">
-                <div class="col-sm-5">
-                    <label>
-                        <input type="checkbox" name="fixed" value="true">
-                        <small class="text-muted" data-i18n="product.fixed.use">Use fixed price in this phase. </small>
-                    </label>
-                </div>
-            </div>
-            <div name="fixed-use">
+            <div class="col-sm-7">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">
-                        <div data-i18n="product.fixed.price">Fixed Price</div>
-                        <a href="Javascript:void(0)" name="price-add" data-i18n="product.fixed.addPrice">+ Add price</a>
-                    </label>
-                    <div class="col-md-5" name="price-item-list">
-
+                    <div class="col-sm-12">
+                        <label>
+                            <input type="checkbox" name="fixed" value="true">
+                            <small class="text-muted" data-i18n="product.fixed.use">Use fixed price in this phase. </small>
+                        </label>
                     </div>
                 </div>
+                <div name="fixed-use">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            <div data-i18n="product.fixed.price">Fixed Price</div>
+                            <a href="Javascript:void(0)" name="price-add" data-i18n="product.fixed.addPrice">+ Add price</a>
+                        </label>
+                        <div class="col-md-9" name="price-item-list">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div name="vendor-form" class="col-sm-5" style="border-left: 1px dashed #e7eaec;">
+
             </div>
         </form>
     </div>
 
     <div class="form-group" id="tier-item" name="tier-item">
-        <div class="col-sm-2 control-label">
+        <div class="col-sm-3 control-label">
             <button type="button" class="btn btn-default btn-sm" name="tier-item-delete"
                     data-i18n="product.tier.delete">Delete Tier
             </button>
             <br>
             <a href="Javascript:void(0)" name="price-add" data-i18n="product.tier.addPrice">+ Add price</a>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-9">
             <div class="hr-line-dashed"></div>
             <div class="row">
                 <div class="col-md-12">
@@ -252,103 +282,108 @@
         </div>
         <div class="ibox-content">
             <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" data-i18n="product.usage.code">Usage
-                        Code</label>
-                    <div class="col-sm-5">
-                        <input type="text" class="form-control"
-                               name="name" value="" readonly>
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" data-i18n="product.usage.code">Usage
+                            Code</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"
+                                   name="name" value="" readonly>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" data-i18n="product.usage.display">Display Name</label>
-                    <div class="col-sm-5">
-                        <input type="text" class="form-control"
-                               name="display_name" value="">
-                        <small class="text-muted" data-i18n="product.usage.displayDesc">송장 항목에 보여지는 이름입니다.</small>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" data-i18n="product.usage.display">Display Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"
+                                   name="display_name" value="">
+                            <small class="text-muted" data-i18n="product.usage.displayDesc">송장 항목에 보여지는 이름입니다.</small>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group"><label
-                        class="col-sm-2 control-label" data-i18n="product.usage.mode">Billing
-                    Mode</label>
-                    <div class="col-md-5">
-                        <select class="chosen-select" tabindex="2"
-                                name="billingMode" required>
-                            <option value="IN_ARREAR" data-i18n="product.usage.arrear">IN_ARREAR
-                            </option>
-                            <option value="IN_ADVANCE" data-i18n="product.usage.advance">IN_ADVANCE
-                            </option>
-                        </select>
+                    <div class="form-group"><label
+                            class="col-sm-3 control-label" data-i18n="product.usage.mode">Billing
+                        Mode</label>
+                        <div class="col-md-9">
+                            <select class="chosen-select" tabindex="2"
+                                    name="billingMode" required>
+                                <option value="IN_ARREAR" data-i18n="product.usage.arrear">IN_ARREAR
+                                </option>
+                                <option value="IN_ADVANCE" data-i18n="product.usage.advance">IN_ADVANCE
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label
+                            class="col-sm-3 control-label" data-i18n="product.usage.type">Usage Type
+                    </label>
+                        <div class="col-md-9">
+                            <select class="chosen-select" tabindex="2"
+                                    name="usageType" required>
+                                <option value="CONSUMABLE" data-i18n="product.usage.consumable">CONSUMABLE
+                                </option>
+                                <option value="CAPACITY" data-i18n="product.usage.capacity">CAPACITY
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label
+                            class="col-sm-3 control-label" data-i18n="product.recurring.period">Billing
+                        Period</label>
+                        <div class="col-md-9">
+                            <select class="chosen-select" tabindex="2"
+                                    name="billingPeriod" required>
+                                <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
+                                <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
+                                <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY
+                                </option>
+                                <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS
+                                </option>
+                                <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
+                                <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY
+                                </option>
+                                <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL
+                                </option>
+                                <option value="ANNUAL" data-i18n="product.recurring.annual">ANNUAL</option>
+                                <option value="BIENNIAL" data-i18n="product.recurring.biennial">BIENNIAL
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" data-i18n="product.usage.scheme">Pricing
+                            Scheme</label>
+                        <div class="col-md-9">
+                            <select class="chosen-select" tabindex="2"
+                                    name="scheme" required>
+                                <option value="TIER" selected>TIER
+                                </option>
+                            </select>
+                            <small class="text-muted" data-i18n="product.usage.tierDesc">
+                                Tier 의 구매 가격은 각 가격 책정의 단가에 따라 계산됩니다.
+                                예를 들어 1-30(Size 10 * max 3) 장의 우표에 6달러, 31-100(Size 10 * max 10) 우표에 5달러일 경우
+                                50 장의 우표를 사려면 $ 280 (30 * $6 + 20 * $5) 의 비용이 듭니다.
+                                Size 는 최소 구매 단위이며, 만일 최소 구매 단위가 10 이고 15개를 구매하였을 경우 20개로 계산됩니다.
+                                또한 max 값 이상의 구매량은 청구되지 않으니, 충분한 max 수량을 책정하도록 하세요.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div name="tier-item-list">
+
+                    </div>
+                    <div class="form-group"><label
+                            class="col-sm-3 control-label"></label>
+                        <div class="col-md-9">
+                            <a href="Javascript:void(0)" name="add-tier" data-i18n="product.usage.addTier">+ Add new
+                                tier</a>
+                        </div>
                     </div>
                 </div>
+                <div name="vendor-form" class="col-sm-5" style="border-left: 1px dashed #e7eaec;">
 
-                <div class="form-group"><label
-                        class="col-sm-2 control-label" data-i18n="product.usage.type">Usage Type
-                </label>
-                    <div class="col-md-5">
-                        <select class="chosen-select" tabindex="2"
-                                name="usageType" required>
-                            <option value="CONSUMABLE" data-i18n="product.usage.consumable">CONSUMABLE
-                            </option>
-                            <option value="CAPACITY" data-i18n="product.usage.capacity">CAPACITY
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group"><label
-                        class="col-sm-2 control-label" data-i18n="product.recurring.period">Billing
-                    Period</label>
-                    <div class="col-md-5">
-                        <select class="chosen-select" tabindex="2"
-                                name="billingPeriod" required>
-                            <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
-                            <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
-                            <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY
-                            </option>
-                            <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS
-                            </option>
-                            <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
-                            <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY
-                            </option>
-                            <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL
-                            </option>
-                            <option value="ANNUAL" data-i18n="product.recurring.annual">ANNUAL</option>
-                            <option value="BIENNIAL" data-i18n="product.recurring.biennial">BIENNIAL
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" data-i18n="product.usage.scheme">Pricing
-                        Scheme</label>
-                    <div class="col-md-5">
-                        <select class="chosen-select" tabindex="2"
-                                name="scheme" required>
-                            <option value="TIER" selected>TIER
-                            </option>
-                        </select>
-                        <small class="text-muted" data-i18n="product.usage.tierDesc">
-                            Tier 의 구매 가격은 각 가격 책정의 단가에 따라 계산됩니다.
-                            예를 들어 1-30(Size 10 * max 3) 장의 우표에 6달러, 31-100(Size 10 * max 10) 우표에 5달러일 경우
-                            50 장의 우표를 사려면 $ 280 (30 * $6 + 20 * $5) 의 비용이 듭니다.
-                            Size 는 최소 구매 단위이며, 만일 최소 구매 단위가 10 이고 15개를 구매하였을 경우 20개로 계산됩니다.
-                            또한 max 값 이상의 구매량은 청구되지 않으니, 충분한 max 수량을 책정하도록 하세요.
-                        </small>
-                    </div>
-                </div>
-
-                <div name="tier-item-list">
-
-                </div>
-                <div class="form-group"><label
-                        class="col-sm-2 control-label"></label>
-                    <div class="col-md-5">
-                        <a href="Javascript:void(0)" name="add-tier" data-i18n="product.usage.addTier">+ Add new
-                            tier</a>
-                    </div>
                 </div>
             </form>
         </div>

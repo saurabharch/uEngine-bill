@@ -31,4 +31,13 @@
         SELECT count(*) as count FROM killbill.payments WHERE account_id = #{account_id};
     </select>
 
+    <select id="getAccountByIds" parameterType="map" resultType="map">
+        SELECT * FROM accounts
+        WHERE
+            id IN
+        <foreach collection="ids" index="index" item="item" open="(" close=")" separator=",">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
 </mapper>

@@ -220,6 +220,42 @@
             version_count: version_count,
             version_select_box: $('#version-list'),
             currentPlan: null,
+            vendorAccounts: null,
+
+            getVendorIdsFromVersion: function (version) {
+                var vendorIds = [];
+                var fromPhases = function (phase) {
+                    var phaseTypes = [phase['recurring'], phase['fixed']];
+                    if (phase['usages']) {
+                        for (var i = 0; i < phase['usages'].length; i++) {
+                            phaseTypes.push(phase['usages'][i]);
+                        }
+                    }
+                    $.each(phaseTypes, function (index, phaseType) {
+                        if (phaseType) {
+                            var vendors = phaseType['overwriteVendors'];
+                            if (vendors && vendors.length) {
+                                $.each(vendors, function (idx, vendor) {
+                                    vendorIds.push(vendor['account_id']);
+                                })
+                            }
+                        }
+                    });
+                }
+                if (!version['plans'] || !version['plans'].length) {
+                    return vendorIds;
+                }
+                $.each(version['plans'], function (c, plan) {
+                    fromPhases(plan['finalPhase']);
+                    if (plan['initialPhases'] && plan['initialPhases'].length) {
+                        for (var d = 0; d < plan['initialPhases'].length; d++) {
+                            fromPhases(plan['initialPhases'][d]);
+                        }
+                    }
+                })
+
+                return vendorIds;
+            },
             init: function () {
                 var me = this;
                 me.version_select_box.chosen({width: "100%"});
@@ -237,8 +273,13 @@
                                 if (versions && versions.length) {
                                     uBilling.getProductVersion(product_id, version_count)
                                         .done(function (version) {
-                                            me.version = version;
-                                            me.fillProductVersion(version);
+                                            var ids = me.getVendorIdsFromVersion(version);
+                                            uBilling.getAccountIds(ids)
+                                                .done(function (accounts) {
+                                                    me.vendorAccounts = accounts;
+                                                    me.version = version;
+                                                    me.fillProductVersion(version);
+                                                })
                                         })
                                         .fail(function (response) {
                                             toastr.error("Failed to get product version: " + response.responseText);
@@ -803,6 +844,26 @@
                     return null;
                 };
 
+                var getVendorData = function (form) {
+                    var data = null;
+                    var formData = form.serializeObject();
+                    if (formData['vendor']) {
+                        var items = form.find('[name=vendor-item]');
+                        if (items && items.length) {
+                            data = [];
+                            items.each(function () {
+                                var item = $(this);
+                                var vendor = {
+                                    account_id: item.find('[name=account_id]').val(),
+                                    ratio: item.find('[name=ratio]').val()
+                                }
+                                data.push(vendor);
+                            })
+                        }
+                    }
+                    return data;
+                }
+
                 var getPhaseData = function (phaseCard) {
                     var data = {
                         type: phaseCard.data('type')
@@ -826,6 +887,10 @@
                         if (priceList) {
                             data['recurring']['recurringPrice'] = priceList;
                         }
+                        var vendorData = getVendorData(recurringForm);
+                        if (vendorData) {
+                            data['recurring']['overwriteVendors'] = vendorData;
+                        }
                     }
 
                     //fixedForm
@@ -835,6 +900,10 @@
                         var priceList = getPriceList(fixedForm.find('[name=price-item]'));
                         if (priceList) {
                             data['fixed']['fixedPrice'] = priceList;
+                        }
+                        var vendorData = getVendorData(fixedForm);
+                        if (vendorData) {
+                            data['fixed']['overwriteVendors'] = vendorData;
                         }
                     }
 
@@ -871,6 +940,10 @@
                                     }
                                     usageData['tiers'].push(tierData);
                                 });
+                            }
+                            var vendorData = getVendorData(form);
+                            if (vendorData) {
+                                usageData['overwriteVendors'] = vendorData;
                             }
 
                             data['usages'].push(usageData);
@@ -944,10 +1017,6 @@
                             blockStop();
                         })
                 }
-
-
-                //currentPlan
-                //final-phase-space
             },
             /**
              * 플랜 화면을 종료한다.
@@ -955,6 +1024,95 @@
             closePlan: function () {
                 $('#version-panel').show();
                 $('#plan-panel').hide();
+            },
+            /**
+             * 벤더 폼을 표현한다.
+             * @param form
+             * @param phaseBilling phase 의 fixed, recurring, usage 오브젝트
+             */
+            drawVendor: function (form, phaseBilling) {
+                var me = this;
+                var appender = form.find('[name=vendor-form]');
+                var panel = $('#vendor-form-item').clone();
+                panel.removeAttr('id');
+                appender.append(panel);
+
+                var check = form.find('[name=vendor]');
+                if (phaseBilling && phaseBilling['overwriteVendors']) {
+                    check.prop('checked', true);
+                } else {
+                    check.prop('checked', false);
+                }
+                var displayVendors = function () {
+                    if (check.prop('checked')) {
+                        panel.find('[name=vendor-use]').show();
+                    } else {
+                        panel.find('[name=vendor-use]').hide();
+                    }
+                };
+                displayVendors();
+                check.click(function () {
+                    displayVendors();
+                });
+
+                var addBtn = panel.find('[name=vendor-add]');
+                var addVendor = function (vendor) {
+                    var item = $('#vendor-item').clone();
+                    item.removeAttr('id');
+                    item.find('[name=delete]').click(function () {
+                        item.remove();
+                    })
+
+                    panel.find('[name=vendor-item-list]').append(item);
+
+                    var accountSelect = item.find('[name=account_id]');
+                    var ratio = item.find('[name=ratio]');
+                    accountSelect.chosen({width: "100%"});
+                    if (vendor) {
+                        var vendorAccounts = me.vendorAccounts;
+                        if (vendorAccounts && vendorAccounts.length) {
+                            var account_id = vendor['account_id'];
+                            var account;
+                            for (var i in vendorAccounts) {
+                                if (vendorAccounts[i]['id'] == account_id) {
+                                    account = vendorAccounts[i];
+                                }
+                            }
+                            if (account) {
+                                ratio.val(vendor.ratio);
+                                accountSelect.append('<option selected value="' + account['id'] + '">' + account['name'] + '</option>');
+                                accountSelect.trigger("chosen:updated");
+                            }
+                        }
+                    }
+
+                    accountSelect.parent().find('input').autocomplete({
+                        source: function (request, response) {
+                            accountSelect.find('option').remove();
+                            accountSelect.append('<option></option>');
+                            uBilling.getAccountSearch(request.term, 0, 10)
+                                .done(function (accounts) {
+                                    for (var i = 0; i < accounts['data'].length; i++) {
+                                        var account = accounts['data'][i];
+                                        accountSelect.append('<option value="' + account['accountId'] + '">' + account['name'] + '</option>');
+                                    }
+                                })
+                                .always(function () {
+                                    accountSelect.trigger("chosen:updated");
+                                    accountSelect.parent().find('input').val(request.term);
+                                })
+                        }
+                    });
+                }
+                addBtn.unbind('click').bind('click', function () {
+                    addVendor();
+                });
+
+                if (phaseBilling && phaseBilling.overwriteVendors) {
+                    $.each(phaseBilling.overwriteVendors, function (index, vendor) {
+                        addVendor(vendor);
+                    });
+                }
             },
             /**
              * 플랜 단계를 표현한다.
@@ -1094,6 +1252,7 @@
 
                 //recurring
                 var drawRecurringForm = function () {
+                    console.log(phase['recurring']);
                     //recurring-form-item
                     card.find('[name=recurring-tab]').find('[name=recurring-form]').remove();
                     var panel = $('#recurring-form-item').clone();
@@ -1125,6 +1284,7 @@
                         priceList = phase['recurring']['recurringPrice'];
                     }
                     drawPrice(priceList, form.find('[name=price-add]'), form.find('[name=price-item-list]'));
+                    me.drawVendor(form, phase['recurring']);
                 };
                 drawRecurringForm();
 
@@ -1161,6 +1321,7 @@
                         priceList = phase['fixed']['fixedPrice'];
                     }
                     drawPrice(priceList, form.find('[name=price-add]'), form.find('[name=price-item-list]'));
+                    me.drawVendor(form, phase['fixed']);
                 };
                 drawFixedForm();
 
@@ -1210,6 +1371,7 @@
 
                     card.find('[name=usage-list]').append(usageItem);
                     usageItem.find('.chosen-select').chosen({width: "100%"});
+                    me.drawVendor(form, usage);
                 };
                 if (phase['usages'] && phase['usages'].length) {
                     for (var i = 0; i < phase['usages'].length; i++) {

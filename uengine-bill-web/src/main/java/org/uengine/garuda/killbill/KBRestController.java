@@ -18,6 +18,7 @@ import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -59,12 +60,35 @@ public class KBRestController {
             Long bundleCount = kbRepository.getBundleCountByAccountId(id);
             Long paymentCount = kbRepository.getPaymentCountByAccountId(id);
 
-            if(bundleCount > 0 || paymentCount > 0){
+            if (bundleCount > 0 || paymentCount > 0) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             kbRepository.deleteAccountById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex) {
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/accountsByIds", method = RequestMethod.POST)
+    public ResponseEntity<List> createProduct(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              @RequestBody List<String> ids) {
+
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            List accountByIds = new ArrayList();
+            if(ids != null && !ids.isEmpty()){
+                accountByIds = kbRepository.getAccountByIds(ids);
+            }
+
+            return new ResponseEntity<>(accountByIds, HttpStatus.OK);
         } catch (Exception ex) {
             ExceptionUtils.httpExceptionKBResponse(ex, response);
             return null;

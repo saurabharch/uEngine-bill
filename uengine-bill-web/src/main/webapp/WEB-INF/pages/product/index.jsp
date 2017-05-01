@@ -115,8 +115,8 @@
                     defaultContent: ''
                 },
                 {
-                    data: 'owner',
-                    title: 'OWNER ACCOUNT',
+                    data: 'vendor',
+                    title: 'Default Vendors',
                     defaultContent: ''
                 }
             ],
@@ -190,6 +190,14 @@
                                 response.data[i]['is_active'] = '<span class="label label-primary">Active</span>'
                             } else {
                                 response.data[i]['is_active'] = '<span class="label label-warning">Inactive</span>'
+                            }
+                            var vendors = response.data[i]['vendors'];
+                            if(vendors && vendors.length){
+                                var total = 0;
+                                $.each(vendors, function (index, vendor) {
+                                    total = total + vendor['ratio'];
+                                })
+                                response.data[i]['vendor'] = vendors.length + ' Vendors (total ratio: ' + total + ' %)';
                             }
                         }
                         dt.gridData = response.data;

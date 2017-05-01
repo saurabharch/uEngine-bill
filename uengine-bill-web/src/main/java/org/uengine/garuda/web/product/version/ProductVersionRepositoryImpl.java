@@ -16,8 +16,12 @@
  */
 package org.uengine.garuda.web.product.version;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.uengine.garuda.common.exception.ServiceException;
@@ -67,7 +71,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
             Map<String, Object> map = JsonUtils.convertClassToMap(productVersion);
             map.put("plans", plans);
             map.remove("is_current");
-            return new ObjectMapper().convertValue(map, ProductDaoVersion.class);
+            return JsonUtils.convertValue(map, ProductDaoVersion.class);
 
         } catch (IOException ex) {
             throw new ServiceException(ex);
@@ -114,7 +118,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
             Map<String, Object> map = JsonUtils.convertClassToMap(productDaoVersion);
             map.put("plans", plans);
             map.put("is_current", is_current);
-            return new ObjectMapper().convertValue(map, ProductVersion.class);
+            return JsonUtils.convertValue(map, ProductVersion.class);
 
         } catch (IOException ex) {
             throw new ServiceException(ex);
@@ -158,7 +162,7 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         map.put("product_id", product_id);
         map.put("version", version);
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByVersion", map);
-        return convertToVersion(daoVersion, null,null);
+        return convertToVersion(daoVersion, null, null);
     }
 
     @Override
@@ -182,13 +186,13 @@ public class ProductVersionRepositoryImpl extends PersistentRepositoryImpl<Strin
         map.put("organization_id", organization_id);
         map.put("product_id", product_id);
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectMaxVersion", map);
-        return convertToVersion(daoVersion, null,null);
+        return convertToVersion(daoVersion, null, null);
     }
 
     @Override
     public ProductVersion selectById(Long id) {
         ProductDaoVersion daoVersion = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", id);
-        return convertToVersion(daoVersion, null,null);
+        return convertToVersion(daoVersion, null, null);
     }
 
     @Override

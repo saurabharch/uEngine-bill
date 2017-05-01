@@ -36,6 +36,8 @@ public interface KBRepository {
 
     Map getAccountById(String id);
 
+    List<Map> getAccountByIds(List<String> ids);
+
     Map getTenantById(String id);
 
     int deleteAccountById(String id);
