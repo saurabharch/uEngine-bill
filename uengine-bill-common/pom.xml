@@ -400,9 +400,9 @@
         </dependency>
 
         <dependency>
-            <groupId>jaf</groupId>
+            <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
-            <version>${jaf.version}</version>
+            <version>${activation.version}</version>
         </dependency>
 
         <!-- ======================= -->
