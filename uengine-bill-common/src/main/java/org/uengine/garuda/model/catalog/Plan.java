@@ -1,5 +1,7 @@
 package org.uengine.garuda.model.catalog;
 
+import org.uengine.garuda.model.Vendor;
+
 import java.util.List;
 
 /**
@@ -14,6 +16,7 @@ public class Plan {
     private Phase finalPhase;
     private Long number_of_subscriptions_referenced_by_version;
     private Long number_of_subscriptions;
+    private List<Vendor> overwriteVendors;
 
     public String getName() {
         return name;
@@ -69,5 +72,13 @@ public class Plan {
 
     public void setNumber_of_subscriptions(Long number_of_subscriptions) {
         this.number_of_subscriptions = number_of_subscriptions;
+    }
+
+    public List<Vendor> getOverwriteVendors() {
+        return overwriteVendors;
+    }
+
+    public void setOverwriteVendors(List<Vendor> overwriteVendors) {
+        this.overwriteVendors = overwriteVendors;
     }
 }

@@ -1,45 +1,79 @@
 package org.uengine.garuda.model;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by uengine on 2017. 1. 25..
  */
 public class ProductDistributionHistory {
-    private String id;
-    private String plan_id;
+    private Long record_id;
+    private String subscription_id;
+    private String tenant_id;
+    private String organization_id;
+    private String buyer_id;
+    private String vendor_id;
     private String product_id;
     private Long version;
-    private String usage_id;
-    private String account_id;
-    private String organization_id;
-    private String tenant_id;
-    private Long account_record_id;
-    private Long tenant_record_id;
-    private BigDecimal distribution;
+    private String plan_name;
+    private String usage_name;
+    private BigDecimal ratio;
     private BigDecimal amount;
     private BigDecimal original_amount;
     private String currency;
     private String invoice_id;
-    private String payment_id;
+    private String invoice_item_id;
+    private String invoice_item_type;
     private String transaction_type;
-    private Date reg_dt;
+    private String format_date;
+    private Date created_date;
 
-    public String getId() {
-        return id;
+    public Long getRecord_id() {
+        return record_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRecord_id(Long record_id) {
+        this.record_id = record_id;
     }
 
-    public String getPlan_id() {
-        return plan_id;
+    public String getSubscription_id() {
+        return subscription_id;
     }
 
-    public void setPlan_id(String plan_id) {
-        this.plan_id = plan_id;
+    public void setSubscription_id(String subscription_id) {
+        this.subscription_id = subscription_id;
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
+    }
+
+    public String getOrganization_id() {
+        return organization_id;
+    }
+
+    public void setOrganization_id(String organization_id) {
+        this.organization_id = organization_id;
+    }
+
+    public String getBuyer_id() {
+        return buyer_id;
+    }
+
+    public void setBuyer_id(String buyer_id) {
+        this.buyer_id = buyer_id;
+    }
+
+    public String getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(String vendor_id) {
+        this.vendor_id = vendor_id;
     }
 
     public String getProduct_id() {
@@ -58,60 +92,28 @@ public class ProductDistributionHistory {
         this.version = version;
     }
 
-    public String getUsage_id() {
-        return usage_id;
+    public String getPlan_name() {
+        return plan_name;
     }
 
-    public void setUsage_id(String usage_id) {
-        this.usage_id = usage_id;
+    public void setPlan_name(String plan_name) {
+        this.plan_name = plan_name;
     }
 
-    public String getAccount_id() {
-        return account_id;
+    public String getUsage_name() {
+        return usage_name;
     }
 
-    public void setAccount_id(String account_id) {
-        this.account_id = account_id;
+    public void setUsage_name(String usage_name) {
+        this.usage_name = usage_name;
     }
 
-    public String getOrganization_id() {
-        return organization_id;
+    public BigDecimal getRatio() {
+        return ratio;
     }
 
-    public void setOrganization_id(String organization_id) {
-        this.organization_id = organization_id;
-    }
-
-    public String getTenant_id() {
-        return tenant_id;
-    }
-
-    public void setTenant_id(String tenant_id) {
-        this.tenant_id = tenant_id;
-    }
-
-    public Long getAccount_record_id() {
-        return account_record_id;
-    }
-
-    public void setAccount_record_id(Long account_record_id) {
-        this.account_record_id = account_record_id;
-    }
-
-    public Long getTenant_record_id() {
-        return tenant_record_id;
-    }
-
-    public void setTenant_record_id(Long tenant_record_id) {
-        this.tenant_record_id = tenant_record_id;
-    }
-
-    public BigDecimal getDistribution() {
-        return distribution;
-    }
-
-    public void setDistribution(BigDecimal distribution) {
-        this.distribution = distribution;
+    public void setRatio(BigDecimal ratio) {
+        this.ratio = ratio;
     }
 
     public BigDecimal getAmount() {
@@ -146,12 +148,20 @@ public class ProductDistributionHistory {
         this.invoice_id = invoice_id;
     }
 
-    public String getPayment_id() {
-        return payment_id;
+    public String getInvoice_item_id() {
+        return invoice_item_id;
     }
 
-    public void setPayment_id(String payment_id) {
-        this.payment_id = payment_id;
+    public void setInvoice_item_id(String invoice_item_id) {
+        this.invoice_item_id = invoice_item_id;
+    }
+
+    public String getInvoice_item_type() {
+        return invoice_item_type;
+    }
+
+    public void setInvoice_item_type(String invoice_item_type) {
+        this.invoice_item_type = invoice_item_type;
     }
 
     public String getTransaction_type() {
@@ -162,11 +172,19 @@ public class ProductDistributionHistory {
         this.transaction_type = transaction_type;
     }
 
-    public Date getReg_dt() {
-        return reg_dt;
+    public String getFormat_date() {
+        return format_date;
     }
 
-    public void setReg_dt(Date reg_dt) {
-        this.reg_dt = reg_dt;
+    public void setFormat_date(String format_date) {
+        this.format_date = format_date;
+    }
+
+    public Date getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(Date created_date) {
+        this.created_date = created_date;
     }
 }

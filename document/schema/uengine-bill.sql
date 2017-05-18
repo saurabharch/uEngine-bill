@@ -172,25 +172,27 @@ CREATE TABLE subscription_events_ext (
 
 DROP TABLE IF EXISTS product_distribution_history;
 CREATE TABLE product_distribution_history (
-    id VARCHAR(36) NOT NULL,
-    plan_name VARCHAR(36) NOT NULL,
+    record_id INT(11) NOT NULL AUTO_INCREMENT,
+    subscription_id VARCHAR(36) NULL,
+    tenant_id VARCHAR(36) NOT NULL,
+    organization_id VARCHAR(36) NOT NULL,
+    buyer_id VARCHAR(36) NOT NULL,
+    vendor_id VARCHAR(36),
     product_id VARCHAR(36) NOT NULL,
-    version INT(11) DEFAULT 1 NOT NULL,
-    usage_id VARCHAR(36) NOT NULL,
-    account_id VARCHAR(36) NOT NULL,
-    organization_id VARCHAR(36),
-    tenant_id VARCHAR(36),
-    account_record_id BIGINT(20),
-    tenant_record_id BIGINT(20),
-    distribution DECIMAL(15,9) DEFAULT 0,
-    amount DECIMAL(15,9),
-    original_amount DECIMAL(15,9),
-    currency VARCHAR(3),
-    invoice_id VARCHAR(36),
-    payment_id VARCHAR(36),
-    transaction_type VARCHAR(32),
-    reg_dt            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id)
+    version INT(11) NOT NULL,
+    plan_name VARCHAR(128) NOT NULL,
+    usage_name VARCHAR(128) NULL,
+    ratio NUMERIC(15,9) NOT NULL,
+    amount NUMERIC(15,9) NOT NULL,
+    original_amount NUMERIC(15,9) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    invoice_id VARCHAR(36) NOT NULL,
+    invoice_item_id VARCHAR(36) NOT NULL,
+    invoice_item_type VARCHAR(24) NOT NULL,
+    transaction_type VARCHAR(24) NOT NULL,
+    format_date VARCHAR(36) NOT NULL,
+    created_date TIMESTAMP NOT NULL,
+    PRIMARY KEY(record_id)
 )
   ENGINE=InnoDB
   DEFAULT CHARSET=utf8;

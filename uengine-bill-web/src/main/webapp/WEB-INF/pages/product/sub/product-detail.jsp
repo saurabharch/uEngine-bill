@@ -104,7 +104,8 @@
         <div class="col-sm-12">
             <label>
                 <input type="checkbox" value="true" name="vendor">
-                <small class="text-muted">공급 업체 계약을 변경합니다.</small>
+                <small class="text-muted">이 플랜에 한하여 공급 업체 계약을 단독으로 사용합니다.</small>
+                <small class="text-muted">이 사용량 과금에 한하여 공급 업체 계약을 단독으로 사용합니다.</small>
             </label>
         </div>
         <div name="vendor-use">
@@ -186,9 +187,6 @@
                     </div>
                 </div>
             </div>
-            <div name="vendor-form" class="col-sm-5" style="border-left: 1px dashed #e7eaec;">
-
-            </div>
         </form>
     </div>
 
@@ -214,9 +212,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div name="vendor-form" class="col-sm-5" style="border-left: 1px dashed #e7eaec;">
-
             </div>
         </form>
     </div>

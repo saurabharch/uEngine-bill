@@ -18,6 +18,7 @@
 package org.uengine.garuda.util;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.uengine.garuda.common.exception.ServiceException;
@@ -41,7 +42,7 @@ public class JsonUtils {
      */
     private static ObjectMapper objectMapper =
             new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public static ObjectMapper getObjectMapper() {
         return objectMapper;

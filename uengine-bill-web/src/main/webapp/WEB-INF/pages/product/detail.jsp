@@ -124,12 +124,6 @@
                                   data-i18n="product.plan.edit">Edit Plan</span>
                             <small class="text-muted" id="plan-panel-name"></small>
                             <br>
-                            <div class="form-group row">
-                                <div class="col-md-5">
-                                    <input placeholder="Display Name" type="text" class="form-control"
-                                           name="display_name" id="display_name">
-                                </div>
-                            </div>
                         </span>
                         <div class="ibox-tools">
                             <button type="button" class="btn btn-primary btn-sm" id="plan-save">Save</button>
@@ -138,6 +132,29 @@
                         </div>
                     </div>
                     <div class="ibox-content">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>기본 정보</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <form class="form-horizontal" id="plan-form">
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                            <input placeholder="Display Name" type="text" class="form-control"
+                                                   name="display_name" id="display_name">
+                                        </div>
+                                    </div>
+                                    <div name="vendor-form" class="col-sm-5" style="border-left: 1px dashed #e7eaec;">
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
@@ -242,10 +259,19 @@
                         }
                     });
                 }
+                var fromPlan = function(plan){
+                    var vendors = plan['overwriteVendors'];
+                    if (vendors && vendors.length) {
+                        $.each(vendors, function (idx, vendor) {
+                            vendorIds.push(vendor['account_id']);
+                        })
+                    }
+                }
                 if (!version['plans'] || !version['plans'].length) {
                     return vendorIds;
                 }
                 $.each(version['plans'], function (c, plan) {
+                    fromPlan(plan);
                     fromPhases(plan['finalPhase']);
                     if (plan['initialPhases'] && plan['initialPhases'].length) {
                         for (var d = 0; d < plan['initialPhases'].length; d++) {
@@ -716,6 +742,10 @@
                     planDisplayName.val('');
                 }
 
+                //plan Vendor
+                var planForm = $('#plan-panel').find('#plan-form');
+                me.drawVendor(planForm, plan);
+
 
                 //initial phase
                 if (plan['initialPhases'] && plan['initialPhases'].length) {
@@ -887,10 +917,6 @@
                         if (priceList) {
                             data['recurring']['recurringPrice'] = priceList;
                         }
-                        var vendorData = getVendorData(recurringForm);
-                        if (vendorData) {
-                            data['recurring']['overwriteVendors'] = vendorData;
-                        }
                     }
 
                     //fixedForm
@@ -900,10 +926,6 @@
                         var priceList = getPriceList(fixedForm.find('[name=price-item]'));
                         if (priceList) {
                             data['fixed']['fixedPrice'] = priceList;
-                        }
-                        var vendorData = getVendorData(fixedForm);
-                        if (vendorData) {
-                            data['fixed']['overwriteVendors'] = vendorData;
                         }
                     }
 
@@ -963,6 +985,11 @@
                 }
                 planData['finalPhase'] = getPhaseData(finalPhaseCard);
                 planData['display_name'] = $('#display_name').val();
+
+                var vendorData = getVendorData($('#plan-form'));
+                if (vendorData) {
+                    planData['overwriteVendors'] = vendorData;
+                }
 
                 //currentPlan 의 name 이 공란이라면 신규 저장, 있다면 업데이트이다.
                 if (currentPlan['name']) {
@@ -1028,17 +1055,18 @@
             /**
              * 벤더 폼을 표현한다.
              * @param form
-             * @param phaseBilling phase 의 fixed, recurring, usage 오브젝트
+             * @param dataObject vendor 데이터가 들어있는 object
              */
-            drawVendor: function (form, phaseBilling) {
+            drawVendor: function (form, dataObject) {
                 var me = this;
                 var appender = form.find('[name=vendor-form]');
                 var panel = $('#vendor-form-item').clone();
                 panel.removeAttr('id');
+                appender.empty();
                 appender.append(panel);
 
                 var check = form.find('[name=vendor]');
-                if (phaseBilling && phaseBilling['overwriteVendors']) {
+                if (dataObject && dataObject['overwriteVendors']) {
                     check.prop('checked', true);
                 } else {
                     check.prop('checked', false);
@@ -1108,8 +1136,8 @@
                     addVendor();
                 });
 
-                if (phaseBilling && phaseBilling.overwriteVendors) {
-                    $.each(phaseBilling.overwriteVendors, function (index, vendor) {
+                if (dataObject && dataObject.overwriteVendors) {
+                    $.each(dataObject.overwriteVendors, function (index, vendor) {
                         addVendor(vendor);
                     });
                 }
@@ -1252,7 +1280,6 @@
 
                 //recurring
                 var drawRecurringForm = function () {
-                    console.log(phase['recurring']);
                     //recurring-form-item
                     card.find('[name=recurring-tab]').find('[name=recurring-form]').remove();
                     var panel = $('#recurring-form-item').clone();
@@ -1284,7 +1311,6 @@
                         priceList = phase['recurring']['recurringPrice'];
                     }
                     drawPrice(priceList, form.find('[name=price-add]'), form.find('[name=price-item-list]'));
-                    me.drawVendor(form, phase['recurring']);
                 };
                 drawRecurringForm();
 
@@ -1321,7 +1347,6 @@
                         priceList = phase['fixed']['fixedPrice'];
                     }
                     drawPrice(priceList, form.find('[name=price-add]'), form.find('[name=price-item-list]'));
-                    me.drawVendor(form, phase['fixed']);
                 };
                 drawFixedForm();
 

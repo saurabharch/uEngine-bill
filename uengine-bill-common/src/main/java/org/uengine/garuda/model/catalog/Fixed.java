@@ -9,7 +9,6 @@ import java.util.List;
  */
 public class Fixed {
     private List<Price> fixedPrice;
-    private List<Vendor> overwriteVendors;
 
     public List<Price> getFixedPrice() {
         return fixedPrice;
@@ -17,13 +16,5 @@ public class Fixed {
 
     public void setFixedPrice(List<Price> fixedPrice) {
         this.fixedPrice = fixedPrice;
-    }
-
-    public List<Vendor> getOverwriteVendors() {
-        return overwriteVendors;
-    }
-
-    public void setOverwriteVendors(List<Vendor> overwriteVendors) {
-        this.overwriteVendors = overwriteVendors;
     }
 }
