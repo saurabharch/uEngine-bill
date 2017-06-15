@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.onetimebuy.OneTimeBuyRepository">
+
+    <insert id="insert" parameterType="org.uengine.garuda.model.OneTimeBuy"
+            useGeneratedKeys="true" keyProperty="record_id" keyColumn="record_id">
+        INSERT INTO onetimebuy (
+        bundle_id,
+        state,
+        tenant_id,
+        organization_id,
+        account_id,
+        product_id,
+        version,
+        plan_name,
+        plan_display_name,
+        amount,
+        currency,
+        invoice_id,
+        invoice_item_id,
+        effective_date,
+        billing_date,
+        created_date
+        )
+        VALUES (
+        #{bundle_id},
+        #{state},
+        #{tenant_id},
+        #{organization_id},
+        #{account_id},
+        #{product_id},
+        #{version},
+        #{plan_name},
+        #{plan_display_name},
+        #{amount},
+        #{currency},
+        #{invoice_id},
+        #{invoice_item_id},
+        #{effective_date},
+        #{billing_date},
+        #{created_date}
+        )
+
+    </insert>
+
+    <update id="update" parameterType="org.uengine.garuda.model.OneTimeBuy">
+        UPDATE onetimebuy
+        SET
+        bundle_id = #{bundle_id},
+        state = #{state},
+        account_id = #{account_id},
+        product_id = #{product_id},
+        version = #{version},
+        plan_name = #{plan_name},
+        plan_display_name = #{plan_display_name},
+        amount = #{amount},
+        currency = #{currency},
+        invoice_id = #{invoice_id},
+        invoice_item_id = #{invoice_item_id},
+        effective_date = #{effective_date},
+        billing_date = #{billing_date},
+        created_date = #{created_date}
+        WHERE record_id = #{record_id}
+    </update>
+
+    <select id="selectByCondition" parameterType="map" resultType="org.uengine.garuda.model.OneTimeBuy">
+        SELECT * FROM onetimebuy
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="searchKey != '' and searchKey != null">
+            AND (
+            bundle_id LIKE CONCAT('%',#{searchKey},'%') OR
+            state LIKE CONCAT('%',#{searchKey},'%') OR
+            account_id LIKE CONCAT('%',#{searchKey},'%') OR
+            product_id LIKE CONCAT('%',#{searchKey},'%') OR
+            plan_name LIKE CONCAT('%',#{searchKey},'%') OR
+            plan_display_name LIKE CONCAT('%',#{searchKey},'%') OR
+            currency LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_id LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_item_id LIKE CONCAT('%',#{searchKey},'%') OR
+            effective_date LIKE CONCAT('%',#{searchKey},'%') OR
+            billing_date LIKE CONCAT('%',#{searchKey},'%')
+            )
+        </if>
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="selectByConditionCount" parameterType="map" resultType="java.lang.Long">
+        SELECT count(*) AS count FROM onetimebuy
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="searchKey != '' and searchKey != null">
+            AND (
+            bundle_id LIKE CONCAT('%',#{searchKey},'%') OR
+            state LIKE CONCAT('%',#{searchKey},'%') OR
+            account_id LIKE CONCAT('%',#{searchKey},'%') OR
+            product_id LIKE CONCAT('%',#{searchKey},'%') OR
+            plan_name LIKE CONCAT('%',#{searchKey},'%') OR
+            plan_display_name LIKE CONCAT('%',#{searchKey},'%') OR
+            currency LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_id LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_item_id LIKE CONCAT('%',#{searchKey},'%') OR
+            effective_date LIKE CONCAT('%',#{searchKey},'%') OR
+            billing_date LIKE CONCAT('%',#{searchKey},'%')
+            )
+        </if>
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="selectCount" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT count(*) AS count FROM onetimebuy
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="org.uengine.garuda.model.OneTimeBuy">
+        SELECT * FROM onetimebuy
+        WHERE record_id = #{record_id}
+    </select>
+
+    <select id="selectByAccountId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OneTimeBuy">
+        SELECT * FROM onetimebuy
+        WHERE account_id = #{account_id}
+    </select>
+
+    <select id="selectBcdPendingBuys" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OneTimeBuy">
+        SELECT * FROM onetimebuy
+        WHERE billing_date <![CDATA[ <= ]]> #{billing_date}
+        AND bundle_id is NULL
+        AND state = 'PENDING_INVOICE'
+    </select>
+
+    <select id="selectBundlePendingBuys" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OneTimeBuy">
+        SELECT * FROM killbill.onetimebuy
+        WHERE billing_date <![CDATA[ <= ]]> #{billing_date}
+        AND bundle_id = #{bundle_id}
+        AND state = 'PENDING_INVOICE'
+    </select>
+</mapper>

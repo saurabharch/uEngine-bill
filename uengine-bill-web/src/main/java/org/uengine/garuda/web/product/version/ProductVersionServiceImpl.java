@@ -1,16 +1,13 @@
 package org.uengine.garuda.web.product.version;
 
 import com.google.common.base.Enums;
-import org.apache.commons.lang.enums.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.uengine.garuda.common.exception.ServiceException;
-import org.uengine.garuda.killbill.KBRepository;
 import org.uengine.garuda.killbill.KBService;
-import org.uengine.garuda.killbill.KBServiceFactory;
 import org.uengine.garuda.killbill.api.model.Clock;
 import org.uengine.garuda.model.*;
 import org.uengine.garuda.model.Product;
@@ -29,10 +26,11 @@ import org.uengine.garuda.web.product.event.SubscriptionEventRepository;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.*;
 import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -120,6 +118,34 @@ public class ProductVersionServiceImpl implements ProductVersionService {
     }
 
     /**
+     * 주어진 효력일에 해당하는 버젼을 반환한다.
+     *
+     * @param organization_id
+     * @param product_id
+     * @param effectiveDate
+     * @return
+     */
+    @Override
+    public ProductVersion getVersionByEffectiveDate(String organization_id, String product_id, java.util.Date effectiveDate) {
+        List<ProductVersion> versions = this.listVersion(organization_id, product_id);
+        //주어진 버젼의 effective 날짜를 비교하여 해당하는 버젼을 구한다.
+        //버젼이 시간이 effectiveDate 보다 같거나 이전인 그룹중 가장 시간 값이 큰 것.
+        ProductVersion maxTimeVersion = null;
+        for (ProductVersion version : versions) {
+            if (version.getEffective_date().getTime() <= effectiveDate.getTime()) {
+                if (maxTimeVersion == null) {
+                    maxTimeVersion = version;
+                } else {
+                    if (maxTimeVersion.getEffective_date().getTime() <= version.getEffective_date().getTime()) {
+                        maxTimeVersion = version;
+                    }
+                }
+            }
+        }
+        return maxTimeVersion;
+    }
+
+    /**
      * 신규 버젼을 생성한다.
      *
      * @param organization_id
@@ -144,7 +170,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //effective date 가 최신버젼보다 이전이면 등록불가.
         ProductVersion maxVersion = productVersionRepository.selectMaxVersion(organization_id, product_id);
         if (maxVersion != null) {
-            java.sql.Date effective_max_date = maxVersion.getEffective_date();
+            Date effective_max_date = maxVersion.getEffective_date();
 
             Date effective_date = productVersion.getEffective_date();
             if (effective_date.getTime() <= effective_max_date.getTime()) {
@@ -153,7 +179,8 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         }
 
         //플랜 벨리데이션
-        validatePlans(productVersion.getPlans());
+        Product product = productRepository.selectProductById(organization_id, product_id);
+        validatePlans(productVersion.getPlans(), ProductCategory.valueOf(product.getCategory()));
 
         //플랜 아이디와 유서지 신규 생성 및 밸리데이션
         productVersion = createAndValidatePlanAndUsageId(organization_id, product_id, productVersion);
@@ -188,7 +215,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         productVersion.setVersion(version);
 
         //effective date 가 없다면 존재하는 버젼의 effective date 사용
-        if(productVersion.getEffective_date() == null){
+        if (productVersion.getEffective_date() == null) {
             productVersion.setEffective_date(existVersion.getEffective_date());
         }
 
@@ -198,21 +225,22 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         ProductVersion prevVersion = this.getVersion(organization_id, product_id, version - 1);
 
         if (nextVersion != null) {
-            java.sql.Date effective_next_date = nextVersion.getEffective_date();
+            Date effective_next_date = nextVersion.getEffective_date();
             if (effective_date.getTime() >= effective_next_date.getTime()) {
                 throw new ServiceException("The effective date can not be later than next version.");
             }
         }
 
         if (prevVersion != null) {
-            java.sql.Date effective_prev_date = prevVersion.getEffective_date();
+            Date effective_prev_date = prevVersion.getEffective_date();
             if (effective_date.getTime() <= effective_prev_date.getTime()) {
                 throw new ServiceException("The effective date can not be earlier than the date of the previous version.");
             }
         }
 
         //플랜 벨리데이션
-        validatePlans(productVersion.getPlans());
+        Product product = productRepository.selectProductById(organization_id, product_id);
+        validatePlans(productVersion.getPlans(), ProductCategory.valueOf(product.getCategory()));
 
         //플랜 아이디와 유서지 신규 생성
         productVersion = createAndValidatePlanAndUsageId(organization_id, product_id, productVersion);
@@ -262,6 +290,8 @@ public class ProductVersionServiceImpl implements ProductVersionService {
                     productVersion.getOrganization_id(),
                     productVersion.getProduct_id(),
                     productVersion.getVersion());
+
+            //TODO 일회성 구매 카운트를 합산하여 리턴하는 로직이 필요하다.
 
             for (Plan plan : productVersion.getPlans()) {
                 boolean planCountExist = false;
@@ -322,35 +352,38 @@ public class ProductVersionServiceImpl implements ProductVersionService {
             }
             planNameList.add(plan.getName());
 
-            List<Phase> initialPhases = plan.getInitialPhases();
-            if (initialPhases != null && !initialPhases.isEmpty()) {
-                for (Phase initialPhase : initialPhases) {
-                    List<Usage> usages = initialPhase.getUsages();
-                    if (usages != null) {
-                        for (Usage usage : usages) {
-                            if (StringUtils.isEmpty(usage.getName())) {
-                                usage_seq++;
-                                usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
-                            } else {
-                                validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+            //원타임 구매가 아닐 경우 phase 마다 usage 아이디 신규 생성 또는 체크
+            if (!ProductCategory.ONE_TIME.toString().equals(product.getCategory())) {
+                List<Phase> initialPhases = plan.getInitialPhases();
+                if (initialPhases != null && !initialPhases.isEmpty()) {
+                    for (Phase initialPhase : initialPhases) {
+                        List<Usage> usages = initialPhase.getUsages();
+                        if (usages != null) {
+                            for (Usage usage : usages) {
+                                if (StringUtils.isEmpty(usage.getName())) {
+                                    usage_seq++;
+                                    usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
+                                } else {
+                                    validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+                                }
+                                usageNameList.add(usage.getName());
                             }
-                            usageNameList.add(usage.getName());
                         }
                     }
                 }
-            }
 
-            Phase finalPhase = plan.getFinalPhase();
-            List<Usage> usages = finalPhase.getUsages();
-            if (usages != null) {
-                for (Usage usage : usages) {
-                    if (StringUtils.isEmpty(usage.getName())) {
-                        usage_seq++;
-                        usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
-                    } else {
-                        validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+                Phase finalPhase = plan.getFinalPhase();
+                List<Usage> usages = finalPhase.getUsages();
+                if (usages != null) {
+                    for (Usage usage : usages) {
+                        if (StringUtils.isEmpty(usage.getName())) {
+                            usage_seq++;
+                            usage.setName(createPlanUsageName(product_id, usage_seq, "USG"));
+                        } else {
+                            validPlanUsageName(usage.getName(), product_id, usage_org_seq, "USG");
+                        }
+                        usageNameList.add(usage.getName());
                     }
-                    usageNameList.add(usage.getName());
                 }
             }
         }
@@ -368,6 +401,18 @@ public class ProductVersionServiceImpl implements ProductVersionService {
         //변경된 plan_seq 와 usage_seq 를 업데이트
         productRepository.updatePlanUsageSeq(organization_id, product_id, plan_seq, usage_seq);
         return productVersion;
+    }
+
+    @Override
+    public Plan getPlanFromVersionByPlanName(ProductVersion version, String plan_name) {
+        List<Plan> plans = version.getPlans();
+        Plan selected = null;
+        for (Plan plan : plans) {
+            if (plan.getName().equals(plan_name)) {
+                selected = plan;
+            }
+        }
+        return selected;
     }
 
     private boolean hsaDuplicate(List<String> list) {
@@ -434,8 +479,9 @@ public class ProductVersionServiceImpl implements ProductVersionService {
      * 플랜의 스트럭쳐를 밸리데이팅 한다.
      *
      * @param plans
+     * @param category
      */
-    private void validatePlans(List<Plan> plans) {
+    private void validatePlans(List<Plan> plans, ProductCategory category) {
         for (Plan plan : plans) {
             if (StringUtils.isEmpty(plan.getDisplay_name())) {
                 throw new ServiceException("Field display_name is required for plan.");
@@ -446,14 +492,18 @@ public class ProductVersionServiceImpl implements ProductVersionService {
                 throw new ServiceException("Field  is_active name is required for plan. (Y or N)");
             }
 
-            if (plan.getFinalPhase() == null) {
-                throw new ServiceException("Final phase is required in plan : " + plan.getDisplay_name());
-            }
-            validatePhase(plan.getFinalPhase(), plan);
+            if (ProductCategory.ONE_TIME.equals(category)) {
+                validatePriceList(plan.getOnetimePrice(), plan);
+            } else {
+                if (plan.getFinalPhase() == null) {
+                    throw new ServiceException("Final phase is required in plan : " + plan.getDisplay_name());
+                }
+                validatePhase(plan.getFinalPhase(), plan);
 
-            if (plan.getInitialPhases() != null && !plan.getInitialPhases().isEmpty()) {
-                for (Phase phase : plan.getInitialPhases()) {
-                    validatePhase(phase, plan);
+                if (plan.getInitialPhases() != null && !plan.getInitialPhases().isEmpty()) {
+                    for (Phase phase : plan.getInitialPhases()) {
+                        validatePhase(phase, plan);
+                    }
                 }
             }
         }

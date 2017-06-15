@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 Flamingo Project (http://www.opencloudengine.org).
+ * Copyright (C) 2011 uEngine Project (http://www.uengine.io).
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public class ProductRepositoryImpl extends PersistentRepositoryImpl<String, Obje
         }
 
         Long total = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductByConditionCount", map);
-        Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductCount", map);
+        Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectProductCount", organization_id);
 
         Map result = new HashMap();
         result.put("list", products);

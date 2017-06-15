@@ -6,5 +6,6 @@ package org.uengine.garuda.model.catalog;
 public enum ProductCategory {
     BASE,
     ADD_ON,
-    STANDALONE
+    STANDALONE,
+    ONE_TIME
 }

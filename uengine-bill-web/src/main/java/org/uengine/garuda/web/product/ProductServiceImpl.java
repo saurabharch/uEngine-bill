@@ -41,7 +41,8 @@ public class ProductServiceImpl implements ProductService {
         product.setOrganization_id(organization.getId());
         product.setTenant_id(organization.getTenant_id());
         if (!ProductCategory.ADD_ON.toString().equals(product.getCategory()) &&
-                !ProductCategory.BASE.toString().equals(product.getCategory())) {
+                !ProductCategory.BASE.toString().equals(product.getCategory()) &&
+                !ProductCategory.ONE_TIME.toString().equals(product.getCategory())) {
             product.setCategory(ProductCategory.BASE.toString());
         }
         return productRepository.insertProduct(product);

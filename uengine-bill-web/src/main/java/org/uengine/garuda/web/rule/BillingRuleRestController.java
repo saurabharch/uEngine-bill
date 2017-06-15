@@ -64,6 +64,13 @@ public class BillingRuleRestController {
             }
 
             BillingRule rule = billingRuleRepository.selectRuleByOrgId(role.getOrganization().getId());
+            if (rule == null) {
+                rule = new BillingRule();
+                rule.setOrganization_id(role.getOrganization().getId());
+                rule.setTenant_id(role.getOrganization().getTenant_id());
+                rule.setRule(billingRuleRepository.getDefaultBillingRule());
+                billingRuleRepository.insertRule(rule);
+            }
             Map map = JsonUtils.marshal(rule.getRule());
 
             return new ResponseEntity<>(map, HttpStatus.OK);

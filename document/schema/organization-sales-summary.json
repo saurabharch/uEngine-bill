@@ -1,0 +1,190 @@
+{
+  "start_date": "2017-03-15",
+  "end_date": "2017-03-17",
+  "sales": {
+    "total_revenue": {
+      "summary": {
+        "total": {
+          "USD": 80
+        },
+        "per_price_type": {
+          "RECURRING": {
+            "USD": 80
+          },
+          "FIXED": {
+            "USD": 80
+          },
+          "USAGE": {
+            "USD": 80
+          }
+        }
+      },
+      "per_date": {
+        "2017-03-15": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ],
+        "2017-03-16": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ]
+      }
+    },
+    "net_income": {
+      "summary": {
+        "total": {
+          "USD": 80
+        },
+        "per_price_type": {
+          "RECURRING": {
+            "USD": 80
+          },
+          "FIXED": {
+            "USD": 80
+          },
+          "USAGE": {
+            "USD": 80
+          }
+        }
+      },
+      "per_date": {
+        "2017-03-15": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ],
+        "2017-03-16": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ]
+      }
+    }
+  },
+  "refund": {
+    "total_revenue": {
+      "summary": {
+        "total": {
+          "USD": 80
+        },
+        "per_price_type": {
+          "RECURRING": {
+            "USD": 80
+          },
+          "FIXED": {
+            "USD": 80
+          },
+          "USAGE": {
+            "USD": 80
+          }
+        }
+      },
+      "per_date": {
+        "2017-03-15": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ],
+        "2017-03-16": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ]
+      }
+    },
+    "net_loss": {
+      "summary": {
+        "total": {
+          "USD": 80
+        },
+        "per_price_type": {
+          "RECURRING": {
+            "USD": 80
+          },
+          "FIXED": {
+            "USD": 80
+          },
+          "USAGE": {
+            "USD": 80
+          }
+        }
+      },
+      "per_date": {
+        "2017-03-15": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ],
+        "2017-03-16": [
+          {
+            "price_type": "RECURRING/FIXED/USAGE",
+            "amount": {
+              "USD": 80,
+              "KRW": 8000
+            }
+          }
+        ]
+      }
+    }
+  },
+  "withdraw": {
+    "summary": {
+      "USD": 800
+    },
+    "per_date": {
+      "2017-03-15": {
+        "USD": 80,
+        "KRW": 8000
+      },
+      "2017-03-16": {
+        "USD": 80,
+        "KRW": 8000
+      }
+    }
+  },
+  "credit": {
+    "summary": {
+      "USD": 800
+    },
+    "per_date": {
+      "2017-03-15": {
+        "USD": 80,
+        "KRW": 8000
+      },
+      "2017-03-16": {
+        "USD": 80,
+        "KRW": 8000
+      }
+    }
+  }
+}

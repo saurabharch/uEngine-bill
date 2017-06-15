@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 Flamingo Project (http://www.opencloudengine.org).
+ * Copyright (C) 2011 uEngine Project (http://www.uengine.io).
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -147,5 +147,10 @@ public class OrganizationRepositoryImpl extends PersistentRepositoryImpl<String,
     @Override
     public int clearDefaultOrganizationEmail(String organization_id) {
         return this.getSqlSessionTemplate().update(this.getNamespace() + ".clearDefaultOrganizationEmail", organization_id);
+    }
+
+    @Override
+    public Organization selectOneForTest() {
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectOneForTest");
     }
 }

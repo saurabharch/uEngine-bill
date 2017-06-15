@@ -126,6 +126,11 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectOneForTest" resultType="org.uengine.garuda.model.Organization">
+        SELECT * FROM organization
+        LIMIT 0,1
+    </select>
+
     <select id="selectByName" parameterType="java.lang.String" resultType="org.uengine.garuda.model.Organization">
         SELECT * FROM organization
         WHERE name = #{name}

@@ -7,19 +7,36 @@
                     <div class="media-body ">
                         <div class="col-md-10">
                             <div class="pull-right">
-                                <small class="text-navy" data-i18n="product.planCard.numSub">
-                                    NUMBER OF SUBSCRIPTIONS :
-                                </small>
-                                <small class="text-navy" name="number-of-subscriptions">
+                                <div name="count-subscription">
+                                    <small class="text-navy" data-i18n="product.planCard.numSub">
+                                        NUMBER OF SUBSCRIPTIONS :
+                                    </small>
+                                    <small class="text-navy" name="number-of-subscriptions">
 
-                                </small>
-                                <br>
-                                <small class="text-navy" data-i18n="product.planCard.numRef">
-                                    NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION :
-                                </small>
-                                <small class="text-navy" name="number-of-subscriptions-referenced-by-version">
+                                    </small>
+                                    <br>
+                                    <small class="text-navy" data-i18n="product.planCard.numRef">
+                                        NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION :
+                                    </small>
+                                    <small class="text-navy" name="number-of-subscriptions-referenced-by-version">
 
-                                </small>
+                                    </small>
+                                </div>
+                                <div name="count-onetime">
+                                    <small class="text-navy" data-i18n="product.planCard.numOneTimeSub">
+                                        NUMBER OF ONE TIME BUYS :
+                                    </small>
+                                    <small class="text-navy" name="number_of_oneTimeBuys">
+
+                                    </small>
+                                    <br>
+                                    <small class="text-navy" data-i18n="product.planCard.numOneTimeRef">
+                                        NUMBER OF ONE TIME BUYS REFERENCED BY VERSION :
+                                    </small>
+                                    <small class="text-navy" name="number_of_oneTimeBuys_referenced_by_version">
+
+                                    </small>
+                                </div>
                             </div>
 
                             <strong name="plan-display-name"></strong>
@@ -27,20 +44,22 @@
                             <p class="text-muted" name="plan-code"></p>
                             <span name="is_active" class="label label-primary">Active</span>
                             <br>
-                            <span>
-                                <span data-i18n="product.planCard.usages">Associated Usages : </span>
-                                <span class="text-navy" name="associated-usages"></span>
-                            </span>
-                            <br>
-                            <span>
-                                <span data-i18n="product.planCard.initials">Initial Plan Phases: </span>
-                                <span class="text-navy" name="initial-plan-phases"></span>
-                            </span>
-                            <br>
-                            <span>
-                                <span data-i18n="product.planCard.final">Final Plan Phase: </span>
-                                <span class="text-navy" name="final-plan-phase"></span>
-                            </span>
+                            <div name="phase-info">
+                                <span>
+                                    <span data-i18n="product.planCard.usages">Associated Usages : </span>
+                                    <span class="text-navy" name="associated-usages"></span>
+                                </span>
+                                <br>
+                                <span>
+                                    <span data-i18n="product.planCard.initials">Initial Plan Phases: </span>
+                                    <span class="text-navy" name="initial-plan-phases"></span>
+                                </span>
+                                <br>
+                                <span>
+                                    <span data-i18n="product.planCard.final">Final Plan Phase: </span>
+                                    <span class="text-navy" name="final-plan-phase"></span>
+                                </span>
+                            </div>
                             <div class="actions">
                                 <button type="button" class="btn btn-default btn-xs" name="edit"
                                         data-i18n="product.planCard.edit">Edit
@@ -153,7 +172,9 @@
                     <div class="col-sm-12">
                         <label>
                             <input type="checkbox" name="recurring" value="true">
-                            <small class="text-muted" data-i18n="product.recurring.use">Use recurring billing in this phase.</small>
+                            <small class="text-muted" data-i18n="product.recurring.use">Use recurring billing in this
+                                phase.
+                            </small>
                         </label>
                     </div>
                 </div>
@@ -166,7 +187,8 @@
                                 <option value="DAILY" data-i18n="product.recurring.daily">DAILY</option>
                                 <option value="WEEKLY" data-i18n="product.recurring.weekly">WEEKLY</option>
                                 <option value="BIWEEKLY" data-i18n="product.recurring.biweekly">BIWEEKLY</option>
-                                <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS</option>
+                                <option value="THIRTY_DAYS" data-i18n="product.recurring.thirty_days">THIRTY_DAYS
+                                </option>
                                 <option value="MONTHLY" data-i18n="product.recurring.monthly">MONTHLY</option>
                                 <option value="QUARTERLY" data-i18n="product.recurring.quarterly">QUARTERLY</option>
                                 <option value="BIANNUAL" data-i18n="product.recurring.biannual">BIANNUAL</option>
@@ -197,7 +219,8 @@
                     <div class="col-sm-12">
                         <label>
                             <input type="checkbox" name="fixed" value="true">
-                            <small class="text-muted" data-i18n="product.fixed.use">Use fixed price in this phase. </small>
+                            <small class="text-muted" data-i18n="product.fixed.use">Use fixed price in this phase.
+                            </small>
                         </label>
                     </div>
                 </div>
@@ -205,7 +228,8 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
                             <div data-i18n="product.fixed.price">Fixed Price</div>
-                            <a href="Javascript:void(0)" name="price-add" data-i18n="product.fixed.addPrice">+ Add price</a>
+                            <a href="Javascript:void(0)" name="price-add" data-i18n="product.fixed.addPrice">+ Add
+                                price</a>
                         </label>
                         <div class="col-md-9" name="price-item-list">
 
@@ -468,6 +492,41 @@
             </div>
 
         </div>
+    </div>
+
+    <div class="ibox float-e-margins" name="onetime-card" id="onetime-card">
+        <div class="ibox-title">
+            <h5>
+                <span name="phase-title" data-i18n="product.phase.titleOneTime">One Time Price</span>
+            </h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="onetime-form-item">
+        <form class="form-horizontal" name="onetime-form">
+            <div class="col-sm-7">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">
+                        <div data-i18n="product.onetime.price">One Time Price</div>
+                        <a href="Javascript:void(0)" name="price-add" data-i18n="product.onetime.addPrice">+ Add
+                            price</a>
+                    </label>
+                    <div class="col-md-9" name="price-item-list">
+
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

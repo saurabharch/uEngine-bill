@@ -10,6 +10,7 @@ import org.uengine.garuda.model.Product;
 import org.uengine.garuda.model.ProductVersion;
 import org.uengine.garuda.model.SubscriptionEventsExt;
 import org.uengine.garuda.model.catalog.Plan;
+import org.uengine.garuda.model.catalog.ProductCategory;
 import org.uengine.garuda.proxy.ProxyRequest;
 import org.uengine.garuda.proxy.ProxyService;
 import org.uengine.garuda.util.ApplicationContextRegistry;
@@ -254,6 +255,12 @@ public class KBRestFilter implements Filter {
                     Product product = productService.selectProductById(organization.getId(), product_id);
                     if (!"Y".equals(product.getIs_active())) {
                         //액티브 프로덕트가 아닐경우
+                        response.setStatus(400);
+                        return;
+                    }
+
+                    //ONE_TIME 프로덕트일 경우 허용되지 않음.
+                    if(ProductCategory.ONE_TIME.toString().equals(product.getCategory())){
                         response.setStatus(400);
                         return;
                     }

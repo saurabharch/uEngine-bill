@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 Flamingo Project (http://www.opencloudengine.org).
+ * Copyright (C) 2011 uEngine Project (http://www.uengine.io).
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@ package org.uengine.garuda.web.rule;
 import com.cloudant.client.api.Database;
 import com.cloudant.client.api.views.AllDocsResponse;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.opencloudengine.garuda.common.exception.ServiceException;
-import org.opencloudengine.garuda.util.JsonUtils;
-import org.opencloudengine.garuda.util.ResourceUtils;
+import org.uengine.garuda.common.exception.ServiceException;
+import org.uengine.garuda.util.JsonUtils;
+import org.uengine.garuda.util.ResourceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.uengine.garuda.common.repository.PersistentRepositoryImpl;

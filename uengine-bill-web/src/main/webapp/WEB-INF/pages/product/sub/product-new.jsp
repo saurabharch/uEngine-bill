@@ -22,6 +22,7 @@
                                     <select class="chosen-select" name="category" required>
                                         <option value="BASE" selected data-i18n="product.new.base">BASE</option>
                                         <option value="ADD_ON" data-i18n="product.new.addon">ADD_ON</option>
+                                        <option value="ONE_TIME" data-i18n="product.new.onetime">ONE_TIME</option>
                                     </select>
                                 </div>
                             </div>

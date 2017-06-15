@@ -1,0 +1,146 @@
+{
+  "start_date": "2017-03-15",
+  "end_date": "2017-03-17",
+  "account_sales_balance": {
+    "USD": 10,
+    "KRW": 1000
+  },
+  "sales": {
+    "summary": {
+      "total": {
+        "USD": 80
+      },
+      "per_product_id": {
+        "product_id": {
+          "USD": 80
+        }
+      },
+      "per_plan_name": {
+        "plan_name": {
+          "USD": 80
+        }
+      },
+      "per_price_type": {
+        "RECURRING": {
+          "USD": 80
+        },
+        "FIXED": {
+          "USD": 80
+        },
+        "usage_name": {
+          "USD": 80
+        }
+      }
+    },
+    "per_date": {
+      "2017-03-15": [
+        {
+          "product_id": "",
+          "plan_name": "",
+          "price_type": "RECURRING/FIXED/USAGE",
+          "usage_name": "",
+          "amount": {
+            "USD": 80,
+            "KRW": 8000
+          }
+        }
+      ],
+      "2017-03-16": [
+        {
+          "product_id": "",
+          "plan_name": "",
+          "price_type": "RECURRING/FIXED/USAGE",
+          "usage_name": "",
+          "amount": {
+            "USD": 80,
+            "KRW": 8000
+          }
+        }
+      ]
+    }
+  },
+  "refund": {
+    "summary": {
+      "total": {
+        "USD": 80
+      },
+      "per_product_id": {
+        "product_id": {
+          "USD": 80
+        }
+      },
+      "per_plan_name": {
+        "plan_name": {
+          "USD": 80
+        }
+      },
+      "per_price_type": {
+        "RECURRING": {
+          "USD": 80
+        },
+        "FIXED": {
+          "USD": 80
+        },
+        "usage_name": {
+          "USD": 80
+        }
+      }
+    },
+    "per_date": {
+      "2017-03-15": [
+        {
+          "product_id": "",
+          "plan_name": "",
+          "price_type": "RECURRING/FIXED/USAGE",
+          "usage_name": "",
+          "amount": {
+            "USD": 80,
+            "KRW": 8000
+          }
+        }
+      ],
+      "2017-03-16": [
+        {
+          "product_id": "",
+          "plan_name": "",
+          "price_type": "RECURRING/FIXED/USAGE",
+          "usage_name": "",
+          "amount": {
+            "USD": 80,
+            "KRW": 8000
+          }
+        }
+      ]
+    }
+  },
+  "withdraw": {
+    "summary": {
+      "USD": 800
+    },
+    "per_date": {
+      "2017-03-15": {
+        "USD": 80,
+        "KRW": 8000
+      },
+      "2017-03-16": {
+        "USD": 80,
+        "KRW": 8000
+      }
+    }
+  },
+  "credit": {
+    "summary": {
+      "USD": 800
+    },
+    "per_date": {
+      "2017-03-15": {
+        "USD": 80,
+        "KRW": 8000
+      },
+      "2017-03-16": {
+        "USD": 80,
+        "KRW": 8000
+      }
+    }
+  }
+}

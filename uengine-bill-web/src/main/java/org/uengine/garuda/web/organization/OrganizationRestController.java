@@ -1,6 +1,5 @@
 package org.uengine.garuda.web.organization;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +17,6 @@ import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
 import org.uengine.garuda.util.ExceptionUtils;
-import org.uengine.garuda.web.system.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

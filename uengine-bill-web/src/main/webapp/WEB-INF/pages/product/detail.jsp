@@ -156,7 +156,7 @@
                             </div>
                         </div>
 
-                        <div class="ibox float-e-margins">
+                        <div class="ibox float-e-margins" id="initial-phase-space">
                             <div class="ibox-title">
                                 <h5 data-i18n="product.plan.initialTitle">Initial Phases</h5>
                                 <div class="ibox-tools">
@@ -203,6 +203,9 @@
                         </div>
 
                         <div id="final-phase-space">
+
+                        </div>
+                        <div id="onetime-phase-space">
 
                         </div>
                     </div>
@@ -259,7 +262,7 @@
                         }
                     });
                 }
-                var fromPlan = function(plan){
+                var fromPlan = function (plan) {
                     var vendors = plan['overwriteVendors'];
                     if (vendors && vendors.length) {
                         $.each(vendors, function (idx, vendor) {
@@ -555,43 +558,60 @@
                 //display_name
                 card.find('[name=plan-display-name]').html(plan['display_name']);
 
-                //subscription count
-                card.find('[name=number-of-subscriptions]')
-                    .html(plan['number_of_subscriptions']);
-                card.find('[name=number-of-subscriptions-referenced-by-version]')
-                    .html(plan['number_of_subscriptions_referenced_by_version']);
-                //plan code
-                card.find('[name=plan-code]').html('Plan Code: ' + plan['name']);
+                if (me.product.category == 'ONE_TIME') {
+                    //onetime count
+                    card.find('[name=count-onetime]').show();
+                    card.find('[name=count-subscription]').hide();
+                    card.find('[name=number_of_oneTimeBuys]')
+                        .html(plan['number_of_oneTimeBuys']);
+                    card.find('[name=number_of_oneTimeBuys_referenced_by_version]')
+                        .html(plan['number_of_oneTimeBuys_referenced_by_version']);
 
-                //associated-usages, phase types
-                var usage_names = [];
-                var initialPhaseTypes = [];
-                var finalPhaseType;
-                var addUsageNames = function (phase) {
-                    if (phase['usages'] && phase['usages'].length) {
-                        for (var i = 0; i < phase['usages'].length; i++) {
-                            var usage_name = phase['usages'][i]['display_name'];
-                            if (usage_names.indexOf(usage_name) == -1) {
-                                usage_names.push(usage_name);
+                    //hide associated-usages, phase types
+                    card.find('[name=phase-info]').hide();
+                } else {
+                    //subscription count
+                    card.find('[name=count-onetime]').hide();
+                    card.find('[name=count-subscription]').show();
+                    card.find('[name=number-of-subscriptions]')
+                        .html(plan['number_of_subscriptions']);
+                    card.find('[name=number-of-subscriptions-referenced-by-version]')
+                        .html(plan['number_of_subscriptions_referenced_by_version']);
+
+                    //associated-usages, phase types
+                    card.find('[name=phase-info]').show();
+                    var usage_names = [];
+                    var initialPhaseTypes = [];
+                    var finalPhaseType;
+                    var addUsageNames = function (phase) {
+                        if (phase['usages'] && phase['usages'].length) {
+                            for (var i = 0; i < phase['usages'].length; i++) {
+                                var usage_name = phase['usages'][i]['display_name'];
+                                if (usage_names.indexOf(usage_name) == -1) {
+                                    usage_names.push(usage_name);
+                                }
                             }
                         }
-                    }
-                };
+                    };
 
-                var initialPhases = plan['initialPhases'];
-                if (initialPhases && initialPhases.length) {
-                    for (var i = 0; i < initialPhases.length; i++) {
-                        addUsageNames(initialPhases[i]);
-                        initialPhaseTypes.push(initialPhases[i]['type']);
+                    var initialPhases = plan['initialPhases'];
+                    if (initialPhases && initialPhases.length) {
+                        for (var i = 0; i < initialPhases.length; i++) {
+                            addUsageNames(initialPhases[i]);
+                            initialPhaseTypes.push(initialPhases[i]['type']);
+                        }
                     }
+                    addUsageNames(plan['finalPhase']);
+                    finalPhaseType = plan['finalPhase']['type'];
+
+
+                    card.find('[name=associated-usages]').html(usage_names.join());
+                    card.find('[name=initial-plan-phases]').html(initialPhaseTypes.join());
+                    card.find('[name=final-plan-phase]').html(finalPhaseType);
                 }
-                addUsageNames(plan['finalPhase']);
-                finalPhaseType = plan['finalPhase']['type'];
 
-
-                card.find('[name=associated-usages]').html(usage_names.join());
-                card.find('[name=initial-plan-phases]').html(initialPhaseTypes.join());
-                card.find('[name=final-plan-phase]').html(finalPhaseType);
+                //plan code
+                card.find('[name=plan-code]').html('Plan Code: ' + plan['name']);
 
                 //price
                 // 조직의 디폴트 currency 가 있다면 리턴, 없다면 첫번째 리턴.
@@ -607,25 +627,37 @@
                     }
                     return priceList[0];
                 };
-                if (plan['finalPhase']['fixed']) {
-                    var price = getCurrency(plan['finalPhase']['fixed']['fixedPrice']);
+
+                if (me.product.category == 'ONE_TIME') {
+                    var price = getCurrency(plan['onetimePrice']);
                     if (price) {
                         var clone = $('#final-phase-price-item').clone();
                         clone.removeAttr('id');
                         clone.find('[name=price]').html(price['currency'] + ' ' + price['value']);
-                        clone.find('[name=period]').html('fixed price');
+                        clone.find('[name=period]').html('one time payment');
                         card.find('[name=final-phase-price]').append(clone);
                     }
-                }
+                } else {
+                    if (plan['finalPhase']['fixed']) {
+                        var price = getCurrency(plan['finalPhase']['fixed']['fixedPrice']);
+                        if (price) {
+                            var clone = $('#final-phase-price-item').clone();
+                            clone.removeAttr('id');
+                            clone.find('[name=price]').html(price['currency'] + ' ' + price['value']);
+                            clone.find('[name=period]').html('fixed price');
+                            card.find('[name=final-phase-price]').append(clone);
+                        }
+                    }
 
-                if (plan['finalPhase']['recurring']) {
-                    var price = getCurrency(plan['finalPhase']['recurring']['recurringPrice']);
-                    if (price) {
-                        var clone = $('#final-phase-price-item').clone();
-                        clone.removeAttr('id');
-                        clone.find('[name=price]').html(price['currency'] + ' ' + price['value']);
-                        clone.find('[name=period]').html('per ' + plan['finalPhase']['recurring']['billingPeriod'].toLowerCase());
-                        card.find('[name=final-phase-price]').append(clone);
+                    if (plan['finalPhase']['recurring']) {
+                        var price = getCurrency(plan['finalPhase']['recurring']['recurringPrice']);
+                        if (price) {
+                            var clone = $('#final-phase-price-item').clone();
+                            clone.removeAttr('id');
+                            clone.find('[name=price]').html(price['currency'] + ' ' + price['value']);
+                            clone.find('[name=period]').html('per ' + plan['finalPhase']['recurring']['billingPeriod'].toLowerCase());
+                            card.find('[name=final-phase-price]').append(clone);
+                        }
                     }
                 }
 
@@ -719,6 +751,7 @@
 
                 //delete remain phase
                 $('#plan-panel').find('[name=phase-card]').remove();
+                $('#plan-panel').find('[name=onetime-card]').remove();
 
                 //Edit or New
                 var planPanelNew = $('#plan-panel-new');
@@ -746,38 +779,53 @@
                 var planForm = $('#plan-panel').find('#plan-form');
                 me.drawVendor(planForm, plan);
 
+                if (me.product.category == 'ONE_TIME') {
+                    $('#initial-phase-space').hide();
+                    $('#final-phase-space').hide();
+                    $('#onetime-phase-space').show();
 
-                //initial phase
-                if (plan['initialPhases'] && plan['initialPhases'].length) {
-                    $('#initial-phase-no').hide();
-                    $('#initial-phase-list').show();
-                    for (var i = 0; i < plan['initialPhases'].length; i++) {
-                        me.drawPhase(plan['initialPhases'][i], true);
+                    console.log(plan);
+                    if (!plan['onetimePrice']) {
+                        plan['onetimePrice'] = []
                     }
+                    me.drawOneTime(plan['onetimePrice']);
+
                 } else {
-                    $('#initial-phase-no').show();
-                    $('#initial-phase-list').hide();
-                }
+                    $('#initial-phase-space').show();
+                    $('#final-phase-space').show();
+                    $('#onetime-phase-space').hide();
 
-                //phase-new
-                $('[name=add-phase]').unbind('click');
-                $('[name=add-phase]').click(function () {
-                    var phaseType = $(this).data('phase');
-                    var data = {
-                        type: phaseType
-                    };
-                    $('#initial-phase-no').hide();
-                    $('#initial-phase-list').show();
-                    me.drawPhase(data, true);
-                });
-
-                if (!plan['finalPhase']) {
-                    plan['finalPhase'] = {
-                        type: 'EVERGREEN'
+                    //initial phase
+                    if (plan['initialPhases'] && plan['initialPhases'].length) {
+                        $('#initial-phase-no').hide();
+                        $('#initial-phase-list').show();
+                        for (var i = 0; i < plan['initialPhases'].length; i++) {
+                            me.drawPhase(plan['initialPhases'][i], true);
+                        }
+                    } else {
+                        $('#initial-phase-no').show();
+                        $('#initial-phase-list').hide();
                     }
-                }
-                me.drawPhase(plan['finalPhase'], false);
 
+                    //phase-new
+                    $('[name=add-phase]').unbind('click');
+                    $('[name=add-phase]').click(function () {
+                        var phaseType = $(this).data('phase');
+                        var data = {
+                            type: phaseType
+                        };
+                        $('#initial-phase-no').hide();
+                        $('#initial-phase-list').show();
+                        me.drawPhase(data, true);
+                    });
+
+                    if (!plan['finalPhase']) {
+                        plan['finalPhase'] = {
+                            type: 'EVERGREEN'
+                        }
+                    }
+                    me.drawPhase(plan['finalPhase'], false);
+                }
             },
             /**
              * 버젼 화면으로 돌아간다.
@@ -854,7 +902,6 @@
                 };
                 var me = this;
                 var currentPlan = me.currentPlan;
-                //me.version
 
                 var getPriceList = function (priceItemList) {
                     if (priceItemList && priceItemList.length) {
@@ -974,18 +1021,34 @@
                     return data;
                 };
 
+                var getOneTimeData = function (oneTimeCard) {
+                    //fixedForm
+                    var onetimeForm = oneTimeCard.find('[name=onetime-form]');
+                    var priceList = getPriceList(onetimeForm.find('[name=price-item]'));
+                    if (priceList) {
+                        return priceList;
+                    }
+                    return [];
+                }
+
                 //최종 수집
                 var initialPhaseCards = $('#initial-phase-list').find('[name=phase-card]');
                 var finalPhaseCard = $('#final-phase-space').find('[name=phase-card]');
-                if (initialPhaseCards && initialPhaseCards.length) {
-                    planData['initialPhases'] = [];
-                    for (var i = 0; i < initialPhaseCards.length; i++) {
-                        planData['initialPhases'].push(getPhaseData($(initialPhaseCards[i])));
-                    }
-                }
-                planData['finalPhase'] = getPhaseData(finalPhaseCard);
-                planData['display_name'] = $('#display_name').val();
+                var oneTimeCard = $('#onetime-phase-space').find('[name=onetime-card]');
 
+                if (me.product.category == 'ONE_TIME') {
+                    planData['onetimePrice'] = getOneTimeData(oneTimeCard);
+                } else {
+                    if (initialPhaseCards && initialPhaseCards.length) {
+                        planData['initialPhases'] = [];
+                        for (var i = 0; i < initialPhaseCards.length; i++) {
+                            planData['initialPhases'].push(getPhaseData($(initialPhaseCards[i])));
+                        }
+                    }
+                    planData['finalPhase'] = getPhaseData(finalPhaseCard);
+                }
+
+                planData['display_name'] = $('#display_name').val();
                 var vendorData = getVendorData($('#plan-form'));
                 if (vendorData) {
                     planData['overwriteVendors'] = vendorData;
@@ -1141,6 +1204,68 @@
                         addVendor(vendor);
                     });
                 }
+            },
+
+            /**
+             * 일회성 구매 플랜을 표현한다.
+             * @param onetimePrice
+             */
+            drawOneTime: function (onetimePrice) {
+                var me = this;
+                var card = $('#onetime-card').clone();
+                card.removeAttr('id');
+
+                //price
+                var drawPrice = function (priceList, addBtn, panel) {
+                    panel.find('[name=price-item]').remove();
+                    var addItem = function (currency, value) {
+                        var priceItem = $('#price-item').clone();
+                        priceItem.removeAttr('id');
+                        priceItem.find('[name=price-item-delete]').click(function () {
+                            priceItem.remove();
+                        });
+                        if (currency) {
+                            priceItem.find('[name=currency]').val(currency);
+                        }
+                        priceItem.find('[name=currency]').chosen({width: "100%"});
+
+                        if (value || value == 0) {
+                            priceItem.find('[name=value]').val(value);
+                        }
+                        panel.append(priceItem);
+                    };
+                    addBtn.click(function () {
+                        addItem();
+                    });
+
+                    if (priceList && priceList.length) {
+                        for (var i = 0; i < priceList.length; i++) {
+                            addItem(priceList[i].currency, priceList[i].value);
+                        }
+                    }
+                };
+
+                //fixed
+                var drawOneTimeForm = function () {
+                    //onetime-form-item
+                    card.find('[name=onetime-form]').remove();
+                    var panel = $('#onetime-form-item').clone();
+                    panel.removeAttr('id');
+                    var form = panel.find('form');
+                    card.find('.panel-body').append(form);
+
+                    var priceList = [];
+                    if (onetimePrice && onetimePrice.length) {
+                        priceList = onetimePrice;
+                    }
+                    drawPrice(priceList, form.find('[name=price-add]'), form.find('[name=price-item-list]'));
+                };
+                drawOneTimeForm();
+
+                //chosen
+                card.find('.chosen-select').chosen({width: "100%"});
+
+                $('#onetime-phase-space').append(card);
             },
             /**
              * 플랜 단계를 표현한다.

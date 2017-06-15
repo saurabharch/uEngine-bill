@@ -1,11 +1,11 @@
 {
   "billingAlignment": [
     {
-      "productCategory" : "BASE",
+      "productCategory": "BASE",
       "billingAlignment": "ACCOUNT"
     },
     {
-      "productCategory" : "ADD_ON",
+      "productCategory": "ADD_ON",
       "billingAlignment": "BUNDLE"
     },
     {
@@ -26,7 +26,7 @@
       "billingActionPolicy": "END_OF_TERM"
     }
   ],
-  "changePolicy" : [
+  "changePolicy": [
     {
       "phaseType": "TRIAL",
       "billingActionPolicy": "IMMEDIATE"
@@ -35,13 +35,18 @@
       "billingActionPolicy": "END_OF_TERM"
     }
   ],
-  "changeAlignment" : [
+  "changeAlignment": [
     {
       "toProductCategory": "ADD_ON",
       "planAlignmentChange": "START_OF_BUNDLE"
     },
     {
       "planAlignmentChange": "START_OF_SUBSCRIPTION"
+    }
+  ],
+  "oneTimeBillingAlignment": [
+    {
+      "oneTimeBillingAlignment": "ACCOUNT"
     }
   ]
 }

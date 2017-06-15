@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 Flamingo Project (http://www.opencloudengine.org).
+ * Copyright (C) 2011 uEngine Project (http://www.uengine.io).
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,12 @@
  */
 package org.uengine.garuda.web.system;
 
-import org.apache.commons.codec.binary.Base64;
 import org.opencloudengine.garuda.client.model.OauthUser;
-import org.opencloudengine.garuda.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

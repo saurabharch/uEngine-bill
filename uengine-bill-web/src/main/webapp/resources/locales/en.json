@@ -352,6 +352,7 @@
       "category": "Category",
       "base": "BASE",
       "addon": "ADD_ON",
+      "onetime": "ONE_TIME",
       "description": "Description",
       "redirect": "Redirect url",
       "redirectInfo": "A redirect url is an address that a buyer completes a purchase through a hosted page and is redirected with the result of the purchase action. Usually you will use the seller's application address.",
@@ -384,6 +385,8 @@
     "planCard": {
       "numSub": "NUMBER OF SUBSCRIPTIONS : ",
       "numRef": "NUMBER OF SUBSCRIPTIONS REFERENCED BY VERSION : ",
+      "numOneTimeSub": "NUMBER OF ONE TIME BUYS : ",
+      "numOneTimeRef": "NUMBER OF ONE TIME BUYS REFERENCED BY VERSION : ",
       "usages": "Associated Usages : ",
       "initials": "Initial Plan Phases: ",
       "final": "Final Plan Phase: ",
@@ -421,6 +424,10 @@
     "fixed": {
       "use": "Use fixed price in this phase. ",
       "price": "Fixed Price",
+      "addPrice": "+ Add price"
+    },
+    "onetime": {
+      "price": "One Time Price",
       "addPrice": "+ Add price"
     },
     "tier": {
@@ -502,14 +509,17 @@
         "createAlignment": "CREATE ALIGNMENT",
         "cancelPolicy": "CANCEL POLICY",
         "changePolicy": "CHANGE POLICY",
-        "changeAlignment": "CHANGE ALIGNMENT"
+        "changeAlignment": "CHANGE ALIGNMENT",
+        "oneTimeBillingAlignment": "ONETIME BILLING ALIGNMENT",
+        "oneTimeBillingAlignmentWithBundle": "ONETIME BILLING ALIGNMENT WITH BUNDLE"
       },
       "desc": {
         "billingAlignment": "This rule uses the Creation Context and configures type of billing alignment used with a subscription. There are three kinds of alignment available:<br><br>ACCOUNT - this means that the billing cycle of the subscription will be lined up with the bill cycle day of the account. In some cases this is undesirable because it means that a proration charge will be applied on first billing to line up the cycles.<br><br>SUBSCRIPTION - this alignment will cause the subscriptions bill cycle to line up with the first bill day of the subscription plan. So, if the subscription starts on January 3rd and has a 15 day free trial, the first billed day with be January 18th and the bill cycle day for the subscription will be set to 18.<br><br>BUNDLE - setting the alignment to bundle is useful for add-ons because it sets the bill cycle day to be aligned with whatever the base plan is using.",
         "createAlignment": "This rule also uses the Creation Context and determines how the phases of an Add-On plan aligns with an existing subscription.<br><br>There are two choices (illustrated above):<br><br>START_OF_BUNDLE - causes the phases of the addon to start on the date when the base plan was first created. This is for instance useful if you want to allow add-on trials during the trial phase of the base plan only. The addon plans must have a trial of the same length as the base plan and then the trials will expire at the same time whenever the add-on is created.<br><br>START_OF_SUBSCRIPTION - this causes the phases of the add-on to start when the add-on subscription is created. This is for instance useful if you want to allow add-ons to have trials that are occur independently of the base plan.",
         "cancelPolicy": "This rule uses the Phase Context and is used to specify when a cancellation should occur.<br><br>There are two options (illustrated above):<br><br>END_OF_TERM - meaning that the cancellation will be applied at the end of the billed period. This is typical in a situation where we want to avoid generating credits.<br><br>IMMEDIATE - meaning that the cancellation will be applied immediately and the customer credited with the balance of the subscription that they have paid for but not yet used.",
         "changePolicy": "This rule uses the Change Context and, like the cancellation rule above, specifies when a plan change should occur.<br><br>There are three options (two of which are illustrated above):<br><br>END_OF_TERM - specifies that the change should happen at the end of the current billed period.<br><br>IMMEDIATE - specifies that the change should happen when requested.<br><br>ILLEGAL - plan change is not allowed (not illustrated).",
-        "changeAlignment": "This rule, which uses the Change Context, specifies how the phases of a new plan should align with the phases of the existing plan when a plan is changed.<br><br>There are three options:<br><br>START_OF_SUBSCRIPTION - The plan phases start with the start of the subscription. This is the most common alignment and applies in most situations.<br><br>START_OF_BUNDLE - The plan phases should align with the start of the base subscription. This is only meaningful for addons.<br><br>CHANGE_OF_PLAN - The plan phases start at the time of the change"
+        "changeAlignment": "This rule, which uses the Change Context, specifies how the phases of a new plan should align with the phases of the existing plan when a plan is changed.<br><br>There are three options:<br><br>START_OF_SUBSCRIPTION - The plan phases start with the start of the subscription. This is the most common alignment and applies in most situations.<br><br>START_OF_BUNDLE - The plan phases should align with the start of the base subscription. This is only meaningful for addons.<br><br>CHANGE_OF_PLAN - The plan phases start at the time of the change",
+        "oneTimeBillingAlignment": "This rule configures the claim sort type for one-time-purchase products.<br><br>There are two kinds of sorting available.<br><br>ACCOUNT - This means that the product's due date is aligned with the account's billing cycle date.<br><br>REQUESTED_DATE - The product's due date will be the same as the product's due date.<br><br>However, if you specify a subscription to pay for a one-time purchase product, regardless of the above settings, the product's due date will be aligned with the subscription's billing cycle date."
       },
       "condition": {
         "productCategory": {
@@ -545,7 +555,8 @@
         "billingAlignment": "Select billing alignment",
         "planAlignmentCreate": "Select plan alignment create",
         "billingActionPolicy": "Select billing action policy",
-        "planAlignmentChange": "Select plan alignment change"
+        "planAlignmentChange": "Select plan alignment change",
+        "oneTimeBillingAlignment": "Select oneTime billing alignment"
       },
       "option": {
         "base": "BASE",
@@ -566,6 +577,7 @@
         "account": "ACCOUNT",
         "bundle": "BUNDLE",
         "subscription": "SUBSCRIPTION",
+        "requested_date": "REQUESTED_DATE",
         "START_OF_BUNDLE": "START_OF_BUNDLE",
         "START_OF_SUBSCRIPTION": "START_OF_SUBSCRIPTION",
         "START_OF_TERM": "START_OF_TERM",

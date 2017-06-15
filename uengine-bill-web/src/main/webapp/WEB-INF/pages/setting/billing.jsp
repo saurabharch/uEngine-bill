@@ -200,6 +200,12 @@
                         "toProductCategory", "toBillingPeriod"
                     ],
                     action: "planAlignmentChange"
+                },
+                oneTimeBillingAlignment: {
+                    title: i18n.t('setting.billing.rules.oneTimeBillingAlignment'),
+                    description: i18n.t('setting.billing.desc.oneTimeBillingAlignment'),
+                    condition: [],
+                    action: "oneTimeBillingAlignment"
                 }
             },
             ref: {
@@ -312,6 +318,13 @@
                         ["START_OF_SUBSCRIPTION", i18n.t('setting.billing.option.START_OF_SUBSCRIPTION')],
                         ["CHANGE_OF_PLAN", i18n.t('setting.billing.option.CHANGE_OF_PLAN')]
                     ]
+                },
+                oneTimeBillingAlignment: {
+                    holder: i18n.t('setting.billing.action.oneTimeBillingAlignment'),
+                    options: [
+                        ["ACCOUNT", i18n.t('setting.billing.option.account')],
+                        ["REQUESTED_DATE", i18n.t('setting.billing.option.requested_date')]
+                    ]
                 }
             }
         };
@@ -327,6 +340,14 @@
                     });
                 });
             };
+            if (!rule['oneTimeBillingAlignment']) {
+                rule['oneTimeBillingAlignment'] = [
+                    {
+                        "oneTimeBillingAlignment": "ACCOUNT"
+                    }
+                ]
+            }
+
             for (var key in rule) {
                 if (key == 'recurringBillingMode') {
                     recurringBillingMode.val(rule['recurringBillingMode']);

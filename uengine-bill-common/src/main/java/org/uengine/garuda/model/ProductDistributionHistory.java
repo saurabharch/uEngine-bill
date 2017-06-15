@@ -23,7 +23,9 @@ public class ProductDistributionHistory {
     private String currency;
     private String invoice_id;
     private String invoice_item_id;
+    private String linked_invoice_item_id;
     private String invoice_item_type;
+    private String price_type;
     private String transaction_type;
     private String format_date;
     private Date created_date;
@@ -156,12 +158,28 @@ public class ProductDistributionHistory {
         this.invoice_item_id = invoice_item_id;
     }
 
+    public String getLinked_invoice_item_id() {
+        return linked_invoice_item_id;
+    }
+
+    public void setLinked_invoice_item_id(String linked_invoice_item_id) {
+        this.linked_invoice_item_id = linked_invoice_item_id;
+    }
+
     public String getInvoice_item_type() {
         return invoice_item_type;
     }
 
     public void setInvoice_item_type(String invoice_item_type) {
         this.invoice_item_type = invoice_item_type;
+    }
+
+    public String getPrice_type() {
+        return price_type;
+    }
+
+    public void setPrice_type(String price_type) {
+        this.price_type = price_type;
     }
 
     public String getTransaction_type() {

@@ -87,6 +87,14 @@ public class KillbillApi {
         return (TestApi) this.copyOptions(new TestApi());
     }
 
+    public BundleApi bundleApi() {
+        return (BundleApi) this.copyOptions(new BundleApi());
+    }
+
+    public InvoiceApi invoiceApi() {
+        return (InvoiceApi) this.copyOptions(new InvoiceApi());
+    }
+
     private KillbillApi copyOptions(KillbillApi killbillApi) {
         killbillApi.setUrl(url);
         killbillApi.setUser(user);
