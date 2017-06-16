@@ -144,10 +144,10 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
             }
 
             //프로덕트와 플랜이 액티브 인지 확인한다.
-            if(!"Y".equals(product.getIs_active())){
+            if (!"Y".equals(product.getIs_active())) {
                 throw new ServiceException("Product " + product.getName() + " is not active");
             }
-            if(!"Y".equals(plan.getIs_active())){
+            if (!"Y".equals(plan.getIs_active())) {
                 throw new ServiceException("Plan " + planName + " is not active");
             }
 
@@ -177,7 +177,7 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
                         .bundleApi().getBundle(bundleId);
 
                 //번들의 어카운트 아이디가 요청자의 아이디와 다르면 신청 불가능이다.
-                if(!accountId.equals(bundle.get("accountId").toString())){
+                if (!accountId.equals(bundle.get("accountId").toString())) {
 //                    //여기서부터.
                     throw new ServiceException("There is no base subscription which has chargedThroughDate in bundle " + bundleId);
                 }
@@ -278,8 +278,9 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
 
     /**
      * 주어진 일회성 구매 인보이스 대기 항목들을 인보이스 발급하고, 송장 번호를 업데이트한다.
-     * @param organization 조직
-     * @param clock 킬빌 현재 시각
+     *
+     * @param organization   조직
+     * @param clock          킬빌 현재 시각
      * @param oneTimeBuyList 일회성 구매 인보이스 대기 항목들
      * @return
      */
@@ -416,6 +417,7 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         //effectiveDate 달의 마지막 day 를 구한다.
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         int actualLastBcdDay = cal.get(Calendar.DAY_OF_MONTH);
 
@@ -432,7 +434,9 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
         //actualBcd 가 effective_date dd 보다 작을 경우, billing_date 는 해당 달++ 달의 ACCOUNT bcd 대입 날짜이다.
         else {
             //다음달의 마지막 day 를 구한다.
-            cal.set(Calendar.MONTH, month + 1);
+            month++;
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
             actualLastBcdDay = cal.get(Calendar.DAY_OF_MONTH);
 
