@@ -352,8 +352,8 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
     }
 
     @Override
-    public OneTimeBuy selectById(Long record_id) {
-        return oneTimeBuyRepository.selectById(record_id);
+    public OneTimeBuy selectById(String organization_id, Long record_id) {
+        return oneTimeBuyRepository.selectById(organization_id, record_id);
     }
 
     @Override
@@ -362,8 +362,11 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
     }
 
     @Override
-    public OneTimeBuy cancelOneTimeBuy(Long record_id) {
-        OneTimeBuy oneTimeBuy = this.selectById(record_id);
+    public OneTimeBuy cancelOneTimeBuy(String organization_id, Long record_id) {
+        OneTimeBuy oneTimeBuy = this.selectById(organization_id, record_id);
+        if (OneTimeBuyState.INVOICED.toString().equals(oneTimeBuy.getState())) {
+            throw new ServiceException("INVOICED One Time Buy record can not ne canceled.");
+        }
         oneTimeBuy.setState(OneTimeBuyState.CANCELED.toString());
         return oneTimeBuyRepository.update(oneTimeBuy);
     }
@@ -374,8 +377,8 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
     }
 
     @Override
-    public List<OneTimeBuy> selectByAccountId(String account_id) {
-        return oneTimeBuyRepository.selectByAccountId(account_id);
+    public List<OneTimeBuy> selectByAccountId(String organization_id, String account_id) {
+        return oneTimeBuyRepository.selectByAccountId(organization_id, account_id);
     }
 
     @Override

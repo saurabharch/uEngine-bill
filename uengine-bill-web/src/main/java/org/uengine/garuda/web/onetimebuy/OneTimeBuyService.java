@@ -12,15 +12,15 @@ import java.util.Map;
 public interface OneTimeBuyService {
     List<OneTimeBuy> createOneTimeBuy(Organization organization, List<OneTimeBuyRequest> list, String accountId, Date requestedDate) throws Exception;
 
-    OneTimeBuy selectById(Long record_id);
+    OneTimeBuy selectById(String organization_id, Long record_id);
 
     OneTimeBuy update(OneTimeBuy oneTimeBuy);
 
-    OneTimeBuy cancelOneTimeBuy(Long record_id);
+    OneTimeBuy cancelOneTimeBuy(String organization_id, Long record_id);
 
     Map selectByCondition(String organization_id, String searchKey, Long offset, Long limit);
 
-    List<OneTimeBuy> selectByAccountId(String account_id);
+    List<OneTimeBuy> selectByAccountId(String organization_id, String account_id);
 
     List<OneTimeBuy> sendOneTimeBuyImmediately(Organization organization, Clock clock, List<OneTimeBuy> oneTimeBuyList);
 

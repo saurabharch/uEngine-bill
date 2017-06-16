@@ -48,15 +48,18 @@ public class OneTimeBuyRepositoryImpl extends PersistentRepositoryImpl<String, O
     }
 
     @Override
-    public OneTimeBuy selectById(Long record_id) {
-        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", record_id);
+    public OneTimeBuy selectById(String organization_id, Long record_id) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("record_id", record_id);
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", map);
     }
 
     @Override
     public OneTimeBuy insert(OneTimeBuy oneTimeBuy) {
         int insert = this.getSqlSessionTemplate().insert(this.getNamespace() + ".insert", oneTimeBuy);
         if (insert > 0) {
-            return this.selectById(oneTimeBuy.getRecord_id());
+            return this.selectById(oneTimeBuy.getOrganization_id(), oneTimeBuy.getRecord_id());
         } else {
             return null;
         }
@@ -65,7 +68,7 @@ public class OneTimeBuyRepositoryImpl extends PersistentRepositoryImpl<String, O
     @Override
     public OneTimeBuy update(OneTimeBuy oneTimeBuy) {
         this.getSqlSessionTemplate().update(this.getNamespace() + ".update", oneTimeBuy);
-        return this.selectById(oneTimeBuy.getRecord_id());
+        return this.selectById(oneTimeBuy.getOrganization_id(), oneTimeBuy.getRecord_id());
     }
 
     @Override
@@ -89,7 +92,10 @@ public class OneTimeBuyRepositoryImpl extends PersistentRepositoryImpl<String, O
     }
 
     @Override
-    public List<OneTimeBuy> selectByAccountId(String account_id) {
+    public List<OneTimeBuy> selectByAccountId(String organization_id, String account_id) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("account_id", account_id);
         return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByAccountId", account_id);
     }
 

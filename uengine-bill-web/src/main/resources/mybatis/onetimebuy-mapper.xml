@@ -62,6 +62,7 @@
         billing_date = #{billing_date},
         created_date = #{created_date}
         WHERE record_id = #{record_id}
+        AND organization_id = #{organization_id}
     </update>
 
     <select id="selectByCondition" parameterType="map" resultType="org.uengine.garuda.model.OneTimeBuy">
@@ -105,7 +106,6 @@
             billing_date LIKE CONCAT('%',#{searchKey},'%')
             )
         </if>
-        LIMIT #{offset},#{limit}
     </select>
 
     <select id="selectCount" parameterType="java.lang.String" resultType="java.lang.Long">
@@ -114,14 +114,16 @@
         AND organization_id = #{organization_id}
     </select>
 
-    <select id="selectById" parameterType="java.lang.Long" resultType="org.uengine.garuda.model.OneTimeBuy">
+    <select id="selectById" parameterType="map" resultType="org.uengine.garuda.model.OneTimeBuy">
         SELECT * FROM onetimebuy
         WHERE record_id = #{record_id}
+        AND organization_id = #{organization_id}
     </select>
 
-    <select id="selectByAccountId" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OneTimeBuy">
+    <select id="selectByAccountId" parameterType="map" resultType="org.uengine.garuda.model.OneTimeBuy">
         SELECT * FROM onetimebuy
         WHERE account_id = #{account_id}
+        AND organization_id = #{organization_id}
     </select>
 
     <select id="selectBcdPendingBuys" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OneTimeBuy">
