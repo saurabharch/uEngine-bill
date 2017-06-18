@@ -158,6 +158,11 @@ public class KBRestFilter implements Filter {
         if (requestURI.startsWith("/rest/v1/accountsByIds") && request.getMethod().toLowerCase().equals("post")) {
             is_proxy = false;
         }
+        //사용자 bcd 업데이트
+        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("put") &&
+                requestURI.endsWith("bcd")) {
+            is_proxy = false;
+        }
 
 
         //킬빌 rest uri 일 경우 프락시 통신을 한다.

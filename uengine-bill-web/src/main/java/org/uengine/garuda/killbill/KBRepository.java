@@ -36,6 +36,8 @@ public interface KBRepository {
 
     Map getAccountById(String id);
 
+    int updateAccountBcd(String id, int billing_cycle_day_local);
+
     List<Map> getAccountByIds(List<String> ids);
 
     Map getTenantById(String id);

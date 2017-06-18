@@ -139,4 +139,11 @@
         AND bundle_id = #{bundle_id}
         AND state = 'PENDING_INVOICE'
     </select>
+
+    <select id="selectAccountPendingBuys" parameterType="java.lang.String" resultType="org.uengine.garuda.model.OneTimeBuy">
+        SELECT * FROM onetimebuy
+        WHERE account_id = #{account_id}
+        AND bundle_id is NULL
+        AND state = 'PENDING_INVOICE'
+    </select>
 </mapper>

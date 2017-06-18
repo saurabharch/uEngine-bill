@@ -15,6 +15,13 @@
         SELECT * FROM accounts WHERE id = #{id}
     </select>
 
+    <update id="updateAccountBcd" parameterType="map">
+        UPDATE accounts
+        SET
+        billing_cycle_day_local = #{billing_cycle_day_local}
+        WHERE id = #{id}
+    </update>
+
     <select id="getTenantById" parameterType="java.lang.String" resultType="map">
         SELECT * FROM tenants WHERE id = #{id}
     </select>

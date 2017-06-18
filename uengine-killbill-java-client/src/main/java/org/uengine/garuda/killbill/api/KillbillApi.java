@@ -95,6 +95,12 @@ public class KillbillApi {
         return (InvoiceApi) this.copyOptions(new InvoiceApi());
     }
 
+    public SubscriptionApi subscriptionApi()
+
+    {
+        return (SubscriptionApi) this.copyOptions(new SubscriptionApi());
+    }
+
     private KillbillApi copyOptions(KillbillApi killbillApi) {
         killbillApi.setUrl(url);
         killbillApi.setUser(user);

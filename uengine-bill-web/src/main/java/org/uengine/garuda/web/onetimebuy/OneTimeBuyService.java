@@ -25,4 +25,6 @@ public interface OneTimeBuyService {
     List<OneTimeBuy> sendOneTimeBuyImmediately(Organization organization, Clock clock, List<OneTimeBuy> oneTimeBuyList);
 
     List<OneTimeBuy> selectBcdPendingBuys(Date billingDate);
+
+    Date getActualBcdDate(Date effectiveDate, int bcd);
 }

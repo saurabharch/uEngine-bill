@@ -59,6 +59,14 @@ public class KBRepositoryImpl extends PersistentRepositoryImpl<String, Object> i
     }
 
     @Override
+    public int updateAccountBcd(String id, int billing_cycle_day_local) {
+        Map map = new HashMap();
+        map.put("id", id);
+        map.put("billing_cycle_day_local", billing_cycle_day_local);
+        return this.getSqlSessionTemplate().update(this.getNamespace() + ".updateAccountBcd", map);
+    }
+
+    @Override
     public Map getTenantById(String id) {
         return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".getTenantById", id);
     }

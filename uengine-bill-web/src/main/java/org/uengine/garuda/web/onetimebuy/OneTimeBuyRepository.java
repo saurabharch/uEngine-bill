@@ -18,6 +18,7 @@ package org.uengine.garuda.web.onetimebuy;
 
 import org.uengine.garuda.model.OneTimeBuy;
 import org.uengine.garuda.model.Product;
+import reactor.core.dynamic.annotation.On;
 
 import java.util.Date;
 import java.util.List;
@@ -41,4 +42,6 @@ public interface OneTimeBuyRepository {
     List<OneTimeBuy> selectByAccountId(String organization_id,String account_id);
 
     List<OneTimeBuy> selectBcdPendingBuys(Date billingDate);
+
+    List<OneTimeBuy> selectAccountPendingBuys(String account_id);
 }

@@ -103,4 +103,9 @@ public class OneTimeBuyRepositoryImpl extends PersistentRepositoryImpl<String, O
     public List<OneTimeBuy> selectBcdPendingBuys(Date billingDate) {
         return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectBcdPendingBuys", DateUtils.parseDate(billingDate, "yyyy-MM-dd"));
     }
+
+    @Override
+    public List<OneTimeBuy> selectAccountPendingBuys(String account_id) {
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectAccountPendingBuys", account_id);
+    }
 }

@@ -398,7 +398,8 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
      * @param bcd
      * @return
      */
-    private Date getActualBcdDate(Date effectiveDate, int bcd) {
+    @Override
+    public Date getActualBcdDate(Date effectiveDate, int bcd) {
 
         //리턴할 billingDate
         Date billingDate = null;
