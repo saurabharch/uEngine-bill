@@ -222,6 +222,18 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    updateAccountBcd: function (accountId, bcd) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/accounts/' + accountId + '/bcd',
+            data: JSON.stringify({
+                billCycleDayLocal: bcd
+            }),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
     getAccount: function (accountId) {
         var options = {
             type: "GET",

@@ -133,7 +133,11 @@
         "overdue": "Overdue status",
         "bcd": "Bill cycle day",
         "nextInvoice": "Next Invoice Date",
-        "notified": "Notified For Invoice"
+        "notified": "Notified For Invoice",
+        "updateBcd": "Update Billing Cycle Day"
+      },
+      "bcdModal": {
+        "title": "Update Billing Cycle Day"
       },
       "pm": {
         "title": "Payment Methods",

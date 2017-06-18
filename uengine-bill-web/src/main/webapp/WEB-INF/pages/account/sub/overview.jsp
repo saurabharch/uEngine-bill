@@ -117,13 +117,13 @@
                                 </div>
                             </div>
                             <%--<div class="col-md-12 row">--%>
-                                <%--<div class="col-md-6">--%>
-                                    <%--<span class="text-muted"--%>
-                                          <%--data-i18n="account.overview.billing.credit">Account credit</span>--%>
-                                <%--</div>--%>
-                                <%--<div class="col-md-6">--%>
-                                    <%--<h4 class="text-success" name="accountCBA"></h4>--%>
-                                <%--</div>--%>
+                            <%--<div class="col-md-6">--%>
+                            <%--<span class="text-muted"--%>
+                            <%--data-i18n="account.overview.billing.credit">Account credit</span>--%>
+                            <%--</div>--%>
+                            <%--<div class="col-md-6">--%>
+                            <%--<h4 class="text-success" name="accountCBA"></h4>--%>
+                            <%--</div>--%>
                             <%--</div>--%>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
@@ -138,7 +138,10 @@
                             <div class="col-md-12 row" style="margin-top: 10px;">
                                 <div class="col-md-6">
                                     <span class="text-muted"
-                                          data-i18n="account.overview.billing.bcd">Bill cycle day</span>
+                                          data-i18n="account.overview.billing.bcd">Bill cycle day</span><br>
+                                    <button type="button" class="btn btn-default btn-xs"
+                                            name="updateBcd">Update Billing Cycle Day
+                                    </button>
                                 </div>
                                 <div class="col-md-6">
                                     <span name="billCycleDayLocal"></span>
@@ -488,23 +491,110 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" name="title" data-i18n="account.overview.tagModal.title" data-i18n="account.overview.tag.modal.title">About
+                <h4 class="modal-title" name="title" data-i18n="account.overview.tagModal.title"
+                    data-i18n="account.overview.tag.modal.title">About
                     Tag</h4>
             </div>
             <div class="modal-body">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content no-padding">
-                        <p data-i18n="account.overview.tag.modal.AUTO_PAY_OFF">AUTO_PAY_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt to trigger automatic payments after invoices have been generated. After this tag has been removed, the system will immediately attempt to issue the payments that were not made.</p>
+                        <p data-i18n="account.overview.tag.modal.AUTO_PAY_OFF">AUTO_PAY_OFF: This tag can only be
+                            associated to an account, and when set it means that the system will not attempt to trigger
+                            automatic payments after invoices have been generated. After this tag has been removed, the
+                            system will immediately attempt to issue the payments that were not made.</p>
 
-                        <p data-i18n="account.overview.tag.modal.AUTO_INVOICING_OFF">AUTO_INVOICING_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt to invoice the customer. After this tag has been removed, the system will immediately attempt to issue invoice the account.</p>
+                        <p data-i18n="account.overview.tag.modal.AUTO_INVOICING_OFF">AUTO_INVOICING_OFF: This tag can
+                            only be associated to an account, and when set it means that the system will not attempt to
+                            invoice the customer. After this tag has been removed, the system will immediately attempt
+                            to issue invoice the account.</p>
 
-                        <p data-i18n="account.overview.tag.modal.OVERDUE_ENFORCEMENT_OFF">OVERDUE_ENFORCEMENT_OFF: This tag can only be associated to an account, and when set it means that the system will not attempt transition the account into an overdue state regardless of his potential failed payments. After this tag has been removed, the system will immediately recompute the current overdue state.</p>
+                        <p data-i18n="account.overview.tag.modal.OVERDUE_ENFORCEMENT_OFF">OVERDUE_ENFORCEMENT_OFF: This
+                            tag can only be associated to an account, and when set it means that the system will not
+                            attempt transition the account into an overdue state regardless of his potential failed
+                            payments. After this tag has been removed, the system will immediately recompute the current
+                            overdue state.</p>
 
-                        <p data-i18n="account.overview.tag.modal.MANUAL_PAY">MANUAL_PAY: This tag can only be associated to an account, and when set it means that the system will not attempt to trigger automatic payments after invoices have been generated. The intent here is to have the customer make his payment outside of Billing System.</p>
+                        <p data-i18n="account.overview.tag.modal.MANUAL_PAY">MANUAL_PAY: This tag can only be associated
+                            to an account, and when set it means that the system will not attempt to trigger automatic
+                            payments after invoices have been generated. The intent here is to have the customer make
+                            his payment outside of Billing System.</p>
 
-                        <p data-i18n="account.overview.tag.modal.TEST">TEST: This tag can only be associated to an account, and it is used by analytics plugin so as to not be included set of accounts.</p>
+                        <p data-i18n="account.overview.tag.modal.TEST">TEST: This tag can only be associated to an
+                            account, and it is used by analytics plugin so as to not be included set of accounts.</p>
 
-                        <p data-i18n="account.overview.tag.modal.PARTNER">PARTNER: This tag can only be associated to an account, and it is used by analytics plugin so as to be interpreted differently.</p>
+                        <p data-i18n="account.overview.tag.modal.PARTNER">PARTNER: This tag can only be associated to an
+                            account, and it is used by analytics plugin so as to be interpreted differently.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal fade" id="account-bcd-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title" data-i18n="account.overview.bcdModal.title">Update Billing Cycle
+                    Day</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <div>
+                            <p>주의사항: 다음의 사항들도 함께 변경됩니다. </p>
+                            <p>구매자 계정의 모든 구독의 결제일이 변경됩니다. (결제일 정렬이 구독으로 지정된 일회성 구매 결제 예약일 또한 변경됩니다.)</p>
+                            <p>일회성 결제 주기 규칙이 Account 정렬인 경우, 송장 발행 대기중인 모든 일회성 구매의 결제일이 변경됩니다.</p>
+                        </div>
+
+                        <form method="get" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-2 control-label"
+                                                           data-i18n="account.new.form.billCycleDayLocal">Payment
+                                Terms</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" name="billCycleDayLocal" required>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1034,7 +1124,7 @@
             var trigger = me.panel.find('[name=tagDescription]');
             var modal = $('#tag-description-modal');
             trigger.unbind('click');
-            trigger.bind('click',function(){
+            trigger.bind('click', function () {
                 modal.modal('show')
             })
 
@@ -1276,6 +1366,13 @@
                 //accountCBA.html(account.accountCBA + ' ' + account.currency);
                 billCycleDayLocal.html(account.billCycleDayLocal + ' (user timezone)');
 
+                //updateBcd
+                var bcdBtn = billingInfo.find('[name=updateBcd]');
+                bcdBtn.click(function () {
+                    me.updateAccountBcd();
+                });
+
+
                 //알림
                 var isNotifiedForInvoices = billingInfo.find('[name=isNotifiedForInvoices]');
                 var isNotifiedForInvoicesMark = billingInfo.find('[name=isNotifiedForInvoices-mark]');
@@ -1330,7 +1427,38 @@
                 .fail(function () {
                     toastr.error('Failed to update Account notes');
                 });
-        }
+        },
+        /**
+         * 어카운트의 bcd 를 변경하는 팝업을 띄운다.
+         **/
+        updateAccountBcd: function () {
+            var me = this;
+            var modal = $('#account-bcd-modal');
+            var form = modal.find('form');
+            form.deserialize({
+                billCycleDayLocal: me.account.billCycleDayLocal
+            });
+            form.find('.chosen-select').chosen({width: "100%"});
+            form.find('.chosen-select').trigger("chosen:updated");
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                blockSubmitStart();
+                uBilling.updateAccountBcd(me.account_id, parseInt(form.find('[name=billCycleDayLocal]').val()))
+                    .done(function () {
+                        toastr.success("Account Billing Cycle Day updated.");
+                        me.init();
+                        modal.modal('hide');
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to update Account Billing Cycle Day : " + response.responseText);
+                    })
+                    .always(function () {
+                        blockStop();
+                    })
+            });
+            modal.modal('show');
+        },
     };
     OverviewController.prototype.constructor = OverviewController;
 </script>
