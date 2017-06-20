@@ -235,6 +235,9 @@
         "title": "Subscription Bundles",
         "add": "Add Subscription Bundle"
       },
+      "onetime": {
+        "add": "Add one time buy"
+      },
       "bundle": {
         "add": "Add add-on",
         "transfer": "Transfer Ownership",
@@ -261,9 +264,11 @@
       },
       "addModal": {
         "baseTile": "Add Subscription Bundle",
+        "onetimeTitle": "Add One Time Buy",
         "addonTitle": "Add ADD_ON",
         "product": "Product: ",
         "plan": "Plan",
+        "bundle": "Bundle",
         "select": {
           "immediately": "Immediately",
           "date": "Specify a date"
@@ -284,6 +289,12 @@
         "default": "Cancel (default policy)",
         "immediately": "Cancel immediately (generate prorated)",
         "endOfTerm": "Cancel end of term"
+      }
+    },
+    "onetimebuy":{
+      "page": {
+        "title": "One Time Buys",
+        "add": "Add One Time Buy"
       }
     }
   },

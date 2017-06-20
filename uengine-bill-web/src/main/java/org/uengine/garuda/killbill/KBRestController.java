@@ -53,11 +53,40 @@ public class KBRestController {
     @Autowired
     private OneTimeBuyService oneTimeBuyService;
 
+    @RequestMapping(value = "/accounts/{id}/onetimebuy", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<OneTimeBuy>> accountOneTimeBuy(HttpServletRequest request,
+                                                              HttpServletResponse response,
+                                                              @PathVariable("id") String id) {
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            Organization organization = role.getOrganization();
+
+            Map account = kbRepository.getAccountById(id);
+            if (account == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            List<OneTimeBuy> oneTimeBuyList = oneTimeBuyService.selectByAccountId(organization.getId(), id);
+            if (oneTimeBuyList == null) {
+                oneTimeBuyList = new ArrayList<>();
+            }
+
+            return new ResponseEntity<>(oneTimeBuyList, HttpStatus.OK);
+        } catch (Exception ex) {
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
+        }
+    }
+
     //여기서 bcd 업데이트 만들기
     @RequestMapping(value = "/accounts/{id}/bcd", method = RequestMethod.PUT)
     public ResponseEntity<Map> updateAccountBcd(HttpServletRequest request,
-                                             HttpServletResponse response,
-                                             @PathVariable("id") String id, @RequestBody Map params) {
+                                                HttpServletResponse response,
+                                                @PathVariable("id") String id, @RequestBody Map params) {
 
         try {
             OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);

@@ -96,7 +96,7 @@ public class OneTimeBuyRepositoryImpl extends PersistentRepositoryImpl<String, O
         Map map = new HashMap();
         map.put("organization_id", organization_id);
         map.put("account_id", account_id);
-        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByAccountId", account_id);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByAccountId", map);
     }
 
     @Override

@@ -1141,6 +1141,29 @@ uBilling.prototype = {
         return this.send(options);
     },
 
+    getAccountOneTimeBuys: function (account_id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + account_id + '/onetimebuy',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createOneTimeBuy: function (data, accountId, requestedDate) {
+        var url = '/rest/v1/onetimebuy?accountId=' + accountId;
+        if (requestedDate) {
+            url = url + '&requestedDate=' + requestedDate;
+        }
+        var options = {
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+
     send: function (options) {
         var caller = arguments.callee.caller.name;
         var me = this;

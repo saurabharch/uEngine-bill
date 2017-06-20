@@ -163,6 +163,11 @@ public class KBRestFilter implements Filter {
                 requestURI.endsWith("bcd")) {
             is_proxy = false;
         }
+        //사용자 onetimebuy 업데이트
+        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("get") &&
+                requestURI.endsWith("onetimebuy")) {
+            is_proxy = false;
+        }
 
 
         //킬빌 rest uri 일 경우 프락시 통신을 한다.

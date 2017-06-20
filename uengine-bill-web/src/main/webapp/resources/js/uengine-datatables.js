@@ -76,7 +76,7 @@ uengineDT.prototype = {
             $(".dataTables_paginate").find('a').css("font-size", "11px");
         }
 
-        if(!greedOptions.ajax){
+        if (!greedOptions.ajax) {
             var renderGridAction = function (gridData) {
                 // page event
                 panel.unbind('draw.dt');
@@ -106,7 +106,7 @@ uengineDT.prototype = {
                 });
             };
             renderGridAction(gridData);
-        }else{
+        } else {
             panel.unbind('draw.dt');
             panel.on('draw.dt', function () {
                 panel.find('tbody').find('td').each(function () {
@@ -139,6 +139,25 @@ uengineDT.prototype = {
         td.bind(eventKey, function () {
             callback(key, value, JSON.parse(JSON.stringify(rowValue)), rowIdx, td);
         })
+
+        var tr = $(td).closest('tr');
+        tr.on('click', function () {
+            setTimeout(function () {
+                var child = tr.next();
+                if (child.hasClass('child')) {
+                    child.find('li').each(function () {
+                        var childTd = $(this);
+                        var dtrIndex = $(this).data('dtr-index');
+                        if (dtrIndex == columnIdx) {
+                            childTd.unbind(eventKey);
+                            childTd.bind(eventKey, function () {
+                                callback(key, value, JSON.parse(JSON.stringify(rowValue)), rowIdx, td);
+                            })
+                        }
+                    })
+                }
+            }, 200);
+        });
     }
 }
 ;

@@ -109,6 +109,15 @@ public class IndexController {
         view.addObject("page", "overview");
         return view;
     }
+
+    @RequestMapping(value = "account/{id}/onetimebuy", method = RequestMethod.GET)
+    public ModelAndView accountOneTimeBuy(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/detail");
+        view.addObject("id", id);
+        view.addObject("page", "onetimebuy");
+        return view;
+    }
+
     @RequestMapping(value = "account/{id}/subscriptions", method = RequestMethod.GET)
     public ModelAndView accountSubscriptions(HttpSession session, @PathVariable("id") String id) {
         ModelAndView view = new ModelAndView("/account/detail");

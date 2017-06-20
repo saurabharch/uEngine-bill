@@ -51,20 +51,24 @@
                                     <a data-toggle="tab" href="#tab-1" aria-expanded="true"
                                        data-i18n="account.detail.tab.overview">Overview</a>
                                 </li>
+                                <li class="" data-page="onetimebuy" name="page-tab">
+                                    <a data-toggle="tab" href="#tab-2" aria-expanded="true"
+                                       data-i18n="account.detail.tab.onetimebuy">One Time Buys</a>
+                                </li>
                                 <li class="" data-page="subscriptions" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-2" aria-expanded="false"
+                                    <a data-toggle="tab" href="#tab-3" aria-expanded="false"
                                        data-i18n="account.detail.tab.subscriptions">Subscriptions</a>
                                 </li>
                                 <li class="" data-page="invoices" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-3" aria-expanded="false"
+                                    <a data-toggle="tab" href="#tab-4" aria-expanded="false"
                                        data-i18n="account.detail.tab.invoices">Invoices</a>
                                 </li>
                                 <li class="" data-page="payments" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-4" aria-expanded="false"
+                                    <a data-toggle="tab" href="#tab-5" aria-expanded="false"
                                        data-i18n="account.detail.tab.payments">Payments</a>
                                 </li>
                                 <li class="" data-page="timeline" name="page-tab">
-                                    <a data-toggle="tab" href="#tab-5" aria-expanded="false"
+                                    <a data-toggle="tab" href="#tab-6" aria-expanded="false"
                                        data-i18n="account.detail.tab.timeline">Timeline</a>
                                 </li>
                             </ul>
@@ -74,22 +78,27 @@
 
                                     </div>
                                 </div>
-                                <div id="tab-2" class="tab-pane" data-page="subscriptions" name="page-content">
+                                <div id="tab-2" class="tab-pane" data-page="onetimebuy" name="page-content">
+                                    <div class="panel-body" id="onetimebuy-append">
+
+                                    </div>
+                                </div>
+                                <div id="tab-3" class="tab-pane" data-page="subscriptions" name="page-content">
                                     <div class="panel-body" id="subscriptions-append">
 
                                     </div>
                                 </div>
-                                <div id="tab-3" class="tab-pane" data-page="invoices" name="page-content">
+                                <div id="tab-4" class="tab-pane" data-page="invoices" name="page-content">
                                     <div class="panel-body" id="invoices-append">
 
                                     </div>
                                 </div>
-                                <div id="tab-4" class="tab-pane" data-page="payments" name="page-content">
+                                <div id="tab-5" class="tab-pane" data-page="payments" name="page-content">
                                     <div class="panel-body" id="payments-append">
 
                                     </div>
                                 </div>
-                                <div id="tab-5" class="tab-pane" data-page="timeline" name="page-content">
+                                <div id="tab-6" class="tab-pane" data-page="timeline" name="page-content">
                                     <div class="panel-body" id="timeline-append">
 
                                     </div>
@@ -103,6 +112,7 @@
 
         <%@include file="../template/footer.jsp" %>
         <%@include file="./sub/overview.jsp" %>
+        <%@include file="./sub/onetimebuy.jsp" %>
         <%@include file="./sub/subscription.jsp" %>
         <%@include file="./sub/invoices.jsp" %>
         <%@include file="./sub/invoice.jsp" %>
@@ -137,6 +147,9 @@
             switch (page) {
                 case "overview":
                     new OverviewController(id, $('#overview-append'));
+                    break;
+                case "onetimebuy":
+                    new OneTimeBuyController(id, $('#onetimebuy-append'), account);
                     break;
                 case "subscriptions":
                     new SubscriptionController(id, $('#subscriptions-append'), account);

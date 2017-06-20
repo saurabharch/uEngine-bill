@@ -24,6 +24,9 @@
                 <span name="title"></span>
             </h5>
             <div class="ibox-tools">
+                <button type="button" class="btn btn-default btn-sm" name="add-one-time"
+                        data-i18n="account.subscription.onetime.add">Add oneTimeBuy
+                </button>
                 <button type="button" class="btn btn-default btn-sm" name="add-add-on"
                         data-i18n="account.subscription.bundle.add">Add add-on
                 </button>
@@ -176,6 +179,15 @@
 
                                 <div class="col-sm-9">
                                     <select class="chosen-select" tabindex="2" name="plan" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-3 control-label"
+                                                           data-i18n="account.subscription.addModal.bundle">Bundle</label>
+
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" tabindex="2" name="bundle" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -382,18 +394,72 @@
             var me = this;
             me.panel = $('#subscription-page').clone();
             me.panel.removeAttr('id');
-            me.appendTo.html('');
-            me.appendTo.append(me.panel);
-
+            if (me.appendTo) {
+                me.appendTo.html('');
+                me.appendTo.append(me.panel);
+            }
             uBilling.getClock()
                 .then(function (clock) {
                     me.localDate = clock['localDate']
-                    me.drawBundles();
+                    if (me.appendTo) {
+                        me.drawBundles();
+                    }
                 })
             me.activatePlanSearch();
             me.panel.find('[name=add-bundle]').click(function () {
                 me.addSubscription('BASE');
             });
+        },
+        /**
+         * 원타임 구매를 추가하는 팝업을 띄운다.
+         **/
+        addOneTimeBuy: function (category, bundleId, callback) {
+            var me = this;
+            var modal = $('#add-bundle-modal');
+            var form = modal.find('form');
+            var title = modal.find('[name=title]');
+            title.html(i18n.t('account.subscription.addModal.onetimeTitle'));
+
+            me.clearPlanSearch(category, 'add-onetime', bundleId);
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = form.serializeObject();
+                var sendData = {
+                    planName: data['plan'],
+                    bundleId: data['bundle'],
+                    productCategory: 'ONE_TIME'
+                };
+
+                var requestedDate = me.convertDate(data['date']);
+                var type = data['type'];
+                if (type == 'IMMEDIATE') {
+                    requestedDate = null;
+                }
+
+                //createOneTimeBuy
+                blockSubmitStart();
+                uBilling.createOneTimeBuy([sendData], me.account_id, requestedDate)
+                    .done(function (response) {
+                        toastr.success("One Time Buy created.");
+                        if (callback) {
+                            callback(response);
+                        } else {
+                            me.init();
+                        }
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to create one time buy : " + response.responseText);
+                        if (callback) {
+                            callback(null, response);
+                        }
+                    })
+                    .always(function (response) {
+                        blockStop();
+                        modal.modal('hide');
+                    });
+            });
+            modal.modal('show');
         },
         /**
          * 서브스크립션을 추가하는 팝업을 띄운다.
@@ -447,7 +513,43 @@
         /**
          * ajax 플랜 선택창을 카테고리에 맞추어 초기화한다.
          **/
-        clearPlanSearch: function (category, action) {
+        clearPlanSearch: function (category, action, targetBundleId) {
+            var me = this;
+            //원 타임 버이인 경우 번들리스트를 반영함.
+            if (action == 'add-onetime') {
+                var fillBundles = function (bundles) {
+                    $('[name=plan-search-form]').each(function () {
+                        var form = $(this);
+                        var bundleSelect = form.find('[name=bundle]');
+                        bundleSelect.chosen({width: "100%"});
+                        bundleSelect.find('option').remove();
+                        bundleSelect.append('<option value="">blank</option>');
+                        for (var i = 0; i < bundles.length; i++) {
+                            var planName = '';
+                            var subscriptions = bundles[i]['subscriptions'];
+                            for (var s = 0; s < subscriptions.length; s++) {
+                                if (subscriptions[s]['productCategory'] == 'BASE') {
+                                    planName = subscriptions[s]['planName'];
+                                }
+                            }
+                            bundleSelect.append('<option value="' + bundles[i]['bundleId'] + '">' + planName + '(' + bundles[i]['bundleId'] + ')</option>');
+                        }
+                        if (targetBundleId) {
+                            bundleSelect.val(targetBundleId);
+                        }
+                        bundleSelect.trigger("chosen:updated");
+                    });
+                }
+
+                var bundles = [];
+                uBilling.getAccountBundles(me.account_id)
+                    .done(function (result) {
+                        bundles = result;
+                    })
+                    .always(function () {
+                        fillBundles(bundles);
+                    })
+            }
             $('[name=plan-search-form]').each(function () {
                 var form = $(this);
                 var productSelect = form.find('[name=product]');
@@ -468,6 +570,8 @@
                 var policyField = form.find('[name=policy]');
                 var dateField = form.find('[name=date]');
                 var typeRadio = form.find('[name=type]');
+                var bundleSelect = form.find('[name=bundle]');
+
                 var setType = function (type) {
                     if (!type) {
                         type = 'IMMEDIATE';
@@ -488,6 +592,13 @@
                     //서브스크립션 변경인 경우만 폴라이시 그룹을 선택가능.
                     if (action != 'change') {
                         policyField.closest('.form-group').hide();
+                    }
+
+                    //원타임 버이일 경우만 번들 선택 가능
+                    if (action != 'add-onetime') {
+                        bundleSelect.closest('.form-group').hide();
+                    } else {
+                        bundleSelect.closest('.form-group').show();
                     }
                 };
                 typeRadio.unbind('change');
@@ -771,6 +882,9 @@
                 var table = card.find('[name=subscription-table]');
                 table.attr('id', bundle['bundleId']);
 
+                card.find('[name=add-one-time]').click(function () {
+                    me.addOneTimeBuy('ONE_TIME', bundle['bundleId']);
+                });
                 card.find('[name=add-add-on]').click(function () {
                     me.addSubscription('ADD_ON', bundle['bundleId']);
                 });

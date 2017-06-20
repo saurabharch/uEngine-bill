@@ -31,7 +31,7 @@ public interface OneTimeBuyRepository {
 
     String NAMESPACE = OneTimeBuyRepository.class.getName();
 
-    OneTimeBuy selectById(String organization_id,Long record_id);
+    OneTimeBuy selectById(String organization_id, Long record_id);
 
     OneTimeBuy insert(OneTimeBuy oneTimeBuy);
 
@@ -39,7 +39,7 @@ public interface OneTimeBuyRepository {
 
     Map selectByCondition(String organization_id, String searchKey, Long offset, Long limit);
 
-    List<OneTimeBuy> selectByAccountId(String organization_id,String account_id);
+    List<OneTimeBuy> selectByAccountId(String organization_id, String account_id);
 
     List<OneTimeBuy> selectBcdPendingBuys(Date billingDate);
 
