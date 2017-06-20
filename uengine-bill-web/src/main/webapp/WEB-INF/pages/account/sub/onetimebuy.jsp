@@ -10,6 +10,10 @@
                             data-i18n="account.onetimebuy.page.add">
                         Add One Time Buy
                     </button>
+                    <button type="button" class="btn btn-default btn-sm" name="cancel-onetimebuy"
+                            data-i18n="account.onetimebuy.page.cancel">
+                        Cancel One Time Buy
+                    </button>
                 </div>
             </div>
             <div class="ibox-content">
@@ -41,6 +45,7 @@
             me.appendTo.append(me.panel);
             me.drawOneTimeBuys();
             me.addOneTimeBuy();
+            me.cancelSelectedOneTimeBuy();
         },
         addOneTimeBuy: function () {
             var me = this;
@@ -52,6 +57,39 @@
                     }
                 })
             });
+        },
+        cancelSelectedOneTimeBuy: function () {
+            var me = this;
+            var cancelBtn = me.panel.find('[name=cancel-onetimebuy]');
+            cancelBtn.click(function () {
+                if (!me.dt) {
+                    return;
+                }
+                var selected = me.dt.getDt().rows({selected: true}).data();
+                if (!selected.length) {
+                    return;
+                }
+                if (selected.length > 1) {
+                    toastr.warning("Choice one to change.");
+                    return;
+                }
+                if (selected[0]['state'] != 'PENDING_INVOICE') {
+                    toastr.warning("Only PENDING_INVOICE can be canceled.");
+                    return;
+                }
+                blockSubmitStart();
+                uBilling.cancelOneTimeBuy(selected[0]['record_id'])
+                    .done(function (response) {
+                        toastr.success("One Time Buy canceled.");
+                        me.drawOneTimeBuys();
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to cancel one time buy : " + response.responseText);
+                    })
+                    .always(function (response) {
+                        blockStop();
+                    });
+            })
         }
         ,
         drawOneTimeBuys: function () {
@@ -60,7 +98,7 @@
                 if (!me.dt) {
                     var dt = new uengineDT(me.panel.find('[name=onetimebuy-table]'),
                         {
-                            order: [[4, "desc"]],
+                            order: [[3, "desc"]],
                             select: {
                                 style: 'single'
                             },
@@ -69,17 +107,6 @@
                                     data: 'plan_display_name',
                                     title: 'PLAN DISPLAY NAME',
                                     defaultContent: ''
-                                },
-                                {
-                                    data: 'plan_name_ref',
-                                    title: 'PLAN',
-                                    defaultContent: '',
-                                    event: {
-                                        click: function (key, value, rowValue, rowIdx, td) {
-                                            var product_id = rowValue['plan_name'].substring(0, 14);
-                                            window.location.href = '/product/' + product_id + '/version/' + rowValue['version'] + '/detail';
-                                        }
-                                    }
                                 },
                                 {
                                     data: 'state',
@@ -102,12 +129,23 @@
                                     defaultContent: ''
                                 },
                                 {
+                                    data: 'plan_name_ref',
+                                    title: 'PLAN',
+                                    defaultContent: '',
+                                    event: {
+                                        click: function (key, value, rowValue, rowIdx, td) {
+                                            var product_id = rowValue['plan_name'].substring(0, 14);
+                                            window.location.href = '/product/' + product_id + '/version/' + rowValue['version'] + '/detail';
+                                        }
+                                    }
+                                },
+                                {
                                     data: 'invoice_id_ref',
                                     title: 'INVOICE ID',
                                     defaultContent: '',
                                     event: {
                                         click: function (key, value, rowValue, rowIdx, td) {
-                                            if(rowValue['invoice_id']){
+                                            if (rowValue['invoice_id']) {
                                                 window.location.href = '/account/' + me.account_id + '/invoices/' + rowValue['invoice_id'];
                                             }
                                         }
@@ -119,7 +157,7 @@
                                     defaultContent: '',
                                     event: {
                                         click: function (key, value, rowValue, rowIdx, td) {
-                                            if(rowValue['invoice_item_id']){
+                                            if (rowValue['invoice_item_id']) {
                                                 window.location.href = '/account/' + me.account_id + '/invoices/' + rowValue['invoice_id'];
                                             }
                                         }
@@ -131,7 +169,7 @@
                                     defaultContent: '',
                                     event: {
                                         click: function (key, value, rowValue, rowIdx, td) {
-                                            if(rowValue['bundle_id']){
+                                            if (rowValue['bundle_id']) {
                                                 window.location.href = '/account/' + me.account_id + '/subscriptions';
                                             }
                                         }

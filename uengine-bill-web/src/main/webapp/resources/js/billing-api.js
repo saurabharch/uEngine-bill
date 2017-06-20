@@ -1163,6 +1163,15 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    cancelOneTimeBuy: function (record_id) {
+        var url = '/rest/v1/onetimebuy/' + record_id;
+        var options = {
+            type: "DELETE",
+            url: url,
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var caller = arguments.callee.caller.name;

@@ -294,7 +294,8 @@
     "onetimebuy":{
       "page": {
         "title": "One Time Buys",
-        "add": "Add One Time Buy"
+        "add": "Add One Time Buy",
+        "cancel": "Cancel Buy"
       }
     }
   },
