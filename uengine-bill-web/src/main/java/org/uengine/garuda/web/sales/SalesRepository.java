@@ -22,6 +22,7 @@ import org.uengine.garuda.model.OrganizationEmail;
 import org.uengine.garuda.model.ProductDistributionHistory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 판매 이력 처리를 하는 SalesRepository
@@ -32,14 +33,13 @@ public interface SalesRepository {
 
     String NAMESPACE = SalesRepository.class.getName();
 
-    ProductDistributionHistory selectById(String id);
+    List<ProductDistributionHistory> selectAccountBalance(String organization_id, String vendor_id);
 
-    List<ProductDistributionHistory> selectAccountSales();
+    List<ProductDistributionHistory> selectPerDateSummary(Map params);
 
-    List<ProductDistributionHistory> selectAccountSalesBalance();
+    List<ProductDistributionHistory> selectByCondition(String organization_id, String vendor_id, String product_id, String searchKey, Long offset, Long limit);
 
-    List<ProductDistributionHistory> selectProductSales();
+    ProductDistributionHistory selectById(String organization_id, Long record_id);
 
-    List<ProductDistributionHistory> selectOrganizationSales();
-
+    int deleteById(String organization_id, Long record_id);
 }

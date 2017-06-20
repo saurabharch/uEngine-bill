@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.uengine.garuda.web.sales.SalesRepository">
+
+    <insert id="insertHistory"
+            parameterType="org.uengine.garuda.model.DistributionTransactionType"
+            useGeneratedKeys="true" keyProperty="record_id" keyColumn="record_id">
+        INSERT INTO product_distribution_history (
+        subscription_id,
+        tenant_id,
+        organization_id,
+        buyer_id,
+        vendor_id,
+        product_id,
+        version,
+        plan_name,
+        usage_name,
+        ratio,
+        amount,
+        original_amount,
+        currency,
+        invoice_id,
+        invoice_item_id,
+        linked_invoice_item_id,
+        invoice_item_type,
+        price_type,
+        transaction_type,
+        format_date,
+        created_date
+        )
+        VALUES (
+        #{subscription_id},
+        #{tenant_id},
+        #{organization_id},
+        #{buyer_id},
+        #{vendor_id},
+        #{product_id},
+        #{version},
+        #{plan_name},
+        #{usage_name},
+        #{ratio},
+        #{amount},
+        #{original_amount},
+        #{currency},
+        #{invoice_id},
+        #{invoice_item_id},
+        #{linked_invoice_item_id},
+        #{invoice_item_type},
+        #{price_type},
+        #{transaction_type},
+        #{format_date},
+        #{created_date}
+        )
+    </insert>
+
+    <select id="selectAccountBalance" parameterType="map"
+            resultType="org.uengine.garuda.model.DistributionTransactionType">
+        SELECT
+        record_id,
+          AVG(ratio) as ratio,
+          sum(amount) as amount,
+          sum(original_amount) as original_amount,
+          currency,
+          transaction_type
+        FROM product_distribution_history
+
+        WHERE vendor_id = #{vendor_id}
+        AND organization_id = #{organization_id}
+
+        group by transaction_type,currency
+
+        UNION ALL
+
+        SELECT
+        record_id,
+          AVG(ratio) as ratio,
+          sum(amount) as amount,
+          sum(original_amount) as original_amount,
+          currency,
+          'BALANCE' as transaction_type
+        FROM product_distribution_history
+
+        WHERE vendor_id = #{vendor_id}
+        AND organization_id = #{organization_id}
+        group by currency
+    </select>
+
+    <select id="selectPerDateSummary" parameterType="map"
+            resultType="org.uengine.garuda.model.DistributionTransactionType">
+        SELECT
+        record_id,
+        subscription_id,
+        tenant_id,
+        organization_id,
+        buyer_id,
+        vendor_id,
+        product_id,
+        version,
+        plan_name,
+        usage_name,
+        AVG(ratio) as ratio,
+        sum(amount) as amount,
+        sum(original_amount) as original_amount,
+        currency,
+        invoice_id,
+        invoice_item_id,
+        linked_invoice_item_id,
+        invoice_item_type,
+        price_type,
+        transaction_type,
+        format_date,
+        created_date
+        FROM product_distribution_history
+
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="startdate != '' and startdate != null">
+            AND format_date <![CDATA[ >= ]]> #{startdate}
+        </if>
+        <if test="enddate != '' and enddate != null">
+            AND format_date <![CDATA[ <= ]]> #{enddate}
+        </if>
+        <if test="vendor_id != '' and vendor_id != null">
+            AND vendor_id = #{vendor_id}
+        </if>
+        <if test="product_id != '' and product_id != null">
+            AND product_id = #{product_id}
+        </if>
+        <if test="plan_name != '' and plan_name != null">
+            AND plan_name = #{plan_name}
+        </if>
+        <if test="usage_name != '' and usage_name != null">
+            AND usage_name = #{usage_name}
+        </if>
+        group by format_date,vendor_id,product_id,plan_name,usage_name,price_type,transaction_type,currency;
+    </select>
+
+    <select id="selectByCondition" parameterType="map"
+            resultType="org.uengine.garuda.model.DistributionTransactionType">
+        SELECT * FROM product_distribution_history
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="vendor_id != '' and vendor_id != null">
+            AND vendor_id = #{vendor_id}
+        </if>
+        <if test="product_id != '' and product_id != null">
+            AND product_id = #{product_id}
+        </if>
+        <if test="searchKey != '' and searchKey != null">
+            AND (
+            subscription_id LIKE CONCAT('%',#{searchKey},'%') OR
+            buyer_id LIKE CONCAT('%',#{searchKey},'%') OR
+            vendor_id LIKE CONCAT('%',#{searchKey},'%') OR
+            product_id LIKE CONCAT('%',#{searchKey},'%') OR
+            plan_name LIKE CONCAT('%',#{searchKey},'%') OR
+            usage_name LIKE CONCAT('%',#{searchKey},'%') OR
+            currency LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_id LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_item_id LIKE CONCAT('%',#{searchKey},'%') OR
+            linked_invoice_item_id LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_item_type LIKE CONCAT('%',#{searchKey},'%') OR
+            price_type LIKE CONCAT('%',#{searchKey},'%') OR
+            transaction_type LIKE CONCAT('%',#{searchKey},'%') OR
+            format_date LIKE CONCAT('%',#{searchKey},'%')
+            )
+        </if>
+        ORDER BY format_date DESC
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="selectByConditionCount" parameterType="map" resultType="java.lang.Long">
+        SELECT count(*) AS count FROM product_distribution_history
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="vendor_id != '' and vendor_id != null">
+            AND vendor_id = #{vendor_id}
+        </if>
+        <if test="product_id != '' and product_id != null">
+            AND product_id = #{product_id}
+        </if>
+        <if test="searchKey != '' and searchKey != null">
+            AND (
+            subscription_id LIKE CONCAT('%',#{searchKey},'%') OR
+            buyer_id LIKE CONCAT('%',#{searchKey},'%') OR
+            vendor_id LIKE CONCAT('%',#{searchKey},'%') OR
+            product_id LIKE CONCAT('%',#{searchKey},'%') OR
+            plan_name LIKE CONCAT('%',#{searchKey},'%') OR
+            usage_name LIKE CONCAT('%',#{searchKey},'%') OR
+            currency LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_id LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_item_id LIKE CONCAT('%',#{searchKey},'%') OR
+            linked_invoice_item_id LIKE CONCAT('%',#{searchKey},'%') OR
+            invoice_item_type LIKE CONCAT('%',#{searchKey},'%') OR
+            price_type LIKE CONCAT('%',#{searchKey},'%') OR
+            transaction_type LIKE CONCAT('%',#{searchKey},'%') OR
+            format_date LIKE CONCAT('%',#{searchKey},'%')
+            )
+        </if>
+    </select>
+
+    <select id="selectCount" parameterType="map" resultType="java.lang.Long">
+        SELECT count(*) AS count FROM product_distribution_history
+        WHERE 1=1
+        AND organization_id = #{organization_id}
+        <if test="vendor_id != '' and vendor_id != null">
+            AND vendor_id = #{vendor_id}
+        </if>
+        <if test="product_id != '' and product_id != null">
+            AND product_id = #{product_id}
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="map" resultType="org.uengine.garuda.model.DistributionTransactionType">
+        SELECT * FROM product_distribution_history
+        WHERE record_id = #{record_id}
+        AND organization_id = #{organization_id}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        DELETE FROM product_distribution_history
+        WHERE record_id = #{record_id}
+        AND organization_id = #{organization_id}
+    </delete>
+</mapper>

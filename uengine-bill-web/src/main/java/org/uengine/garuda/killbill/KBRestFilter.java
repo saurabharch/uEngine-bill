@@ -168,7 +168,16 @@ public class KBRestFilter implements Filter {
                 requestURI.endsWith("onetimebuy")) {
             is_proxy = false;
         }
-
+        //사용자 출금 이벤트
+        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("post") &&
+                requestURI.endsWith("sales/withdraw")) {
+            is_proxy = false;
+        }
+        //사용자 크레딧 전환 이벤트
+        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("post") &&
+                requestURI.endsWith("sales/credit")) {
+            is_proxy = false;
+        }
 
         //킬빌 rest uri 일 경우 프락시 통신을 한다.
         if (is_proxy) {
