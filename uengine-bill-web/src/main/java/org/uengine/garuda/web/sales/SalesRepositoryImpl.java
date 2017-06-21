@@ -47,89 +47,62 @@ public class SalesRepositoryImpl extends PersistentRepositoryImpl<String, Object
     }
 
     @Override
+    public ProductDistributionHistory insertHistory(ProductDistributionHistory history) {
+        int insert = this.getSqlSessionTemplate().insert(this.getNamespace() + ".insertHistory", history);
+        if (insert > 0) {
+            return this.selectById(history.getOrganization_id(), history.getRecord_id());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public List<ProductDistributionHistory> selectAccountBalance(String organization_id, String vendor_id) {
-        return null;
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("vendor_id", vendor_id);
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectAccountBalance", map);
     }
 
     @Override
     public List<ProductDistributionHistory> selectPerDateSummary(Map params) {
-        return null;
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectPerDateSummary", params);
     }
 
     @Override
-    public List<ProductDistributionHistory> selectByCondition(String organization_id, String vendor_id, String product_id, String searchKey, Long offset, Long limit) {
-        return null;
+    public Map selectByCondition(String organization_id, String vendor_id, String product_id, String searchKey, Long offset, Long limit) {
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("vendor_id", vendor_id);
+        map.put("product_id", product_id);
+        map.put("searchKey", searchKey);
+        map.put("offset", offset);
+        map.put("limit", limit);
+        List<ProductDistributionHistory> historyList = this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByCondition", map);
+        Long total = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByConditionCount", map);
+        Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectCount", map);
+
+        Map result = new HashMap();
+        result.put("list", historyList);
+        result.put("total", total + "");
+        result.put("max", max + "");
+        result.put("offset", offset + "");
+        return result;
     }
 
     @Override
     public ProductDistributionHistory selectById(String organization_id, Long record_id) {
-        return null;
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("record_id", record_id);
+        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", map);
     }
 
     @Override
     public int deleteById(String organization_id, Long record_id) {
-        return 0;
+        Map map = new HashMap();
+        map.put("organization_id", organization_id);
+        map.put("record_id", record_id);
+        return this.getSqlSessionTemplate().delete(this.getNamespace() + ".deleteById", map);
     }
-
-    //    @Override
-//    public OneTimeBuy selectById(String organization_id, Long record_id) {
-//        Map map = new HashMap();
-//        map.put("organization_id", organization_id);
-//        map.put("record_id", record_id);
-//        return this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectById", map);
-//    }
-//
-//    @Override
-//    public OneTimeBuy insert(OneTimeBuy oneTimeBuy) {
-//        int insert = this.getSqlSessionTemplate().insert(this.getNamespace() + ".insert", oneTimeBuy);
-//        if (insert > 0) {
-//            return this.selectById(oneTimeBuy.getOrganization_id(), oneTimeBuy.getRecord_id());
-//        } else {
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public OneTimeBuy update(OneTimeBuy oneTimeBuy) {
-//        this.getSqlSessionTemplate().update(this.getNamespace() + ".update", oneTimeBuy);
-//        return this.selectById(oneTimeBuy.getOrganization_id(), oneTimeBuy.getRecord_id());
-//    }
-//
-//    @Override
-//    public Map selectByCondition(String organization_id, String searchKey, Long offset, Long limit) {
-//
-//        Map map = new HashMap();
-//        map.put("organization_id", organization_id);
-//        map.put("searchKey", searchKey);
-//        map.put("offset", offset);
-//        map.put("limit", limit);
-//        List<OneTimeBuy> oneTimeBuyList = this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByCondition", map);
-//        Long total = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectByConditionCount", map);
-//        Long max = this.getSqlSessionTemplate().selectOne(this.getNamespace() + ".selectCount", organization_id);
-//
-//        Map result = new HashMap();
-//        result.put("list", oneTimeBuyList);
-//        result.put("total", total + "");
-//        result.put("max", max + "");
-//        result.put("offset", offset + "");
-//        return result;
-//    }
-//
-//    @Override
-//    public List<OneTimeBuy> selectByAccountId(String organization_id, String account_id) {
-//        Map map = new HashMap();
-//        map.put("organization_id", organization_id);
-//        map.put("account_id", account_id);
-//        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectByAccountId", map);
-//    }
-//
-//    @Override
-//    public List<OneTimeBuy> selectBcdPendingBuys(Date billingDate) {
-//        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectBcdPendingBuys", DateUtils.parseDate(billingDate, "yyyy-MM-dd"));
-//    }
-//
-//    @Override
-//    public List<OneTimeBuy> selectAccountPendingBuys(String account_id) {
-//        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectAccountPendingBuys", account_id);
-//    }
 }

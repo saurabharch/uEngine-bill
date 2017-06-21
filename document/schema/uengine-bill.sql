@@ -198,6 +198,7 @@ CREATE TABLE product_distribution_history (
   transaction_type       VARCHAR(24)    NOT NULL,
   format_date            VARCHAR(36)    NOT NULL,
   created_date           TIMESTAMP      NOT NULL,
+  notes                  LONGTEXT                DEFAULT NULL,
   PRIMARY KEY (record_id)
 )
   ENGINE = InnoDB

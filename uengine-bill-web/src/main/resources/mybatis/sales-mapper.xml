@@ -27,7 +27,8 @@
         price_type,
         transaction_type,
         format_date,
-        created_date
+        created_date,
+        notes
         )
         VALUES (
         #{subscription_id},
@@ -50,7 +51,8 @@
         #{price_type},
         #{transaction_type},
         #{format_date},
-        #{created_date}
+        #{created_date},
+        #{notes}
         )
     </insert>
 
@@ -110,7 +112,8 @@
         price_type,
         transaction_type,
         format_date,
-        created_date
+        created_date,
+        notes
         FROM product_distribution_history
 
         WHERE 1=1

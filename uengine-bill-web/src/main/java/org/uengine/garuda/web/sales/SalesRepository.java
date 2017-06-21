@@ -33,11 +33,13 @@ public interface SalesRepository {
 
     String NAMESPACE = SalesRepository.class.getName();
 
+    ProductDistributionHistory insertHistory(ProductDistributionHistory history);
+
     List<ProductDistributionHistory> selectAccountBalance(String organization_id, String vendor_id);
 
     List<ProductDistributionHistory> selectPerDateSummary(Map params);
 
-    List<ProductDistributionHistory> selectByCondition(String organization_id, String vendor_id, String product_id, String searchKey, Long offset, Long limit);
+    Map selectByCondition(String organization_id, String vendor_id, String product_id, String searchKey, Long offset, Long limit);
 
     ProductDistributionHistory selectById(String organization_id, Long record_id);
 

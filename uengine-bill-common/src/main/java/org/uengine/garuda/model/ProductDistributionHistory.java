@@ -29,6 +29,7 @@ public class ProductDistributionHistory {
     private String transaction_type;
     private String format_date;
     private Date created_date;
+    private String notes;
 
     public Long getRecord_id() {
         return record_id;
@@ -204,5 +205,13 @@ public class ProductDistributionHistory {
 
     public void setCreated_date(Date created_date) {
         this.created_date = created_date;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
