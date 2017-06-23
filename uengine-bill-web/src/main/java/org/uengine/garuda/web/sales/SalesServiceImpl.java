@@ -108,11 +108,33 @@ public class SalesServiceImpl implements SalesService {
         return result;
     }
 
+    @Override
+    public Map getPerDateSummaryForOrganization(Organization organization, SalesSummaryFilter summaryFilter) throws Exception {
+
+        //총 매출 합산은 벤더 필터를 삭제한다.
+        summaryFilter.setVendor_id(null);
+        Map total_revenue = this.getPerDateSummary(organization, summaryFilter);
+
+        //순 매출,환불 합산은 벤더 필터를 organization 설정
+        summaryFilter.setVendor_id("organization");
+        Map net_summary = this.getPerDateSummary(organization, summaryFilter);
+
+        //credit, widthdraw 항목은 순 매출,환불 집계 대상이 아니기때문에 총 합산식과 공유하도록 한다.
+        net_summary.put("credit", total_revenue.get("credit"));
+        net_summary.put("withdraw", total_revenue.get("withdraw"));
+
+        Map map = new HashedMap();
+        map.put("total_revenue", total_revenue);
+        map.put("net_summary", net_summary);
+        return map;
+    }
+
+
     /**
      * 판매 이력 합계를 날짜별로 계산하여 리턴한다.
      *
-     * @param organization
-     * @param summaryFilter
+     * @param organization  Organization
+     * @param summaryFilter SalesSummaryFilter
      * @return
      */
     @Override
@@ -142,25 +164,44 @@ public class SalesServiceImpl implements SalesService {
         Map<String, Map<String, Object>> withdraw_summary = new HashMap<>();
         Map<String, Map<String, Object>> credit_summary = new HashMap<>();
 
-
         List<ProductDistributionHistory> historyList = salesRepository.selectPerDateSummary(filter);
         for (ProductDistributionHistory history : historyList) {
             String transactionType = history.getTransaction_type();
-            switch (transactionType) {
-                case "CREATION":
-                    this.mergePerDate(sales_per_date, sales_summary, history);
-                    break;
-                case "ADJUSTMENT":
-                    this.mergePerDate(refund_per_date, refund_summary, history);
-                    break;
-                case "WITHDRAW":
-                    this.mergePerDate(withdraw_per_date, withdraw_summary, history);
-                    break;
-                case "CREDIT":
-                    this.mergePerDate(credit_per_date, credit_summary, history);
-                    break;
-                default:
-                    break;
+
+            if(summaryFilter.getSummaryType().equals(SalesSummaryType.ORGANIZATION)){
+                switch (transactionType) {
+                    case "CREATION":
+                        this.mergePerDateForOrganization(sales_per_date, sales_summary, history);
+                        break;
+                    case "ADJUSTMENT":
+                        this.mergePerDateForOrganization(refund_per_date, refund_summary, history);
+                        break;
+                    case "WITHDRAW":
+                        this.mergePerDateForOrganization(withdraw_per_date, withdraw_summary, history);
+                        break;
+                    case "CREDIT":
+                        this.mergePerDateForOrganization(credit_per_date, credit_summary, history);
+                        break;
+                    default:
+                        break;
+                }
+            }else{
+                switch (transactionType) {
+                    case "CREATION":
+                        this.mergePerDate(sales_per_date, sales_summary, history);
+                        break;
+                    case "ADJUSTMENT":
+                        this.mergePerDate(refund_per_date, refund_summary, history);
+                        break;
+                    case "WITHDRAW":
+                        this.mergePerDate(withdraw_per_date, withdraw_summary, history);
+                        break;
+                    case "CREDIT":
+                        this.mergePerDate(credit_per_date, credit_summary, history);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -185,6 +226,66 @@ public class SalesServiceImpl implements SalesService {
         result.put("withdraw", withdraw);
         result.put("credit", credit);
         return result;
+    }
+
+    private void mergePerDateForOrganization(Map<String, List<Map<String, Object>>> per_date, Map<String, Map<String, Object>> summary, ProductDistributionHistory history) {
+        String format_date = history.getFormat_date();
+        if (StringUtils.isEmpty(format_date)) {
+            return;
+        }
+
+        String price_type = history.getPrice_type() != null ? history.getPrice_type() : "";
+
+        //total 인서트 수행
+        if (!summary.containsKey("total")) {
+            summary.put("total", new HashedMap());
+        }
+        Map<String, Object> total = summary.get("total");
+        if (total.containsKey(history.getCurrency())) {
+            BigDecimal decimal = (BigDecimal) total.get(history.getCurrency());
+            BigDecimal add = decimal.add(history.getAmount());
+            total.put(history.getCurrency(), add);
+        } else {
+            total.put(history.getCurrency(), history.getAmount());
+        }
+
+        //per_price_type
+        this.mergeSummary(summary, "per_price_type", price_type, history);
+
+        //per_date 에 인서트한다.
+        if (!per_date.containsKey(format_date)) {
+            per_date.put(format_date, new ArrayList<Map<String, Object>>());
+        }
+        List<Map<String, Object>> date_map = per_date.get(format_date);
+
+
+        //날짜에 속한 map 들이 동일한 필드를 가지고 있다면,includeMap 에 저장한다.
+        Map<String, Object> includeMap = null;
+        for (Map<String, Object> map : date_map) {
+            boolean isSame = true;
+            if (!map.get("price_type").equals(price_type)) {
+                isSame = false;
+            }
+            if (isSame) {
+                includeMap = map;
+            }
+        }
+
+        //includeMap 이 있다면 amount 에 currency 를 추가한다.
+        if (includeMap != null) {
+            Map<String, BigDecimal> amount = (Map<String, BigDecimal>) includeMap.get("amount");
+            amount.put(history.getCurrency(), history.getAmount());
+        }
+        //그 외의 경우 새로운 map 을 만들어서 date_map 에 입력한다.
+        else {
+            includeMap = new HashedMap();
+            includeMap.put("price_type", price_type);
+
+            Map<String, BigDecimal> amount = new HashedMap();
+            amount.put(history.getCurrency(), history.getAmount());
+            includeMap.put("amount", amount);
+            date_map.add(includeMap);
+        }
     }
 
     private void mergePerDate(Map<String, List<Map<String, Object>>> per_date, Map<String, Map<String, Object>> summary, ProductDistributionHistory history) {
@@ -284,7 +385,6 @@ public class SalesServiceImpl implements SalesService {
         Map<String, Object> perSummary = summary.get(summaryPerType);
         if (!StringUtils.isEmpty(perValue)) {
 
-            //per_product_id 에 프로덕트 아이디가 없을경우 새로 생성.
             if (!perSummary.containsKey(perValue)) {
                 perSummary.put(perValue, new HashedMap());
             }
@@ -299,23 +399,52 @@ public class SalesServiceImpl implements SalesService {
         }
     }
 
+    /**
+     * 벤더의 판매기록을 조회한다.
+     *
+     * @param organization
+     * @param vendor_id
+     * @param searchKey
+     * @param offset
+     * @param limit
+     * @return
+     */
     @Override
     public Map getAccountSalesByCondition(Organization organization, String vendor_id, String searchKey, Long offset, Long limit) {
         return salesRepository.selectByCondition(organization.getId(), vendor_id, null, searchKey, offset, limit);
     }
 
+    /**
+     * 프로덕트의 판매기록을 조회한다.
+     *
+     * @param organization
+     * @param product_id
+     * @param searchKey
+     * @param offset
+     * @param limit
+     * @return
+     */
     @Override
     public Map getProductSalesByCondition(Organization organization, String product_id, String searchKey, Long offset, Long limit) {
         return salesRepository.selectByCondition(organization.getId(), null, product_id, searchKey, offset, limit);
     }
 
+    /**
+     * 조직 전체의 판매기록을 조회한다.
+     *
+     * @param organization
+     * @param searchKey
+     * @param offset
+     * @param limit
+     * @return
+     */
     @Override
     public Map getOrgSalesByCondition(Organization organization, String searchKey, Long offset, Long limit) {
         return salesRepository.selectByCondition(organization.getId(), null, null, searchKey, offset, limit);
     }
 
     /**
-     * 사용자의 판매대금에서 출금한다.
+     * 사용자의 판매대금에서 출금 또는 크레딧 전환한다.
      *
      * @param organization
      * @param vendor_id
@@ -409,6 +538,15 @@ public class SalesServiceImpl implements SalesService {
         return salesRepository.deleteById(organization.getId(), record_id);
     }
 
+    /**
+     * 판매 기록의 notes 를 업데이트 한다.
+     *
+     * @param organization
+     * @param record_id
+     * @param vendor_id
+     * @param notes
+     * @return
+     */
     @Override
     public ProductDistributionHistory updateNote(Organization organization, Long record_id, String vendor_id, String notes) {
         return salesRepository.updateNotes(organization.getId(), record_id, vendor_id, notes);

@@ -16,6 +16,8 @@ public interface SalesService {
 
     Map getAccountSalesBalance(Organization organization, String vendor_id);
 
+    Map getPerDateSummaryForOrganization(Organization organization, SalesSummaryFilter summaryFilter) throws Exception;
+
     Map getPerDateSummary(Organization organization, SalesSummaryFilter summaryFilter) throws Exception;
 
     Map getAccountSalesByCondition(Organization organization, String vendor_id, String searchKey, Long offset, Long limit);
@@ -28,5 +30,5 @@ public interface SalesService {
 
     int cancelWithdraw(Organization organization, Long record_id);
 
-    ProductDistributionHistory updateNote(Organization organization, Long record_id,String vendor_id, String notes);
+    ProductDistributionHistory updateNote(Organization organization, Long record_id, String vendor_id, String notes);
 }

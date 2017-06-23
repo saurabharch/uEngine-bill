@@ -389,12 +389,12 @@ public class SalesRestController {
             filter.setSummaryType(SalesSummaryType.ORGANIZATION);
             filter.setStart_date(start_date);
             filter.setEnd_date(end_date);
-            filter.setVendor_id(vendor_id);
+            filter.setVendor_id(null);
             filter.setProduct_id(product_id);
             filter.setPlan_name(plan_name);
             filter.setUsage_name(usage_name);
 
-            Map perDateSummary = salesService.getPerDateSummary(role.getOrganization(), filter);
+            Map perDateSummary = salesService.getPerDateSummaryForOrganization(role.getOrganization(), filter);
             if (perDateSummary == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
