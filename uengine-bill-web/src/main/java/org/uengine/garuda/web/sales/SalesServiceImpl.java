@@ -126,6 +126,13 @@ public class SalesServiceImpl implements SalesService {
         Map map = new HashedMap();
         map.put("total_revenue", total_revenue);
         map.put("net_summary", net_summary);
+
+        if (summaryFilter.getStart_date() != null) {
+            map.put("start_date", DateUtils.parseDate(summaryFilter.getStart_date(), "yyyy-MM-dd"));
+        }
+        if (summaryFilter.getEnd_date() != null) {
+            map.put("end_date", DateUtils.parseDate(summaryFilter.getStart_date(), "yyyy-MM-dd"));
+        }
         return map;
     }
 
@@ -168,7 +175,7 @@ public class SalesServiceImpl implements SalesService {
         for (ProductDistributionHistory history : historyList) {
             String transactionType = history.getTransaction_type();
 
-            if(summaryFilter.getSummaryType().equals(SalesSummaryType.ORGANIZATION)){
+            if (summaryFilter.getSummaryType().equals(SalesSummaryType.ORGANIZATION)) {
                 switch (transactionType) {
                     case "CREATION":
                         this.mergePerDateForOrganization(sales_per_date, sales_summary, history);
@@ -185,7 +192,7 @@ public class SalesServiceImpl implements SalesService {
                     default:
                         break;
                 }
-            }else{
+            } else {
                 switch (transactionType) {
                     case "CREATION":
                         this.mergePerDate(sales_per_date, sales_summary, history);
