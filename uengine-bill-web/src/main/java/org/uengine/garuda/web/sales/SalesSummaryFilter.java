@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by uengine on 2017. 6. 21..
  */
 public class SalesSummaryFilter {
-    private SalesSummaryType requesterType;
+    private SalesSummaryType summaryType;
     private Date start_date;
     private Date end_date;
     private String vendor_id;
@@ -14,12 +14,12 @@ public class SalesSummaryFilter {
     private String plan_name;
     private String usage_name;
 
-    public SalesSummaryType getRequesterType() {
-        return requesterType;
+    public SalesSummaryType getSummaryType() {
+        return summaryType;
     }
 
-    public void setRequesterType(SalesSummaryType requesterType) {
-        this.requesterType = requesterType;
+    public void setSummaryType(SalesSummaryType summaryType) {
+        this.summaryType = summaryType;
     }
 
     public Date getStart_date() {

@@ -12,23 +12,21 @@ import java.util.List;
 import java.util.Map;
 
 public interface SalesService {
-    ProductDistributionHistory selectById(String organization_id, Long record_id);
+    ProductDistributionHistory selectById(Organization organization, Long record_id);
 
-    Map getAccountSalesBalance(String organization_id, String vendor_id);
+    Map getAccountSalesBalance(Organization organization, String vendor_id);
 
-    Map getPerDateSummary(String organization_id, SalesSummaryFilter summaryFilter);
+    Map getPerDateSummary(Organization organization, SalesSummaryFilter summaryFilter) throws Exception;
 
-    ProductDistributionHistory insertHistory(ProductDistributionHistory history);
+    Map getAccountSalesByCondition(Organization organization, String vendor_id, String searchKey, Long offset, Long limit);
 
-    Map getAccountSalesByCondition(String organization_id, String vendor_id, String searchKey, Long offset, Long limit);
+    Map getProductSalesByCondition(Organization organization, String product_id, String searchKey, Long offset, Long limit);
 
-    Map getProductSalesByCondition(String organization_id, String product_id, String searchKey, Long offset, Long limit);
+    Map getOrgSalesByCondition(Organization organization, String searchKey, Long offset, Long limit);
 
-    Map getOrgSalesByCondition(String organization_id, String searchKey, Long offset, Long limit);
+    ProductDistributionHistory withdrawAccountBalance(Organization organization, String vendor_id, SalesWithdrawRequest withdrawRequest);
 
-    ProductDistributionHistory withdrawAccountBalance(String organization_id, String vendor_id, SalesWithdrawRequest withdrawRequest);
+    int cancelWithdraw(Organization organization, Long record_id);
 
-    int cancelWithdraw(String organization_id, Long record_id);
-
-    ProductDistributionHistory updateNote(String organization_id, Long record_id, String notes);
+    ProductDistributionHistory updateNote(Organization organization, Long record_id,String vendor_id, String notes);
 }

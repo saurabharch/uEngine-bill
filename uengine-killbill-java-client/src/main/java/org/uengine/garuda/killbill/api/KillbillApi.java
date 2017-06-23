@@ -95,6 +95,10 @@ public class KillbillApi {
         return (InvoiceApi) this.copyOptions(new InvoiceApi());
     }
 
+    public CreditsApi creditsApi() {
+        return (CreditsApi) this.copyOptions(new CreditsApi());
+    }
+
     public SubscriptionApi subscriptionApi()
 
     {

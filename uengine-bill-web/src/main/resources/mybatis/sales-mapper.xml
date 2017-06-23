@@ -4,7 +4,7 @@
 <mapper namespace="org.uengine.garuda.web.sales.SalesRepository">
 
     <insert id="insertHistory"
-            parameterType="org.uengine.garuda.model.DistributionTransactionType"
+            parameterType="org.uengine.garuda.model.ProductDistributionHistory"
             useGeneratedKeys="true" keyProperty="record_id" keyColumn="record_id">
         INSERT INTO product_distribution_history (
         subscription_id,
@@ -57,7 +57,7 @@
     </insert>
 
     <select id="selectAccountBalance" parameterType="map"
-            resultType="org.uengine.garuda.model.DistributionTransactionType">
+            resultType="org.uengine.garuda.model.ProductDistributionHistory">
         SELECT
         record_id,
           AVG(ratio) as ratio,
@@ -89,7 +89,7 @@
     </select>
 
     <select id="selectPerDateSummary" parameterType="map"
-            resultType="org.uengine.garuda.model.DistributionTransactionType">
+            resultType="org.uengine.garuda.model.ProductDistributionHistory">
         SELECT
         record_id,
         subscription_id,
@@ -136,11 +136,12 @@
         <if test="usage_name != '' and usage_name != null">
             AND usage_name = #{usage_name}
         </if>
-        group by format_date,vendor_id,product_id,plan_name,usage_name,price_type,transaction_type,currency;
+        GROUP BY format_date,vendor_id,product_id,plan_name,usage_name,price_type,transaction_type,currency
+        ORDER BY format_date;
     </select>
 
     <select id="selectByCondition" parameterType="map"
-            resultType="org.uengine.garuda.model.DistributionTransactionType">
+            resultType="org.uengine.garuda.model.ProductDistributionHistory">
         SELECT * FROM product_distribution_history
         WHERE 1=1
         AND organization_id = #{organization_id}
@@ -214,7 +215,7 @@
         </if>
     </select>
 
-    <select id="selectById" parameterType="map" resultType="org.uengine.garuda.model.DistributionTransactionType">
+    <select id="selectById" parameterType="map" resultType="org.uengine.garuda.model.ProductDistributionHistory">
         SELECT * FROM product_distribution_history
         WHERE record_id = #{record_id}
         AND organization_id = #{organization_id}
@@ -225,4 +226,13 @@
         WHERE record_id = #{record_id}
         AND organization_id = #{organization_id}
     </delete>
+
+    <update id="updateNote" parameterType="map">
+        UPDATE product_distribution_history
+        SET
+        notes = #{notes}
+        WHERE record_id = #{record_id}
+        AND organization_id = #{organization_id}
+        AND vendor_id = #{vendor_id}
+    </update>
 </mapper>

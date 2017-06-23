@@ -168,14 +168,8 @@ public class KBRestFilter implements Filter {
                 requestURI.endsWith("onetimebuy")) {
             is_proxy = false;
         }
-        //사용자 출금 이벤트
-        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("post") &&
-                requestURI.endsWith("sales/withdraw")) {
-            is_proxy = false;
-        }
-        //사용자 크레딧 전환 이벤트
-        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("post") &&
-                requestURI.endsWith("sales/credit")) {
+        //sales 관련
+        if (requestURI.startsWith("/rest/v1/accounts/") && requestURI.contains("/sales/")) {
             is_proxy = false;
         }
 
@@ -279,7 +273,7 @@ public class KBRestFilter implements Filter {
                     }
 
                     //ONE_TIME 프로덕트일 경우 허용되지 않음.
-                    if(ProductCategory.ONE_TIME.toString().equals(product.getCategory())){
+                    if (ProductCategory.ONE_TIME.toString().equals(product.getCategory())) {
                         response.setStatus(400);
                         return;
                     }

@@ -44,4 +44,6 @@ public interface SalesRepository {
     ProductDistributionHistory selectById(String organization_id, Long record_id);
 
     int deleteById(String organization_id, Long record_id);
+
+    ProductDistributionHistory updateNotes(String organization_id, Long record_id, String vendor_id, String notes);
 }

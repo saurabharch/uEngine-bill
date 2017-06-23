@@ -10,5 +10,6 @@ public enum  DistributionTransactionType {
     CREATION,
     ADJUSTMENT,
     WITHDRAW,
-    CREDIT
+    CREDIT,
+    BALANCE
 }
