@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class SalesSummaryFilter {
     private SalesSummaryType summaryType;
+    private SalesSummaryPeriod period;
     private Date start_date;
     private Date end_date;
     private String vendor_id;
@@ -20,6 +21,14 @@ public class SalesSummaryFilter {
 
     public void setSummaryType(SalesSummaryType summaryType) {
         this.summaryType = summaryType;
+    }
+
+    public SalesSummaryPeriod getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(SalesSummaryPeriod period) {
+        this.period = period;
     }
 
     public Date getStart_date() {

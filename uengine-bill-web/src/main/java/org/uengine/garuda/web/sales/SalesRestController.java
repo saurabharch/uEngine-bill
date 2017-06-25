@@ -69,6 +69,7 @@ public class SalesRestController {
     public ResponseEntity<Map> getAccountSummary(HttpServletRequest request,
                                                  HttpServletResponse response,
                                                  @PathVariable("id") String id,
+                                                 @RequestParam(value = "period", required = false, defaultValue = "DAY") String period,
                                                  @RequestParam(value = "start_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date start_date,
                                                  @RequestParam(value = "end_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date end_date,
                                                  @RequestParam(value = "product_id", required = false) String product_id,
@@ -82,6 +83,7 @@ public class SalesRestController {
 
             SalesSummaryFilter filter = new SalesSummaryFilter();
             filter.setSummaryType(SalesSummaryType.VENDOR);
+            filter.setPeriod(SalesSummaryPeriod.valueOf(period));
             filter.setStart_date(start_date);
             filter.setEnd_date(end_date);
             filter.setVendor_id(id);
@@ -276,6 +278,7 @@ public class SalesRestController {
     public ResponseEntity<Map> getProductSummary(HttpServletRequest request,
                                                  HttpServletResponse response,
                                                  @PathVariable("id") String id,
+                                                 @RequestParam(value = "period", required = false, defaultValue = "DAY") String period,
                                                  @RequestParam(value = "start_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date start_date,
                                                  @RequestParam(value = "end_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date end_date,
                                                  @RequestParam(value = "vendor_id", required = false) String vendor_id,
@@ -289,6 +292,7 @@ public class SalesRestController {
 
             SalesSummaryFilter filter = new SalesSummaryFilter();
             filter.setSummaryType(SalesSummaryType.PRODUCT);
+            filter.setPeriod(SalesSummaryPeriod.valueOf(period));
             filter.setStart_date(start_date);
             filter.setEnd_date(end_date);
             filter.setVendor_id(vendor_id);
@@ -373,6 +377,7 @@ public class SalesRestController {
     @RequestMapping(value = "/organization/sales/summary", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Map> getOrganizationSummary(HttpServletRequest request,
                                                       HttpServletResponse response,
+                                                      @RequestParam(value = "period", required = false, defaultValue = "DAY") String period,
                                                       @RequestParam(value = "start_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date start_date,
                                                       @RequestParam(value = "end_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date end_date,
                                                       @RequestParam(value = "vendor_id", required = false) String vendor_id,
@@ -387,6 +392,7 @@ public class SalesRestController {
 
             SalesSummaryFilter filter = new SalesSummaryFilter();
             filter.setSummaryType(SalesSummaryType.ORGANIZATION);
+            filter.setPeriod(SalesSummaryPeriod.valueOf(period));
             filter.setStart_date(start_date);
             filter.setEnd_date(end_date);
             filter.setVendor_id(null);

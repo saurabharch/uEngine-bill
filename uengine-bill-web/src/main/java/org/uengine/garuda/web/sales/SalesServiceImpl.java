@@ -178,16 +178,16 @@ public class SalesServiceImpl implements SalesService {
             if (summaryFilter.getSummaryType().equals(SalesSummaryType.ORGANIZATION)) {
                 switch (transactionType) {
                     case "CREATION":
-                        this.mergePerDateForOrganization(sales_per_date, sales_summary, history);
+                        this.mergePerDateForOrganization(sales_per_date, sales_summary, history, summaryFilter.getPeriod());
                         break;
                     case "ADJUSTMENT":
-                        this.mergePerDateForOrganization(refund_per_date, refund_summary, history);
+                        this.mergePerDateForOrganization(refund_per_date, refund_summary, history, summaryFilter.getPeriod());
                         break;
                     case "WITHDRAW":
-                        this.mergePerDateForOrganization(withdraw_per_date, withdraw_summary, history);
+                        this.mergePerDateForOrganization(withdraw_per_date, withdraw_summary, history, summaryFilter.getPeriod());
                         break;
                     case "CREDIT":
-                        this.mergePerDateForOrganization(credit_per_date, credit_summary, history);
+                        this.mergePerDateForOrganization(credit_per_date, credit_summary, history, summaryFilter.getPeriod());
                         break;
                     default:
                         break;
@@ -195,16 +195,16 @@ public class SalesServiceImpl implements SalesService {
             } else {
                 switch (transactionType) {
                     case "CREATION":
-                        this.mergePerDate(sales_per_date, sales_summary, history);
+                        this.mergePerDate(sales_per_date, sales_summary, history, summaryFilter.getPeriod());
                         break;
                     case "ADJUSTMENT":
-                        this.mergePerDate(refund_per_date, refund_summary, history);
+                        this.mergePerDate(refund_per_date, refund_summary, history, summaryFilter.getPeriod());
                         break;
                     case "WITHDRAW":
-                        this.mergePerDate(withdraw_per_date, withdraw_summary, history);
+                        this.mergePerDate(withdraw_per_date, withdraw_summary, history, summaryFilter.getPeriod());
                         break;
                     case "CREDIT":
-                        this.mergePerDate(credit_per_date, credit_summary, history);
+                        this.mergePerDate(credit_per_date, credit_summary, history, summaryFilter.getPeriod());
                         break;
                     default:
                         break;
@@ -235,9 +235,22 @@ public class SalesServiceImpl implements SalesService {
         return result;
     }
 
-    private void mergePerDateForOrganization(Map<String, List<Map<String, Object>>> per_date, Map<String, Map<String, Object>> summary, ProductDistributionHistory history) {
-        String format_date = history.getFormat_date();
-        if (StringUtils.isEmpty(format_date)) {
+    private void mergePerDateForOrganization(Map<String, List<Map<String, Object>>> per_date,
+                                             Map<String, Map<String, Object>> summary,
+                                             ProductDistributionHistory history,
+                                             SalesSummaryPeriod period) {
+        //period 에 따라 format_date 를 변경한다.
+        if (StringUtils.isEmpty(history.getFormat_date())) {
+            return;
+        }
+        String format_date = null;
+        if (period.equals(SalesSummaryPeriod.DAY)) {
+            format_date = history.getFormat_date();
+        } else if (period.equals(SalesSummaryPeriod.MONTH)) {
+            format_date = history.getFormat_date().substring(0, 7);
+        } else if (period.equals(SalesSummaryPeriod.YEAR)) {
+            format_date = history.getFormat_date().substring(0, 4);
+        } else {
             return;
         }
 
@@ -295,9 +308,23 @@ public class SalesServiceImpl implements SalesService {
         }
     }
 
-    private void mergePerDate(Map<String, List<Map<String, Object>>> per_date, Map<String, Map<String, Object>> summary, ProductDistributionHistory history) {
-        String format_date = history.getFormat_date();
-        if (StringUtils.isEmpty(format_date)) {
+    private void mergePerDate(Map<String, List<Map<String, Object>>> per_date,
+                              Map<String, Map<String, Object>> summary,
+                              ProductDistributionHistory history,
+                              SalesSummaryPeriod period) {
+
+        //period 에 따라 format_date 를 변경한다.
+        if (StringUtils.isEmpty(history.getFormat_date())) {
+            return;
+        }
+        String format_date = null;
+        if (period.equals(SalesSummaryPeriod.DAY)) {
+            format_date = history.getFormat_date();
+        } else if (period.equals(SalesSummaryPeriod.MONTH)) {
+            format_date = history.getFormat_date().substring(0, 7);
+        } else if (period.equals(SalesSummaryPeriod.YEAR)) {
+            format_date = history.getFormat_date().substring(0, 4);
+        } else {
             return;
         }
 
@@ -306,8 +333,6 @@ public class SalesServiceImpl implements SalesService {
         String plan_name = history.getPlan_name() != null ? history.getPlan_name() : "";
         String price_type = history.getPrice_type() != null ? history.getPrice_type() : "";
         String usage_name = history.getUsage_name() != null ? history.getUsage_name() : "";
-
-        //summary 에 인서트한다.
 
         //total 인서트 수행
         if (!summary.containsKey("total")) {

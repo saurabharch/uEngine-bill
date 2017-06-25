@@ -501,12 +501,24 @@
                 label: "Number of Activations",
                 data: data3,
                 color: "#1ab394",
-                bars: {
+//                bars: {
+//                    show: true,
+//                    align: "center",
+//                    barWidth: 24 * 60 * 60 * 600,
+//                    lineWidth: 0
+//                },
+                lines: {
+                    lineWidth: 1,
                     show: true,
-                    align: "center",
-                    barWidth: 24 * 60 * 60 * 600,
-                    lineWidth: 0
-                }
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.2
+                        }, {
+                            opacity: 0.4
+                        }]
+                    }
+                },
 
             }, {
                 label: "Net Cancellations",
@@ -570,9 +582,10 @@
                 position: "nw"
             },
             grid: {
-                hoverable: false,
+                hoverable: true,
                 borderWidth: 0
-            }
+            },
+            tooltip: true,
         };
 
         function gd(year, month, day) {
