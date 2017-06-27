@@ -29,36 +29,35 @@
             <div class="ibox-title">
                 <h5>Graph in period</h5>
                 <div class="pull-right">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-xs" name="create-charge"
-                                data-i18n="">Last week
+                    <div class="btn-group" name="g-btns">
+                        <button type="button" class="btn btn-default btn-xs" data-type="range-week" data-i18n="">Last
+                            week
                         </button>
-                        <button type="button" class="btn btn-default btn-xs" name="create-charge"
+                        <button type="button" class="btn btn-default btn-xs active" data-type="range-month"
                                 data-i18n="">Last month
                         </button>
-                        <button type="button" class="btn btn-default btn-xs" name="create-charge"
-                                data-i18n="">Last 3 months
+                        <button type="button" class="btn btn-default btn-xs" data-type="range-year" data-i18n="">Last 3
+                            months
                         </button>
                     </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-xs btn-default active">일별 보기</button>
-                        <button type="button" class="btn btn-xs btn-default">월별보기</button>
-                        <button type="button" class="btn btn-xs btn-default">년별 보기</button>
+                    <div class="btn-group" name="g-btns">
+                        <button type="button" class="btn btn-xs btn-default active" data-type="period-day">일별 보기
+                        </button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="period-month">월별보기</button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="period-year">년별 보기</button>
                     </div>
 
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-xs btn-default active">Total</button>
-                        <button type="button" class="btn btn-xs btn-default">Price type</button>
-                        <button type="button" class="btn btn-xs btn-default">Total vs Net</button>
+                    <div class="btn-group" name="g-btns">
+                        <button type="button" class="btn btn-xs btn-default active" data-type="per-total">Total</button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="per-price">Price type</button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="per-net">Total vs Net</button>
                     </div>
 
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-xs btn-default active"><i class="fa fa-check-square-o">
-                            매출</i></button>
-                        <button type="button" class="btn btn-xs btn-default active"><i class="fa fa-check-square-o">
-                            환불</i></button>
-                        <button type="button" class="btn btn-xs btn-default">출금</button>
-                        <button type="button" class="btn btn-xs btn-default">크레딧</button>
+                    <div class="btn-group" name="g-btns">
+                        <button type="button" class="btn btn-xs btn-default active" data-type="t-sales">매출</button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="t-refund">환불</button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="t-withdraw">출금</button>
+                        <button type="button" class="btn btn-xs btn-default" data-type="t-credit">크레딧</button>
                     </div>
 
                     <a class="collapse-link">
@@ -69,38 +68,53 @@
             <div class="ibox-content" style="display: none">
                 <form role="form" class="form-inline">
                     <div class="form-group">
+                        <div class="label label-default">Vendor</div>
+                        <select data-placeholder="" class="chosen-select"
+                                tabindex="2" name="vendor_id" required>
+                            <option value="">ALL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <div class="label label-default">Product</div>
                         <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="product" required>
-                            <option>PRD-000000-0000001</option>
+                                tabindex="2" name="product_id" required>
+                            <option value="">ALL</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <div class="label label-default">Plan</div>
                         <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="product" required>
-                            <option>PRD-000000-0000001</option>
+                                tabindex="2" name="plan_name" required>
+                            <option value="">ALL</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <div class="label label-default">Usage</div>
                         <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="product" required>
-                            <option>PRD-000000-0000001</option>
+                                tabindex="2" name="usage_name" required>
+                            <option value="">ALL</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <div class="label label-default">Price type</div>
                         <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="product" required>
-                            <option>ONE_TIME</option>
+                                tabindex="2" name="price_type" required>
+                            <option value="">ALL</option>
+                            <option value="RECURRING">RECURRING</option>
+                            <option value="FIXED">FIXED</option>
+                            <option value="USAGE">USAGE</option>
+                            <option value="ONE_TIME">ONE_TIME</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <div class="label label-default">Transaction type</div>
                         <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="product" required>
-                            <option>WITHDRAW</option>
+                                tabindex="2" name="transaction_type" required>
+                            <option value="">ALL</option>
+                            <option value="SALES">SALES</option>
+                            <option value="REFUND">REFUND</option>
+                            <option value="WITHDRAW">WITHDRAW</option>
+                            <option value="CREDIT">CREDIT</option>
                         </select>
                     </div>
                 </form>
@@ -126,7 +140,7 @@
                                     <span class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </span>
-                                    <input name="date" type="text" class="form-control" value="01/02/2017">
+                                    <input name="start_date" type="text" class="form-control" value="01/02/2017">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -136,14 +150,14 @@
                                     <span class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </span>
-                                    <input name="date" type="text" class="form-control" value="01/02/2017">
+                                    <input name="end_date" type="text" class="form-control" value="01/02/2017">
                                 </div>
                             </div>
                         </form>
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                                    <div class="flot-chart-content" name="period-chart"></div>
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -287,9 +301,19 @@
         this.account = null;
         this.product = null;
         this.currency = null;
-        this.init();
-        this.drawCumulative();
-        this.drawSalesHistory();
+        this.filter = null;
+        this.clock = null;
+
+        var me = this;
+        uBilling.getClock()
+            .done(function (clock) {
+                me.clock = clock;
+                me.init();
+                me.bindGraphButtons();
+                me.drawCumulative();
+                me.drawPeriodGraph();
+                me.drawSalesHistory();
+            });
     };
     SalesController.prototype = {
         init: function () {
@@ -299,8 +323,8 @@
             me.appendTo.html('');
             me.appendTo.append(me.panel);
 
-            //currency 셀렉트창 초기화.
-            me.panel.find('.chosen-select').val(null);
+            //filter-currency 셀렉트창 초기화, chosen-select 초기화
+            me.panel.find('[name=filter-currency]').val(null);
             me.panel.find('.chosen-select').chosen({width: "100%"});
 
             //currency 셀렉트창 변경 이벤트
@@ -431,9 +455,172 @@
 
             var previousPoint = null, previousLabel = null;
 
-            $.plot(me.panel.find("#flot-dashboard-chart"), dataset, options);
+            $.plot(me.panel.find("[name=period-chart]"), dataset, options);
 
             me.drawPieChart();
+        },
+
+        /**
+         * 그래프 필터 값을 가져온다.
+         */
+        getGraphFilter: function () {
+            var me = this;
+            var filter = {};
+
+            //period 값
+            me.panel.find('[name=g-btns]').each(function () {
+                var group = $(this);
+                group.find('button').each(function () {
+                    if ($(this).hasClass('active')) {
+                        var type = $(this).data('type');
+                        if (type == 'period-day') {
+                            filter.period = 'DAY'
+                        }
+                        if (type == 'period-month') {
+                            filter.period = 'MONTH'
+                        }
+                        if (type == 'period-year') {
+                            filter.period = 'YEAR'
+                        }
+                    }
+                });
+            });
+
+            //필터 값
+            var vendor_id = me.panel.find('[name=vendor_id]');
+            var product_id = me.panel.find('[name=product_id]');
+            var plan_name = me.panel.find('[name=plan_name]');
+            var usage_name = me.panel.find('[name=usage_name]');
+            var price_type = me.panel.find('[name=price_type]');
+            var transaction_type = me.panel.find('[name=transaction_type]');
+            var list = [vendor_id, product_id, plan_name, usage_name, price_type, transaction_type];
+            $.each(list, function (i, selectBox) {
+                if (selectBox.val() && selectBox.val().length > 0) {
+                    filter[selectBox.attr('name')] = selectBox.val();
+                }
+            });
+
+            //스타트,엔드 값.
+            var startDate = me.panel.find('[name=start_date]').val();
+            var splited = startDate.split('/');
+            var month = splited[0];
+            var date = splited[1];
+            var year = splited[2];
+            var requestedDate = year + '-' + month + '-' + date;
+            filter['start_date'] = requestedDate;
+
+            var endDate = me.panel.find('[name=end_date]').val();
+            var splited = startDate.split('/');
+            var month = splited[0];
+            var date = splited[1];
+            var year = splited[2];
+            var requestedDate = year + '-' + month + '-' + date;
+            filter['end_date'] = requestedDate;
+
+            return filter;
+        },
+
+        /**
+         * 그래프 제어 요소 이벤트를 등록한다.
+         */
+        bindGraphButtons: function () {
+            var me = this;
+
+            //버튼 이벤트
+            me.panel.find('[name=g-btns]').each(function () {
+                var group = $(this);
+                group.find('button').each(function () {
+                    $(this).click(function () {
+                        group.find('button').removeClass('active');
+                        $(this).addClass('active');
+                        me.drawPeriodGraph();
+                    })
+                });
+            });
+
+            //필터 이벤트
+            var start_date = me.panel.find('[name=start_date]');
+            var end_date = me.panel.find('[name=end_date]');
+
+            if (organizations && organizations.length && testMode) {
+                var drawTestDate = function () {
+                    var testDate = $('[name=change-test-date]');
+                    uBilling.getClock()
+                        .done(function (clock) {
+                            testDate.parent().show();
+                            testDate.html(clock['localDate']);
+
+                            testDate.click(function () {
+                                var me = this;
+                                var modal = $('#test-date-modal');
+                                var testDate = clock['localDate'];
+                                var split = testDate.split('-');
+                                var year = split[0];
+                                var month = split[1];
+                                var date = split[2];
+                                var pickerValue = month + '/' + date + '/' + year;
+                                var picker = $('#test-date-group .input-group.date');
+                                picker.datepicker('destroy');
+                                $('#test-date-group').find('input').val(pickerValue);
+                                picker.datepicker({
+                                    todayBtn: "linked",
+                                    keyboardNavigation: false,
+                                    forceParse: false,
+                                    calendarWeeks: true,
+                                    autoclose: true,
+                                    dateFormat: 'mm/dd/yy'
+                                }).datepicker("setDate", pickerValue);
+
+                                modal.find('[name=save]').unbind('click');
+                                modal.find('[name=save]').bind('click', function () {
+                                    var value = $('#test-date-group').find('input').val();
+                                    var splited = value.split('/');
+                                    var month = splited[0];
+                                    var date = splited[1];
+                                    var year = splited[2];
+                                    var requestedDate = year + '-' + month + '-' + date;
+                                    uBilling.updateClock(requestedDate)
+                                        .done(function (clock) {
+                                            toastr.success('Server date changed.');
+                                            drawTestDate();
+                                        })
+                                        .fail(function (response) {
+                                            toastr.error("Failed to change server date: " + response.responseText);
+                                        })
+                                        .always(function () {
+                                            modal.modal('hide');
+                                        })
+                                });
+                                modal.modal('show');
+                            })
+                        })
+                        .fail(function () {
+                            testDate.hide();
+                        })
+                }
+                drawTestDate();
+            }
+        },
+
+        /**
+         * 기간동안의 그래프를 그린다.
+         */
+        drawPeriodGraph: function () {
+            var me = this;
+            var filter = me.getGraphFilter();
+            //필터가 없을경우, 이벤트 등록 및 필터 등록.
+//            if (!me.filter) {
+//                me.bindGraphButtons();
+//            }
+
+//            uBilling.getOrgSalesSummary('YEAR', null, null, null, null, null, null)
+//                .done(function (summary) {
+//                    me.setCurrencyFromSummaryData(summary);
+//                    fill(summary);
+//                })
+//                .fail(function () {
+//                    toastr.error("Can't find OrgSalesSummary.");
+//                });
         },
         /**
          * 서머리 데이터로부터 페이지의 currency 를 설정한다.
@@ -495,8 +682,8 @@
                     amount2 = amount2 ? amount2.toFixed(2) : '0';
 
                     data = {
-                        currency : me.currency,
-                        title : i18n.t('sales.cumulative.sales'),
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.sales'),
                         amount1: amount1,
                         sub1: i18n.t('sales.cumulative.total-sales'),
                         amount2: amount2,
@@ -510,8 +697,8 @@
                     amount2 = amount2 ? amount2.toFixed(2) : '0';
 
                     data = {
-                        currency : me.currency,
-                        title : i18n.t('sales.cumulative.refunds'),
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.refunds'),
                         amount1: amount1,
                         sub1: i18n.t('sales.cumulative.total-refunds'),
                         amount2: amount2,
@@ -525,15 +712,15 @@
                     amount2 = amount2 ? amount2.toFixed(2) : '0';
 
                     data = {
-                        currency : me.currency,
-                        title : i18n.t('sales.cumulative.withdraw'),
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.withdraw'),
                         amount1: amount1,
                         sub1: i18n.t('sales.cumulative.total-withdraw'),
                         amount2: amount2,
                         sub2: i18n.t('sales.cumulative.total-credit')
                     }
                 }
-                if(data){
+                if (data) {
                     item.find('[name=currency]').html(data.currency);
                     item.find('[name=title]').html(data.title);
                     item.find('[name=amount1]').html(data.amount1);
