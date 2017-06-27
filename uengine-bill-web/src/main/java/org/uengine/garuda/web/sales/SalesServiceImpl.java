@@ -133,10 +133,20 @@ public class SalesServiceImpl implements SalesService {
         if (summaryFilter.getEnd_date() != null) {
             map.put("end_date", DateUtils.parseDate(summaryFilter.getStart_date(), "yyyy-MM-dd"));
         }
+
+        this.mergeCurrencies(map, organization.getId());
         return map;
     }
 
 
+    private void createPerType(Map<String, Map<String, Object>> summary){
+        summary.put("total", new HashedMap());
+        summary.put("per_product_id", new HashedMap());
+        summary.put("per_vendor_id", new HashedMap());
+        summary.put("per_plan_name", new HashedMap());
+        summary.put("per_price_type", new HashedMap());
+        summary.put("per_usage_name", new HashedMap());
+    }
     /**
      * 판매 이력 합계를 날짜별로 계산하여 리턴한다.
      *
@@ -170,6 +180,10 @@ public class SalesServiceImpl implements SalesService {
         Map<String, Map<String, Object>> refund_summary = new HashMap<>();
         Map<String, Map<String, Object>> withdraw_summary = new HashMap<>();
         Map<String, Map<String, Object>> credit_summary = new HashMap<>();
+        this.createPerType(sales_summary);
+        this.createPerType(refund_summary);
+        this.createPerType(withdraw_summary);
+        this.createPerType(credit_summary);
 
         List<ProductDistributionHistory> historyList = salesRepository.selectPerDateSummary(filter);
         for (ProductDistributionHistory history : historyList) {
@@ -232,7 +246,14 @@ public class SalesServiceImpl implements SalesService {
         result.put("refund", refund);
         result.put("withdraw", withdraw);
         result.put("credit", credit);
+
+        this.mergeCurrencies(result, organization.getId());
         return result;
+    }
+
+    private void mergeCurrencies(Map map, String organization_id) {
+        List<String> currencyFromOrg = salesRepository.selectCurrencyFromOrg(organization_id);
+        map.put("currencies", currencyFromOrg);
     }
 
     private void mergePerDateForOrganization(Map<String, List<Map<String, Object>>> per_date,

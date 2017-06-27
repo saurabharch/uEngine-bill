@@ -120,4 +120,9 @@ public class SalesRepositoryImpl extends PersistentRepositoryImpl<String, Object
             return null;
         }
     }
+
+    @Override
+    public List<String> selectCurrencyFromOrg(String organization_id) {
+        return this.getSqlSessionTemplate().selectList(this.getNamespace() + ".selectCurrencyFromOrg", organization_id);
+    }
 }

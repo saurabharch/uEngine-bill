@@ -1173,6 +1173,50 @@ uBilling.prototype = {
         return this.send(options);
     },
 
+    getOrgSalesHistories: function (searchKey, offset, limit) {
+        var data = {
+            offset: offset ? offset : 0,
+            limit: limit ? limit : 100
+        };
+        var url = searchKey ? '/rest/v1/organization/sales/search/' + searchKey : '/rest/v1/organization/sales/pagination';
+        var options = {
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: data,
+            resolve: function (response, status, xhr) {
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
+                return {
+                    data: response,
+                    total: total,
+                    filtered: filtered,
+                    offset: data.offset,
+                    limit: data.limit
+                };
+            }
+        };
+        return this.send(options);
+    },
+    getOrgSalesSummary: function(period, start_date, end_date,vendor_id,product_id,plan_name,usage_name){
+        var data = {
+            period: period,
+            start_date: start_date,
+            end_date: end_date,
+            vendor_id: vendor_id,
+            product_id: product_id,
+            plan_name: plan_name,
+            usage_name: usage_name
+        };
+        var options = {
+            type: "GET",
+            url: '/rest/v1/organization/sales/summary',
+            dataType: 'json',
+            data: data
+        };
+        return this.send(options);
+    },
+
     send: function (options) {
         var caller = arguments.callee.caller.name;
         var me = this;

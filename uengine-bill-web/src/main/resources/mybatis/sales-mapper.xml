@@ -221,6 +221,12 @@
         AND organization_id = #{organization_id}
     </select>
 
+    <select id="selectCurrencyFromOrg" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT currency FROM killbill.product_distribution_history
+        WHERE organization_id = #{organization_id}
+        group by currency;
+    </select>
+
     <delete id="deleteById" parameterType="map">
         DELETE FROM product_distribution_history
         WHERE record_id = #{record_id}

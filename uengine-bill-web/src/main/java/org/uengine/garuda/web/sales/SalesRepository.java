@@ -46,4 +46,6 @@ public interface SalesRepository {
     int deleteById(String organization_id, Long record_id);
 
     ProductDistributionHistory updateNotes(String organization_id, Long record_id, String vendor_id, String notes);
+
+    List<String> selectCurrencyFromOrg(String organization_id);
 }

@@ -36,6 +36,19 @@
       }
     }
   },
+  "sales": {
+    "cumulative": {
+      "sales": "Cumulative sales",
+      "total-sales": "Total sales amount",
+      "net-sales": "Net sales amount",
+      "refunds": "Cumulative refunds amount",
+      "total-refunds": "Total refunds amount",
+      "net-refunds": "Net refunds",
+      "withdraw": "Cumulative withdrawal",
+      "total-withdraw" : "Total withdrawal amount",
+      "total-credit" : "Total credit conversion amount"
+    }
+  },
   "account": {
     "new": {
       "title": "Edit account",

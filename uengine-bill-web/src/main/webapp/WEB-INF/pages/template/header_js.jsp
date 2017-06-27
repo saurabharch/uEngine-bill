@@ -55,15 +55,12 @@
 <link href="/resources/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
 <link href="/resources/css/plugins/dataTables/select.dataTables.min.css" rel="stylesheet">
 
+<!-- Common -->
 <link href="/resources/css/animate.css" rel="stylesheet">
 <link href="/resources/css/style.css" rel="stylesheet">
 <link href="/resources/css/custom.css" rel="stylesheet">
 
 <link href="/resources/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
-
-<!-- Spring JS -->
-<script type="text/javascript" th:src="@{/resources/spring/Spring.js}"></script>
-<script type="text/javascript" th:src="@{/resources/spring/Spring-Dojo.js}"></script>
 
 <!-- Jquery -->
 <script src="/resources/js/jquery-2.1.1.js"></script>

@@ -74,10 +74,17 @@ public class IndexController {
         return new ModelAndView("/product/index");
     }
     @RequestMapping(value = "product/{id}/version/{version}/detail", method = RequestMethod.GET)
-    public ModelAndView accountEdit(HttpSession session, @PathVariable("id") String id,@PathVariable("version") String version) {
+    public ModelAndView productEdit(HttpSession session, @PathVariable("id") String id,@PathVariable("version") String version) {
         ModelAndView view = new ModelAndView("/product/detail");
         view.addObject("id", id);
         view.addObject("version", version);
+        return view;
+    }
+
+    @RequestMapping(value = "product/{id}/sales", method = RequestMethod.GET)
+    public ModelAndView productSales(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/product/sales");
+        view.addObject("id", id);
         return view;
     }
 
@@ -160,6 +167,14 @@ public class IndexController {
         ModelAndView view = new ModelAndView("/account/detail");
         view.addObject("id", id);
         view.addObject("page", "timeline");
+        return view;
+    }
+
+    @RequestMapping(value = "account/{id}/sales", method = RequestMethod.GET)
+    public ModelAndView accountSales(HttpSession session, @PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("/account/detail");
+        view.addObject("id", id);
+        view.addObject("page", "sales");
         return view;
     }
 
