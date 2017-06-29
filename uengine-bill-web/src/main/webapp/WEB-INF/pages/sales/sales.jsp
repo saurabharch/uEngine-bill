@@ -1,5 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
+    <li id="summary-item">
+        <div>
+            <div style="border:1px solid #000000;padding:1px;width: 14px;float: left;margin-top: 3px">
+                <div name="color" style="width:4px;height:0px;border:5px solid #1C84C6;overflow:hidden"></div>
+            </div>
+            <small style="margin-left: 10px" name="title"></small>
+        </div>
+        <h2 class="no-margins" name="amount">2,346</h2>
+    </li>
     <div class="col-lg-4" id="cumulative-item">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
@@ -154,32 +163,8 @@
                                 </div>
                             </div>
                             <div class="col-lg-3">
-                                <ul class="stat-list">
-                                    <li>
-                                        <h2 class="no-margins">2,346</h2>
-                                        <small>Total orders in period</small>
-                                        <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i></div>
-                                        <div class="progress progress-mini">
-                                            <div style="width: 48%;" class="progress-bar"></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <h2 class="no-margins ">4,422</h2>
-                                        <small>Orders in last month</small>
-                                        <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i>
-                                        </div>
-                                        <div class="progress progress-mini">
-                                            <div style="width: 60%;" class="progress-bar"></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <h2 class="no-margins ">9,180</h2>
-                                        <small>Monthly income from orders</small>
-                                        <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
-                                        <div class="progress progress-mini">
-                                            <div style="width: 22%;" class="progress-bar"></div>
-                                        </div>
-                                    </li>
+                                <ul class="stat-list" name="summary-append">
+
                                 </ul>
                             </div>
                         </div>
@@ -296,6 +281,20 @@
         this.currency = null;
         this.filter = null;
         this.clock = null;
+        this.colorList = [
+            '#1C84C6',
+            '#005b6e',
+            '#4ec600',
+            '#bfc623',
+            '#c6731e',
+            '#c63710',
+            '#c63981',
+            '#a328c6',
+            '#742ac6',
+            '#4926c6',
+            '#9ec6c1',
+            '#414141'
+        ];
 
         var me = this;
         uBilling.getClock()
@@ -329,8 +328,6 @@
                     ibox.find('[id^=map-]').resize();
                 }, 50);
             });
-
-            me.drawPieChart();
         },
 
         /**
@@ -639,42 +636,12 @@
         },
 
         drawPeriodGraphFromSummary: function (filter, summary) {
-            console.log(filter, summary);
-//            var filter = {
-//                currency: "USD",
-//                end_date: "2017-05-28",
-//                per: "per-total",
-//                period: "DAY",
-//                plan_name: "PRD_0000000001_PL_000001",
-//                product_id: "PRD_0000000001",
-//                range: "range-month",
-//                start_date: "2017-05-28",
-//                transaction: "sales",
-//                usage_name: "PRD_0000000001_USG_000001",
-//                vendor_id: "881c5072-5a7d-4b35-8ade-25939da579e3"
-//            }
-
-            //기본 골격은, 날짜 리스트를 얻는데 있다. (start_date,end_date).
-            //currency 는 me.currency 에서 사용.
-            //per 값이
-            //per-total : 모든 레코드의 amount 를 합산한다.
-            //per-price : 레코드의 price_type 별로 합산한다.
-            //per-net : 모든 레코드의 amount 를 합산하되, net 도 별도 계산한다.
-            //per-vendor : 레코드의 vendor_id 별로 합산한다.
-            //per-product : 레코드의 product_id 별로 합산한다.
-            //per-plan : 레코드의 plan_name 별로 합산한다.
-            //per-usage : 레코드의 usage_name 별로 합산한다.
-
-            //공통: currency 에 해당하는 amount 만 합산토록 한다.
-
+            //console.log(filter, summary);
             var me = this;
-
             var createDataSet = function (per, period, transaction, summary, start_date, end_date) {
                 //transaction 인 것에 해당하는 값만 구하도록 한다.
                 var dateSetList = [];
                 var perDate = summary[transaction]['per_date'];
-                console.log(perDate, transaction);
-
                 //1. per 값 별로 분리해야 할 라인값을 지정한다.
 
                 //2. 루프를 돌며, 각 라인값이 존재하면 라인값의 per_date 에 amount 를 합산하도록 한다.
@@ -699,7 +666,7 @@
                     var dataSet = {
                         label: label,
                         data: JSON.parse(JSON.stringify(baseAmountArray)),
-                        color: "#1C84C6",
+                        color: '#1C84C6',
                         lines: {
                             lineWidth: 1,
                             show: true,
@@ -711,7 +678,8 @@
                                     opacity: 0.1
                                 }]
                             }
-                        }
+                        },
+                        summary: 0
                     }
                     dateSetList.push(dataSet);
                     return dataSet;
@@ -726,8 +694,6 @@
                     }
                 }
 
-                //필수 라벨값을 세팅한다.
-
                 //퍼데이트를 분석한다.
                 var dataSetByLabel, dataSetRecord, recordAmount;
                 for (var formatDate in perDate) {
@@ -741,13 +707,50 @@
                             if (dataSetRecord) {
                                 dataSetRecord[1] = dataSetRecord[1] + recordAmount;
                             }
+                            dataSetByLabel.summary = dataSetByLabel.summary + recordAmount;
                         }
                         //per-price : 레코드의 price_type 별로 합산한다.
-                        //per-net : 모든 레코드의 amount 를 합산하되, net 도 별도 계산한다.
+                        else if (per == 'per-price') {
+                            var labelList = ['ONE_TIME', 'FIXED', 'RECURRING', 'USAGE'];
+                            $.each(labelList, function (l, label) {
+                                if (record['price_type'] == label) {
+                                    dataSetByLabel = findDataSetByLabel(label);
+                                    dataSetRecord = findDataRecordFromDateSet(dataSetByLabel, formatDate);
+                                    if (dataSetRecord) {
+                                        dataSetRecord[1] = dataSetRecord[1] + recordAmount;
+                                    }
+                                    dataSetByLabel.summary = dataSetByLabel.summary + recordAmount;
+                                }
+                            })
+                        }
                         //per-vendor : 레코드의 vendor_id 별로 합산한다.
                         //per-product : 레코드의 product_id 별로 합산한다.
                         //per-plan : 레코드의 plan_name 별로 합산한다.
                         //per-usage : 레코드의 usage_name 별로 합산한다.
+                        else {
+                            var label;
+                            if (per == 'per-vendor') {
+                                label = record['vendor_id'];
+                            }
+                            if (per == 'per-product') {
+                                label = record['product_id'];
+                            }
+                            if (per == 'per-plan') {
+                                label = record['plan_name'];
+                            }
+                            if (per == 'per-usage') {
+                                label = record['usage_name'];
+                            }
+                            if (!label || label.length < 1) {
+                                return;
+                            }
+                            dataSetByLabel = findDataSetByLabel(label);
+                            dataSetRecord = findDataRecordFromDateSet(dataSetByLabel, formatDate);
+                            if (dataSetRecord) {
+                                dataSetRecord[1] = dataSetRecord[1] + recordAmount;
+                            }
+                            dataSetByLabel.summary = dataSetByLabel.summary + recordAmount;
+                        }
                     })
                 }
 
@@ -761,6 +764,7 @@
             };
 
             var lineData = [];
+            //per-net : 모든 레코드의 amount 를 합산하되, net 도 별도 계산한다.
             if (me.summaryType == 'organization' && filter.per == 'per-net') {
                 lineData = createDataSet(
                     'per-total',
@@ -778,8 +782,9 @@
                     filter.start_date,
                     filter.end_date
                 ));
-                lineData[1].label = 'net';
-                lineData[1].color = 'red';
+                if (lineData[1]) {
+                    lineData[1].label = 'net';
+                }
             } else if (me.summaryType == 'organization') {
                 lineData = createDataSet(
                     filter.per,
@@ -835,14 +840,30 @@
                     position: "nw"
                 },
                 grid: {
-                    hoverable: false,
+                    hoverable: true,
                     borderWidth: 0
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%s : %y ( %x )"
                 }
             };
 
-            var previousPoint = null, previousLabel = null;
+            //lineData 의 각 선마다 색상을 추가하고, summary 를 표현한다.
+            me.panel.find('[name=summary-append]').html('');
+            $.each(lineData, function (i, line) {
+                var color = me.colorList[i] ? me.colorList[i] : '#1C84C6';
+                line.color = color;
 
-            console.log(lineData);
+                var item = $('#summary-item').clone();
+                item.removeAttr('id');
+                item.find('[name=color]').css('border', '5px solid ' + line.color);
+                item.find('[name=title]').html(line.label + ' summary in period');
+                item.find('[name=amount]').html(line.summary.toFixed(2));
+                me.panel.find('[name=summary-append]').append(item);
+            })
+
+            //선형 그래프를 그린다.
             $.plot(me.panel.find("[name=period-chart]"), lineData, options);
         },
         /**
@@ -870,7 +891,6 @@
             var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
             return newDate;
         }
-
         ,
 
         /**
@@ -958,6 +978,7 @@
                 .done(function (summary) {
                     me.setCurrencyFromSummaryData(summary);
                     me.drawPeriodGraphFromSummary(filter, summary);
+                    me.drawPieChart(filter, summary);
                 })
                 .fail(function () {
                     toastr.error("Can't find OrgSalesSummary.");
@@ -1091,8 +1112,24 @@
                 });
         }
         ,
-        drawPieChart: function () {
+        drawPieChart: function (filter, summary) {
+//            var filter = {
+//                currency: "USD",
+//                end_date: "2017-05-28",
+//                per: "per-total",
+//                period: "DAY",
+//                plan_name: "PRD_0000000001_PL_000001",
+//                product_id: "PRD_0000000001",
+//                range: "range-month",
+//                start_date: "2017-05-28",
+//                transaction: "sales",
+//                usage_name: "PRD_0000000001_USG_000001",
+//                vendor_id: "881c5072-5a7d-4b35-8ade-25939da579e3"
+//            }
+
             var me = this;
+
+
             var data = [{
                 label: "Sales 1",
                 data: 21,
@@ -1123,7 +1160,10 @@
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                    content: function (label, xval, yval, flotItem) {
+                      return yval + '%, ' + label + ', ' + flotItem.datapoint[0].toFixed(2);
+                    },
+                    //content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
                     shifts: {
                         x: 20,
                         y: 0
@@ -1135,7 +1175,6 @@
             $.plot(me.panel.find("#flot-pie-chart2"), data, options);
             $.plot(me.panel.find("#flot-pie-chart3"), data, options);
             $.plot(me.panel.find("#flot-pie-chart4"), data, options);
-
         }
         ,
         drawSalesHistory: function () {
