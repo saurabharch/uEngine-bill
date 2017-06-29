@@ -33,6 +33,9 @@
                     <div class="ibox-title">
                         <h5 id="product-title"></h5>
                         <div class="ibox-tools">
+                            <button type="button" class="btn btn-default btn-sm" name="sales">
+                                Sales Status
+                            </button>
                             <button type="button" class="btn btn-default btn-sm" name="change-effective-date"
                                     data-i18n="product.version.changeDate">Change
                                 Effective date
@@ -358,6 +361,11 @@
 
                 $('[name=create-new-version]').click(function () {
                     me.createNewVersion();
+                });
+
+                //sales
+                $('[name=sales]').click(function () {
+                    window.location.href = '/product/' + me.product_id + '/sales';
                 });
             },
             /**

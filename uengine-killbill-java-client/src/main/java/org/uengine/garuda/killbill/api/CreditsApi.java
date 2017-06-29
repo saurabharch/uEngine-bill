@@ -45,7 +45,8 @@ public class CreditsApi extends KillbillApi {
             }
 
             Header location = httpResponse.getHeaders("location")[0];
-            return this.getCredit(location.getValue());
+            String[] split = location.getValue().split("/");
+            return this.getCredit(split[split.length - 1]);
 
         } catch (IOException ex) {
             throw new ServiceException("Failed to create invoiceCharges", ex);

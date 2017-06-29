@@ -181,33 +181,10 @@ public class SalesRestController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            withdrawRequest.setTransactionType(DistributionTransactionType.WITHDRAW);
-            ProductDistributionHistory history = salesService.withdrawAccountBalance(role.getOrganization(), id, withdrawRequest);
-            return new ResponseEntity<>(history, HttpStatus.CREATED);
-        } catch (Exception ex) {
-            ExceptionUtils.httpExceptionKBResponse(ex, response);
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/accounts/{id}/sales/credit", method = RequestMethod.POST)
-    public ResponseEntity<ProductDistributionHistory> credit(HttpServletRequest request,
-                                                             HttpServletResponse response,
-                                                             @PathVariable("id") String id,
-                                                             @RequestBody SalesWithdrawRequest withdrawRequest) {
-
-        try {
-            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
-            if (!role.getAccept()) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            if(withdrawRequest.getTransactionType() == null){
+                withdrawRequest.setTransactionType(DistributionTransactionType.WITHDRAW);
             }
 
-            Map account = kbRepository.getAccountById(id);
-            if(account == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-
-            withdrawRequest.setTransactionType(DistributionTransactionType.CREDIT);
             ProductDistributionHistory history = salesService.withdrawAccountBalance(role.getOrganization(), id, withdrawRequest);
             return new ResponseEntity<>(history, HttpStatus.CREATED);
         } catch (Exception ex) {

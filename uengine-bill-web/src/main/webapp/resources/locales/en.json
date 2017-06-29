@@ -38,6 +38,8 @@
   },
   "sales": {
     "cumulative": {
+      "balance" : "Sales balance",
+      "total-balance" : "Total sales balance",
       "sales": "Cumulative sales",
       "total-sales": "Total sales amount",
       "net-sales": "Net sales amount",
@@ -46,7 +48,8 @@
       "net-refunds": "Net refunds",
       "withdraw": "Cumulative withdrawal",
       "total-withdraw" : "Total withdrawal amount",
-      "total-credit" : "Total credit conversion amount"
+      "total-credit" : "Total credit conversion amount",
+      "sales-refunds": "Cumulative sales and refund"
     }
   },
   "account": {

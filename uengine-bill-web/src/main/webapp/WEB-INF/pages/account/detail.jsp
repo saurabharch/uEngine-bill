@@ -67,8 +67,12 @@
                                     <a data-toggle="tab" href="#tab-5" aria-expanded="false"
                                        data-i18n="account.detail.tab.payments">Payments</a>
                                 </li>
-                                <li class="" data-page="timeline" name="page-tab">
+                                <li class="" data-page="sales" name="page-tab">
                                     <a data-toggle="tab" href="#tab-6" aria-expanded="false"
+                                       data-i18n="account.detail.tab.sales">Sales</a>
+                                </li>
+                                <li class="" data-page="timeline" name="page-tab">
+                                    <a data-toggle="tab" href="#tab-7" aria-expanded="false"
                                        data-i18n="account.detail.tab.timeline">Timeline</a>
                                 </li>
                             </ul>
@@ -98,7 +102,12 @@
 
                                     </div>
                                 </div>
-                                <div id="tab-6" class="tab-pane" data-page="timeline" name="page-content">
+                                <div id="tab-6" class="tab-pane" data-page="sales" name="page-content">
+                                    <div class="panel-body" id="sales-append">
+
+                                    </div>
+                                </div>
+                                <div id="tab-7" class="tab-pane" data-page="timeline" name="page-content">
                                     <div class="panel-body" id="timeline-append">
 
                                     </div>
@@ -119,6 +128,7 @@
         <%@include file="./sub/payments.jsp" %>
         <%@include file="./sub/payment.jsp" %>
         <%@include file="./sub/timeline.jsp" %>
+        <%@include file="../sales/sales.jsp" %>
     </div>
 </div>
 <%@include file="../template/footer_js.jsp" %>
@@ -167,6 +177,9 @@
                     } else {
                         new PaymentController(id, $('#payments-append'), account)
                     }
+                    break;
+                case "sales":
+                    new SalesController('vendor', id, account, $('#sales-append'));
                     break;
                 case "timeline":
                     new TimeLineController(id, $('#timeline-append'), account);

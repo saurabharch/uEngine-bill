@@ -1,5 +1,26 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 <div style="display: none">
+    <div class="col-md-3" id="pie-item">
+        <div class="statistic-box">
+            <h4 name="title">
+
+            </h4>
+            <div class="row text-center">
+                <div class="col-lg-12">
+                    <div class="flot-chart" name="no-data">
+                        <div class="well">
+                            <h3 class="text-muted">
+                                No data.
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="flot-chart" name="has-data">
+                        <div class="flot-chart-pie-content" name="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <li id="summary-item">
         <div>
             <div style="border:1px solid #000000;padding:1px;width: 14px;float: left;margin-top: 3px">
@@ -12,18 +33,28 @@
     <div class="col-lg-4" id="cumulative-item">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <span class="label label-success pull-right" name="currency">USD</span>
-                <h5 name="title">누적 매출</h5>
+                <span class="label label-success pull-right" name="currency"></span>
+                <h5 name="title"></h5>
             </div>
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-md-6">
-                        <h1 class="no-margins" name="amount1">406,42</h1>
-                        <small class="text-success" name="sub-title1">총매출</small>
+                        <h1 class="no-margins" name="amount1"></h1>
+                        <small class="text-success" name="sub-title1"></small>
                     </div>
                     <div class="col-md-6">
-                        <h1 class="no-margins" name="amount2">206,12</h1>
-                        <small class="text-success" name="sub-title2">순매출</small>
+                        <div name="withdraw-view" style="display: none;">
+                            <button type="button" class="btn btn-default btn-xs" name="create-withdraw"
+                                    data-i18n="">Withdraw amount
+                            </button>
+                            <button type="button" class="btn btn-default btn-xs" name="create-credit"
+                                    data-i18n="">Credit conversion
+                            </button>
+                        </div>
+                        <div name="sub-view">
+                            <h1 class="no-margins" name="amount2"></h1>
+                            <small class="text-success" name="sub-title2"></small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,24 +68,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>Graph in period</h5>
-                <div class="pull-right">
-                    <div class="btn-group" name="g-btns">
-                        <button type="button" class="btn btn-default active" data-type="per-total">Total</button>
-                        <button type="button" class="btn btn-default" data-type="per-price">Price type</button>
-                        <button type="button" class="btn btn-default" data-type="per-net">Total vs Net</button>
-                        <button type="button" class="btn btn-default" data-type="per-vendor">Vendor</button>
-                        <button type="button" class="btn btn-default" data-type="per-product">Product</button>
-                        <button type="button" class="btn btn-default" data-type="per-plan">Plan</button>
-                        <button type="button" class="btn btn-default" data-type="per-usage">Usage</button>
-                    </div>
-
-                    <div class="btn-group" name="g-btns">
-                        <button type="button" class="btn btn-default active" data-type="sales">매출</button>
-                        <button type="button" class="btn btn-default" data-type="refund">환불</button>
-                        <button type="button" class="btn btn-default" data-type="withdraw">출금</button>
-                        <button type="button" class="btn btn-default" data-type="credit">크레딧</button>
-                    </div>
-
+                <div class="ibox-tools">
                     <a class="collapse-link">
                         <i class="fa fa-chevron-down">More filters</i>
                     </a>
@@ -158,6 +172,30 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-9">
+                                <div class="btn-group" name="g-btns">
+                                    <button type="button" class="btn btn-default active" data-type="per-total">Total
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-type="per-price">Price type
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-type="per-net">Total vs Net
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-type="per-vendor">Vendor</button>
+                                    <button type="button" class="btn btn-default" data-type="per-product">Product
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-type="per-plan">Plan</button>
+                                    <button type="button" class="btn btn-default" data-type="per-usage">Usage</button>
+                                </div>
+
+                                <div class="btn-group pull-right" name="g-btns">
+                                    <button type="button" class="btn btn-default active" data-type="sales">매출</button>
+                                    <button type="button" class="btn btn-default" data-type="refund">환불</button>
+                                    <button type="button" class="btn btn-default" data-type="withdraw">출금</button>
+                                    <button type="button" class="btn btn-default" data-type="credit">크레딧</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-9">
                                 <div class="flot-chart">
                                     <div class="flot-chart-content" name="period-chart"></div>
                                 </div>
@@ -169,87 +207,8 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="statistic-box">
-                                    <h4>
-                                        Total vs NET INCOME
-                                    </h4>
-                                    <div class="row text-center">
-                                        <div class="col-lg-12">
-                                            <div class="flot-chart">
-                                                <div class="flot-chart-pie-content" id="flot-pie-chart1"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="m-t">
-                                        <small>Lorem Ipsum is simply dummy text of the printing and typesetting
-                                            industry.
-                                        </small>
-                                    </div>
+                        <div class="row" name="pie-append">
 
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="statistic-box">
-                                    <h4>
-                                        Total vs NET REFUND
-                                    </h4>
-                                    <div class="row text-center">
-                                        <div class="col-lg-12">
-                                            <div class="flot-chart">
-                                                <div class="flot-chart-pie-content" id="flot-pie-chart2"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="m-t">
-                                        <small>Lorem Ipsum is simply dummy text of the printing and typesetting
-                                            industry.
-                                        </small>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="statistic-box">
-                                    <h4>
-                                        Sales by Price Type
-                                    </h4>
-                                    <div class="row text-center">
-                                        <div class="col-lg-12">
-                                            <div class="flot-chart">
-                                                <div class="flot-chart-pie-content" id="flot-pie-chart3"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="m-t">
-                                        <small>Lorem Ipsum is simply dummy text of the printing and typesetting
-                                            industry.
-                                        </small>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="statistic-box">
-                                    <h4>
-                                        Refund by Price Type
-                                    </h4>
-                                    <div class="row text-center">
-                                        <div class="col-lg-12">
-                                            <div class="flot-chart">
-                                                <div class="flot-chart-pie-content" id="flot-pie-chart4"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="m-t">
-                                        <small>Lorem Ipsum is simply dummy text of the printing and typesetting
-                                            industry.
-                                        </small>
-                                    </div>
-
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -265,11 +224,53 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
+
+<div class="modal inmodal fade" id="withdraw-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title" data-i18n="">Withdraw amount</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form method="post" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" data-i18n="">Amount</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="amount">
+                                    <div class="text-muted">
+                                        <span data-i18n="">Currency: </span>
+                                        <span class="text-success" name="currency"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" data-i18n="">Notes</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="notes"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    var SalesController = function (summaryType, objectId, appendTo) {
+    var SalesController = function (summaryType, objectId, object, appendTo) {
         this.objectId = objectId;
         this.summaryType = summaryType;
         this.account_id = null;
@@ -295,16 +296,56 @@
             '#9ec6c1',
             '#414141'
         ];
-
+        this.pieColorList = [
+            "#1ab394",
+            '#79d2c0',
+            '#bababa',
+            '#d3d3d3',
+            '#1C84C6',
+            '#005b6e',
+            '#4ec600',
+            '#bfc623',
+            '#c6731e',
+            '#c63710',
+            '#c63981'
+        ];
         var me = this;
+        var launch = function () {
+            me.init();
+            me.bindGraphButtons();
+            me.drawCumulative();
+            me.drawPeriodGraph();
+            me.drawSalesHistory();
+        }
         uBilling.getClock()
             .done(function (clock) {
                 me.clock = clock;
-                me.init();
-                me.bindGraphButtons();
-                me.drawCumulative();
-                me.drawPeriodGraph();
-                me.drawSalesHistory();
+
+                if (me.summaryType == 'vendor') {
+                    me.account_id = objectId;
+                    uBilling.getAccount(me.account_id)
+                        .done(function (account) {
+                            me.account = account;
+                            launch();
+                        })
+                        .fail(function () {
+                            toastr.error('Failed to load account.');
+                        })
+                }
+                if (me.summaryType == 'product') {
+                    me.product_id = objectId;
+                    uBilling.getProduct(me.product_id)
+                        .done(function (product) {
+                            me.product = product;
+                            launch();
+                        })
+                        .fail(function () {
+                            toastr.error('Failed to load product.');
+                        })
+                }
+                if (me.summaryType == 'organization') {
+                    launch();
+                }
             });
     };
     SalesController.prototype = {
@@ -636,7 +677,6 @@
         },
 
         drawPeriodGraphFromSummary: function (filter, summary) {
-            //console.log(filter, summary);
             var me = this;
             var createDataSet = function (per, period, transaction, summary, start_date, end_date) {
                 //transaction 인 것에 해당하는 값만 구하도록 한다.
@@ -794,10 +834,9 @@
                     filter.start_date,
                     filter.end_date
                 );
-            }
-            else {
+            } else {
                 lineData = createDataSet(
-                    per,
+                    filter.per,
                     filter.period,
                     filter.transaction,
                     summary,
@@ -967,22 +1006,60 @@
             var me = this;
             var filter = me.getGraphFilter();
 
-            uBilling.getOrgSalesSummary(
-                filter.period,
-                filter.start_date,
-                filter.end_date,
-                filter.vendor_id,
-                filter.product_id,
-                filter.plan_name,
-                filter.usage_name)
-                .done(function (summary) {
-                    me.setCurrencyFromSummaryData(summary);
-                    me.drawPeriodGraphFromSummary(filter, summary);
-                    me.drawPieChart(filter, summary);
-                })
-                .fail(function () {
-                    toastr.error("Can't find OrgSalesSummary.");
-                });
+            if (me.summaryType == 'organization') {
+                uBilling.getOrgSalesSummary(
+                    filter.period,
+                    filter.start_date,
+                    filter.end_date,
+                    filter.vendor_id,
+                    filter.product_id,
+                    filter.plan_name,
+                    filter.usage_name)
+                    .done(function (summary) {
+                        me.setCurrencyFromSummaryData(summary);
+                        me.drawPeriodGraphFromSummary(filter, summary);
+                        me.drawPieChart(filter, summary);
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find OrgSalesSummary.");
+                    });
+            } else if (me.summaryType == 'product') {
+                uBilling.getProductSalesSummary(
+                    me.product_id,
+                    filter.period,
+                    filter.start_date,
+                    filter.end_date,
+                    filter.vendor_id,
+                    filter.product_id,
+                    filter.plan_name,
+                    filter.usage_name)
+                    .done(function (summary) {
+                        me.setCurrencyFromSummaryData(summary);
+                        me.drawPeriodGraphFromSummary(filter, summary);
+                        me.drawPieChart(filter, summary);
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find OrgSalesSummary.");
+                    });
+            } else if (me.summaryType == 'vendor') {
+                uBilling.getAccountSalesSummary(
+                    me.account_id,
+                    filter.period,
+                    filter.start_date,
+                    filter.end_date,
+                    filter.vendor_id,
+                    filter.product_id,
+                    filter.plan_name,
+                    filter.usage_name)
+                    .done(function (summary) {
+                        me.setCurrencyFromSummaryData(summary);
+                        me.drawPeriodGraphFromSummary(filter, summary);
+                        me.drawPieChart(filter, summary);
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find OrgSalesSummary.");
+                    });
+            }
         }
         ,
         /**
@@ -1025,6 +1102,58 @@
             //셀렉트박스를 currency 로 업데이트
             me.panel.find('[name=filter-currency]').val(me.currency);
             me.panel.find('[name=filter-currency]').trigger("chosen:updated");
+        },
+        createWithDraw: function (balance) {
+            var me = this;
+            var bindWithdraw = function (transaction) {
+                var modal = $('#withdraw-modal');
+                var form = modal.find('form');
+                form.find('[name=currency]').html(me.currency);
+                var title = modal.find('[name=title]');
+                var transactionType;
+                if (transaction == 'withdraw') {
+                    title.html('Withdraw amount');
+                    transactionType = 'WITHDRAW';
+                }
+                if (transaction == 'credit') {
+                    title.html('Credit conversion');
+                    transactionType = 'CREDIT';
+                }
+
+                modal.find('[name=save]').unbind('click');
+                modal.find('[name=save]').bind('click', function () {
+                    var data = form.serializeObject();
+                    for (var key in data) {
+                        if (data[key].length < 1) {
+                            delete data[key];
+                        }
+                    }
+                    data.transactionType = transactionType;
+                    data.currency = me.currency;
+                    uBilling.createAccountWithdraw(me.account_id, data)
+                        .done(function (history) {
+                            console.log(history);
+                        })
+                        .fail(function (response) {
+                            toastr.error("Failed to " + transaction + " : " + response.responseText);
+                        })
+                        .always(function () {
+                            modal.modal('hide');
+                        })
+
+                });
+                modal.modal('show');
+            };
+
+            var withdrawBtn = me.panel.find('[name=create-withdraw]');
+            var creditBtn = me.panel.find('[name=create-credit]');
+            withdrawBtn.click(function () {
+                bindWithdraw('withdraw');
+            })
+            creditBtn.click(function () {
+                bindWithdraw('credit');
+            })
+            //withdraw-modal
         }
         ,
         /**
@@ -1082,6 +1211,93 @@
                         sub2: i18n.t('sales.cumulative.total-credit')
                     }
                 }
+                if (cumulativeType == 'sales') {
+                    amount1 = summary['sales']['summary']['total'][me.currency];
+                    amount1 = amount1 ? amount1.toFixed(2) : '0';
+
+                    data = {
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.sales'),
+                        amount1: amount1,
+                        sub1: i18n.t('sales.cumulative.total-sales'),
+                        amount2: '',
+                        sub2: ''
+                    }
+                }
+                if (cumulativeType == 'refund') {
+                    amount1 = summary['refund']['summary']['total'][me.currency];
+                    amount1 = amount1 ? amount1.toFixed(2) : '0';
+
+                    data = {
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.refunds'),
+                        amount1: amount1,
+                        sub1: i18n.t('sales.cumulative.total-refunds'),
+                        amount2: '',
+                        sub2: ''
+                    }
+                }
+                if (cumulativeType == 'withdraw') {
+                    amount1 = summary['withdraw']['summary']['total'][me.currency];
+                    amount1 = amount1 ? amount1.toFixed(2) : '0';
+                    amount2 = summary['credit']['summary']['total'][me.currency];
+                    amount2 = amount2 ? amount2.toFixed(2) : '0';
+
+                    data = {
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.withdraw'),
+                        amount1: amount1,
+                        sub1: i18n.t('sales.cumulative.total-withdraw'),
+                        amount2: amount2,
+                        sub2: i18n.t('sales.cumulative.total-credit')
+                    }
+                }
+                if (cumulativeType == 'account-balance') {
+                    amount1 = summary['balance'][me.currency];
+                    amount1 = amount1 ? amount1.toFixed(2) : '0';
+
+                    data = {
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.balance'),
+                        amount1: amount1,
+                        sub1: i18n.t('sales.cumulative.total-balance'),
+                        amount2: '',
+                        sub2: ''
+                    }
+
+                    item.find('[name=withdraw-view]').show();
+                    item.find('[name=sub-view]').hide();
+                }
+                if (cumulativeType == 'account-sales-refunds') {
+                    amount1 = summary['sales'][me.currency];
+                    amount1 = amount1 ? amount1.toFixed(2) : '0';
+                    amount2 = summary['refund'][me.currency];
+                    amount2 = amount2 ? amount2.toFixed(2) : '0';
+
+                    data = {
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.sales-refunds'),
+                        amount1: amount1,
+                        sub1: i18n.t('sales.cumulative.total-sales'),
+                        amount2: amount2,
+                        sub2: i18n.t('sales.cumulative.total-refunds')
+                    }
+                }
+                if (cumulativeType == 'account-withdraw') {
+                    amount1 = summary['withdraw'][me.currency];
+                    amount1 = amount1 ? amount1.toFixed(2) : '0';
+                    amount2 = summary['credit'][me.currency];
+                    amount2 = amount2 ? amount2.toFixed(2) : '0';
+
+                    data = {
+                        currency: me.currency,
+                        title: i18n.t('sales.cumulative.withdraw'),
+                        amount1: amount1,
+                        sub1: i18n.t('sales.cumulative.total-withdraw'),
+                        amount2: amount2,
+                        sub2: i18n.t('sales.cumulative.total-credit')
+                    }
+                }
                 if (data) {
                     item.find('[name=currency]').html(data.currency);
                     item.find('[name=title]').html(data.title);
@@ -1101,80 +1317,234 @@
                     drawCumulativeItem(summary, 'org-refund', append);
                     drawCumulativeItem(summary, 'org-withdraw', append);
                 }
+                else if (me.summaryType == 'product') {
+                    drawCumulativeItem(summary, 'sales', append);
+                    drawCumulativeItem(summary, 'refund', append);
+                }
+                else if (me.summaryType == 'vendor') {
+                    drawCumulativeItem(summary, 'account-balance', append);
+                    drawCumulativeItem(summary, 'account-sales-refunds', append);
+                    drawCumulativeItem(summary, 'account-withdraw', append);
+                }
             };
-            uBilling.getOrgSalesSummary('YEAR', null, null, null, null, null, null)
-                .done(function (summary) {
-                    me.setCurrencyFromSummaryData(summary);
-                    fill(summary);
-                })
-                .fail(function () {
-                    toastr.error("Can't find OrgSalesSummary.");
-                });
+            if (me.summaryType == 'organization') {
+                uBilling.getOrgSalesSummary('YEAR', null, null, null, null, null, null)
+                    .done(function (summary) {
+                        me.setCurrencyFromSummaryData(summary);
+                        fill(summary);
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find OrgSalesSummary.");
+                    });
+            }
+            else if (me.summaryType == 'product') {
+                uBilling.getProductSalesSummary(me.product_id, 'YEAR', null, null, null, null, null, null)
+                    .done(function (summary) {
+                        me.setCurrencyFromSummaryData(summary);
+                        fill(summary);
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find ProductSalesSummary.");
+                    });
+            }
+            else if (me.summaryType == 'vendor') {
+                uBilling.getAccountSalesBalance(me.account_id)
+                    .done(function (summary) {
+                        summary['currencies'] = [];
+                        for (var currency in summary['balance']) {
+                            summary['currencies'].push(currency);
+                        }
+                        me.setCurrencyFromSummaryData(summary);
+                        fill(summary);
+                        //사용자 출금 이벤트를 생성한다.
+                        me.createWithDraw(summary);
+                    })
+                    .fail(function () {
+                        toastr.error("Can't find AccountSalesBalance.");
+                    });
+            }
         }
         ,
         drawPieChart: function (filter, summary) {
-//            var filter = {
-//                currency: "USD",
-//                end_date: "2017-05-28",
-//                per: "per-total",
-//                period: "DAY",
-//                plan_name: "PRD_0000000001_PL_000001",
-//                product_id: "PRD_0000000001",
-//                range: "range-month",
-//                start_date: "2017-05-28",
-//                transaction: "sales",
-//                usage_name: "PRD_0000000001_USG_000001",
-//                vendor_id: "881c5072-5a7d-4b35-8ade-25939da579e3"
-//            }
-
             var me = this;
-
-
-            var data = [{
-                label: "Sales 1",
-                data: 21,
-                color: "#d3d3d3",
-            }, {
-                label: "Sales 2",
-                data: 3,
-                color: "#bababa",
-            }, {
-                label: "Sales 3",
-                data: 15,
-                color: "#79d2c0",
-            }, {
-                label: "Sales 4",
-                data: 52,
-                color: "#1ab394",
-            }];
-
-            var options = {
-                series: {
-                    pie: {
-                        show: true,
-                        radius: 3 / 5,
-                    }
-                },
-                grid: {
-                    hoverable: true
-                },
-                tooltip: true,
-                tooltipOpts: {
-                    content: function (label, xval, yval, flotItem) {
-                      return yval + '%, ' + label + ', ' + flotItem.datapoint[0].toFixed(2);
-                    },
-                    //content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
-                    shifts: {
-                        x: 20,
-                        y: 0
-                    },
-                    defaultTheme: true
+            var pieItems = [];
+            var insertPieItemFromPerSummary = function (title, perSummary, defaultLabels) {
+                if (!defaultLabels) {
+                    defaultLabels = [];
                 }
-            };
-            $.plot(me.panel.find("#flot-pie-chart1"), data, options);
-            $.plot(me.panel.find("#flot-pie-chart2"), data, options);
-            $.plot(me.panel.find("#flot-pie-chart3"), data, options);
-            $.plot(me.panel.find("#flot-pie-chart4"), data, options);
+                for (var label in perSummary) {
+                    if (defaultLabels.indexOf(label) == -1) {
+                        defaultLabels.push(label);
+                    }
+                }
+                var datas = [];
+                $.each(defaultLabels, function (l, label) {
+                    var data = perSummary[label] ? perSummary[label][me.currency] : null;
+                    datas.push({
+                        label: label.length > 12 ? label.substring(0, 12) + '..' : label,
+                        data: data,
+                        color: me.pieColorList[l]
+                    });
+                })
+                pieItems.push({
+                    title: title,
+                    data: datas
+                });
+            }
+
+            if (me.summaryType == 'organization') {
+                pieItems.push({
+                    title: 'Vendor vs NET INCOME',
+                    data: [
+                        {
+                            label: "vendor",
+                            data: summary['total_revenue']['sales']['summary']['total'][me.currency]
+                            - summary['net_summary']['sales']['summary']['total'][me.currency],
+                            color: me.pieColorList[0]
+                        },
+                        {
+                            label: "organization",
+                            data: summary['net_summary']['sales']['summary']['total'][me.currency],
+                            color: me.pieColorList[1]
+                        }
+                    ]
+                });
+                pieItems.push({
+                    title: 'Vendor vs NET REFUND',
+                    data: [
+                        {
+                            label: "vendor",
+                            data: summary['total_revenue']['refund']['summary']['total'][me.currency]
+                            - summary['net_summary']['refund']['summary']['total'][me.currency],
+                            color: me.pieColorList[0]
+                        },
+                        {
+                            label: "organization",
+                            data: summary['net_summary']['refund']['summary']['total'][me.currency],
+                            color: me.pieColorList[1]
+                        }
+                    ]
+                });
+                insertPieItemFromPerSummary(
+                    'Sales by Price Type',
+                    summary['total_revenue']['sales']['summary']['per_price_type'],
+                    ['RECURRING', 'FIXED', 'USAGE', 'ONE_TIME']);
+
+                insertPieItemFromPerSummary(
+                    'Refund by Price Type',
+                    summary['total_revenue']['refund']['summary']['per_price_type'],
+                    ['RECURRING', 'FIXED', 'USAGE', 'ONE_TIME']);
+            } else if (me.summaryType == 'product') {
+                insertPieItemFromPerSummary(
+                    'Sales by Plan',
+                    summary['sales']['summary']['per_plan_name']);
+                insertPieItemFromPerSummary(
+                    'Refund by Plan',
+                    summary['refund']['summary']['per_plan_name']);
+
+                insertPieItemFromPerSummary(
+                    'Sales by Usage',
+                    summary['sales']['summary']['per_usage_name']);
+                insertPieItemFromPerSummary(
+                    'Refund by Usage',
+                    summary['refund']['summary']['per_usage_name']);
+
+                insertPieItemFromPerSummary(
+                    'Sales by Price Type',
+                    summary['sales']['summary']['per_price_type'],
+                    ['RECURRING', 'FIXED', 'USAGE', 'ONE_TIME']);
+                insertPieItemFromPerSummary(
+                    'Refund by Price Type',
+                    summary['refund']['summary']['per_price_type'],
+                    ['RECURRING', 'FIXED', 'USAGE', 'ONE_TIME']);
+
+                insertPieItemFromPerSummary(
+                    'Sales by Vendor',
+                    summary['sales']['summary']['per_vendor_id']);
+                insertPieItemFromPerSummary(
+                    'Refund by Vendor',
+                    summary['refund']['summary']['per_vendor_id']);
+            } else if (me.summaryType == 'vendor') {
+                insertPieItemFromPerSummary(
+                    'Sales by Product',
+                    summary['sales']['summary']['per_product_id']);
+                insertPieItemFromPerSummary(
+                    'Refund by Product',
+                    summary['refund']['summary']['per_product_id']);
+
+                insertPieItemFromPerSummary(
+                    'Sales by Plan',
+                    summary['sales']['summary']['per_plan_name']);
+                insertPieItemFromPerSummary(
+                    'Refund by Plan',
+                    summary['refund']['summary']['per_plan_name']);
+
+                insertPieItemFromPerSummary(
+                    'Sales by Usage',
+                    summary['sales']['summary']['per_usage_name']);
+                insertPieItemFromPerSummary(
+                    'Refund by Usage',
+                    summary['refund']['summary']['per_usage_name']);
+
+                insertPieItemFromPerSummary(
+                    'Sales by Price Type',
+                    summary['sales']['summary']['per_price_type'],
+                    ['RECURRING', 'FIXED', 'USAGE', 'ONE_TIME']);
+                insertPieItemFromPerSummary(
+                    'Refund by Price Type',
+                    summary['refund']['summary']['per_price_type'],
+                    ['RECURRING', 'FIXED', 'USAGE', 'ONE_TIME']);
+            }
+
+            //pieItem 들의 data 가 누락될경우 0 으로 마추고, color 보정후, 그래프를 그린다.
+            me.panel.find('[name=pie-append]').html('');
+            $.each(pieItems, function (i, pieItem) {
+                var isAllDataZero = true;
+                $.each(pieItem.data, function (c, pieData) {
+                    if (!pieData.data) {
+                        pieData.data = 0;
+                    } else {
+                        isAllDataZero = false;
+                    }
+                    if (!pieData.color) {
+                        pieData.color = me.pieColorList[0]
+                    }
+                });
+                var options = {
+                    series: {
+                        pie: {
+                            show: true,
+                            radius: 3 / 5,
+                        }
+                    },
+                    grid: {
+                        hoverable: true
+                    },
+                    tooltip: true,
+                    tooltipOpts: {
+                        content: function (label, xval, yval, flotItem) {
+                            return flotItem.datapoint[0].toFixed(2) + '%, ' + label + ', ' + yval.toFixed(2);
+                        },
+                        shifts: {
+                            x: 20,
+                            y: 0
+                        },
+                        defaultTheme: true
+                    }
+                };
+
+                var item = $('#pie-item').clone();
+                item.removeAttr('id');
+                item.find('[name=title]').html(pieItem.title);
+                me.panel.find('[name=pie-append]').append(item);
+
+                if (!isAllDataZero) {
+                    item.find('[name=no-data]').hide();
+                    $.plot(item.find('[name=chart]'), pieItem.data, options);
+                } else {
+                    item.find('[name=has-data]').hide();
+                }
+            });
         }
         ,
         drawSalesHistory: function () {

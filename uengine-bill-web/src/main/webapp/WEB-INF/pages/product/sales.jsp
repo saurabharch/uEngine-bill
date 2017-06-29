@@ -16,33 +16,34 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>uEngine Billing | HOME</title>
 
-    <%@include file="template/header_js.jsp" %>
+    <%@include file="../template/header_js.jsp" %>
 </head>
 
 <body>
 <div id="wrapper">
-    <%@include file="template/nav.jsp" %>
-    <script type="text/javascript">$('[name=list-menu-index]').addClass('active');</script>
+    <%@include file="../template/nav.jsp" %>
+    <script type="text/javascript">$('[name=list-menu-product]').addClass('active');</script>
 
     <div id="page-wrapper" class="gray-bg">
 
-        <%@include file="template/header.jsp" %>
+        <%@include file="../template/header.jsp" %>
 
         <div id="sales-append" class="white-bg wrapper wrapper-content">
 
         </div>
 
-        <%@include file="./sales/sales.jsp" %>
+        <%@include file="../sales/sales.jsp" %>
 
-        <%@include file="template/footer.jsp" %>
+        <%@include file="../template/footer.jsp" %>
     </div>
 </div>
-<%@include file="template/footer_js.jsp" %>
+<%@include file="../template/footer_js.jsp" %>
 
 
 <script>
     $(document).ready(function () {
-        new SalesController('organization', currentOrg.id, currentOrg, $('#sales-append'));
+        var product_id = '${id}';
+        new SalesController('product', product_id, null, $('#sales-append'));
     });
 </script>
 </body>

@@ -1198,7 +1198,7 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
-    getOrgSalesSummary: function(period, start_date, end_date,vendor_id,product_id,plan_name,usage_name){
+    getOrgSalesSummary: function (period, start_date, end_date, vendor_id, product_id, plan_name, usage_name) {
         var data = {
             period: period,
             start_date: start_date,
@@ -1213,6 +1213,60 @@ uBilling.prototype = {
             url: '/rest/v1/organization/sales/summary',
             dataType: 'json',
             data: data
+        };
+        return this.send(options);
+    },
+    getProductSalesSummary: function (id, period, start_date, end_date, vendor_id, product_id, plan_name, usage_name) {
+        var data = {
+            period: period,
+            start_date: start_date,
+            end_date: end_date,
+            vendor_id: vendor_id,
+            product_id: product_id,
+            plan_name: plan_name,
+            usage_name: usage_name
+        };
+        var options = {
+            type: "GET",
+            url: '/rest/v1/product/' + id + '/sales/summary',
+            dataType: 'json',
+            data: data
+        };
+        return this.send(options);
+    },
+    getAccountSalesSummary: function (id, period, start_date, end_date, vendor_id, product_id, plan_name, usage_name) {
+        var data = {
+            period: period,
+            start_date: start_date,
+            end_date: end_date,
+            vendor_id: vendor_id,
+            product_id: product_id,
+            plan_name: plan_name,
+            usage_name: usage_name
+        };
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + id + '/sales/summary',
+            dataType: 'json',
+            data: data
+        };
+        return this.send(options);
+    },
+    getAccountSalesBalance: function (id) {
+        var options = {
+            type: "GET",
+            url: '/rest/v1/accounts/' + id + '/sales/balance',
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
+    createAccountWithdraw: function (id, data) {
+        var options = {
+            type: "POST",
+            url: '/rest/v1/accounts/' + id + '/sales/withdraw',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
         };
         return this.send(options);
     },

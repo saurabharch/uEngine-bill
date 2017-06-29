@@ -546,6 +546,11 @@ public class SalesServiceImpl implements SalesService {
             balanceAmount = (BigDecimal) balance.get(currency);
         }
 
+        //출금 요청 금액이 0 보다 크지 않을 경우 요청을 거절한다.
+        if (amount.compareTo(new BigDecimal(0)) != 1) {
+            throw new ServiceException("Request withdrawal amount should more than 0");
+        }
+
         //출금 요청 금액이 잔액보다 클 경우 요청을 거절한다.
         if (amount.compareTo(balanceAmount) == 1) {
             throw new ServiceException("Requested withdrawal amount is more than account balance");
@@ -581,7 +586,7 @@ public class SalesServiceImpl implements SalesService {
             history.setAmount(amount);
             history.setCurrency(currency);
             history.setInvoice_id(invoiceId);
-            history.setTransaction_type(DistributionTransactionType.WITHDRAW.toString());
+            history.setTransaction_type(DistributionTransactionType.CREDIT.toString());
             history.setFormat_date(clock.getLocalDate());
             history.setCreated_date(clock.getCurrentUtcTime());
             history.setNotes(withdrawRequest.getNotes());
