@@ -30,34 +30,20 @@
                 <h5>Graph in period</h5>
                 <div class="pull-right">
                     <div class="btn-group" name="g-btns">
-                        <button type="button" class="btn btn-default btn-xs" data-type="range-week" data-i18n="">Last
-                            week
-                        </button>
-                        <button type="button" class="btn btn-default btn-xs active" data-type="range-month"
-                                data-i18n="">Last month
-                        </button>
-                        <button type="button" class="btn btn-default btn-xs" data-type="range-year" data-i18n="">Last 3
-                            months
-                        </button>
-                    </div>
-                    <div class="btn-group" name="g-btns">
-                        <button type="button" class="btn btn-xs btn-default active" data-type="period-day">일별 보기
-                        </button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="period-month">월별보기</button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="period-year">년별 보기</button>
+                        <button type="button" class="btn btn-default active" data-type="per-total">Total</button>
+                        <button type="button" class="btn btn-default" data-type="per-price">Price type</button>
+                        <button type="button" class="btn btn-default" data-type="per-net">Total vs Net</button>
+                        <button type="button" class="btn btn-default" data-type="per-vendor">Vendor</button>
+                        <button type="button" class="btn btn-default" data-type="per-product">Product</button>
+                        <button type="button" class="btn btn-default" data-type="per-plan">Plan</button>
+                        <button type="button" class="btn btn-default" data-type="per-usage">Usage</button>
                     </div>
 
                     <div class="btn-group" name="g-btns">
-                        <button type="button" class="btn btn-xs btn-default active" data-type="per-total">Total</button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="per-price">Price type</button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="per-net">Total vs Net</button>
-                    </div>
-
-                    <div class="btn-group" name="g-btns">
-                        <button type="button" class="btn btn-xs btn-default active" data-type="t-sales">매출</button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="t-refund">환불</button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="t-withdraw">출금</button>
-                        <button type="button" class="btn btn-xs btn-default" data-type="t-credit">크레딧</button>
+                        <button type="button" class="btn btn-default active" data-type="sales">매출</button>
+                        <button type="button" class="btn btn-default" data-type="refund">환불</button>
+                        <button type="button" class="btn btn-default" data-type="withdraw">출금</button>
+                        <button type="button" class="btn btn-default" data-type="credit">크레딧</button>
                     </div>
 
                     <a class="collapse-link">
@@ -66,7 +52,7 @@
                 </div>
             </div>
             <div class="ibox-content" style="display: none">
-                <form role="form" class="form-inline">
+                <form role="form" class="form-inline" name="filter-form">
                     <div class="form-group">
                         <div class="label label-default">Vendor</div>
                         <select data-placeholder="" class="chosen-select"
@@ -93,28 +79,6 @@
                         <select data-placeholder="" class="chosen-select"
                                 tabindex="2" name="usage_name" required>
                             <option value="">ALL</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <div class="label label-default">Price type</div>
-                        <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="price_type" required>
-                            <option value="">ALL</option>
-                            <option value="RECURRING">RECURRING</option>
-                            <option value="FIXED">FIXED</option>
-                            <option value="USAGE">USAGE</option>
-                            <option value="ONE_TIME">ONE_TIME</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <div class="label label-default">Transaction type</div>
-                        <select data-placeholder="" class="chosen-select"
-                                tabindex="2" name="transaction_type" required>
-                            <option value="">ALL</option>
-                            <option value="SALES">SALES</option>
-                            <option value="REFUND">REFUND</option>
-                            <option value="WITHDRAW">WITHDRAW</option>
-                            <option value="CREDIT">CREDIT</option>
                         </select>
                     </div>
                 </form>
@@ -153,7 +117,36 @@
                                     <input name="end_date" type="text" class="form-control" value="01/02/2017">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" name="update-date"
+                                        style="margin-top: 22px">Update Date
+                                </button>
+                            </div>
                         </form>
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <div class="btn-group" name="g-btns">
+                                    <button type="button" class="btn btn-default" data-type="range-week" data-i18n="">
+                                        Last
+                                        week
+                                    </button>
+                                    <button type="button" class="btn btn-default active" data-type="range-month"
+                                            data-i18n="">Last month
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-type="range-3month" data-i18n="">
+                                        Last
+                                        3
+                                        months
+                                    </button>
+                                </div>
+                                <div class="btn-group pull-right" name="g-btns">
+                                    <button type="button" class="btn btn-default active" data-type="DAY">일별 보기
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-type="MONTH">월별보기</button>
+                                    <button type="button" class="btn btn-default" data-type="YEAR">년별 보기</button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="flot-chart">
@@ -323,17 +316,6 @@
             me.appendTo.html('');
             me.appendTo.append(me.panel);
 
-            //filter-currency 셀렉트창 초기화, chosen-select 초기화
-            me.panel.find('[name=filter-currency]').val(null);
-            me.panel.find('.chosen-select').chosen({width: "100%"});
-
-            //currency 셀렉트창 변경 이벤트
-            var currencyFilter = me.panel.find('[name=filter-currency]');
-            currencyFilter.change(function () {
-                me.currency = currencyFilter.val();
-                me.drawCumulative();
-            });
-
             //collapse-link 이벤트
             me.panel.find('.collapse-link').on('click', function () {
                 var ibox = $(this).closest('div.ibox');
@@ -348,115 +330,6 @@
                 }, 50);
             });
 
-            var data2 = [
-                [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
-                [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
-                [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
-                [gd(2012, 1, 13), 4], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8],
-                [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6],
-                [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13],
-                [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8],
-                [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
-            ];
-
-            var data3 = [
-                [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
-                [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
-                [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
-                [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
-                [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
-                [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
-                [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
-                [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
-            ];
-
-
-            var dataset = [
-                {
-                    label: "Number of orders",
-                    data: data3,
-                    color: "#1ab394",
-                    bars: {
-                        show: true,
-                        align: "center",
-                        barWidth: 24 * 60 * 60 * 600,
-                        lineWidth: 0
-                    }
-                }, {
-                    label: "Payments",
-                    data: data2,
-                    yaxis: 2,
-                    color: "#1C84C6",
-                    lines: {
-                        lineWidth: 1,
-                        show: true,
-                        fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 0.2
-                            }, {
-                                opacity: 0.4
-                            }]
-                        }
-                    },
-                    splines: {
-                        show: false,
-                        tension: 0.6,
-                        lineWidth: 1,
-                        fill: 0.1
-                    },
-                }
-            ];
-
-
-            var options = {
-                xaxis: {
-                    mode: "time",
-                    tickSize: [3, "day"],
-                    tickLength: 0,
-                    axisLabel: "Date",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: 'Arial',
-                    axisLabelPadding: 10,
-                    color: "#d5d5d5"
-                },
-                yaxes: [{
-                    position: "left",
-                    max: 1070,
-                    color: "#d5d5d5",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: 'Arial',
-                    axisLabelPadding: 3
-                }, {
-                    position: "right",
-                    clolor: "#d5d5d5",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: ' Arial',
-                    axisLabelPadding: 67
-                }
-                ],
-                legend: {
-                    noColumns: 1,
-                    labelBoxBorderColor: "#000000",
-                    position: "nw"
-                },
-                grid: {
-                    hoverable: false,
-                    borderWidth: 0
-                }
-            };
-
-            function gd(year, month, day) {
-                return new Date(year, month - 1, day).getTime();
-            }
-
-            var previousPoint = null, previousLabel = null;
-
-            $.plot(me.panel.find("[name=period-chart]"), dataset, options);
-
             me.drawPieChart();
         },
 
@@ -467,20 +340,31 @@
             var me = this;
             var filter = {};
 
-            //period 값
             me.panel.find('[name=g-btns]').each(function () {
                 var group = $(this);
                 group.find('button').each(function () {
                     if ($(this).hasClass('active')) {
                         var type = $(this).data('type');
-                        if (type == 'period-day') {
-                            filter.period = 'DAY'
+
+                        //range
+                        if (type == 'range-week' || type == 'range-month' || type == 'range-3month') {
+                            filter.range = type;
                         }
-                        if (type == 'period-month') {
-                            filter.period = 'MONTH'
+
+                        //period
+                        if (type == 'DAY' || type == 'MONTH' || type == 'YEAR') {
+                            filter.period = type;
                         }
-                        if (type == 'period-year') {
-                            filter.period = 'YEAR'
+                        //per-type
+                        if (type == 'per-total' || type == 'per-price' || type == 'per-net' ||
+                            type == 'per-vendor' || type == 'per-product' || type == 'per-plan' ||
+                            type == 'per-usage') {
+                            filter.per = type;
+                        }
+                        //transaction
+                        if (type == 'sales' || type == 'refund' || type == 'withdraw' ||
+                            type == 'credit') {
+                            filter.transaction = type;
                         }
                     }
                 });
@@ -491,9 +375,7 @@
             var product_id = me.panel.find('[name=product_id]');
             var plan_name = me.panel.find('[name=plan_name]');
             var usage_name = me.panel.find('[name=usage_name]');
-            var price_type = me.panel.find('[name=price_type]');
-            var transaction_type = me.panel.find('[name=transaction_type]');
-            var list = [vendor_id, product_id, plan_name, usage_name, price_type, transaction_type];
+            var list = [vendor_id, product_id, plan_name, usage_name];
             $.each(list, function (i, selectBox) {
                 if (selectBox.val() && selectBox.val().length > 0) {
                     filter[selectBox.attr('name')] = selectBox.val();
@@ -510,7 +392,7 @@
             filter['start_date'] = requestedDate;
 
             var endDate = me.panel.find('[name=end_date]').val();
-            var splited = startDate.split('/');
+            var splited = endDate.split('/');
             var month = splited[0];
             var date = splited[1];
             var year = splited[2];
@@ -521,86 +403,542 @@
         },
 
         /**
+         * ajax 필터 선택창을 활성화시킨다.
+         **/
+        activateFilterSearch: function () {
+            var me = this;
+            var activate = function (form) {
+                if (form.data('activated')) {
+                    return;
+                }
+                form.data('activated', true);
+
+                //프로덕트 셀렉트
+                var productSelect = form.find('[name=product_id]');
+                productSelect.chosen({width: "100%"});
+                productSelect.parent().find('input').autocomplete({
+                    source: function (request, response) {
+                        productSelect.find('option').remove();
+                        productSelect.append('<option value="">ALL</option>');
+                        uBilling.getProductSearch(request.term, 0, 10)
+                            .done(function (products) {
+                                for (var i = 0; i < products['data'].length; i++) {
+                                    var product = products['data'][i];
+                                    productSelect.append('<option value="' + product['id'] + '">' + product['name'] + '</option>');
+                                }
+                            })
+                            .always(function () {
+                                productSelect.trigger("chosen:updated");
+                                productSelect.parent().find('input').val(request.term);
+                            })
+                    }
+                });
+
+                productSelect.bind('change', function () {
+                    updatePlanSearch(productSelect.val());
+                });
+
+                //플랜, 유서지 셀렉트
+                var planSelect = form.find('[name=plan_name]');
+                var usageSelect = form.find('[name=usage_name]');
+                planSelect.chosen({width: "100%"});
+                usageSelect.chosen({width: "100%"});
+                planSelect.bind('change', function () {
+                    me.drawPeriodGraph();
+                });
+                usageSelect.bind('change', function () {
+                    me.drawPeriodGraph();
+                });
+                var updatePlanSearch = function (product_id) {
+                    planSelect.find('option').remove();
+                    usageSelect.find('option').remove();
+                    planSelect.append('<option value="">ALL</option>');
+                    usageSelect.append('<option value="">ALL</option>');
+
+                    if (!product_id || product_id.length < 1) {
+                        planSelect.trigger("chosen:updated");
+                        usageSelect.trigger("chosen:updated");
+                        me.drawPeriodGraph();
+                        return;
+                    }
+                    uBilling.getProductVersion(product_id, 'current')
+                        .done(function (version) {
+                            $.each(version['plans'], function (idx, plan) {
+                                planSelect.append('<option value="' + plan['name'] + '">' + plan['display_name'] + '</option>');
+
+                                var phases = [];
+                                if (plan['initialPhases'] && plan['initialPhases'].length) {
+                                    phases = plan['initialPhases'];
+                                }
+                                if (plan['finalPhase']) {
+                                    phases.push(plan['finalPhase']);
+                                }
+                                $.each(phases, function (p, phase) {
+                                    if (phase.usages && phase.usages.length) {
+                                        $.each(phase.usages, function (u, usage) {
+                                            usageSelect.append('<option value="' + usage['name'] + '">' + usage['display_name'] + '</option>');
+                                        });
+                                    }
+                                });
+                            });
+                        })
+                        .always(function () {
+                            planSelect.trigger("chosen:updated");
+                            usageSelect.trigger("chosen:updated");
+                            me.drawPeriodGraph();
+                        });
+                };
+
+                //벤더 셀렉트
+                var vendorSelect = form.find('[name=vendor_id]');
+                vendorSelect.chosen({width: "100%"});
+                vendorSelect.parent().find('input').autocomplete({
+                    source: function (request, response) {
+                        vendorSelect.find('option').remove();
+                        vendorSelect.append('<option value="">ALL</option>');
+                        uBilling.getAccountSearch(request.term, 0, 10)
+                            .done(function (accounts) {
+                                for (var i = 0; i < accounts['data'].length; i++) {
+                                    var account = accounts['data'][i];
+                                    vendorSelect.append('<option value="' + account['accountId'] + '">' + account['name'] + '</option>');
+                                }
+                            })
+                            .always(function () {
+                                vendorSelect.trigger("chosen:updated");
+                                vendorSelect.parent().find('input').val(request.term);
+                            })
+                    }
+                });
+                vendorSelect.bind('change', function () {
+                    me.drawPeriodGraph();
+                });
+            };
+            activate(me.panel.find('[name=filter-form]'));
+        },
+
+        /**
          * 그래프 제어 요소 이벤트를 등록한다.
          */
         bindGraphButtons: function () {
             var me = this;
 
+            //filter-currency 셀렉트창 초기화, chosen-select 초기화
+            me.panel.find('[name=filter-currency]').val(null);
+            me.panel.find('.chosen-select').chosen({width: "100%"});
+
+            //currency 셀렉트창 변경 이벤트
+            var currencyFilter = me.panel.find('[name=filter-currency]');
+            currencyFilter.change(function () {
+                me.currency = currencyFilter.val();
+                //currency 변경시 누적집계 갱신
+                me.drawCumulative();
+
+                //currency 변경시 기간그래프 갱신
+                me.drawPeriodGraph();
+            });
+
             //버튼 이벤트
             me.panel.find('[name=g-btns]').each(function () {
                 var group = $(this);
                 group.find('button').each(function () {
+                    var type = $(this).data('type');
+
+                    //현재 summary 타입에 따라 기능을 제한한다.
+                    if (me.summaryType == 'organization') {
+                        if (type == 'per-vendor' || type == 'per-product' ||
+                            type == 'per-plan' || type == 'per-usage') {
+                            $(this).hide();
+                        }
+                    }
+                    if (me.summaryType == 'product') {
+                        if (type == 'per-net' || type == 'per-product' ||
+                            type == 'withdraw' || type == 'credit') {
+                            $(this).hide();
+                        }
+                    }
+                    if (me.summaryType == 'vendor') {
+                        if (type == 'per-net' || type == 'per-vendor') {
+                            $(this).hide();
+                        }
+                    }
+
                     $(this).click(function () {
                         group.find('button').removeClass('active');
                         $(this).addClass('active');
-                        me.drawPeriodGraph();
+
+                        var clickedType = $(this).data('type');
+
+                        //Range 버튼을 클릭시에는 start_date, end_date 를 반영하도록 한다.
+                        if (clickedType == 'range-week' || clickedType == 'range-month' || clickedType == 'range-3month') {
+                            updateDateByRange(clickedType);
+                            me.drawPeriodGraph();
+                        } else {
+                            me.drawPeriodGraph();
+                        }
                     })
                 });
             });
 
-            //필터 이벤트
+            //날짜 이벤트 등록
+            var filter = me.getGraphFilter();
             var start_date = me.panel.find('[name=start_date]');
             var end_date = me.panel.find('[name=end_date]');
+            me.panel.find('[name=update-date]').click(function () {
+                me.drawPeriodGraph();
+            });
 
-            if (organizations && organizations.length && testMode) {
-                var drawTestDate = function () {
-                    var testDate = $('[name=change-test-date]');
-                    uBilling.getClock()
-                        .done(function (clock) {
-                            testDate.parent().show();
-                            testDate.html(clock['localDate']);
-
-                            testDate.click(function () {
-                                var me = this;
-                                var modal = $('#test-date-modal');
-                                var testDate = clock['localDate'];
-                                var split = testDate.split('-');
-                                var year = split[0];
-                                var month = split[1];
-                                var date = split[2];
-                                var pickerValue = month + '/' + date + '/' + year;
-                                var picker = $('#test-date-group .input-group.date');
-                                picker.datepicker('destroy');
-                                $('#test-date-group').find('input').val(pickerValue);
-                                picker.datepicker({
-                                    todayBtn: "linked",
-                                    keyboardNavigation: false,
-                                    forceParse: false,
-                                    calendarWeeks: true,
-                                    autoclose: true,
-                                    dateFormat: 'mm/dd/yy'
-                                }).datepicker("setDate", pickerValue);
-
-                                modal.find('[name=save]').unbind('click');
-                                modal.find('[name=save]').bind('click', function () {
-                                    var value = $('#test-date-group').find('input').val();
-                                    var splited = value.split('/');
-                                    var month = splited[0];
-                                    var date = splited[1];
-                                    var year = splited[2];
-                                    var requestedDate = year + '-' + month + '-' + date;
-                                    uBilling.updateClock(requestedDate)
-                                        .done(function (clock) {
-                                            toastr.success('Server date changed.');
-                                            drawTestDate();
-                                        })
-                                        .fail(function (response) {
-                                            toastr.error("Failed to change server date: " + response.responseText);
-                                        })
-                                        .always(function () {
-                                            modal.modal('hide');
-                                        })
-                                });
-                                modal.modal('show');
-                            })
-                        })
-                        .fail(function () {
-                            testDate.hide();
-                        })
+            /**
+             * range 값에 따라 start_date, end_date 필드값을 조정한다.
+             * @param range
+             */
+            var updateDateByRange = function (range) {
+                var startDate = new Date(me.clock['localDate']);
+                var endDate = new Date(me.clock['localDate']);
+                if (range == 'range-week') {
+                    startDate.setDate(startDate.getDate() - 7);
                 }
-                drawTestDate();
+                if (range == 'range-month') {
+                    startDate.setMonth(startDate.getMonth() - 1);
+                }
+                if (range == 'range-3month') {
+                    startDate.setMonth(startDate.getMonth() - 3);
+                }
+                bindDatePicker(start_date, startDate);
+                bindDatePicker(end_date, endDate);
             }
+
+            /**
+             * 데이터 피커 이벤트를 초기화하고 재등록한다.
+             * @param dateInput
+             * @param localDate Date
+             */
+            var bindDatePicker = function (dateInput, localDate) {
+                var year = localDate.getFullYear();
+                var month = localDate.getMonth() + 1;
+                var date = localDate.getDate();
+                var pickerValue = month + '/' + date + '/' + year;
+                var picker = dateInput.closest('.input-group.date');
+                picker.datepicker('destroy');
+                picker.find('input').val(pickerValue);
+                picker.datepicker({
+                    todayBtn: "linked",
+                    keyboardNavigation: false,
+                    forceParse: false,
+                    calendarWeeks: true,
+                    autoclose: true,
+                    dateFormat: 'mm/dd/yy'
+                }).datepicker("setDate", pickerValue);
+            }
+
+            //처음 시작시에는 range 값으로 시간을 조정토록 한다.
+            updateDateByRange(filter.range);
+
+
+            //필터 이벤트 등록
+            me.activateFilterSearch();
         },
+
+        drawPeriodGraphFromSummary: function (filter, summary) {
+            console.log(filter, summary);
+//            var filter = {
+//                currency: "USD",
+//                end_date: "2017-05-28",
+//                per: "per-total",
+//                period: "DAY",
+//                plan_name: "PRD_0000000001_PL_000001",
+//                product_id: "PRD_0000000001",
+//                range: "range-month",
+//                start_date: "2017-05-28",
+//                transaction: "sales",
+//                usage_name: "PRD_0000000001_USG_000001",
+//                vendor_id: "881c5072-5a7d-4b35-8ade-25939da579e3"
+//            }
+
+            //기본 골격은, 날짜 리스트를 얻는데 있다. (start_date,end_date).
+            //currency 는 me.currency 에서 사용.
+            //per 값이
+            //per-total : 모든 레코드의 amount 를 합산한다.
+            //per-price : 레코드의 price_type 별로 합산한다.
+            //per-net : 모든 레코드의 amount 를 합산하되, net 도 별도 계산한다.
+            //per-vendor : 레코드의 vendor_id 별로 합산한다.
+            //per-product : 레코드의 product_id 별로 합산한다.
+            //per-plan : 레코드의 plan_name 별로 합산한다.
+            //per-usage : 레코드의 usage_name 별로 합산한다.
+
+            //공통: currency 에 해당하는 amount 만 합산토록 한다.
+
+            var me = this;
+
+            var createDataSet = function (per, period, transaction, summary, start_date, end_date) {
+                //transaction 인 것에 해당하는 값만 구하도록 한다.
+                var dateSetList = [];
+                var perDate = summary[transaction]['per_date'];
+                console.log(perDate, transaction);
+
+                //1. per 값 별로 분리해야 할 라인값을 지정한다.
+
+                //2. 루프를 돌며, 각 라인값이 존재하면 라인값의 per_date 에 amount 를 합산하도록 한다.
+                //이 때 amount 에 currency 가 있어야 한다.
+
+                //3. 2의 과정중 새로운 라인항목이 나타나면 신규 라인 생성하되, start 와 end 사이의 date array 를 작성토록한다.
+                //이때 각 data array 는 amount 가 0 이다.
+
+                var dates = me.getDates(start_date, end_date, period);
+                var baseAmountArray = [];
+                $.each(dates, function (i, date) {
+                    baseAmountArray.push([date, 0]);
+                });
+
+                //라벨에 해당하는 데이터셋을 반환한다.
+                var findDataSetByLabel = function (label) {
+                    for (var i = 0; i < dateSetList.length; i++) {
+                        if (dateSetList[i].label == label) {
+                            return dateSetList[i];
+                        }
+                    }
+                    var dataSet = {
+                        label: label,
+                        data: JSON.parse(JSON.stringify(baseAmountArray)),
+                        color: "#1C84C6",
+                        lines: {
+                            lineWidth: 1,
+                            show: true,
+                            fill: true,
+                            fillColor: {
+                                colors: [{
+                                    opacity: 0.1
+                                }, {
+                                    opacity: 0.1
+                                }]
+                            }
+                        }
+                    }
+                    dateSetList.push(dataSet);
+                    return dataSet;
+                };
+
+                //데이터 셋 안에서 주어진 날짜에 해당하는 데이터를 반환한다.
+                var findDataRecordFromDateSet = function (dataSet, formatDate) {
+                    for (var i = 0; i < dataSet.data.length; i++) {
+                        if (dataSet.data[i][0] == formatDate) {
+                            return dataSet.data[i];
+                        }
+                    }
+                }
+
+                //필수 라벨값을 세팅한다.
+
+                //퍼데이트를 분석한다.
+                var dataSetByLabel, dataSetRecord, recordAmount;
+                for (var formatDate in perDate) {
+                    var records = perDate[formatDate];
+                    $.each(records, function (l, record) {
+                        recordAmount = record['amount'][me.currency] ? record['amount'][me.currency] : 0;
+                        //per-total : 모든 레코드의 amount 를 합산한다.
+                        if (per == 'per-total') {
+                            dataSetByLabel = findDataSetByLabel('total');
+                            dataSetRecord = findDataRecordFromDateSet(dataSetByLabel, formatDate);
+                            if (dataSetRecord) {
+                                dataSetRecord[1] = dataSetRecord[1] + recordAmount;
+                            }
+                        }
+                        //per-price : 레코드의 price_type 별로 합산한다.
+                        //per-net : 모든 레코드의 amount 를 합산하되, net 도 별도 계산한다.
+                        //per-vendor : 레코드의 vendor_id 별로 합산한다.
+                        //per-product : 레코드의 product_id 별로 합산한다.
+                        //per-plan : 레코드의 plan_name 별로 합산한다.
+                        //per-usage : 레코드의 usage_name 별로 합산한다.
+                    })
+                }
+
+                //dateSetList 의 date 를 그래프 date 로 변환한다.
+                $.each(dateSetList, function (s, dateSet) {
+                    $.each(dateSet.data, function (c, record) {
+                        record[0] = me.gd(record[0]);
+                    })
+                })
+                return dateSetList;
+            };
+
+            var lineData = [];
+            if (me.summaryType == 'organization' && filter.per == 'per-net') {
+                lineData = createDataSet(
+                    'per-total',
+                    filter.period,
+                    filter.transaction,
+                    summary['total_revenue'],
+                    filter.start_date,
+                    filter.end_date
+                );
+                lineData = lineData.concat(createDataSet(
+                    'per-total',
+                    filter.period,
+                    filter.transaction,
+                    summary['net_summary'],
+                    filter.start_date,
+                    filter.end_date
+                ));
+                lineData[1].label = 'net';
+                lineData[1].color = 'red';
+            } else if (me.summaryType == 'organization') {
+                lineData = createDataSet(
+                    filter.per,
+                    filter.period,
+                    filter.transaction,
+                    summary['total_revenue'],
+                    filter.start_date,
+                    filter.end_date
+                );
+            }
+            else {
+                lineData = createDataSet(
+                    per,
+                    filter.period,
+                    filter.transaction,
+                    summary,
+                    filter.start_date,
+                    filter.end_date
+                );
+            }
+
+            var tickSize;
+            if (filter.period == 'DATA') {
+                tickSize = [1, "day"];
+            } else if (filter.period == 'MONTH') {
+                tickSize = [1, "month"];
+            } else if (filter.period == 'YEAR') {
+                tickSize = [1, "year"];
+            }
+            var options = {
+                xaxis: {
+                    mode: "time",
+                    tickSize: tickSize,
+                    tickLength: 0,
+                    axisLabel: "Date",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Arial',
+                    axisLabelPadding: 10,
+                    color: "#d5d5d5"
+                },
+                yaxis: {
+                    position: "left",
+                    color: "#d5d5d5",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: ' Arial',
+                    axisLabelPadding: 67
+                },
+                legend: {
+                    noColumns: 1,
+                    labelBoxBorderColor: "#000000",
+                    position: "nw"
+                },
+                grid: {
+                    hoverable: false,
+                    borderWidth: 0
+                }
+            };
+
+            var previousPoint = null, previousLabel = null;
+
+            console.log(lineData);
+            $.plot(me.panel.find("[name=period-chart]"), lineData, options);
+        },
+        /**
+         * 그래프를 위해 GMT 를 보정한 Date 를 반환한다.
+         * @param year
+         * @param month
+         * @param day
+         * @return {Date}
+         */
+        gd: function (dateString) {
+            var splited = dateString.split('-');
+            var year = splited[0];
+            var month = splited[1];
+            var day = splited[2];
+
+            var date;
+            if (month == null || month == undefined) {
+                date = new Date(year, 0, 1);
+            }
+            else if (day == null || day == undefined) {
+                date = new Date(year, month - 1, 1);
+            } else {
+                date = new Date(year, month - 1, day);
+            }
+            var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return newDate;
+        }
+
+        ,
+
+        /**
+         * 두 날짜 사이의 날짜들을 반환한다.
+         * @param startDate
+         * @param endDate
+         * @param period
+         * @return {Array}
+         */
+        getDates: function (start_date, end_date, period) {
+            var me = this;
+            var dates = [],
+                currentDate = new Date(start_date),
+                endDate = new Date(end_date);
+
+            var addDays = function (date, number) {
+                date.setDate(date.getDate() + number);
+                return date;
+            };
+            var addMonths = function (date, number) {
+                date.setMonth(date.getMonth() + number);
+                return date;
+            };
+            var addYears = function (date, number) {
+                date.setFullYear(date.getFullYear() + number);
+                return date;
+            };
+
+            while (currentDate <= endDate) {
+                try {
+                    if (period == 'DAY') {
+                        dates.push(me.yyyyMMdd(currentDate));
+                        currentDate = addDays(currentDate, 1);
+                    }
+                    else if (period == 'MONTH') {
+                        dates.push(me.yyyyMMdd(currentDate).substring(0, 7));
+                        currentDate = addMonths(currentDate, 1);
+                    }
+                    else if (period == 'YEAR') {
+                        dates.push(me.yyyyMMdd(currentDate).substring(0, 4));
+                        currentDate = addYears(currentDate, 1);
+                    } else {
+                        break;
+                    }
+                } catch (e) {
+                    console.log(e);
+                    break;
+                }
+            }
+            return dates;
+        }
+        ,
+
+        /**
+         * date 를 yyyyMMdd 형식으로 반환한ㄷ.
+         * @param date
+         * @return {string}
+         */
+        yyyyMMdd: function (date) {
+            var mm = date.getMonth() + 1; // getMonth() is zero-based
+            var dd = date.getDate();
+
+            return [date.getFullYear(),
+                (mm > 9 ? '' : '0') + mm,
+                (dd > 9 ? '' : '0') + dd
+            ].join('-');
+        }
+        ,
 
         /**
          * 기간동안의 그래프를 그린다.
@@ -608,20 +946,24 @@
         drawPeriodGraph: function () {
             var me = this;
             var filter = me.getGraphFilter();
-            //필터가 없을경우, 이벤트 등록 및 필터 등록.
-//            if (!me.filter) {
-//                me.bindGraphButtons();
-//            }
 
-//            uBilling.getOrgSalesSummary('YEAR', null, null, null, null, null, null)
-//                .done(function (summary) {
-//                    me.setCurrencyFromSummaryData(summary);
-//                    fill(summary);
-//                })
-//                .fail(function () {
-//                    toastr.error("Can't find OrgSalesSummary.");
-//                });
-        },
+            uBilling.getOrgSalesSummary(
+                filter.period,
+                filter.start_date,
+                filter.end_date,
+                filter.vendor_id,
+                filter.product_id,
+                filter.plan_name,
+                filter.usage_name)
+                .done(function (summary) {
+                    me.setCurrencyFromSummaryData(summary);
+                    me.drawPeriodGraphFromSummary(filter, summary);
+                })
+                .fail(function () {
+                    toastr.error("Can't find OrgSalesSummary.");
+                });
+        }
+        ,
         /**
          * 서머리 데이터로부터 페이지의 currency 를 설정한다.
          */
@@ -651,20 +993,19 @@
             if (!currencies || !currencies.length) {
                 me.currency = baseCurrency;
             }
-
             //기본 currency 가 currencies 에 속해있다면 기본 currency 를 사용.
-            if (currencies.indexOf(baseCurrency) != -1) {
+            else if (currencies.indexOf(baseCurrency) != -1) {
                 me.currency = baseCurrency;
             }
             //기본 currency 가 currencies 에 없다면 currencies 의 첫번째를 사용.
             else {
                 me.currency = currencies[0];
             }
-
             //셀렉트박스를 currency 로 업데이트
             me.panel.find('[name=filter-currency]').val(me.currency);
             me.panel.find('[name=filter-currency]').trigger("chosen:updated");
-        },
+        }
+        ,
         /**
          * 누적 집계 패널을 구성한다.
          */
@@ -748,7 +1089,8 @@
                 .fail(function () {
                     toastr.error("Can't find OrgSalesSummary.");
                 });
-        },
+        }
+        ,
         drawPieChart: function () {
             var me = this;
             var data = [{
@@ -794,7 +1136,8 @@
             $.plot(me.panel.find("#flot-pie-chart3"), data, options);
             $.plot(me.panel.find("#flot-pie-chart4"), data, options);
 
-        },
+        }
+        ,
         drawSalesHistory: function () {
             var me = this;
             if (!me.dt) {
@@ -900,6 +1243,7 @@
                 me.dt = dt;
             }
         }
-    };
+    }
+    ;
     SalesController.prototype.constructor = SalesController;
 </script>

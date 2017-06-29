@@ -131,7 +131,7 @@ public class SalesServiceImpl implements SalesService {
             map.put("start_date", DateUtils.parseDate(summaryFilter.getStart_date(), "yyyy-MM-dd"));
         }
         if (summaryFilter.getEnd_date() != null) {
-            map.put("end_date", DateUtils.parseDate(summaryFilter.getStart_date(), "yyyy-MM-dd"));
+            map.put("end_date", DateUtils.parseDate(summaryFilter.getEnd_date(), "yyyy-MM-dd"));
         }
 
         this.mergeCurrencies(map, organization.getId());
@@ -139,7 +139,7 @@ public class SalesServiceImpl implements SalesService {
     }
 
 
-    private void createPerType(Map<String, Map<String, Object>> summary){
+    private void createPerType(Map<String, Map<String, Object>> summary) {
         summary.put("total", new HashedMap());
         summary.put("per_product_id", new HashedMap());
         summary.put("per_vendor_id", new HashedMap());
@@ -147,6 +147,7 @@ public class SalesServiceImpl implements SalesService {
         summary.put("per_price_type", new HashedMap());
         summary.put("per_usage_name", new HashedMap());
     }
+
     /**
      * 판매 이력 합계를 날짜별로 계산하여 리턴한다.
      *
@@ -167,7 +168,7 @@ public class SalesServiceImpl implements SalesService {
             result.put("start_date", filter.get("start_date").toString());
         }
         if (summaryFilter.getEnd_date() != null) {
-            filter.put("end_date", DateUtils.parseDate(summaryFilter.getStart_date(), "yyyy-MM-dd"));
+            filter.put("end_date", DateUtils.parseDate(summaryFilter.getEnd_date(), "yyyy-MM-dd"));
             result.put("end_date", filter.get("end_date").toString());
         }
 
@@ -315,7 +316,13 @@ public class SalesServiceImpl implements SalesService {
         //includeMap 이 있다면 amount 에 currency 를 추가한다.
         if (includeMap != null) {
             Map<String, BigDecimal> amount = (Map<String, BigDecimal>) includeMap.get("amount");
-            amount.put(history.getCurrency(), history.getAmount());
+            if (amount.containsKey(history.getCurrency())) {
+                BigDecimal decimal = amount.get(history.getCurrency());
+                BigDecimal add = decimal.add(history.getAmount());
+                amount.put(history.getCurrency(), add);
+            } else {
+                amount.put(history.getCurrency(), history.getAmount());
+            }
         }
         //그 외의 경우 새로운 map 을 만들어서 date_map 에 입력한다.
         else {
@@ -413,7 +420,13 @@ public class SalesServiceImpl implements SalesService {
         //includeMap 이 있다면 amount 에 currency 를 추가한다.
         if (includeMap != null) {
             Map<String, BigDecimal> amount = (Map<String, BigDecimal>) includeMap.get("amount");
-            amount.put(history.getCurrency(), history.getAmount());
+            if (amount.containsKey(history.getCurrency())) {
+                BigDecimal decimal = amount.get(history.getCurrency());
+                BigDecimal add = decimal.add(history.getAmount());
+                amount.put(history.getCurrency(), add);
+            } else {
+                amount.put(history.getCurrency(), history.getAmount());
+            }
         }
         //그 외의 경우 새로운 map 을 만들어서 date_map 에 입력한다.
         else {

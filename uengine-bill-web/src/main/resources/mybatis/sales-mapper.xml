@@ -136,6 +136,12 @@
         <if test="usage_name != '' and usage_name != null">
             AND usage_name = #{usage_name}
         </if>
+        <if test="start_date != '' and start_date != null">
+            AND format_date <![CDATA[ >= ]]> #{start_date}
+        </if>
+        <if test="end_date != '' and end_date != null">
+            AND format_date <![CDATA[ <= ]]> #{end_date}
+        </if>
         GROUP BY format_date,vendor_id,product_id,plan_name,usage_name,price_type,transaction_type,currency
         ORDER BY format_date;
     </select>
