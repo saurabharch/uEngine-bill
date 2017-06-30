@@ -115,7 +115,8 @@
                             </div>
 
                             <div class="form-group"><label class="col-sm-3 control-label"
-                                                           data-i18n="account.invoice.modal.reqDate">Request Date</label>
+                                                           data-i18n="account.invoice.modal.reqDate">Request
+                                Date</label>
 
                                 <div class="col-sm-9">
                                     <div class="input-group date">
@@ -148,13 +149,14 @@
 </div>
 
 <script>
-    var InvoiceDetailController = function (invoice_id, appendTo, account) {
+    var InvoiceDetailController = function (invoice_id, appendTo, account, invoice, isDryRun) {
         this.invoice_id = invoice_id;
         this.appendTo = appendTo;
         this.panel = null;
         this.account = account;
         this.dt = null;
-        this.invoice = null;
+        this.invoice = invoice;
+        this.isDryRun = isDryRun;
         this.init();
     };
     InvoiceDetailController.prototype = {
@@ -164,9 +166,14 @@
             me.panel.removeAttr('id');
             me.appendTo.html('');
             me.appendTo.append(me.panel);
-            me.drawInvoice();
-            me.drawInvoicePayments();
-            me.invoiceCtlEvents();
+            if (me.isDryRun) {
+                me.drawDryRunInvoice();
+                me.invoiceCtlEvents();
+            } else {
+                me.drawInvoice();
+                me.drawInvoicePayments();
+                me.invoiceCtlEvents();
+            }
         },
         drawInvoicePayments: function () {
             var me = this;
@@ -390,15 +397,21 @@
             var addCredit = me.panel.find('[name=add-credit]');
             var createCharge = me.panel.find('[name=create-charge]');
             var makePayment = me.panel.find('[name=make-payment]');
-            addCredit.click(function () {
-                me.invoiceCtlAction('createInvoiceCredit');
-            });
-            createCharge.click(function () {
-                me.invoiceCtlAction('createInvoiceCharge');
-            });
-            makePayment.click(function () {
-                me.invoiceCtlAction('createInvoicePayment');
-            });
+            if (me.isDryRun) {
+                addCredit.hide();
+                createCharge.hide();
+                makePayment.hide();
+            } else {
+                addCredit.click(function () {
+                    me.invoiceCtlAction('createInvoiceCredit');
+                });
+                createCharge.click(function () {
+                    me.invoiceCtlAction('createInvoiceCharge');
+                });
+                makePayment.click(function () {
+                    me.invoiceCtlAction('createInvoicePayment');
+                });
+            }
         },
         drawInvoiceItems: function (items) {
             var me = this;
@@ -440,8 +453,10 @@
                             defaultContent: '',
                             event: {
                                 click: function (key, value, rowValue, rowIdx, td) {
-                                    if (rowValue['itemType'] != 'ITEM_ADJ' && rowValue['itemType'] != 'REPAIR_ADJ') {
-                                        me.invoiceCtlAction('adjustInvoiceItem', rowValue);
+                                    if (!me.isDryRun) {
+                                        if (rowValue['itemType'] != 'ITEM_ADJ' && rowValue['itemType'] != 'REPAIR_ADJ') {
+                                            me.invoiceCtlAction('adjustInvoiceItem', rowValue);
+                                        }
                                     }
                                 }
                             }
@@ -476,7 +491,9 @@
         drawSum: function () {
             var me = this;
 
-            me.panel.find('[name=title]').html('Invoice ' + me.invoice['invoiceNumber']);
+            if (!me.isDryRun) {
+                me.panel.find('[name=title]').html('Invoice ' + me.invoice['invoiceNumber']);
+            }
             me.panel.find('[name=invoiceId]').html('ID: ' + me.invoice['invoiceId']);
             me.panel.find('[name=invoiceDate]').html(me.invoice['invoiceDate']);
             me.panel.find('[name=targetDate]').html(me.invoice['targetDate']);
@@ -520,6 +537,18 @@
                 .fail(function (response) {
                     toastr.error("Failed to get AccountInvoices : " + response.responseText);
                 });
+        },
+        drawDryRunInvoice: function () {
+            var me = this;
+            me.drawSum();
+            var items = me.invoice['items'];
+            if (items && items.length) {
+                $.each(items, function (index, item) {
+                    var currencyLabel = '<small class="text-success">' + item['currency'] + '</small>'
+                    item['amountWithCurrency'] = '<span>' + item['amount'] + '</span> ' + currencyLabel;
+                })
+                me.drawInvoiceItems(items);
+            }
         },
         /**
          * 데이터 피커의 날짜를 yyyy-mm-dd 로 변환

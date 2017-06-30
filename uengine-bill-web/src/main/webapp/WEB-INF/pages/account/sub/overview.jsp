@@ -116,15 +116,6 @@
                                     <h4 class="text-success" name="accountBalance"></h4>
                                 </div>
                             </div>
-                            <%--<div class="col-md-12 row">--%>
-                            <%--<div class="col-md-6">--%>
-                            <%--<span class="text-muted"--%>
-                            <%--data-i18n="account.overview.billing.credit">Account credit</span>--%>
-                            <%--</div>--%>
-                            <%--<div class="col-md-6">--%>
-                            <%--<h4 class="text-success" name="accountCBA"></h4>--%>
-                            <%--</div>--%>
-                            <%--</div>--%>
                             <div class="col-md-12 row">
                                 <div class="col-md-6">
                                     <span class="text-muted"
@@ -153,6 +144,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <span name="nextInvoiceDate"></span>
+                                    <span class="btn btn-default btn-xs" name="dryRunShow" style="display: none">인보이스 미리보기</span>
                                 </div>
                             </div>
                             <div class="col-md-12 row" style="margin-top: 10px;">
@@ -602,6 +594,31 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" name="save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal fade" id="dry-run-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title" data-i18n="">Dry run Invoice</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <div class="row" name="dry-run-append">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -1249,6 +1266,22 @@
                 } else {
                     nextInvoiceDate.html('N/A');
                 }
+
+                //가상 인보이스 보기 버튼
+                if (invoice) {
+                    me.panel.find('[name=dryRunShow]').show();
+                    me.panel.find('[name=dryRunShow]').unbind('click')
+                        .bind('click', function () {
+                            console.log(invoice);
+                            var modal = $('#dry-run-modal');
+                            new InvoiceDetailController(invoice.invoiceId, modal.find('[name=dry-run-append]'), me.account,
+                            invoice, true);
+                            modal.modal('show');
+                        });
+                } else {
+                    me.panel.find('[name=dryRunShow]').hide();
+                }
+
             };
             var data = {
                 "dryRunType": "UPCOMING_INVOICE"
