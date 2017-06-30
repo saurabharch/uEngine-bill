@@ -239,7 +239,7 @@
         AND organization_id = #{organization_id}
     </delete>
 
-    <update id="updateNote" parameterType="map">
+    <update id="updateNotes" parameterType="map">
         UPDATE product_distribution_history
         SET
         notes = #{notes}

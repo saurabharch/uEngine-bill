@@ -312,10 +312,6 @@
         var me = this;
         var launch = function () {
             me.init();
-            me.bindGraphButtons();
-            me.drawCumulative();
-            me.drawPeriodGraph();
-            me.drawSalesHistory();
         }
         uBilling.getClock()
             .done(function (clock) {
@@ -369,6 +365,11 @@
                     ibox.find('[id^=map-]').resize();
                 }, 50);
             });
+
+            me.bindGraphButtons();
+            me.drawCumulative();
+            me.drawPeriodGraph();
+            me.drawSalesHistory();
         },
 
         /**
@@ -1120,6 +1121,8 @@
                     transactionType = 'CREDIT';
                 }
 
+                form.find('[name=amount]').closest('.form-group').show();
+
                 modal.find('[name=save]').unbind('click');
                 modal.find('[name=save]').bind('click', function () {
                     var data = form.serializeObject();
@@ -1132,7 +1135,8 @@
                     data.currency = me.currency;
                     uBilling.createAccountWithdraw(me.account_id, data)
                         .done(function (history) {
-                            console.log(history);
+                            toastr.success('Withdraw succeedded.');
+                            me.init();
                         })
                         .fail(function (response) {
                             toastr.error("Failed to " + transaction + " : " + response.responseText);
@@ -1147,13 +1151,47 @@
 
             var withdrawBtn = me.panel.find('[name=create-withdraw]');
             var creditBtn = me.panel.find('[name=create-credit]');
+            withdrawBtn.unbind('click');
             withdrawBtn.click(function () {
                 bindWithdraw('withdraw');
             })
+            creditBtn.unbind('click');
             creditBtn.click(function () {
                 bindWithdraw('credit');
             })
-            //withdraw-modal
+        },
+        updateNotes: function (vendor_id, record_id, existNote) {
+            var me = this;
+            var modal = $('#withdraw-modal');
+            var form = modal.find('form');
+            form.find('[name=currency]').html(me.currency);
+            var title = modal.find('[name=title]');
+            title.html('Update notes');
+
+            form.find('[name=amount]').closest('.form-group').hide();
+
+            form.find('[name=notes]').val(existNote);
+
+            modal.find('[name=save]').unbind('click');
+            modal.find('[name=save]').bind('click', function () {
+                var data = form.serializeObject();
+                var notes = data.notes ? data.notes : '';
+                uBilling.updateSalesNotes(vendor_id, record_id, notes)
+                    .done(function (history) {
+                        toastr.success('Note updated.');
+                        if(me.dt){
+                            me.dt.getDt().ajax.reload();
+                        }
+                    })
+                    .fail(function (response) {
+                        toastr.error("Failed to update note. " + response.responseText);
+                    })
+                    .always(function () {
+                        modal.modal('hide');
+                    })
+
+            });
+            modal.modal('show');
         }
         ,
         /**
@@ -1567,211 +1605,253 @@
                     history['invoice_id_label'] = '<a href="Javascript:void(0);">' + history['invoice_id'] + '</a>';
                 }
             }
-            if (!me.dt) {
-                var dt = new uengineDT(me.panel.find('[name=sales-table]'), {
-                    order: [[0, "desc"]],
-                    select: {
-                        style: 'single'
+            var dt = new uengineDT(me.panel.find('[name=sales-table]'), {
+                order: [[0, "desc"]],
+                select: {
+                    style: 'single'
+                },
+                columns: [
+                    {
+                        data: 'format_date',
+                        title: 'DATE',
+                        defaultContent: ''
                     },
-                    columns: [
-                        {
-                            data: 'format_date',
-                            title: 'DATE',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'vendor_id_label',
-                            title: 'VENDOR',
-                            defaultContent: '',
-                            event: {
-                                click: function (key, value, rowValue, rowIdx, td) {
-                                    if (rowValue['vendor_id'] && rowValue['vendor_id'] != 'organization') {
-                                        window.location.href = '/account/' + rowValue['vendor_id'] + '/overview';
-                                    }
+                    {
+                        data: 'vendor_id_label',
+                        title: 'VENDOR',
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                if (rowValue['vendor_id'] && rowValue['vendor_id'] != 'organization') {
+                                    window.location.href = '/account/' + rowValue['vendor_id'] + '/overview';
                                 }
-                            }
-                        },
-                        {
-                            data: 'amount_label',
-                            title: 'AMOUNT',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'original_amount_label',
-                            title: 'ORIGINAL AMOUNT',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'ratio',
-                            title: 'RATIO',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'transaction_type',
-                            title: 'TRANSACTION',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'buyer_id_label',
-                            title: 'BUYER',
-                            defaultContent: '',
-                            event: {
-                                click: function (key, value, rowValue, rowIdx, td) {
-                                    if (rowValue['buyer_id']) {
-                                        window.location.href = '/account/' + rowValue['buyer_id'] + '/overview';
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            data: 'plan_name_label',
-                            title: 'PLAN',
-                            defaultContent: '',
-                            event: {
-                                click: function (key, value, rowValue, rowIdx, td) {
-                                    if (rowValue['plan_name']) {
-                                        var product_id = rowValue['plan_name'].substring(0, 14);
-                                        window.location.href = '/product/' + product_id + '/version/' + rowValue['version'] + '/detail';
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            data: 'subscription_id',
-                            title: 'SUBSCRIPTION',
-                            defaultContent: ''
-                        },
-                        {
-                            data: 'invoice_id_label',
-                            title: 'INVOICE',
-                            defaultContent: '',
-                            event: {
-                                click: function (key, value, rowValue, rowIdx, td) {
-                                    if (rowValue['invoice_id']) {
-                                        var accountId = rowValue['buyer_id'] ? rowValue['buyer_id'] : rowValue['vendor_id']
-                                        window.location.href = '/account/' + accountId + '/invoices/' + rowValue['invoice_id'];
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            data: 'price_type',
-                            title: 'PRICE TYPE',
-                            defaultContent: ''
-                        }
-                    ],
-                    pageLength: 10,
-                    info: true,
-                    responsive: true,
-                    dom: '<"html5buttons"B>lTfgitp',
-                    buttons: [
-                        {extend: 'copy'},
-                        {extend: 'csv'},
-                        {extend: 'excel', title: 'ExampleFile'},
-                        {extend: 'pdf', title: 'ExampleFile'},
-
-                        {
-                            extend: 'print',
-                            customize: function (win) {
-                                $(win.document.body).addClass('white-bg');
-                                $(win.document.body).css('font-size', '10px');
-
-                                $(win.document.body).find('table')
-                                    .addClass('compact')
-                                    .css('font-size', 'inherit');
                             }
                         }
-                    ],
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": function (data, callback, settings) {
-                        var offset = data.start;
-                        var limit = data.length;
-                        var searchKey = data.search.value;
-                        searchKey = searchKey.length > 0 ? searchKey : null;
+                    },
+                    {
+                        data: 'amount_label',
+                        title: 'AMOUNT',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'original_amount_label',
+                        title: 'ORIGINAL AMOUNT',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'ratio',
+                        title: 'RATIO',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'transaction_type',
+                        title: 'TRANSACTION',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'buyer_id_label',
+                        title: 'BUYER',
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                if (rowValue['buyer_id']) {
+                                    window.location.href = '/account/' + rowValue['buyer_id'] + '/overview';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        data: 'plan_name_label',
+                        title: 'PLAN',
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                if (rowValue['plan_name']) {
+                                    var product_id = rowValue['plan_name'].substring(0, 14);
+                                    window.location.href = '/product/' + product_id + '/version/' + rowValue['version'] + '/detail';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        data: 'subscription_id',
+                        title: 'SUBSCRIPTION',
+                        defaultContent: ''
+                    },
+                    {
+                        data: 'invoice_id_label',
+                        title: 'INVOICE',
+                        defaultContent: '',
+                        event: {
+                            click: function (key, value, rowValue, rowIdx, td) {
+                                if (rowValue['invoice_id']) {
+                                    var accountId = rowValue['buyer_id'] ? rowValue['buyer_id'] : rowValue['vendor_id']
+                                    window.location.href = '/account/' + accountId + '/invoices/' + rowValue['invoice_id'];
+                                }
+                            }
+                        }
+                    },
+                    {
+                        data: 'price_type',
+                        title: 'PRICE TYPE',
+                        defaultContent: ''
+                    }
+                    , {
+                        data: 'notes',
+                        title: 'NOTES',
+                        defaultContent: ''
+                    }
+                ],
+                pageLength: 10,
+                info: true,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    {
+                        text: 'Cancel withdraw',
+                        action: function () {
+                            var selected = dt.getDt().rows({selected: true}).data();
+                            if (!selected.length) {
+                                return;
+                            }
+                            var record_id = selected[0]['record_id'];
+                            var account_id = selected[0]['vendor_id'];
+                            var transaction_type = selected[0]['transaction_type'];
+                            if (transaction_type != 'WITHDRAW') {
+                                toastr.error('Only WITHDRAW transaction could be deleted.');
+                                return;
+                            }
+                            uBilling.cancelWithdraw(account_id, record_id)
+                                .done(function () {
+                                    toastr.success('Cancel withdraw succeeded.');
+                                    me.drawCumulative();
+                                    me.drawPeriodGraph();
+                                    dt.getDt().ajax.reload();
+                                })
+                                .fail(function () {
+                                    toastr.error('Cancel withdraw failed.');
+                                });
+                        }
+                    },
+                    {
+                        text: 'Update note',
+                        action: function () {
+                            var selected = dt.getDt().rows({selected: true}).data();
+                            if (!selected.length) {
+                                return;
+                            }
+                            var record_id = selected[0]['record_id'];
+                            var account_id = selected[0]['vendor_id'];
+                            me.updateNotes(account_id, record_id, selected[0].notes);
+                        }
+                    },
+                    {extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
 
-                        if (me.summaryType == 'organization') {
-                            uBilling.getOrgSalesHistories(searchKey, offset, limit)
-                                .done(function (response) {
-                                    var histories = response['data'];
-                                    $.each(histories, function (index, history) {
-                                        parseHistory(history);
-                                    })
-                                    dt.gridData = histories;
-                                    callback({
-                                        recordsTotal: response.total,
-                                        recordsFiltered: response.filtered,
-                                        data: histories
-                                    });
-                                })
-                                .fail(function () {
-                                    toastr.error("Can't find invoice list.");
-                                });
-                        } else if (me.summaryType == 'product') {
-                            uBilling.getProductSalesHistories(me.product_id, searchKey, offset, limit)
-                                .done(function (response) {
-                                    var histories = response['data'];
-                                    $.each(histories, function (index, history) {
-                                        parseHistory(history);
-                                    })
-                                    dt.gridData = histories;
-                                    callback({
-                                        recordsTotal: response.total,
-                                        recordsFiltered: response.filtered,
-                                        data: histories
-                                    });
-                                })
-                                .fail(function () {
-                                    toastr.error("Can't find invoice list.");
-                                });
-                        } else if (me.summaryType == 'vendor') {
-                            uBilling.getAccountSalesHistories(me.account_id, searchKey, offset, limit)
-                                .done(function (response) {
-                                    console.log(response);
-                                    var histories = response['data'];
-                                    $.each(histories, function (index, history) {
-                                        parseHistory(history);
-                                    })
-                                    dt.gridData = histories;
-                                    callback({
-                                        recordsTotal: response.total,
-                                        recordsFiltered: response.filtered,
-                                        data: histories
-                                    });
-                                })
-                                .fail(function () {
-                                    toastr.error("Can't find invoice list.");
-                                });
+                    {
+                        extend: 'print',
+                        customize: function (win) {
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
                         }
                     }
+                ],
+                "processing": true,
+                "serverSide": true,
+                "ajax": function (data, callback, settings) {
+                    var offset = data.start;
+                    var limit = data.length;
+                    var searchKey = data.search.value;
+                    searchKey = searchKey.length > 0 ? searchKey : null;
+
+                    if (me.summaryType == 'organization') {
+                        uBilling.getOrgSalesHistories(searchKey, offset, limit)
+                            .done(function (response) {
+                                var histories = response['data'];
+                                $.each(histories, function (index, history) {
+                                    parseHistory(history);
+                                })
+                                dt.gridData = histories;
+                                callback({
+                                    recordsTotal: response.total,
+                                    recordsFiltered: response.filtered,
+                                    data: histories
+                                });
+                            })
+                            .fail(function () {
+                                toastr.error("Can't find invoice list.");
+                            });
+                    } else if (me.summaryType == 'product') {
+                        uBilling.getProductSalesHistories(me.product_id, searchKey, offset, limit)
+                            .done(function (response) {
+                                var histories = response['data'];
+                                $.each(histories, function (index, history) {
+                                    parseHistory(history);
+                                })
+                                dt.gridData = histories;
+                                callback({
+                                    recordsTotal: response.total,
+                                    recordsFiltered: response.filtered,
+                                    data: histories
+                                });
+                            })
+                            .fail(function () {
+                                toastr.error("Can't find invoice list.");
+                            });
+                    } else if (me.summaryType == 'vendor') {
+                        uBilling.getAccountSalesHistories(me.account_id, searchKey, offset, limit)
+                            .done(function (response) {
+                                console.log(response);
+                                var histories = response['data'];
+                                $.each(histories, function (index, history) {
+                                    parseHistory(history);
+                                })
+                                dt.gridData = histories;
+                                callback({
+                                    recordsTotal: response.total,
+                                    recordsFiltered: response.filtered,
+                                    data: histories
+                                });
+                            })
+                            .fail(function () {
+                                toastr.error("Can't find invoice list.");
+                            });
+                    }
+                }
+            });
+            dt.renderGrid();
+            dt.getDt()
+                .on('user-select', function (e, dt, type, cell, originalEvent) {
+                    if ($(originalEvent.target).index() === 0) {
+                        e.preventDefault();
+                    }
+                })
+                .on('select', function (e, dt, type, indexes) {
+                    tableButtonCss();
+                })
+                .on('deselect', function (e, dt, type, indexes) {
+                    tableButtonCss();
                 });
-                dt.renderGrid();
-                dt.getDt()
-                    .on('user-select', function (e, dt, type, cell, originalEvent) {
-                        if ($(originalEvent.target).index() === 0) {
-                            e.preventDefault();
-                        }
-                    })
-                    .on('select', function (e, dt, type, indexes) {
-                        tableButtonCss();
-                    })
-                    .on('deselect', function (e, dt, type, indexes) {
-                        tableButtonCss();
-                    });
-                var tableButtonCss = function () {
-                    var buttons = dt.getPanel().parent().find('.html5buttons').find('a');
-                    var count = dt.getDt().rows({selected: true}).count();
-                    if (count > 0) {
-                        buttons.eq(0).css('opacity', '1');
-                        buttons.eq(1).css('opacity', '1');
-                    } else {
-                        buttons.eq(0).css('opacity', '0.5');
-                        buttons.eq(1).css('opacity', '0.5');
-                    }
-                };
-                tableButtonCss();
-                me.dt = dt;
-            }
+            me.dt = dt;
+
+            var tableButtonCss = function () {
+                var buttons = dt.getPanel().parent().find('.html5buttons').find('a');
+                var count = dt.getDt().rows({selected: true}).count();
+                if (count > 0) {
+                    buttons.eq(0).css('opacity', '1');
+                    buttons.eq(1).css('opacity', '1');
+                } else {
+                    buttons.eq(0).css('opacity', '0.5');
+                    buttons.eq(1).css('opacity', '0.5');
+                }
+            };
+            tableButtonCss();
         }
     }
     ;

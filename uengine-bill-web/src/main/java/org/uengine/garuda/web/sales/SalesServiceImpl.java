@@ -563,7 +563,7 @@ public class SalesServiceImpl implements SalesService {
             history.setTenant_id(organization.getTenant_id());
             history.setOrganization_id(organization.getId());
             history.setVendor_id(vendor_id);
-            history.setAmount(amount);
+            history.setAmount(amount.multiply(new BigDecimal(-1)));
             history.setCurrency(currency);
             history.setTransaction_type(DistributionTransactionType.WITHDRAW.toString());
             history.setFormat_date(clock.getLocalDate());
@@ -583,7 +583,7 @@ public class SalesServiceImpl implements SalesService {
             history.setTenant_id(organization.getTenant_id());
             history.setOrganization_id(organization.getId());
             history.setVendor_id(vendor_id);
-            history.setAmount(amount);
+            history.setAmount(amount.multiply(new BigDecimal(-1)));
             history.setCurrency(currency);
             history.setInvoice_id(invoiceId);
             history.setTransaction_type(DistributionTransactionType.CREDIT.toString());

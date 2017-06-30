@@ -109,10 +109,10 @@ public class SalesRepositoryImpl extends PersistentRepositoryImpl<String, Object
     @Override
     public ProductDistributionHistory updateNotes(String organization_id, Long record_id, String vendor_id, String notes) {
         Map map = new HashMap();
+        map.put("notes", notes);
         map.put("organization_id", organization_id);
         map.put("record_id", record_id);
         map.put("vendor_id", vendor_id);
-        map.put("notes", notes);
         int update = this.getSqlSessionTemplate().update(this.getNamespace() + ".updateNotes", map);
         if (update > 0) {
             return this.selectById(organization_id, record_id);

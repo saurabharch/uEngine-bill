@@ -177,11 +177,11 @@ public class SalesRestController {
             }
 
             Map account = kbRepository.getAccountById(id);
-            if(account == null){
+            if (account == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            if(withdrawRequest.getTransactionType() == null){
+            if (withdrawRequest.getTransactionType() == null) {
                 withdrawRequest.setTransactionType(DistributionTransactionType.WITHDRAW);
             }
 
@@ -224,7 +224,7 @@ public class SalesRestController {
     public ResponseEntity<ProductDistributionHistory> updateNotes(HttpServletRequest request,
                                                                   HttpServletResponse response,
                                                                   @RequestBody Map params,
-                                                                  @RequestParam(value = "id") String id,
+                                                                  @PathVariable(value = "id") String id,
                                                                   @PathVariable("sales_record_id") Long sales_record_id) {
 
         try {
@@ -234,13 +234,12 @@ public class SalesRestController {
             }
 
             ProductDistributionHistory history = salesService.selectById(role.getOrganization(), sales_record_id);
-            if (history == null || !id.equals(history.getVendor_id()) ||
-                    !DistributionTransactionType.WITHDRAW.toString().equals(history.getTransaction_type())) {
+            if (history == null || !id.equals(history.getVendor_id())) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
             ProductDistributionHistory updated = salesService.updateNote(role.getOrganization(), sales_record_id, history.getVendor_id(), params.get("notes").toString());
-            if(updated == null){
+            if (updated == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(updated, HttpStatus.OK);

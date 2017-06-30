@@ -1320,6 +1320,23 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    cancelWithdraw: function (account_id, record_id) {
+        var options = {
+            type: "DELETE",
+            url: '/rest/v1/accounts/' + account_id + '/sales/cancelwithdraw/' + record_id
+        };
+        return this.send(options);
+    },
+    updateSalesNotes: function (account_id, record_id, notes) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/accounts/' + account_id + '/sales/notes/' + record_id,
+            data: JSON.stringify({notes: notes}),
+            contentType: "application/json",
+            dataType: 'json'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var caller = arguments.callee.caller.name;
