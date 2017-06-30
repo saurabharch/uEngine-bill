@@ -1198,6 +1198,56 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    getAccountSalesHistories: function (id, searchKey, offset, limit) {
+        var data = {
+            offset: offset ? offset : 0,
+            limit: limit ? limit : 100
+        };
+        var url = searchKey ? '/rest/v1/accounts/' + id + '/sales/search/' + searchKey : '/rest/v1/accounts/' + id + '/sales/pagination';
+        var options = {
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: data,
+            resolve: function (response, status, xhr) {
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
+                return {
+                    data: response,
+                    total: total,
+                    filtered: filtered,
+                    offset: data.offset,
+                    limit: data.limit
+                };
+            }
+        };
+        return this.send(options);
+    },
+    getProductSalesHistories: function (id, searchKey, offset, limit) {
+        var data = {
+            offset: offset ? offset : 0,
+            limit: limit ? limit : 100
+        };
+        var url = searchKey ? '/rest/v1/product/' + id + '/sales/search/' + searchKey : '/rest/v1/product/' + id + '/sales/pagination';
+        var options = {
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: data,
+            resolve: function (response, status, xhr) {
+                var total = parseInt(xhr.getResponseHeader('x-uengine-pagination-totalnbrecords'));
+                var filtered = parseInt(xhr.getResponseHeader('x-uengine-pagination-maxnbrecords'));
+                return {
+                    data: response,
+                    total: total,
+                    filtered: filtered,
+                    offset: data.offset,
+                    limit: data.limit
+                };
+            }
+        };
+        return this.send(options);
+    },
     getOrgSalesSummary: function (period, start_date, end_date, vendor_id, product_id, plan_name, usage_name) {
         var data = {
             period: period,
