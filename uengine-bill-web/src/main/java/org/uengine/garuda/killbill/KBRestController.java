@@ -6,10 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.uengine.garuda.killbill.api.KillbillApi;
 import org.uengine.garuda.model.OneTimeBuy;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
@@ -190,6 +188,55 @@ public class KBRestController {
             }
 
             return new ResponseEntity<>(accountByIds, HttpStatus.OK);
+        } catch (Exception ex) {
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
+        }
+    }
+
+    //아카운트 unblock
+    @RequestMapping(value = "/accounts/{id}/unblock", method = RequestMethod.PUT)
+    public ResponseEntity<Void> unblockAccount(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              @PathVariable("id") String id,
+                                              @RequestParam(value = "resumeInvoice", defaultValue = "false") boolean resumeInvoice) {
+
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.ADMIN);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            Organization organization = role.getOrganization();
+
+            KillbillApi killbillApi = kbServiceFactory.apiClient(organization.getTenant_api_key(), organization.getTenant_api_secret());
+
+            //1.어카운트의 블락 스테이트 업데이트.
+            Map blockParams = new HashMap();
+            blockParams.put("stateName", "__KILLBILL__CLEAR__OVERDUE_STATE__");
+            blockParams.put("service", "overdue-service");
+            blockParams.put("type", "ACCOUNT");
+            killbillApi.accountApi().blockAccount(id, blockParams);
+
+            //resumeInvoice 가 있다면
+            if (resumeInvoice) {
+                //2. 어카운트 태그 조회
+                boolean hasInvoiceOffTag = false;
+                List<Map> accountTags = killbillApi.accountApi().getAccountTags(id);
+                for (Map accountTag : accountTags) {
+                    if (accountTag.get("tagDefinitionId").equals("00000000-0000-0000-0000-000000000002")) {
+                        hasInvoiceOffTag = true;
+                    }
+                }
+
+                //3. resumeInvoice 수행
+                if (hasInvoiceOffTag) {
+                    ArrayList<String> tags = new ArrayList<>();
+                    tags.add("00000000-0000-0000-0000-000000000002");
+                    killbillApi.accountApi().deleteAccountTags(id, tags);
+                }
+            }
+
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
             ExceptionUtils.httpExceptionKBResponse(ex, response);
             return null;

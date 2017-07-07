@@ -172,6 +172,11 @@ public class KBRestFilter implements Filter {
         if (requestURI.startsWith("/rest/v1/accounts/") && requestURI.contains("/sales/")) {
             is_proxy = false;
         }
+        //사용자 unblock
+        if (requestURI.startsWith("/rest/v1/accounts") && request.getMethod().toLowerCase().equals("put") &&
+                requestURI.endsWith("unblock")) {
+            is_proxy = false;
+        }
 
         //킬빌 rest uri 일 경우 프락시 통신을 한다.
         if (is_proxy) {

@@ -149,48 +149,48 @@
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="btn-group" name="g-btns">
-                                    <button type="button" class="btn btn-default" data-type="range-week" data-i18n="">
+                                    <button type="button" class="btn btn-default btn-xs" data-type="range-week" data-i18n="">
                                         Last
                                         week
                                     </button>
-                                    <button type="button" class="btn btn-default active" data-type="range-month"
+                                    <button type="button" class="btn btn-default btn-xs active" data-type="range-month"
                                             data-i18n="">Last month
                                     </button>
-                                    <button type="button" class="btn btn-default" data-type="range-3month" data-i18n="">
+                                    <button type="button" class="btn btn-default btn-xs" data-type="range-3month" data-i18n="">
                                         Last
                                         3
                                         months
                                     </button>
                                 </div>
                                 <div class="btn-group pull-right" name="g-btns">
-                                    <button type="button" class="btn btn-default active" data-type="DAY">일별 보기
+                                    <button type="button" class="btn btn-default btn-xs active" data-type="DAY">일별 보기
                                     </button>
-                                    <button type="button" class="btn btn-default" data-type="MONTH">월별보기</button>
-                                    <button type="button" class="btn btn-default" data-type="YEAR">년별 보기</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="MONTH">월별보기</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="YEAR">년별 보기</button>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="btn-group" name="g-btns">
-                                    <button type="button" class="btn btn-default active" data-type="per-total">Total
+                                    <button type="button" class="btn btn-default btn-xs active" data-type="per-total">Total
                                     </button>
-                                    <button type="button" class="btn btn-default" data-type="per-price">Price type
+                                    <button type="button" class="btn btn-default btn-xs" data-type="per-price">Price type
                                     </button>
-                                    <button type="button" class="btn btn-default" data-type="per-net">Total vs Net
+                                    <button type="button" class="btn btn-default btn-xs" data-type="per-net">Total vs Net
                                     </button>
-                                    <button type="button" class="btn btn-default" data-type="per-vendor">Vendor</button>
-                                    <button type="button" class="btn btn-default" data-type="per-product">Product
+                                    <button type="button" class="btn btn-default btn-xs" data-type="per-vendor">Vendor</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="per-product">Product
                                     </button>
-                                    <button type="button" class="btn btn-default" data-type="per-plan">Plan</button>
-                                    <button type="button" class="btn btn-default" data-type="per-usage">Usage</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="per-plan">Plan</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="per-usage">Usage</button>
                                 </div>
 
                                 <div class="btn-group pull-right" name="g-btns">
-                                    <button type="button" class="btn btn-default active" data-type="sales">매출</button>
-                                    <button type="button" class="btn btn-default" data-type="refund">환불</button>
-                                    <button type="button" class="btn btn-default" data-type="withdraw">출금</button>
-                                    <button type="button" class="btn btn-default" data-type="credit">크레딧</button>
+                                    <button type="button" class="btn btn-default btn-xs active" data-type="sales">매출</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="refund">환불</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="withdraw">출금</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-type="credit">크레딧</button>
                                 </div>
                             </div>
                         </div>
