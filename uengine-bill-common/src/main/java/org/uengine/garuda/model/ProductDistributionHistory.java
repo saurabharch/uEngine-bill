@@ -1,7 +1,7 @@
 package org.uengine.garuda.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by uengine on 2017. 1. 25..

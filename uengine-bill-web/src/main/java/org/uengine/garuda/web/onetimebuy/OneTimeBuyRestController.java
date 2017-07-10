@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.uengine.garuda.authentication.AuthenticationService;
+import org.uengine.garuda.killbill.KBRepository;
 import org.uengine.garuda.model.OneTimeBuy;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.Product;
@@ -21,10 +22,7 @@ import org.uengine.garuda.web.product.ProductService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by uengine on 2017. 1. 11..
@@ -44,8 +42,40 @@ public class OneTimeBuyRestController {
     @Autowired
     private OneTimeBuyService oneTimeBuyService;
 
+    @Autowired
+    private KBRepository kbRepository;
+
+    @RequestMapping(value = "/accounts/{id}/onetimebuy", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<OneTimeBuy>> accountOneTimeBuy(HttpServletRequest request,
+                                                              HttpServletResponse response,
+                                                              @PathVariable("id") String id) {
+        try {
+            OrganizationRole role = organizationService.getOrganizationRole(request, OrganizationRole.MEMBER);
+            if (!role.getAccept()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            Organization organization = role.getOrganization();
+
+            Map account = kbRepository.getAccountById(id);
+            if (account == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            List<OneTimeBuy> oneTimeBuyList = oneTimeBuyService.selectByAccountId(organization.getId(), id);
+            if (oneTimeBuyList == null) {
+                oneTimeBuyList = new ArrayList<>();
+            }
+
+            return new ResponseEntity<>(oneTimeBuyList, HttpStatus.OK);
+        } catch (Exception ex) {
+            ExceptionUtils.httpExceptionKBResponse(ex, response);
+            return null;
+        }
+    }
+
     @RequestMapping(value = "/onetimebuy", method = RequestMethod.POST)
-    public ResponseEntity<List<OneTimeBuy>> createProduct(HttpServletRequest request,
+    public ResponseEntity<List<OneTimeBuy>> createOneTimeBuy(HttpServletRequest request,
                                                           HttpServletResponse response,
                                                           @RequestBody List<OneTimeBuyRequest> list,
                                                           @RequestParam(value = "accountId") String accountId,
@@ -67,7 +97,7 @@ public class OneTimeBuyRestController {
     }
 
     @RequestMapping(value = "/onetimebuy/pagination", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<OneTimeBuy>> getProducts(HttpServletRequest request,
+    public ResponseEntity<List<OneTimeBuy>> listOneTimeBuys(HttpServletRequest request,
                                                         HttpServletResponse response,
                                                         @RequestParam(defaultValue = "0") Long offset,
                                                         @RequestParam(defaultValue = "100") Long limit) {
@@ -96,7 +126,7 @@ public class OneTimeBuyRestController {
     }
 
     @RequestMapping(value = "/onetimebuy/search/{searchKey}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<OneTimeBuy>> getProductsSearch(HttpServletRequest request,
+    public ResponseEntity<List<OneTimeBuy>> listOneTimeBuySearch(HttpServletRequest request,
                                                               HttpServletResponse response,
                                                               @PathVariable("searchKey") String searchKey,
                                                               @RequestParam(defaultValue = "0") Long offset,
@@ -126,7 +156,7 @@ public class OneTimeBuyRestController {
     }
 
     @RequestMapping(value = "/onetimebuy/{record_id}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<OneTimeBuy> getProduct(HttpServletRequest request,
+    public ResponseEntity<OneTimeBuy> getOneTimeBuy(HttpServletRequest request,
                                                  HttpServletResponse response,
                                                  @PathVariable("record_id") Long record_id) {
         try {
@@ -157,7 +187,7 @@ public class OneTimeBuyRestController {
      * @return
      */
     @RequestMapping(value = "/onetimebuy/{record_id}", method = RequestMethod.DELETE)
-    public ResponseEntity<OneTimeBuy> deleteProduct(HttpServletRequest request,
+    public ResponseEntity<OneTimeBuy> cancelOneTimeBuy(HttpServletRequest request,
                                                     HttpServletResponse response,
                                                     @PathVariable("record_id") Long record_id) {
 

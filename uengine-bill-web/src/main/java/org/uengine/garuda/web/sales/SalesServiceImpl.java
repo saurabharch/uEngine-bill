@@ -29,6 +29,8 @@ import org.uengine.garuda.web.product.version.ProductVersionService;
 import org.uengine.garuda.web.rule.BillingRuleRepository;
 
 import java.math.BigDecimal;
+import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 @Service
@@ -567,7 +569,7 @@ public class SalesServiceImpl implements SalesService {
             history.setCurrency(currency);
             history.setTransaction_type(DistributionTransactionType.WITHDRAW.toString());
             history.setFormat_date(clock.getLocalDate());
-            history.setCreated_date(clock.getCurrentUtcTime());
+            history.setCreated_date(new Date(clock.getCurrentUtcTime().getTime()));
             history.setNotes(withdrawRequest.getNotes());
 
             return salesRepository.insertHistory(history);
@@ -588,7 +590,7 @@ public class SalesServiceImpl implements SalesService {
             history.setInvoice_id(invoiceId);
             history.setTransaction_type(DistributionTransactionType.CREDIT.toString());
             history.setFormat_date(clock.getLocalDate());
-            history.setCreated_date(clock.getCurrentUtcTime());
+            history.setCreated_date(new Date(clock.getCurrentUtcTime().getTime()));
             history.setNotes(withdrawRequest.getNotes());
 
             return salesRepository.insertHistory(history);

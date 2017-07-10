@@ -26,8 +26,10 @@ import org.uengine.garuda.web.rule.BillingRuleRepository;
 import sun.misc.resources.Messages_pt_BR;
 
 import java.math.BigDecimal;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 @Service
 public class OneTimeBuyServiceImpl implements OneTimeBuyService {
@@ -216,7 +218,7 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
                 oneTimeBuy.setCurrency(currency);
                 oneTimeBuy.setEffective_date(DateUtils.parseDate(effectiveDate, "yyyy-MM-dd"));
                 oneTimeBuy.setBilling_date(billing_date);
-                oneTimeBuy.setCreated_date(clock.getCurrentUtcTime());
+                oneTimeBuy.setCreated_date(new java.sql.Date(clock.getCurrentUtcTime().getTime()));
 
                 OneTimeBuy inserted = oneTimeBuyRepository.insert(oneTimeBuy);
                 oneTimeBuyList.add(inserted);
@@ -255,7 +257,7 @@ public class OneTimeBuyServiceImpl implements OneTimeBuyService {
                 oneTimeBuy.setCurrency(currency);
                 oneTimeBuy.setEffective_date(DateUtils.parseDate(effectiveDate, "yyyy-MM-dd"));
                 oneTimeBuy.setBilling_date(DateUtils.parseDate(actualBcdDate, "yyyy-MM-dd"));
-                oneTimeBuy.setCreated_date(clock.getCurrentUtcTime());
+                oneTimeBuy.setCreated_date(new java.sql.Date(clock.getCurrentUtcTime().getTime()));
 
                 OneTimeBuy inserted = oneTimeBuyRepository.insert(oneTimeBuy);
                 oneTimeBuyList.add(inserted);

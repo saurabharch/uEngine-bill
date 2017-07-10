@@ -20,6 +20,9 @@
       "name": "organization"
     },
     {
+      "name": "onetimebuy"
+    },
+    {
       "name": "product"
     },
     {
@@ -480,6 +483,397 @@
           },
           "204": {
             "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/organization/sales/summary": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "get organization sales summary per date",
+        "description": "조직의 판매대금 합계를 기간별로 조회한다.",
+        "operationId": "getOrganizationSalesSummary",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "DAY",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ]
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "vendor_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "plan_name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "usage_name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationSalesPerDateSummaryJson"
+            }
+          },
+          "400": {
+            "description": "Invalid request supplied"
+          }
+        }
+      }
+    },
+    "/rest/v1/organization/sales/pagination": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "List organization sales history",
+        "description": "조직의 판매 이력을 페이징 처리하여 조회한다.",
+        "operationId": "getOrganizationSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/organization/sales/search/{searchKey}": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Search organization sales history",
+        "description": "주어진 검색어에 해당하는 조직의 판매 이력을 페이징 처리하여 반환한다.",
+        "operationId": "searchOrganizationSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": ".*"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/onetimebuy": {
+      "post": {
+        "tags": [
+          "onetimebuy"
+        ],
+        "summary": "Create Onetimebuy",
+        "description": "일회성 구매들을 요청한다.",
+        "operationId": "createOnetimebuy",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ListOneTimeBuyRequestJson"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "requestedDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OneTimeBuyJson"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/onetimebuy/{record_id}": {
+      "get": {
+        "tags": [
+          "onetimebuy"
+        ],
+        "summary": "Retrieve an onetimebuy by id",
+        "description": "onetimebuy 를 아이디로 조회한다.",
+        "operationId": "getOnetimebuy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "onetimebuy not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OneTimeBuyJson"
+            }
+          },
+          "400": {
+            "description": "Invalid onetimebuy id supplied"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "onetimebuy"
+        ],
+        "summary": "Cancel Onetimebuy",
+        "description": "Onetimebuy 요청을 취소한다. 결제 대기(PENDING_INVOICE) 상태인 것만 가능하다.",
+        "operationId": "cancelOneTimeBuy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "onetimebuy not found"
+          },
+          "400": {
+            "description": "Invalid onetimebuy id supplied"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OneTimeBuyJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/onetimebuy/pagination": {
+      "get": {
+        "tags": [
+          "onetimebuy"
+        ],
+        "summary": "List onetimebuy",
+        "description": "onetimebuy 를 페이징 하여 조회한다.",
+        "operationId": "listOneTimeBuys",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OneTimeBuyJson"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/onetimebuy/search/{searchKey}": {
+      "get": {
+        "tags": [
+          "onetimebuy"
+        ],
+        "summary": "Search onetimebuys",
+        "description": "주어진 검색어에 해당하는 onetimebuy 들을 페이징 처리하여 반환한다.",
+        "operationId": "searchOnetimebuy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": ".*"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Request"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OneTimeBuyJson"
+              }
+            }
           }
         }
       }
@@ -1062,6 +1456,189 @@
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/ProductVersionJson"
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/sales/summary": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "get product sales summary per date",
+        "description": "제품의 판매대금 합계를 기간별로 조회한다.",
+        "operationId": "getProductSalesSummary",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "DAY",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ]
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "vendor_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "plan_name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "usage_name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Product not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SalesPerDateSummaryJson"
+            }
+          },
+          "400": {
+            "description": "Invalid account id supplied"
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/sales/pagination": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "List product sales history",
+        "description": "제품의 판매 이력을 페이징 처리하여 조회한다.",
+        "operationId": "getAccountsSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/product/{productId}/sales/search/{searchKey}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "summary": "Search product sales history",
+        "description": "주어진 검색어에 해당하는 제품 판매 이력을 페이징 처리하여 반환한다.",
+        "operationId": "searchAccountsSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "searchKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": ".*"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
             }
           }
         }
@@ -1930,6 +2507,389 @@
             "description": "Invalid account data supplied"
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Remove account",
+        "description": "구매자 계정을 삭제한다. 구독기록이나 결제 기록이 있다면 삭제할 수 없다.",
+        "operationId": "deleteAccount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid account delete supplied"
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "204": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/sales/balance": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "get account sales balance",
+        "description": "구매자 계정의 판매대금 잔액을 조회한다.",
+        "operationId": "getAccountSalesBalance",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Account not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountSalesBalanceJson"
+            }
+          },
+          "400": {
+            "description": "Invalid account id supplied"
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/sales/summary": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "get account sales summary per date",
+        "description": "구매자 계정의 판매대금 합계를 기간별로 조회한다.",
+        "operationId": "getAccountSalesSummary",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "DAY",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ]
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "plan_name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "usage_name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Account not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SalesPerDateSummaryJson"
+            }
+          },
+          "400": {
+            "description": "Invalid account id supplied"
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/sales/pagination": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "List accounts sales history",
+        "description": "판매자의 판매 이력을 페이징 처리하여 조회한다.",
+        "operationId": "getAccountsSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/sales/search/{searchKey}": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Search accounts sales history",
+        "description": "주어진 검색어에 해당하는 판매자 계정의 판매 이력을 페이징 처리하여 반환한다.",
+        "operationId": "searchAccountsSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "searchKey",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": ".*"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 100,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/sales/withdraw": {
+      "post": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Withdraw accounts sales",
+        "description": "판매자의 판매 잔금을 출금처리한다.",
+        "operationId": "withdrawAccountsSales",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SalesWithdrawRequest"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found account"
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductDistributionHistory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/sales/cancelwithdraw/{sales_record_id}": {
+      "post": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Cancel withdraw",
+        "description": "판매자의 판매 잔금을 출금기록을 취소한다.",
+        "operationId": "cancelWithdraw",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "sales_record_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found sales record"
+          },
+          "400": {
+            "description": "Invalid Request"
+          },
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/bcd": {
+      "put": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Update account bcd",
+        "description": "구매자 계정 결제일을 업데이트 한다.",
+        "operationId": "updateAccountBCD",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/AccountBCDJson"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid account bcd data supplied"
+          },
+          "404": {
+            "description": "Account Not Found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountJson"
+            }
+          }
+        }
       }
     },
     "/rest/v1/accounts/{accountId}/allTags": {
@@ -2144,6 +3104,85 @@
         "responses": {
           "404": {
             "description": "Account not found"
+          },
+          "400": {
+            "description": "Invalid account id supplied"
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/unblock": {
+      "put": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Unblock an account",
+        "description": "구매자 계정을 UnBlock 시킨다.",
+        "operationId": "addAccountUnBlockingState",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          },
+          {
+            "name": "resumeInvoice",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "인보이스 생성 재시작 여부"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Account not found"
+          },
+          "400": {
+            "description": "Invalid account unblock supplied"
+          },
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/rest/v1/accounts/{accountId}/onetimebuy": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Retrieve onetimebuy for account",
+        "description": "구매자 계정이 구매한 일회성 구매 이력을 조회한다.",
+        "operationId": "getAccountOnetimebuy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "\\w+-\\w+-\\w+-\\w+-\\w+"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Account not found"
+          },
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OneTimeBuyJson"
+              }
+            }
           },
           "400": {
             "description": "Invalid account id supplied"
@@ -11223,7 +12262,6 @@
     }
   },
   "definitions": {
-
     "RolledUpUnitJson": {
       "type": "object",
       "properties": {
@@ -13387,6 +14425,15 @@
         }
       }
     },
+    "AccountBCDJson": {
+      "type": "object",
+      "properties": {
+        "billCycleDayLocal": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "TokenJson": {
       "type": "object",
       "properties": {
@@ -13899,8 +14946,25 @@
         "usage_seq": {
           "type": "number"
         },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VendorJson"
+          }
+        },
         "reg_dt": {
           "type": "string"
+        }
+      }
+    },
+    "VendorJson": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "type": "string"
+        },
+        "ratio": {
+          "type": "number"
         }
       }
     },
@@ -13984,6 +15048,12 @@
           "items": {
             "$ref": "#/definitions/TierJson"
           }
+        },
+        "overwriteVendors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VendorJson"
+          }
         }
       }
     },
@@ -14066,6 +15136,12 @@
         },
         "number_of_subscriptions": {
           "type": "number"
+        },
+        "overwriteVendors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VendorJson"
+          }
         }
       }
     },
@@ -14196,10 +15272,354 @@
         }
       }
     },
-    "ListInvoiceItemJson":{
+    "ListInvoiceItemJson": {
       "type": "array",
       "items": {
         "$ref": "#/definitions/InvoiceItemJson"
+      }
+    },
+    "ListOneTimeBuyRequestJson": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/OneTimeBuyRequestJson"
+      }
+    },
+    "OneTimeBuyRequestJson": {
+      "type": "object",
+      "properties": {
+        "bundleId": {
+          "type": "string"
+        },
+        "productCategory": {
+          "type": "string"
+        },
+        "planName": {
+          "type": "string"
+        }
+      }
+    },
+    "OneTimeBuyJson": {
+      "type": "object",
+      "properties": {
+        "record_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bundle_id": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "account_id": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "number"
+        },
+        "plan_name": {
+          "type": "string"
+        },
+        "plan_display_name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "invoice_id": {
+          "type": "string"
+        },
+        "invoice_item_id": {
+          "type": "string"
+        },
+        "effective_date": {
+          "type": "string"
+        },
+        "billing_date": {
+          "type": "string"
+        },
+        "created_date": {
+          "type": "string"
+        }
+      }
+    },
+    "AccountSalesBalanceJson": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "$ref": "#/definitions/AmountCurrencyMap"
+        },
+        "sales": {
+          "$ref": "#/definitions/AmountCurrencyMap"
+        },
+        "refund": {
+          "$ref": "#/definitions/AmountCurrencyMap"
+        },
+        "withdraw": {
+          "$ref": "#/definitions/AmountCurrencyMap"
+        },
+        "credit": {
+          "$ref": "#/definitions/AmountCurrencyMap"
+        }
+      }
+    },
+    "OrganizationSalesPerDateSummaryJson":{
+      "type": "object",
+      "properties": {
+        "start_date": {
+          "type": "string"
+        },
+        "end_date": {
+          "type": "string"
+        },
+        "currencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "total_revenue": {
+          "$ref": "#/definitions/SalesPerDateSummaryJson"
+        },
+        "net_summary": {
+          "$ref": "#/definitions/SalesPerDateSummaryJson"
+        }
+      }
+    },
+    "SalesPerDateSummaryJson": {
+      "type": "object",
+      "properties": {
+        "start_date": {
+          "type": "string"
+        },
+        "end_date": {
+          "type": "string"
+        },
+        "currencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "balance": {
+          "$ref": "#/definitions/SummaryAndPerDateJson"
+        },
+        "sales": {
+          "$ref": "#/definitions/SummaryAndPerDateJson"
+        },
+        "refund": {
+          "$ref": "#/definitions/SummaryAndPerDateJson"
+        },
+        "withdraw": {
+          "$ref": "#/definitions/SummaryAndPerDateJson"
+        },
+        "credit": {
+          "$ref": "#/definitions/SummaryAndPerDateJson"
+        }
+      }
+    },
+    "SummaryAndPerDateJson": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/SummaryJson"
+        },
+        "per_date": {
+          "$ref": "#/definitions/PerDateJson"
+        }
+      }
+    },
+    "SummaryJson": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "$ref": "#/definitions/AmountCurrencyMap"
+        },
+        "per_usage_name": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AmountCurrencyMap"
+          }
+        },
+        "per_vendor_id": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AmountCurrencyMap"
+          }
+        },
+        "per_product_id": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AmountCurrencyMap"
+          }
+        },
+        "per_plan_name": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AmountCurrencyMap"
+          }
+        },
+        "per_price_type": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AmountCurrencyMap"
+          }
+        }
+      }
+    },
+    "PerDateJson": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "usage_name": {
+              "type": "string"
+            },
+            "price_type": {
+              "type": "string"
+            },
+            "plan_name": {
+              "type": "string"
+            },
+            "product_id": {
+              "type": "string"
+            },
+            "vendor_id": {
+              "type": "string"
+            },
+            "amount": {
+              "$ref": "#/definitions/AmountCurrencyMap"
+            }
+          }
+        }
+      }
+    },
+    "AmountCurrencyMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "ProductDistributionHistory":{
+      "type": "object",
+      "properties": {
+        "record_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "subscription_id": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "buyer_id": {
+          "type": "string"
+        },
+        "vendor_id": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "number"
+        },
+        "plan_name": {
+          "type": "string"
+        },
+        "usage_name": {
+          "type": "string"
+        },
+        "ratio": {
+          "type": "number"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "original_amount": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "invoice_id": {
+          "type": "string"
+        },
+        "invoice_item_id": {
+          "type": "string"
+        },
+        "linked_invoice_item_id": {
+          "type": "string"
+        },
+        "invoice_item_type": {
+          "type": "string"
+        },
+        "price_type": {
+          "type": "string",
+          "enum":[
+            "ONE_TIME",
+            "USAGE",
+            "RECURRING",
+            "FIXED"
+          ]
+        },
+        "transaction_type": {
+          "type": "string",
+          "enum":[
+            "CREATION",
+            "ADJUSTMENT",
+            "WITHDRAW",
+            "CREDIT"
+          ]
+        },
+        "format_date":{
+          "type": "string"
+        },
+        "created_date": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "SalesWithdrawRequest":{
+      "type": "object",
+      "properties": {
+        "transactionType":{
+          "type": "string",
+          "enum":[
+            "WITHDRAW",
+            "CREDIT"
+          ]
+        },
+        "amount": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
       }
     }
   }
