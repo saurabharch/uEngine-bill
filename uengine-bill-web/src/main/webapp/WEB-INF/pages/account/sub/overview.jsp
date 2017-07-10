@@ -123,6 +123,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <span class="label label-primary" name="status"></span>
+                                    <span class="btn btn-default btn-xs" name="block-state" style="margin-top: 3px;">연체 상태 변경</span>
                                 </div>
                             </div>
 
@@ -619,6 +620,67 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal fade" id="block-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="title" data-i18n="account.overview.pmTrModal.title">Update Overdue
+                    State</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content no-padding">
+                        <form method="get" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" data-i18n="">State</label>
+
+                                <div class="col-sm-9">
+                                    <select class="chosen-select" tabindex="2" name="stateName" required>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group"><label class="col-sm-3 control-label" data-i18n=""></label>
+
+                                <div class="col-sm-9">
+                                    <div name="block">
+                                        <label>
+                                            <input type="checkbox" name="blockChange" value="true" checked>
+                                            <span data-i18n="">구독 변경을 중단합니다.</span>
+                                        </label><br>
+                                        <label>
+                                            <input type="checkbox" name="blockEntitlement" value="true" checked>
+                                            <span data-i18n="">구독 신규 생성을 중단합니다.</span>
+                                        </label><br>
+                                        <label>
+                                            <input type="checkbox" name="blockBilling" value="true" checked>
+                                            <span data-i18n="">진행중인 구독을 정지합니다.</span>
+                                        </label>
+                                    </div>
+                                    <div name="unblock">
+                                        <label>
+                                            <input type="checkbox" name="resumeInvoice" value="true" checked>
+                                            <span data-i18n="">인보이스 발행을 재게합니다.</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" name="save">Save</button>
             </div>
         </div>
     </div>
@@ -1275,7 +1337,7 @@
                             console.log(invoice);
                             var modal = $('#dry-run-modal');
                             new InvoiceDetailController(invoice.invoiceId, modal.find('[name=dry-run-append]'), me.account,
-                            invoice, true);
+                                invoice, true);
                             modal.modal('show');
                         });
                 } else {
@@ -1318,6 +1380,102 @@
                 })
                 .fail(function () {
                     toastr.error('Failed to get Account Overdue');
+                })
+
+
+            var fillBlock = function (overdueRule) {
+                console.log(overdueRule);
+                var states = [];
+                $.each(overdueRule.overdueStates, function (i, state) {
+                    states.push(state.name);
+                })
+
+                me.panel.find('[name=block-state]').unbind('click')
+                    .bind('click', function () {
+                        var modal = $('#block-modal');
+                        var form = modal.find('form');
+
+                        var stateNameBox = form.find('[name=stateName]');
+                        stateNameBox.find('option').remove();
+
+                        //클리어 스테이트를 추가한다.
+                        stateNameBox.append('<option value="__KILLBILL__CLEAR__OVERDUE_STATE__" selected>Good</option>');
+
+                        $.each(states, function (s, name) {
+                            stateNameBox.append('<option value="' + name + '">' + name + '</option>');
+                        })
+
+                        var updateByStateNameBox = function () {
+                            if (stateNameBox.val() == '__KILLBILL__CLEAR__OVERDUE_STATE__') {
+                                form.find('[name=unblock]').show();
+                                form.find('[name=block]').hide();
+                            } else {
+                                form.find('[name=unblock]').hide();
+                                form.find('[name=block]').show();
+                            }
+                        }
+
+                        stateNameBox.chosen({width: "100%"});
+                        stateNameBox.trigger("chosen:updated");
+
+                        stateNameBox.unbind('change');
+                        stateNameBox.bind('change', function (event, value) {
+                            updateByStateNameBox();
+                        });
+                        updateByStateNameBox();
+
+                        modal.find('[name=save]').unbind('click');
+                        modal.find('[name=save]').bind('click', function () {
+                            blockSubmitStart();
+                            var data = form.serializeObject();
+                            if (data.stateName == '__KILLBILL__CLEAR__OVERDUE_STATE__') {
+                                uBilling.unblockAccount(me.account_id, data.resumeInvoice)
+                                    .done(function () {
+                                        toastr.success("Account unblocked.");
+                                        me.init();
+                                        modal.modal('hide');
+                                    })
+                                    .fail(function (response) {
+                                        toastr.error("Failed to unblock Account : " + response.responseText);
+                                    })
+                                    .always(function () {
+                                        blockStop();
+                                    })
+                            } else {
+                                data = {
+                                    stateName: data.stateName,
+                                    service: 'overdue-service',
+                                    blockChange: data.blockChange ? true : false,
+                                    blockEntitlement: data.blockEntitlement ? true : false,
+                                    blockBilling: data.blockBilling ? true : false,
+                                    type: 'ACCOUNT'
+                                }
+                                uBilling.blockAccount(me.account_id, data)
+                                    .done(function () {
+                                        toastr.success("Account blocked.");
+                                        me.init();
+                                        modal.modal('hide');
+                                    })
+                                    .fail(function (response) {
+                                        toastr.error("Failed to block Account : " + response.responseText);
+                                    })
+                                    .always(function () {
+                                        blockStop();
+                                    })
+                            }
+                        });
+
+
+                        modal.modal('show');
+                    });
+                //blockEntitlement
+            }
+            uBilling.getOverdueRule()
+                .done(function (overdueRule) {
+                    fillBlock(overdueRule);
+                })
+                .fail(function () {
+                    toastr.error('Failed to get Organization Overdue Rule');
                 })
         }
         ,

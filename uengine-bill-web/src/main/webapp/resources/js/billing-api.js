@@ -1337,6 +1337,26 @@ uBilling.prototype = {
         };
         return this.send(options);
     },
+    unblockAccount: function (account_id, resumeInvoice) {
+        var url = '/rest/v1/accounts/' + account_id + '/unblock';
+        url = resumeInvoice ? url + '?resumeInvoice=true' : url;
+        var options = {
+            type: "PUT",
+            url: url,
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
+    blockAccount: function (account_id, blockJson) {
+        var options = {
+            type: "PUT",
+            url: '/rest/v1/accounts/' + account_id + '/block',
+            data: JSON.stringify(blockJson),
+            contentType: "application/json",
+            dataType: 'text'
+        };
+        return this.send(options);
+    },
 
     send: function (options) {
         var caller = arguments.callee.caller.name;
