@@ -5,13 +5,13 @@
     <parent>
         <artifactId>uengine-bill</artifactId>
         <groupId>org.uengine.garuda</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uengine-bill-web</artifactId>
     <packaging>war</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <name>uEngine Billing Web Page - Personal</name>
     <url>http://www.oceiam.org</url>
 
@@ -86,13 +86,13 @@
         <dependency>
             <groupId>org.uengine.garuda</groupId>
             <artifactId>uengine-bill-common</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.uengine.garuda</groupId>
             <artifactId>uengine-killbill-java-client</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>

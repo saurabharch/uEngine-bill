@@ -5,13 +5,13 @@
     <parent>
         <artifactId>uengine-bill</artifactId>
         <groupId>org.uengine.garuda</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uengine-bill-common</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <name>uEngine Billing - Common</name>
 
     <dependencies>
