@@ -1546,7 +1546,7 @@
         ],
         "summary": "List product sales history",
         "description": "제품의 판매 이력을 페이징 처리하여 조회한다.",
-        "operationId": "getAccountsSales",
+        "operationId": "getProductsSales",
         "produces": [
           "application/json"
         ],
@@ -1595,7 +1595,7 @@
         ],
         "summary": "Search product sales history",
         "description": "주어진 검색어에 해당하는 제품 판매 이력을 페이징 처리하여 반환한다.",
-        "operationId": "searchAccountsSales",
+        "operationId": "searchProductSales",
         "produces": [
           "application/json"
         ],
@@ -2807,7 +2807,7 @@
       }
     },
     "/rest/v1/accounts/{accountId}/sales/cancelwithdraw/{sales_record_id}": {
-      "post": {
+      "delete": {
         "tags": [
           "accounts"
         ],

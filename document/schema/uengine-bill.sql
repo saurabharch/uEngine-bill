@@ -2,7 +2,6 @@ ALTER TABLE killbill.accounts
   ADD COLUMN billing_cycle_day_local_ext INT(11) DEFAULT NULL
   AFTER billing_cycle_day_local;
 
-DROP TABLE IF EXISTS registe;
 CREATE TABLE IF NOT EXISTS registe (
   id           INT(11)      NOT NULL AUTO_INCREMENT,
   user_id      VARCHAR(36)  NOT NULL,
@@ -14,8 +13,7 @@ CREATE TABLE IF NOT EXISTS registe (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS organization;
-CREATE TABLE organization (
+CREATE TABLE IF NOT EXISTS organization (
   id                  VARCHAR(36)  NOT NULL,
   name                VARCHAR(256) NOT NULL,
   tenant_id           VARCHAR(36)  NOT NULL,
@@ -45,8 +43,7 @@ CREATE TABLE organization (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS authority;
-CREATE TABLE authority (
+CREATE TABLE IF NOT EXISTS authority (
   id              VARCHAR(36)  NOT NULL,
   organization_id VARCHAR(36)  NOT NULL,
   user_id         VARCHAR(36)  NOT NULL,
@@ -58,8 +55,7 @@ CREATE TABLE authority (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS organization_email;
-CREATE TABLE organization_email (
+CREATE TABLE IF NOT EXISTS organization_email (
   id              VARCHAR(36)  NOT NULL,
   organization_id VARCHAR(36)  NOT NULL,
   email           VARCHAR(128) NOT NULL,
@@ -71,8 +67,7 @@ CREATE TABLE organization_email (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS organization_template;
-CREATE TABLE organization_template (
+CREATE TABLE IF NOT EXISTS organization_template (
   record_id         INT(11)      NOT NULL AUTO_INCREMENT,
   organization_id   VARCHAR(36)  NOT NULL,
   tenant_id         VARCHAR(36)  NOT NULL,
@@ -88,8 +83,7 @@ CREATE TABLE organization_template (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS notification_config;
-CREATE TABLE notification_config (
+CREATE TABLE IF NOT EXISTS notification_config (
   record_id        INT(11)       NOT NULL AUTO_INCREMENT,
   organization_id  VARCHAR(36)   NOT NULL,
   tenant_id        VARCHAR(36)   NOT NULL,
@@ -101,9 +95,7 @@ CREATE TABLE notification_config (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
-DROP TABLE IF EXISTS billing_rule;
-CREATE TABLE billing_rule (
+CREATE TABLE IF NOT EXISTS billing_rule (
   organization_id VARCHAR(36) NOT NULL,
   tenant_id       VARCHAR(36) NOT NULL,
   rule            LONGTEXT  DEFAULT NULL,
@@ -113,9 +105,7 @@ CREATE TABLE billing_rule (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
-DROP TABLE IF EXISTS product;
-CREATE TABLE product (
+CREATE TABLE IF NOT EXISTS product (
   record_id        INT(11)      NOT NULL AUTO_INCREMENT,
   id               VARCHAR(36),
   name             VARCHAR(256) NOT NULL,
@@ -137,8 +127,7 @@ CREATE TABLE product (
 ALTER TABLE product
   ADD vendors LONGTEXT;
 
-DROP TABLE IF EXISTS product_version;
-CREATE TABLE product_version (
+CREATE TABLE IF NOT EXISTS product_version (
   id              INT(11)           NOT NULL AUTO_INCREMENT,
   product_id      VARCHAR(36)       NOT NULL,
   version         INT(11) DEFAULT 1 NOT NULL,
@@ -153,8 +142,7 @@ CREATE TABLE product_version (
   DEFAULT CHARSET = utf8;
 
 
-DROP TABLE IF EXISTS subscription_events_ext;
-CREATE TABLE subscription_events_ext (
+CREATE TABLE IF NOT EXISTS subscription_events_ext (
   id                INT(11)           NOT NULL AUTO_INCREMENT,
   subscription_id   VARCHAR(36)       NULL,
   event_type        VARCHAR(15),
@@ -174,8 +162,7 @@ CREATE TABLE subscription_events_ext (
   DEFAULT CHARSET = utf8;
 
 
-DROP TABLE IF EXISTS product_distribution_history;
-CREATE TABLE product_distribution_history (
+CREATE TABLE IF NOT EXISTS product_distribution_history (
   record_id              INT(11)        NOT NULL AUTO_INCREMENT,
   subscription_id        VARCHAR(36)    NULL,
   tenant_id              VARCHAR(36)    NOT NULL,
@@ -204,8 +191,7 @@ CREATE TABLE product_distribution_history (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS onetimebuy;
-CREATE TABLE onetimebuy (
+CREATE TABLE IF NOT EXISTS onetimebuy (
   record_id         INT(11)        NOT NULL AUTO_INCREMENT,
   bundle_id         VARCHAR(36)    NULL,
   state             VARCHAR(36)    NOT NULL,

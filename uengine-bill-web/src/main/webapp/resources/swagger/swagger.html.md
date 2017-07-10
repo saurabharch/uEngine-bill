@@ -30,6 +30,7 @@
 * invoicePayments
 * invoices
 * notification
+* onetimebuy
 * organization
 * overdue
 * paymentMethods
@@ -755,26 +756,14 @@ curl -X PUT
 --header 'X-Killbill-CreatedBy: Swagger' 
 --header 'Authorization: <token>' 
 --header 'X-organization-id: c16ba270-2842-4339-ac35-91c225eaf185' -d '{
-  "service": "aaa",
-  "stateName": "bbb",
-  "blockChange": false,
-  "blockEntitlement": false,
-  "blockBilling": false,
-  "effectiveDate": "2017-03-23T08:06:12.016Z",
-  "type": "ACCOUNT"
+"stateName": "OD3",
+"service": "overdue-service",
+"blockChange": true,
+"blockEntitlement": true,
+"blockBilling": true,
+"type": "ACCOUNT"
 }' 'http://localhost:18080/rest/v1/accounts/e6a43c25-bc9b-40c2-a2e4-a86dfb0e6bd8/block'
 
-Overdue 에 의해서 잠김 상태가 된 구매자 계정을 풀고 싶다면,
-
-{
-	"stateName": "__KILLBILL__CLEAR__OVERDUE_STATE__",
-	"service": "overdue-service",
-	"blockChange": false,
-	"blockEntitlement": false,
-	"blockBilling": false,
-	"type": "ACCOUNT",
-	"auditLogs": []
-}
 
 
 Reponse Example
@@ -3411,6 +3400,1152 @@ POST /rest/v1/accounts/{childAccountId}/transferCredit
 * `application/json`
 
 
+<a name="deleteaccount"></a>
+## Remove account
+```
+DELETE /rest/v1/accounts/{accountId}
+
+Request Example
+
+curl -X DELETE 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>'  
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/a4262a82-aae5-40d1-a2d1-ff057618392e'
+
+
+Reponse Example
+
+204 no content
+```
+
+
+### Description
+구매자 계정을 삭제한다. 구독기록이나 결제 기록이 있다면 삭제할 수 없다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**accountId**  <br>*required*|string|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**204**|successful operation|No Content|
+|**400**|Invalid account delete supplied|No Content|
+|**404**|Account not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+
+<a name="updateaccountbcd"></a>
+## Update account bcd
+```
+PUT /rest/v1/accounts/{accountId}/bcd
+
+Request Example
+
+curl -X PUT 
+--header 'Content-Type: application/json' 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+-d '{
+  "billCycleDayLocal": 10
+}' 'http://localhost:18080/rest/v1/accounts/2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183/bcd'
+
+
+Response Example
+
+{
+  "country": "KR",
+  "external_key": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+  "notes": "",
+  "is_notified_for_invoices": false,
+  "city": "",
+  "is_payment_delegated_to_parent": false,
+  "locale": "en_US",
+  "state_or_province": "",
+  "currency": "USD",
+  "id": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+  "email": "sppark@uengine.org",
+  "address1": "",
+  "time_zone": "UTC",
+  "created_by": "uEngine",
+  "record_id": 8,
+  "payment_method_id": "15223df2-0441-49bc-af7f-18a20358ba4d",
+  "phone": "100000000",
+  "company_name": "unionnec",
+  "name": "buyer 2",
+  "updated_by": "SubscriptionBaseTransition",
+  "created_date": 1496509470000,
+  "updated_date": 1496509914000,
+  "billing_cycle_day_local": 10,
+  "postal_code": "",
+  "first_name_length": 5,
+  "tenant_record_id": 1
+}
+```
+
+
+### Description
+구매자 계정 결제일을 업데이트 한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**accountId**  <br>*required*|string|
+|**Body**|**body**  <br>*optional*|[AccountBCDJson](#accountbcdjson)|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[AccountJson](#accountjson)|
+|**400**|Invalid account bcd data supplied|No Content|
+|**404**|Account Not Found|No Content|
+
+
+### Consumes
+
+* `application/json`
+
+
+### Produces
+
+* `application/json`
+
+
+
+<a name="addaccountunblockingstate"></a>
+## Unblock an account
+```
+PUT /rest/v1/accounts/{accountId}/unblock
+
+Request Example
+
+curl -X PUT 
+--header 'Content-Type: application/json' 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183/unblock?resumeInvoice=true'
+
+
+Response Example
+
+200 OK
+```
+
+
+### Description
+구매자 계정을 UnBlock 시킨다.
+
+
+### Parameters
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**accountId**  <br>*required*||string|
+|**Query**|**resumeInvoice**  <br>*optional*|인보이스 생성 재시작 여부|boolean|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|No Content|
+|**400**|Invalid account unblock supplied|No Content|
+|**404**|Account not found|No Content|
+
+
+### Consumes
+
+* `application/json`
+
+
+
+
+<a name="getaccountonetimebuy"></a>
+## Retrieve onetimebuy for account
+```
+GET /rest/v1/accounts/{accountId}/onetimebuy
+
+Request Example
+
+curl -X GET -
+-header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183/onetimebuy'
+
+
+Response Example
+
+[
+  {
+    "record_id": 49,
+    "bundle_id": "87c85f88-bcf0-4057-acf5-638ad4b0abd8",
+    "state": "PENDING_INVOICE",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "account_id": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+    "product_id": "PRD_0000000006",
+    "version": 2,
+    "plan_name": "PRD_0000000006_PL_000001",
+    "plan_display_name": "일회 결제 샘플 1번",
+    "amount": 10,
+    "currency": "USD",
+    "invoice_id": null,
+    "invoice_item_id": null,
+    "effective_date": "2017-06-30",
+    "billing_date": "2018-01-04",
+    "created_date": "2017-06-30"
+  }
+]
+```
+
+
+### Description
+구매자 계정이 구매한 일회성 구매 이력을 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**accountId**  <br>*required*|string|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [OneTimeBuyJson](#onetimebuyjson) > array|
+|**400**|Invalid account id supplied|No Content|
+|**404**|Account not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+
+
+
+<a name="getaccountsalesbalance"></a>
+## get account sales balance
+```
+GET /rest/v1/accounts/{accountId}/sales/balance
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/881c5072-5a7d-4b35-8ade-25939da579e3/sales/balance'
+
+
+Response Example
+
+{
+  "balance": {
+    "KRW": 12915.8,
+    "USD": 70.514419
+  },
+  "credit": {},
+  "sales": {
+    "KRW": 13735.8,
+    "USD": 83.907619
+  },
+  "refund": {
+    "KRW": -820,
+    "USD": -2.3932
+  },
+  "withdraw": {
+    "USD": -11
+  }
+}
+```
+
+
+### Description
+구매자 계정의 판매대금 잔액을 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**accountId**  <br>*required*|string|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[AccountSalesBalanceJson](#accountsalesbalancejson)|
+|**400**|Invalid account id supplied|No Content|
+|**404**|Account not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="cancelwithdraw"></a>
+## Cancel withdraw
+```
+DELETE /rest/v1/accounts/{accountId}/sales/cancelwithdraw/{sales_record_id}
+
+Request Example
+
+curl -X DELETE 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+'http://localhost:18080/rest/v1/accounts/881c5072-5a7d-4b35-8ade-25939da579e3/sales/cancelwithdraw/501'
+
+
+Response Example
+
+200 OK
+```
+
+
+### Description
+판매자의 판매 잔금을 출금기록을 취소한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**accountId**  <br>*required*|string|
+|**Path**|**sales_record_id**  <br>*required*|number|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|No Content|
+|**400**|Invalid Request|No Content|
+|**404**|Not found sales record|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="getaccountssales"></a>
+## List accounts sales history
+```
+GET /rest/v1/accounts/{accountId}/sales/pagination
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/881c5072-5a7d-4b35-8ade-25939da579e3/sales/pagination?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 256,
+    "subscription_id": "49c5c928-110f-461f-93f0-2d82a7d27a51",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "buyer_id": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+    "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000002",
+    "version": 1,
+    "plan_name": "PRD_0000000002_PL_000001",
+    "usage_name": null,
+    "ratio": 30,
+    "amount": 1.5,
+    "original_amount": 5,
+    "currency": "USD",
+    "invoice_id": "08363881-445e-4431-aa1e-9838b95defbd",
+    "invoice_item_id": "63f5363f-3d4c-45f8-a5ee-4c025f04a382",
+    "linked_invoice_item_id": null,
+    "invoice_item_type": "RECURRING",
+    "price_type": "RECURRING",
+    "transaction_type": "CREATION",
+    "format_date": "2017-12-20",
+    "created_date": "2017-06-30",
+    "notes": "Bds"
+  }
+]
+```
+
+
+### Description
+판매자의 판매 이력을 페이징 처리하여 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**accountId**  <br>*required*|string||
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="searchaccountssales"></a>
+## Search accounts sales history
+```
+GET /rest/v1/accounts/{accountId}/sales/search/{searchKey}
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/881c5072-5a7d-4b35-8ade-25939da579e3/sales/search/PRD_0000000002_PL_000001?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 256,
+    "subscription_id": "49c5c928-110f-461f-93f0-2d82a7d27a51",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "buyer_id": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+    "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000002",
+    "version": 1,
+    "plan_name": "PRD_0000000002_PL_000001",
+    "usage_name": null,
+    "ratio": 30,
+    "amount": 1.5,
+    "original_amount": 5,
+    "currency": "USD",
+    "invoice_id": "08363881-445e-4431-aa1e-9838b95defbd",
+    "invoice_item_id": "63f5363f-3d4c-45f8-a5ee-4c025f04a382",
+    "linked_invoice_item_id": null,
+    "invoice_item_type": "RECURRING",
+    "price_type": "RECURRING",
+    "transaction_type": "CREATION",
+    "format_date": "2017-12-20",
+    "created_date": "2017-06-30",
+    "notes": "Bds"
+  }
+]
+```
+
+
+### Description
+주어진 검색어에 해당하는 판매자 계정의 판매 이력을 페이징 처리하여 반환한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**accountId**  <br>*required*|string||
+|**Path**|**searchKey**  <br>*required*|string||
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="getaccountsalessummary"></a>
+## get account sales summary per date
+```
+GET /rest/v1/accounts/{accountId}/sales/summary
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/accounts/881c5072-5a7d-4b35-8ade-25939da579e3/sales/summary?period=MONTH&start_date=2017-01-01&end_date=2017-12-31'
+
+
+Response Example
+
+{
+  "refund": {
+    "summary": {
+      "total": {
+        "USD": -2.3932,
+        "KRW": -820
+      },
+      "per_usage_name": {
+        "PRD_0000000001_USG_000001": {
+          "USD": -0.332,
+          "KRW": -99.6
+        }
+      },
+      "per_vendor_id": {
+        "881c5072-5a7d-4b35-8ade-25939da579e3": {
+          "USD": -2.3932,
+          "KRW": -820
+        }
+      },
+      "per_product_id": {
+        "PRD_0000000002": {
+          "USD": -1.2,
+          "KRW": -600
+        },
+        "PRD_0000000001": {
+          "USD": -0.6932,
+          "KRW": -220
+        },
+        "PRD_0000000006": {
+          "USD": -0.5
+        }
+      },
+      "per_plan_name": {
+        "PRD_0000000006_PL_000001": {
+          "USD": -0.5
+        },
+        "PRD_0000000001_PL_000001": {
+          "USD": -0.6932,
+          "KRW": -220
+        },
+        "PRD_0000000002_PL_000001": {
+          "USD": -1.2,
+          "KRW": -600
+        }
+      },
+      "per_price_type": {
+        "USAGE": {
+          "USD": -0.332,
+          "KRW": -99.6
+        },
+        "RECURRING": {
+          "USD": -1.5612,
+          "KRW": -720.4
+        },
+        "ONE_TIME": {
+          "USD": -0.5
+        }
+      }
+    },
+    "per_date": {
+      "2017-06": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -0.5
+          },
+          "price_type": "ONE_TIME",
+          "plan_name": "PRD_0000000006_PL_000001",
+          "product_id": "PRD_0000000006",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-08": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -0.3612,
+            "KRW": -120.4
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": -0.332,
+            "KRW": -99.6
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -1.2,
+            "KRW": -600
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ]
+    }
+  },
+  "credit": {
+    "summary": {
+      "total": {},
+      "per_usage_name": {},
+      "per_vendor_id": {},
+      "per_product_id": {},
+      "per_plan_name": {},
+      "per_price_type": {}
+    },
+    "per_date": {}
+  },
+  "end_date": "2017-12-31",
+  "withdraw": {
+    "summary": {
+      "total": {
+        "USD": -11
+      },
+      "per_usage_name": {},
+      "per_vendor_id": {
+        "881c5072-5a7d-4b35-8ade-25939da579e3": {
+          "USD": -11
+        }
+      },
+      "per_product_id": {},
+      "per_plan_name": {},
+      "per_price_type": {}
+    },
+    "per_date": {
+      "2017-07": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -11
+          },
+          "price_type": "",
+          "plan_name": "",
+          "product_id": "",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ]
+    }
+  },
+  "sales": {
+    "summary": {
+      "total": {
+        "USD": 83.907619,
+        "KRW": 13735.8
+      },
+      "per_usage_name": {
+        "PRD_0000000001_USG_000001": {
+          "USD": 1.5272,
+          "KRW": 1128.8
+        }
+      },
+      "per_vendor_id": {
+        "881c5072-5a7d-4b35-8ade-25939da579e3": {
+          "USD": 83.907619,
+          "KRW": 13735.8
+        }
+      },
+      "per_product_id": {
+        "PRD_0000000002": {
+          "USD": 51.936,
+          "KRW": 10500
+        },
+        "PRD_0000000001": {
+          "USD": 27.471619,
+          "KRW": 3235.8
+        },
+        "PRD_0000000006": {
+          "USD": 4.5
+        }
+      },
+      "per_plan_name": {
+        "PRD_0000000006_PL_000001": {
+          "USD": 4.5
+        },
+        "PRD_0000000001_PL_000002": {
+          "USD": 1.95
+        },
+        "PRD_0000000001_PL_000003": {
+          "USD": 2.4195
+        },
+        "PRD_0000000001_PL_000001": {
+          "USD": 23.102119,
+          "KRW": 3235.8
+        },
+        "PRD_0000000002_PL_000001": {
+          "USD": 51.936,
+          "KRW": 10500
+        }
+      },
+      "per_price_type": {
+        "USAGE": {
+          "USD": 1.5272,
+          "KRW": 1128.8
+        },
+        "RECURRING": {
+          "USD": 77.329419,
+          "KRW": 12607
+        },
+        "ONE_TIME": {
+          "USD": 4.5
+        },
+        "FIXED": {
+          "USD": 0.551
+        }
+      }
+    },
+    "per_date": {
+      "2017-06": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 3.5518,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 4.299,
+            "KRW": 1500
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1
+          },
+          "price_type": "ONE_TIME",
+          "plan_name": "PRD_0000000006_PL_000001",
+          "product_id": "PRD_0000000006",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-10": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.403,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.301
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.65
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 3,
+            "KRW": 1500
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-11": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.102,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.65
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 3,
+            "KRW": 1500
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-12": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 2.607,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.65
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 3,
+            "KRW": 1500
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-07": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.25
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 4.922933
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 17.685
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.5
+          },
+          "price_type": "ONE_TIME",
+          "plan_name": "PRD_0000000006_PL_000001",
+          "product_id": "PRD_0000000006",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-08": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.9195
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 4.549052,
+            "KRW": 602
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": 1.5272,
+            "KRW": 1128.8
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 14.952,
+            "KRW": 3000
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.5
+          },
+          "price_type": "ONE_TIME",
+          "plan_name": "PRD_0000000006_PL_000001",
+          "product_id": "PRD_0000000006",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ],
+      "2017-09": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 2.888134,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.5
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 6,
+            "KRW": 1500
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000002_PL_000001",
+          "product_id": "PRD_0000000002",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.5
+          },
+          "price_type": "ONE_TIME",
+          "plan_name": "PRD_0000000006_PL_000001",
+          "product_id": "PRD_0000000006",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        }
+      ]
+    }
+  },
+  "start_date": "2017-01-01",
+  "currencies": [
+    "KRW",
+    "USD"
+  ]
+}
+```
+
+
+### Description
+구매자 계정의 판매대금 합계를 기간별로 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**accountId**  <br>*required*|string||
+|**Query**|**end_date**  <br>*optional*|string||
+|**Query**|**period**  <br>*optional*|enum (DAY, MONTH, YEAR)|`"DAY"`|
+|**Query**|**plan_name**  <br>*optional*|string||
+|**Query**|**product_id**  <br>*optional*|string||
+|**Query**|**start_date**  <br>*optional*|string||
+|**Query**|**usage_name**  <br>*optional*|string||
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[SalesPerDateSummaryJson](#salesperdatesummaryjson)|
+|**400**|Invalid account id supplied|No Content|
+|**404**|Account not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="withdrawaccountssales"></a>
+## Withdraw accounts sales
+```
+POST /rest/v1/accounts/{accountId}/sales/withdraw
+
+Request Example
+
+curl -X POST 
+--header 'Content-Type: application/json' 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+-d '{
+  "transactionType": "WITHDRAW", /"CREDIT"
+  "amount": 10,
+  "currency": "USD",
+  "notes": "출금 기록1"
+}' 'http://localhost:18080/rest/v1/accounts/881c5072-5a7d-4b35-8ade-25939da579e3/sales/withdraw'
+
+
+Response Example
+
+{
+  "record_id": 501,
+  "subscription_id": null,
+  "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+  "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+  "buyer_id": null,
+  "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+  "product_id": null,
+  "version": null,
+  "plan_name": null,
+  "usage_name": null,
+  "ratio": null,
+  "amount": -10,
+  "original_amount": null,
+  "currency": "USD",
+  "invoice_id": null,
+  "invoice_item_id": null,
+  "linked_invoice_item_id": null,
+  "invoice_item_type": null,
+  "price_type": null,
+  "transaction_type": "WITHDRAW",
+  "format_date": "2017-07-10",
+  "created_date": "2017-07-10",
+  "notes": "출금 기록1"
+}
+```
+
+
+### Description
+판매자의 판매 잔금을 출금처리한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**accountId**  <br>*required*|string|
+|**Body**|**body**  <br>*required*|[SalesWithdrawRequest](#saleswithdrawrequest)|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**201**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+|**400**|Invalid Request|No Content|
+|**404**|Not found account|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+
 <a name="auth_resource"></a>
 # Auth
 
@@ -3523,6 +4658,349 @@ GET /rest/v1/token_info
 |---|---|---|
 |**200**|successful operation|[UserJson](#userjson)|
 |**400**|Invalid token|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="onetimebuy_resource"></a>
+# Onetimebuy
+
+<a name="createonetimebuy"></a>
+## Create Onetimebuy
+```
+POST /rest/v1/onetimebuy
+
+Request Example
+
+curl -X POST 
+--header 'Content-Type: application/json' 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+-d '[
+  {
+    "bundleId": "112b255c-5055-459b-861f-f2b53d063f75",
+    "productCategory": "ONE_TIME",
+    "planName": "PRD_0000000006_PL_000001"
+  }
+]' 'http://localhost:18080/rest/v1/onetimebuy?accountId=881c5072-5a7d-4b35-8ade-25939da579e3&requestedDate=2017-07-10'
+
+* 번들에 포함하여 구매하지 않고 개별 구매를 할 경우는 bundleId 값을 주지 않습니다.
+* requestedDate 를 지정하지 않은 경우 오늘 날짜로 구매됩니다.
+
+
+Response Example
+
+[
+  {
+    "record_id": 52,
+    "bundle_id": "112b255c-5055-459b-861f-f2b53d063f75",
+    "state": "PENDING_INVOICE",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "account_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000006",
+    "version": 2,
+    "plan_name": "PRD_0000000006_PL_000001",
+    "plan_display_name": "일회 결제 샘플 1번",
+    "amount": 10,
+    "currency": "USD",
+    "invoice_id": null,
+    "invoice_item_id": null,
+    "effective_date": "2017-07-10",
+    "billing_date": "2017-08-10",
+    "created_date": "2017-07-10"
+  }
+]
+```
+
+
+### Description
+일회성 구매들을 요청한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Query**|**accountId**  <br>*optional*|string|
+|**Query**|**requestedDate**  <br>*optional*|string|
+|**Body**|**body**  <br>*required*|[ListOneTimeBuyRequestJson](#listonetimebuyrequestjson)|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**201**|successful operation|< [OneTimeBuyJson](#onetimebuyjson) > array|
+|**400**|Invalid Request|No Content|
+
+
+### Consumes
+
+* `application/json`
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="listonetimebuys"></a>
+## List onetimebuy
+```
+GET /rest/v1/onetimebuy/pagination
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/onetimebuy/pagination?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 25,
+    "bundle_id": "d681ce0a-8c5e-451e-9c02-4601cda7cf02",
+    "state": "INVOICED",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "account_id": "88f53eb4-3f8b-41a2-8a07-5e06e6633548",
+    "product_id": "PRD_0000000006",
+    "version": 2,
+    "plan_name": "PRD_0000000006_PL_000001",
+    "plan_display_name": "일회 결제 샘플 1번",
+    "amount": 10,
+    "currency": "USD",
+    "invoice_id": "790b4479-d737-4070-a0ef-076764707cd7",
+    "invoice_item_id": "ab195cfa-63a9-4b76-a4ef-b45b6ea4ffd8",
+    "effective_date": "2017-08-01",
+    "billing_date": "2017-09-06",
+    "created_date": "2017-06-15"
+  }
+]
+```
+
+
+### Description
+onetimebuy 를 페이징 하여 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [OneTimeBuyJson](#onetimebuyjson) > array|
+|**204**|No Content|No Content|
+|**400**|Invalid Request|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="searchonetimebuy"></a>
+## Search onetimebuys
+```
+GET /rest/v1/onetimebuy/search/{searchKey}
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/onetimebuy/search/PRD_0000000006_PL_000001?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 25,
+    "bundle_id": "d681ce0a-8c5e-451e-9c02-4601cda7cf02",
+    "state": "INVOICED",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "account_id": "88f53eb4-3f8b-41a2-8a07-5e06e6633548",
+    "product_id": "PRD_0000000006",
+    "version": 2,
+    "plan_name": "PRD_0000000006_PL_000001",
+    "plan_display_name": "일회 결제 샘플 1번",
+    "amount": 10,
+    "currency": "USD",
+    "invoice_id": "790b4479-d737-4070-a0ef-076764707cd7",
+    "invoice_item_id": "ab195cfa-63a9-4b76-a4ef-b45b6ea4ffd8",
+    "effective_date": "2017-08-01",
+    "billing_date": "2017-09-06",
+    "created_date": "2017-06-15"
+  }
+]
+```
+
+
+### Description
+주어진 검색어에 해당하는 onetimebuy 들을 페이징 처리하여 반환한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**searchKey**  <br>*required*|string||
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [OneTimeBuyJson](#onetimebuyjson) > array|
+|**204**|No Content|No Content|
+|**400**|Invalid Request|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="getonetimebuy"></a>
+## Retrieve an onetimebuy by id
+```
+GET /rest/v1/onetimebuy/{record_id}
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/onetimebuy/52'
+
+
+Response Example
+
+{
+  "record_id": 52,
+  "bundle_id": "112b255c-5055-459b-861f-f2b53d063f75",
+  "state": "PENDING_INVOICE",
+  "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+  "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+  "account_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+  "product_id": "PRD_0000000006",
+  "version": 2,
+  "plan_name": "PRD_0000000006_PL_000001",
+  "plan_display_name": "일회 결제 샘플 1번",
+  "amount": 10,
+  "currency": "USD",
+  "invoice_id": null,
+  "invoice_item_id": null,
+  "effective_date": "2017-07-10",
+  "billing_date": "2017-08-10",
+  "created_date": "2017-07-10"
+}
+```
+
+
+### Description
+onetimebuy 를 아이디로 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**record_id**  <br>*required*|number|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[OneTimeBuyJson](#onetimebuyjson)|
+|**400**|Invalid onetimebuy id supplied|No Content|
+|**404**|onetimebuy not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="cancelonetimebuy"></a>
+## Cancel Onetimebuy
+```
+DELETE /rest/v1/onetimebuy/{record_id}
+
+Request Example
+
+curl -X DELETE 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/onetimebuy/52'
+
+
+Response Example
+
+{
+  "record_id": 52,
+  "bundle_id": "112b255c-5055-459b-861f-f2b53d063f75",
+  "state": "CANCELED",
+  "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+  "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+  "account_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+  "product_id": "PRD_0000000006",
+  "version": 2,
+  "plan_name": "PRD_0000000006_PL_000001",
+  "plan_display_name": "일회 결제 샘플 1번",
+  "amount": 10,
+  "currency": "USD",
+  "invoice_id": null,
+  "invoice_item_id": null,
+  "effective_date": "2017-07-10",
+  "billing_date": "2017-08-10",
+  "created_date": "2017-07-10"
+}
+```
+
+
+### Description
+Onetimebuy 요청을 취소한다. 결제 대기(PENDING_INVOICE) 상태인 것만 가능하다.
+
+
+### Parameters
+
+|Type|Name|Schema|
+|---|---|---|
+|**Path**|**record_id**  <br>*required*|number|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[OneTimeBuyJson](#onetimebuyjson)|
+|**400**|Invalid onetimebuy id supplied|No Content|
+|**404**|onetimebuy not found|No Content|
 
 
 ### Produces
@@ -8086,6 +9564,672 @@ organization email 을 삭제한다.
 * `application/json`
 
 
+
+<a name="getorganizationsales"></a>
+## List organization sales history
+```
+GET /rest/v1/organization/sales/pagination
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/organization/sales/pagination?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 256,
+    "subscription_id": "49c5c928-110f-461f-93f0-2d82a7d27a51",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "buyer_id": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+    "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000002",
+    "version": 1,
+    "plan_name": "PRD_0000000002_PL_000001",
+    "usage_name": null,
+    "ratio": 30,
+    "amount": 1.5,
+    "original_amount": 5,
+    "currency": "USD",
+    "invoice_id": "08363881-445e-4431-aa1e-9838b95defbd",
+    "invoice_item_id": "63f5363f-3d4c-45f8-a5ee-4c025f04a382",
+    "linked_invoice_item_id": null,
+    "invoice_item_type": "RECURRING",
+    "price_type": "RECURRING",
+    "transaction_type": "CREATION",
+    "format_date": "2017-12-20",
+    "created_date": "2017-06-30",
+    "notes": "Bds"
+  }
+]
+```
+
+
+### Description
+조직의 판매 이력을 페이징 처리하여 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="searchorganizationsales"></a>
+## Search organization sales history
+```
+GET /rest/v1/organization/sales/search/{searchKey}
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/organization/sales/search/08363881-445e-4431-aa1e-9838b95defbd?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 256,
+    "subscription_id": "49c5c928-110f-461f-93f0-2d82a7d27a51",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "buyer_id": "2fe21dcf-d5ec-4ce2-b55e-922d5e3f4183",
+    "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000002",
+    "version": 1,
+    "plan_name": "PRD_0000000002_PL_000001",
+    "usage_name": null,
+    "ratio": 30,
+    "amount": 1.5,
+    "original_amount": 5,
+    "currency": "USD",
+    "invoice_id": "08363881-445e-4431-aa1e-9838b95defbd",
+    "invoice_item_id": "63f5363f-3d4c-45f8-a5ee-4c025f04a382",
+    "linked_invoice_item_id": null,
+    "invoice_item_type": "RECURRING",
+    "price_type": "RECURRING",
+    "transaction_type": "CREATION",
+    "format_date": "2017-12-20",
+    "created_date": "2017-06-30",
+    "notes": "Bds"
+  }
+]
+```
+
+
+### Description
+주어진 검색어에 해당하는 조직의 판매 이력을 페이징 처리하여 반환한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**searchKey**  <br>*required*|string||
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="getorganizationsalessummary"></a>
+## get organization sales summary per date
+```
+GET /rest/v1/organization/sales/summary
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/organization/sales/summary?period=MONTH&start_date=2017-01-01&end_date=2017-12-31'
+
+
+Response Example
+
+{
+  "total_revenue": {
+    "refund": {
+      "summary": {
+        "total": {
+          "USD": -36,
+          "KRW": -9000
+        },
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {
+          "USAGE": {
+            "USD": -10,
+            "KRW": -3000
+          },
+          "RECURRING": {
+            "USD": -16,
+            "KRW": -6000
+          },
+          "ONE_TIME": {
+            "USD": -10
+          }
+        }
+      },
+      "per_date": {
+        "2017-06": [
+          {
+            "amount": {
+              "USD": -10
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-08": [
+          {
+            "amount": {
+              "USD": -16,
+              "KRW": -6000
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": -10,
+              "KRW": -3000
+            },
+            "price_type": "USAGE"
+          }
+        ]
+      }
+    },
+    "credit": {
+      "summary": {
+        "total": {},
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {}
+      },
+      "per_date": {}
+    },
+    "end_date": "2017-12-31",
+    "withdraw": {
+      "summary": {
+        "total": {
+          "USD": -11
+        },
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {}
+      },
+      "per_date": {
+        "2017-07": [
+          {
+            "amount": {
+              "USD": -11
+            },
+            "price_type": ""
+          }
+        ]
+      }
+    },
+    "sales": {
+      "summary": {
+        "total": {
+          "USD": 1393.7,
+          "KRW": 139000
+        },
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {
+          "USAGE": {
+            "USD": 46,
+            "KRW": 34000
+          },
+          "RECURRING": {
+            "USD": 922.7,
+            "KRW": 105000
+          },
+          "ONE_TIME": {
+            "USD": 410
+          },
+          "FIXED": {
+            "USD": 15
+          }
+        }
+      },
+      "per_date": {
+        "2017-06": [
+          {
+            "amount": {
+              "USD": 132.33,
+              "KRW": 15000
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 0
+            },
+            "price_type": "FIXED"
+          },
+          {
+            "amount": {
+              "USD": 130
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-10": [
+          {
+            "amount": {
+              "USD": 63,
+              "KRW": 15000
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 10
+            },
+            "price_type": "FIXED"
+          }
+        ],
+        "2017-11": [
+          {
+            "amount": {
+              "USD": 53,
+              "KRW": 15000
+            },
+            "price_type": "RECURRING"
+          }
+        ],
+        "2017-12": [
+          {
+            "amount": {
+              "USD": 103,
+              "KRW": 15000
+            },
+            "price_type": "RECURRING"
+          }
+        ],
+        "2017-07": [
+          {
+            "amount": {
+              "USD": 5
+            },
+            "price_type": "FIXED"
+          },
+          {
+            "amount": {
+              "USD": 219.28
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 20
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-08": [
+          {
+            "amount": {
+              "USD": 232.75,
+              "KRW": 30000
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 46,
+              "KRW": 34000
+            },
+            "price_type": "USAGE"
+          },
+          {
+            "amount": {
+              "USD": 230
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-09": [
+          {
+            "amount": {
+              "USD": 119.34,
+              "KRW": 15000
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 30
+            },
+            "price_type": "ONE_TIME"
+          }
+        ]
+      }
+    },
+    "start_date": "2017-01-01",
+    "currencies": [
+      "KRW",
+      "USD"
+    ]
+  },
+  "end_date": "2017-12-31",
+  "start_date": "2017-01-01",
+  "currencies": [
+    "KRW",
+    "USD"
+  ],
+  "net_summary": {
+    "refund": {
+      "summary": {
+        "total": {
+          "USD": -28.0868,
+          "KRW": -7338.4
+        },
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {
+          "USAGE": {
+            "USD": -9.336,
+            "KRW": -2800.8
+          },
+          "RECURRING": {
+            "USD": -12.3528,
+            "KRW": -4537.6
+          },
+          "ONE_TIME": {
+            "USD": -6.398
+          }
+        }
+      },
+      "per_date": {
+        "2017-06": [
+          {
+            "amount": {
+              "USD": -6.398
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-08": [
+          {
+            "amount": {
+              "USD": -12.3528,
+              "KRW": -4537.6
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": -9.336,
+              "KRW": -2800.8
+            },
+            "price_type": "USAGE"
+          }
+        ]
+      }
+    },
+    "credit": {
+      "summary": {
+        "total": {},
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {}
+      },
+      "per_date": {}
+    },
+    "end_date": "2017-12-31",
+    "withdraw": {
+      "summary": {
+        "total": {
+          "USD": -11
+        },
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {}
+      },
+      "per_date": {
+        "2017-07": [
+          {
+            "amount": {
+              "USD": -11
+            },
+            "price_type": ""
+          }
+        ]
+      }
+    },
+    "sales": {
+      "summary": {
+        "total": {
+          "USD": 1152.939686,
+          "KRW": 111150.4
+        },
+        "per_usage_name": {},
+        "per_vendor_id": {},
+        "per_product_id": {},
+        "per_plan_name": {},
+        "per_price_type": {
+          "USAGE": {
+            "USD": 42.9456,
+            "KRW": 31742.4
+          },
+          "RECURRING": {
+            "USD": 720.218086,
+            "KRW": 79408
+          },
+          "ONE_TIME": {
+            "USD": 377.582
+          },
+          "FIXED": {
+            "USD": 12.194
+          }
+        }
+      },
+      "per_date": {
+        "2017-06": [
+          {
+            "amount": {
+              "USD": 105.7171,
+              "KRW": 11344
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 0
+            },
+            "price_type": "FIXED"
+          },
+          {
+            "amount": {
+              "USD": 122.796
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-10": [
+          {
+            "amount": {
+              "USD": 49.282,
+              "KRW": 11344
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 8.194
+            },
+            "price_type": "FIXED"
+          }
+        ],
+        "2017-11": [
+          {
+            "amount": {
+              "USD": 41.088,
+              "KRW": 11344
+            },
+            "price_type": "RECURRING"
+          }
+        ],
+        "2017-12": [
+          {
+            "amount": {
+              "USD": 82.058,
+              "KRW": 11344
+            },
+            "price_type": "RECURRING"
+          }
+        ],
+        "2017-07": [
+          {
+            "amount": {
+              "USD": 4
+            },
+            "price_type": "FIXED"
+          },
+          {
+            "amount": {
+              "USD": 168.124902
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 16.398
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-08": [
+          {
+            "amount": {
+              "USD": 180.336888,
+              "KRW": 22688
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 42.9456,
+              "KRW": 31742.4
+            },
+            "price_type": "USAGE"
+          },
+          {
+            "amount": {
+              "USD": 219.194
+            },
+            "price_type": "ONE_TIME"
+          }
+        ],
+        "2017-09": [
+          {
+            "amount": {
+              "USD": 93.611196,
+              "KRW": 11344
+            },
+            "price_type": "RECURRING"
+          },
+          {
+            "amount": {
+              "USD": 19.194
+            },
+            "price_type": "ONE_TIME"
+          }
+        ]
+      }
+    },
+    "start_date": "2017-01-01",
+    "currencies": [
+      "KRW",
+      "USD"
+    ]
+  }
+}
+```
+
+
+### Description
+조직의 판매대금 합계를 기간별로 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Query**|**end_date**  <br>*optional*|string||
+|**Query**|**period**  <br>*optional*|enum (DAY, MONTH, YEAR)|`"DAY"`|
+|**Query**|**plan_name**  <br>*optional*|string||
+|**Query**|**product_id**  <br>*optional*|string||
+|**Query**|**start_date**  <br>*optional*|string||
+|**Query**|**usage_name**  <br>*optional*|string||
+|**Query**|**vendor_id**  <br>*optional*|string||
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[OrganizationSalesPerDateSummaryJson](#organizationsalesperdatesummaryjson)|
+|**400**|Invalid request supplied|No Content|
+|**404**|Not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
 <a name="overdue_resource"></a>
 # Overdue
 
@@ -12406,6 +14550,926 @@ product version 을 삭제한다.
 |**204**|successful operation|No Content|
 |**400**|Invalid product version supplied|No Content|
 |**404**|product version not found|No Content|
+
+
+### Produces
+
+* `application/json`
+
+
+
+<a name="getaccountssales"></a>
+## List product sales history
+```
+GET /rest/v1/product/{productId}/sales/pagination
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/product/PRD_0000000001/sales/pagination?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 262,
+    "subscription_id": "ae57d7c3-b99c-4ea3-9523-d55bcae294ed",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "buyer_id": "64daf4bd-447c-4f10-963d-055c8ce2cc96",
+    "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000001",
+    "version": 1,
+    "plan_name": "PRD_0000000001_PL_000001",
+    "usage_name": null,
+    "ratio": 5,
+    "amount": 0.5,
+    "original_amount": 10,
+    "currency": "USD",
+    "invoice_id": "907085d7-a76f-4803-81da-e5b1bbdbcbfc",
+    "invoice_item_id": "987e7985-a05c-48ab-95f3-cece3b2b8ca8",
+    "linked_invoice_item_id": null,
+    "invoice_item_type": "RECURRING",
+    "price_type": "RECURRING",
+    "transaction_type": "CREATION",
+    "format_date": "2017-12-20",
+    "created_date": "2017-12-20",
+    "notes": null
+  }
+]
+```
+
+
+### Description
+제품의 판매 이력을 페이징 처리하여 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**productId**  <br>*required*|string||
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="searchaccountssales"></a>
+## Search product sales history
+```
+GET /rest/v1/product/{productId}/sales/search/{searchKey}
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/product/PRD_0000000001/sales/search/PRD_0000000001_PL_000001?offset=0&limit=1'
+
+
+Response Example
+
+[
+  {
+    "record_id": 262,
+    "subscription_id": "ae57d7c3-b99c-4ea3-9523-d55bcae294ed",
+    "tenant_id": "a31a66e0-ed86-494c-983a-75df5894069d",
+    "organization_id": "6925a6d1-a6b7-4298-944b-b29945bd4872",
+    "buyer_id": "64daf4bd-447c-4f10-963d-055c8ce2cc96",
+    "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3",
+    "product_id": "PRD_0000000001",
+    "version": 1,
+    "plan_name": "PRD_0000000001_PL_000001",
+    "usage_name": null,
+    "ratio": 5,
+    "amount": 0.5,
+    "original_amount": 10,
+    "currency": "USD",
+    "invoice_id": "907085d7-a76f-4803-81da-e5b1bbdbcbfc",
+    "invoice_item_id": "987e7985-a05c-48ab-95f3-cece3b2b8ca8",
+    "linked_invoice_item_id": null,
+    "invoice_item_type": "RECURRING",
+    "price_type": "RECURRING",
+    "transaction_type": "CREATION",
+    "format_date": "2017-12-20",
+    "created_date": "2017-12-20",
+    "notes": null
+  }
+]
+```
+
+
+### Description
+주어진 검색어에 해당하는 제품 판매 이력을 페이징 처리하여 반환한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**productId**  <br>*required*|string||
+|**Path**|**searchKey**  <br>*required*|string||
+|**Query**|**limit**  <br>*optional*|integer (int64)|`100`|
+|**Query**|**offset**  <br>*optional*|integer (int64)|`0`|
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|< [ProductDistributionHistory](#productdistributionhistory) > array|
+
+
+### Produces
+
+* `application/json`
+
+
+<a name="getproductsalessummary"></a>
+## get product sales summary per date
+```
+GET /rest/v1/product/{productId}/sales/summary
+
+Request Example
+
+curl -X GET 
+--header 'Accept: application/json' 
+--header 'Authorization: <token>' 
+--header 'X-organization-id: 6925a6d1-a6b7-4298-944b-b29945bd4872' 
+'http://localhost:18080/rest/v1/product/PRD_0000000001/sales/summary?period=MONTH&start_date=2017-01-01&end_date=2017-12-31'
+
+
+Response Example
+
+{
+  "refund": {
+    "summary": {
+      "total": {
+        "USD": -22,
+        "KRW": -7000
+      },
+      "per_usage_name": {
+        "PRD_0000000001_USG_000001": {
+          "USD": -10,
+          "KRW": -3000
+        }
+      },
+      "per_vendor_id": {
+        "881c5072-5a7d-4b35-8ade-25939da579e3": {
+          "USD": -0.6932,
+          "KRW": -220
+        },
+        "efb27bd3-23f9-4a65-8d85-0503030a3b81": {
+          "USD": -2.138,
+          "KRW": -701.6
+        },
+        "organization": {
+          "USD": -19.1688,
+          "KRW": -6078.4
+        }
+      },
+      "per_product_id": {
+        "PRD_0000000001": {
+          "USD": -22,
+          "KRW": -7000
+        }
+      },
+      "per_plan_name": {
+        "PRD_0000000001_PL_000001": {
+          "USD": -22,
+          "KRW": -7000
+        }
+      },
+      "per_price_type": {
+        "USAGE": {
+          "USD": -10,
+          "KRW": -3000
+        },
+        "RECURRING": {
+          "USD": -12,
+          "KRW": -4000
+        }
+      }
+    },
+    "per_date": {
+      "2017-08": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -0.3612,
+            "KRW": -120.4
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": -0.332,
+            "KRW": -99.6
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -1.806,
+            "KRW": -602
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": -0.332,
+            "KRW": -99.6
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": -9.8328,
+            "KRW": -3277.6
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": -9.336,
+            "KRW": -2800.8
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ]
+    }
+  },
+  "credit": {
+    "summary": {
+      "total": {},
+      "per_usage_name": {},
+      "per_vendor_id": {},
+      "per_product_id": {},
+      "per_plan_name": {},
+      "per_price_type": {}
+    },
+    "per_date": {}
+  },
+  "end_date": "2017-12-31",
+  "withdraw": {
+    "summary": {
+      "total": {},
+      "per_usage_name": {},
+      "per_vendor_id": {},
+      "per_product_id": {},
+      "per_plan_name": {},
+      "per_price_type": {}
+    },
+    "per_date": {}
+  },
+  "sales": {
+    "summary": {
+      "total": {
+        "USD": 810.58,
+        "KRW": 104000
+      },
+      "per_usage_name": {
+        "PRD_0000000001_USG_000001": {
+          "USD": 46,
+          "KRW": 34000
+        }
+      },
+      "per_vendor_id": {
+        "881c5072-5a7d-4b35-8ade-25939da579e3": {
+          "USD": 27.772619,
+          "KRW": 3235.8
+        },
+        "efb27bd3-23f9-4a65-8d85-0503030a3b81": {
+          "USD": 116.515295,
+          "KRW": 11663.8
+        },
+        "organization": {
+          "USD": 666.292086,
+          "KRW": 89100.4
+        }
+      },
+      "per_product_id": {
+        "PRD_0000000001": {
+          "USD": 810.58,
+          "KRW": 104000
+        }
+      },
+      "per_plan_name": {
+        "PRD_0000000001_PL_000002": {
+          "USD": 39
+        },
+        "PRD_0000000001_PL_000003": {
+          "USD": 48.39
+        },
+        "PRD_0000000001_PL_000001": {
+          "USD": 723.19,
+          "KRW": 104000
+        }
+      },
+      "per_price_type": {
+        "USAGE": {
+          "USD": 46,
+          "KRW": 34000
+        },
+        "RECURRING": {
+          "USD": 749.58,
+          "KRW": 70000
+        },
+        "FIXED": {
+          "USD": 15
+        }
+      }
+    },
+    "per_date": {
+      "2017-06": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 3.5518,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 17.759,
+            "KRW": 1505
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 96.6892,
+            "KRW": 8194
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ],
+      "2017-10": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.403,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 6.015,
+            "KRW": 1505
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 32.582,
+            "KRW": 8194
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.301
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.65
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.505
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.95
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 8.194
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 10.4
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ],
+      "2017-11": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.102,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.65
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 4.51,
+            "KRW": 1505
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.95
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 24.388,
+            "KRW": 8194
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 10.4
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ],
+      "2017-12": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 2.607,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.65
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 12.035,
+            "KRW": 1505
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.95
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 65.358,
+            "KRW": 8194
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 10.4
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000002",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ],
+      "2017-07": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.25
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 5.223933
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.75
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 24.119665
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 4
+          },
+          "price_type": "FIXED",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 130.986402
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ],
+      "2017-08": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.9195
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 5.7585
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 30.712
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 4.549052,
+            "KRW": 602
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": 1.5272,
+            "KRW": 1128.8
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 21.74526,
+            "KRW": 3010
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": 1.5272,
+            "KRW": 1128.8
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 118.225688,
+            "KRW": 16388
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "PRD_0000000001_USG_000001",
+          "amount": {
+            "USD": 42.9456,
+            "KRW": 31742.4
+          },
+          "price_type": "USAGE",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ],
+      "2017-09": [
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 2.888134,
+            "KRW": 301
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 0.5
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "881c5072-5a7d-4b35-8ade-25939da579e3"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 13.44067,
+            "KRW": 1505
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 1.5
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "efb27bd3-23f9-4a65-8d85-0503030a3b81"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 73.011196,
+            "KRW": 8194
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000001",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        },
+        {
+          "usage_name": "",
+          "amount": {
+            "USD": 8
+          },
+          "price_type": "RECURRING",
+          "plan_name": "PRD_0000000001_PL_000003",
+          "product_id": "PRD_0000000001",
+          "vendor_id": "organization"
+        }
+      ]
+    }
+  },
+  "start_date": "2017-01-01",
+  "currencies": [
+    "KRW",
+    "USD"
+  ]
+}
+```
+
+
+### Description
+제품의 판매대금 합계를 기간별로 조회한다.
+
+
+### Parameters
+
+|Type|Name|Schema|Default|
+|---|---|---|---|
+|**Path**|**productId**  <br>*required*|string||
+|**Query**|**end_date**  <br>*optional*|string||
+|**Query**|**period**  <br>*optional*|enum (DAY, MONTH, YEAR)|`"DAY"`|
+|**Query**|**plan_name**  <br>*optional*|string||
+|**Query**|**start_date**  <br>*optional*|string||
+|**Query**|**usage_name**  <br>*optional*|string||
+|**Query**|**vendor_id**  <br>*optional*|string||
+
+
+### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**|successful operation|[SalesPerDateSummaryJson](#salesperdatesummaryjson)|
+|**400**|Invalid account id supplied|No Content|
+|**404**|Product not found|No Content|
 
 
 ### Produces
