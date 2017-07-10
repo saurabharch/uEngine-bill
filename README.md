@@ -1,4 +1,4 @@
-# Install Guide (1.0.1 - Killbill 0.18.7)
+# Install Guide (1.0.2 - Killbill 0.18.7)
 
 
 ## Java Install && Download sources
@@ -13,12 +13,12 @@ $ sudo yum install java-1.8.0-openjdk-devel.x86_64
 $ sudo yum install wget
 
 $ cd
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.1/bundles.zip
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.1/killbill-profiles-killbill-0.18.7-SNAPSHOT.war
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.1/uengine-bill-all.sql
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.1/reports.zip
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.1/uengine-bill-web-1.0.1-SNAPSHOT.war
-$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.1/apache-tomcat-8.0.42.tar.gz
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/bundles.zip
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/killbill-profiles-killbill-0.18.7-SNAPSHOT.war
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/uengine-bill-all.sql
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/reports.zip
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/uengine-bill-web-1.0.2-SNAPSHOT.war
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/apache-tomcat-8.0.42.tar.gz
 
 $ sudo yum install unzip
 $ sudo mkdir /var/tmp/bundles
@@ -26,7 +26,7 @@ $ sudo unzip bundles.zip -d /var/tmp/bundles
 
 $ tar -xvf apache-tomcat-8.0.42.tar.gz
 $ cp killbill-profiles-killbill-0.18.7-SNAPSHOT.war apache-tomcat-8.0.42/webapps/killbill.war
-$ cp uengine-bill-web-1.0.1-SNAPSHOT.war apache-tomcat-8.0.42/webapps/ROOT.war 
+$ cp uengine-bill-web-1.0.2-SNAPSHOT.war apache-tomcat-8.0.42/webapps/ROOT.war 
 $ chmod +x apache-tomcat-8.0.42/webapps/killbill.war
 $ chmod +x apache-tomcat-8.0.42/webapps/ROOT.war
 $ rm -rf apache-tomcat-8.0.42/webapps/ROOT
