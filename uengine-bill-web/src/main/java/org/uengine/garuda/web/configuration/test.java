@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
+import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.util.JsonUtils;
 
 import java.io.InputStream;
@@ -22,12 +23,14 @@ public class test {
 
     public static void main(String[] args) throws Exception {
 
-        Map map = new HashMap();
-        map.put("a" , "bb");
-        map.put("b" , "bb");
+        //컨스트럭터에 의해 선언이 됨.
+        Organization organization = new Organization();
 
-        Map map1 = JsonUtils.convertValue(map, Map.class);
-        System.out.println(map1);
+        //클래스의 prototype 의 이용.
+        organization.setId("고유아이디");
+        System.out.println(organization.getId());
+
+
 
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

@@ -47,12 +47,12 @@ public class VersionConfigurer implements javax.servlet.ServletContextListener {
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append("   ________                ___               ____          \n" +
-                "  / ____/ /___  __  ______/ (_)___  ___     /  _/___  _____\n" +
-                " / /   / / __ \\/ / / / __  / / __ \\/ _ \\    / // __ \\/ ___/\n" +
-                "/ /___/ / /_/ / /_/ / /_/ / / / / /  __/  _/ // / / / /__  \n" +
-                "\\____/_/\\____/\\__,_/\\__,_/_/_/ /_/\\___/  /___/_/ /_/\\___/  \n" +
-                "                                                           ");
+        builder.append("   __    __ _______  ____    __  _____      __ ____    __ _______        \n" +
+                       "  / /   / // _____/ / _  |  / / / ___ \\    / // _  |  / // _____/       \n" +
+                       " / /   / // /_____ / / | | / / / /  /_/   / // / | | / // /_____          \n" +
+                       "/ /___/ //  _____// /  | |/ / / /_/ / \\  / // /  | |/ //  _____/          \n" +
+                       "\\_____/_/\\______//_/   |___/  \\___,__/_ /_//_/   |___/ \\______/             \n" +
+                       "                                                           ");
 
         printHeader(builder, "Application Information");
         Properties appProps = new Properties();

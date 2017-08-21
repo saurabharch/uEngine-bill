@@ -2,7 +2,7 @@
 
 HERE=`cd \`dirname $0\`; pwd`
 
-MYSQL_HOST=${MYSQL_HOST-"127.0.0.1"}
+MYSQL_HOST=${MYSQL_HOST-"127.0.0.2"}
 MYSQL_USER=${MYSQL_USER-"killbill"}
 MYSQL_PASSWORD=${MYSQL_PASSWORD-"killbill"}
 MYSQL_DATABASE=${MYSQL_DATABASE-"killbill"}

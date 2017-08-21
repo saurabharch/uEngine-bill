@@ -120,9 +120,20 @@
     </properties>
 
     <repositories>
+        <!--<repository>-->
+            <!--<id>central</id>-->
+            <!--<url>https://repo1.maven.org/maven2</url>-->
+        <!--</repository>-->
         <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
             <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
+            <name>Open Cloud Engine Maven Repository</name>
+            <url>http://maven.opencloudengine.org/content/groups/public/</url>
         </repository>
         <repository>
             <id>oss-rh</id>

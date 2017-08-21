@@ -5,6 +5,8 @@
 
 자바 인스톨 및 필요 소스들을 다운로드합니다.
 
+### CentOS
+
 ```
 $ sudo yum update
 $ sudo yum install java-1.8.0-openjdk-devel.x86_64
@@ -32,9 +34,39 @@ $ chmod +x apache-tomcat-8.0.42/webapps/ROOT.war
 $ rm -rf apache-tomcat-8.0.42/webapps/ROOT
 ```
 
+### Ubuntu
+
+```
+$ sudo apt-get update
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository ppa:webupd8team/java -y
+sudo apt-get update
+sudo apt-get install oracle-java8-installer oracle-java8-set-default wget unzip -y
+
+$ cd
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/bundles.zip
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/killbill-profiles-killbill-0.18.7-SNAPSHOT.war
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/uengine-bill-all.sql
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/reports.zip
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/uengine-bill-web-1.0.2-SNAPSHOT.war
+$ wget https://s3.ap-northeast-2.amazonaws.com/uengine-bill/1.0.2/apache-tomcat-8.0.42.tar.gz
+
+$ sudo mkdir /var/tmp/bundles
+$ sudo unzip bundles.zip -d /var/tmp/bundles
+
+$ tar -xvf apache-tomcat-8.0.42.tar.gz
+$ cp killbill-profiles-killbill-0.18.7-SNAPSHOT.war apache-tomcat-8.0.42/webapps/killbill.war
+$ cp uengine-bill-web-1.0.2-SNAPSHOT.war apache-tomcat-8.0.42/webapps/ROOT.war 
+$ chmod +x apache-tomcat-8.0.42/webapps/killbill.war
+$ chmod +x apache-tomcat-8.0.42/webapps/ROOT.war
+$ rm -rf apache-tomcat-8.0.42/webapps/ROOT
+```
+
 ## Install Jruby
 
 유엔진 빌링은 OSGI 를 사용하여 ruby 번들을 실행시키기 때문에, Jruby 가 필요합니다.
+
+### CentOS
 
 ```
 $ sudo mkdir -p /var/lib/jruby
@@ -57,9 +89,33 @@ $ source .bash_profile
 $ gem env
 ```
 
+### Ubuntu
+
+```
+$ sudo apt-get install curl
+$ sudo mkdir -p /var/lib/jruby
+$ sudo su (root 권한으로 설치할 것)
+$ curl -SL http://jruby.org.s3.amazonaws.com/downloads/1.7.26/jruby-bin-1.7.26.tar.gz \
+    | tar -z -x --strip-components=1 -C /var/lib/jruby
+$ exit (root 권한 빠져나올 것)
+
+$ sudo vi .bash_profile
+.
+.
+export PATH="/var/lib/jruby/bin:$PATH"
+
+
+$ source .bash_profile 
+$ gem env
+```
+
+
 ## Mysql setting
 
-Mysql 설치 및 환경설정을 하고, 데이터베이스 등록과 유저를 등록합니다.
+Mysql 설치 및 환경설정
+
+
+### CentOS
 
 ```
 $ sudo rpm -ivh http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
@@ -76,8 +132,18 @@ max_connections        = 1000
 
 $ sudo systemctl start mysqld
 $ mysql -uroot
+```
 
+### Ubuntu
 
+```
+$ sudo apt-get install mysql-client-5.6 mysql-server-5.6
+$ mysql -uroot
+```
+
+데이터베이스 등록과 유저를 등록합니다.
+
+```
 CREATE DATABASE killbill CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
 DROP USER 'killbill'@'localhost';
 CREATE USER 'killbill'@'localhost' IDENTIFIED BY 'killbill';
@@ -331,8 +397,16 @@ $ sudo vi /etc/hosts
 
 ntp 를 설치만 해도 자동으로 timezone 과 동기화되지만, Region 별로 특정 timezone 적용을 원할 시에는 ntp 문서를 참조하도록 합니다.
 
+### CentOS
+
 ```
 $ sudo yum install ntp
+```
+
+### Ubuntu
+
+```
+$ sudo apt-get install ntp
 ```
 
 ## Server Entropy
@@ -343,6 +417,8 @@ Jruby 는 Security 동작시 서버에 충분한 엔트로피가 있어야 합�
 
 이 설정을 하지 않을 경우 빌링 서비스가 매우 느리게 동작하게 됩니다.
 
+### CentOS
+
 ```
 $ sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 $ sudo yum update
@@ -350,6 +426,20 @@ $ sudo yum install haveged
 $ sudo chkconfig haveged on
 $ haveged -w 1024
 $ sudo systemctl start haveged
+```
+
+### Ubuntu
+
+```
+sudo apt-get install haveged
+
+vi /etc/default/haveged
+
+.
+.
+DAEMON_ARGS="-w 1024"
+
+update-rc.d haveged defaults
 ```
 
 ## Service start
