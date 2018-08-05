@@ -3,8 +3,6 @@ package org.uengine.garuda.authentication;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 
-import org.opencloudengine.garuda.client.model.OauthClient;
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,10 +11,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.system.UserService;
+import org.uengine.iam.client.model.OauthClient;
+import org.uengine.iam.client.model.OauthUser;
 import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentMap;
@@ -120,7 +121,7 @@ public class AuthenticationServiceImpl implements AuthenticationService, Initial
             OauthClient oauthClient = null;
             Long iat = null;
             Long exp = null;
-            String scopes = null;
+            List<String> scopes = null;
             String type = null;
             String refreshToken = null;
             Map claim = null;
@@ -138,12 +139,12 @@ public class AuthenticationServiceImpl implements AuthenticationService, Initial
 
                 Map context = (Map) tokenInfo.get("context");
 
-                oauthClient = userService.selectClientById(context.get("clientId").toString());
-                scopes = context.get("scopes").toString();
-                type = context.get("type").toString();
+                oauthClient = userService.selectClientById(context.get("clientKey").toString());
+                scopes = (List<String>) context.get("scopes");
+                //type = context.get("type").toString();
 
-                if (context.containsKey("userId")) {
-                    String userId = context.get("userId").toString();
+                if (context.containsKey("userName")) {
+                    String userId = context.get("userName").toString();
                     oauthUser = userService.selectByUserId(userId);
                 }
 
@@ -169,12 +170,12 @@ public class AuthenticationServiceImpl implements AuthenticationService, Initial
                 Date expDate = new Date(currentTime + expires_in * 1000);
                 exp = expDate.getTime();
 
-                oauthClient = userService.selectClientById(tokenInfo.get("clientId").toString());
-                scopes = tokenInfo.get("scope").toString();
-                type = tokenInfo.get("type").toString();
+                oauthClient = userService.selectClientById(tokenInfo.get("clientKey").toString());
+                scopes = (List<String>) tokenInfo.get("scope");
+                //type = tokenInfo.get("type").toString();
 
-                if (tokenInfo.containsKey("userId")) {
-                    String userId = tokenInfo.get("userId").toString();
+                if (tokenInfo.containsKey("userName")) {
+                    String userId = tokenInfo.get("userName").toString();
                     oauthUser = userService.selectByUserId(userId);
                 }
 
@@ -187,8 +188,8 @@ public class AuthenticationServiceImpl implements AuthenticationService, Initial
             authInformation.setOauthClient(oauthClient);
             authInformation.setIat(iat);
             authInformation.setExp(exp);
-            authInformation.setScopes(scopes);
-            authInformation.setType(type);
+            //authInformation.setScopes(scopes);
+            //authInformation.setType(type);
             authInformation.setRefreshToken(refreshToken);
             authInformation.setClaim(claim);
 

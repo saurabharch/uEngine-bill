@@ -1,7 +1,7 @@
 package org.uengine.garuda.web.organization;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.model.Organization;
+import org.uengine.iam.client.model.OauthUser;
 
 /**
  * Created by uengine on 2017. 1. 11..

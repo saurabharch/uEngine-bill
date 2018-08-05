@@ -16,10 +16,6 @@
  */
 package org.uengine.garuda.web.system;
 
-import org.opencloudengine.garuda.client.IamClient;
-import org.opencloudengine.garuda.client.ResourceOwnerPasswordCredentials;
-import org.opencloudengine.garuda.client.model.OauthClient;
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.springframework.beans.factory.InitializingBean;
 import org.uengine.garuda.authentication.AuthInformation;
 import org.uengine.garuda.authentication.AuthenticationService;
@@ -31,6 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
+import org.uengine.iam.client.IamClient;
+import org.uengine.iam.client.ResourceOwnerPasswordCredentials;
+import org.uengine.iam.client.model.OauthClient;
+import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
             OauthUser user = new OauthUser();
             user.setUserName(config.getProperty("system.admin.username"));
             user.setUserPassword(config.getProperty("system.admin.password"));
-            user.put("email", config.getProperty("system.admin.email"));
+            user.getMetaData().put("email", config.getProperty("system.admin.email"));
 
             this.createEnableUser(user);
         }
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
         IamClient iamClient = serviceFactory.trustClient();
         OauthUser user = this.selectByUserName(userName);
         try {
-            user.put("enable", true);
+            user.getMetaData().put("enable", true);
             return iamClient.updateUser(user);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -116,8 +116,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public OauthUser createUser(OauthUser oauthUser) {
         IamClient iamClient = serviceFactory.trustClient();
         try {
-            oauthUser.setLevel(0);
-            oauthUser.put("enable", false);
+            oauthUser.getMetaData().put("enable", false);
             return iamClient.createUser(oauthUser);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -129,8 +128,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public OauthUser createEnableUser(OauthUser oauthUser) {
         IamClient iamClient = serviceFactory.trustClient();
         try {
-            oauthUser.setLevel(0);
-            oauthUser.put("enable", true);
+            oauthUser.getMetaData().put("enable", true);
             return iamClient.createUser(oauthUser);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -156,7 +154,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
         IamClient iamClient = serviceFactory.trustClient();
         OauthUser user = this.selectByUserName(userName);
         try {
-            iamClient.deleteUser(user.get_id());
+            iamClient.deleteUser(user.getUserName());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -187,7 +185,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public OauthUser selectByUserName(String userName) {
         IamClient iamClient = serviceFactory.trustClient();
         try {
-            return iamClient.getUserByName(userName);
+            return iamClient.getUser(userName);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -209,7 +207,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public boolean waitingConfirmation(String userName) {
         OauthUser user = this.selectByUserName(userName);
         if (user != null) {
-            if (!user.containsKey("enable") || !(boolean) user.get("enable")) {
+            if (!user.getMetaData().containsKey("enable") || !(boolean) user.getMetaData().get("enable")) {
                 return true;
             }
         }
@@ -220,7 +218,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public boolean completeAccount(String userName) {
         OauthUser user = this.selectByUserName(userName);
         if (user != null) {
-            if (user.containsKey("enable") && (boolean) user.get("enable")) {
+            if (user.getMetaData().containsKey("enable") && (boolean) user.getMetaData().get("enable")) {
                 return true;
             }
         }
@@ -231,14 +229,14 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public void sendPasswdMail(String userName) {
         OauthUser user = this.selectByUserName(userName);
         Registe registe = new Registe();
-        registe.setUser_id(user.get_id());
+        registe.setUser_id(user.getUserName());
 
         String fromUser = System.getProperty("org.killbill.mail.from");
         String token = new String(Base64.encode(String.valueOf(System.currentTimeMillis()).getBytes()));
         registe.setToken(token);
 
         registeRepository.insertRegiste(registe);
-        mailService.passwd(registe.getUser_id(), token, "Forgot Password", fromUser, "uEngine", (String) user.get("email"), null);
+        mailService.passwd(registe.getUser_id(), token, "Forgot Password", fromUser, "uEngine", (String) user.getMetaData().get("email"), null);
     }
 
     @Override

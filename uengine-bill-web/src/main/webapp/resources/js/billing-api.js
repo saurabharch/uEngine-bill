@@ -77,10 +77,12 @@ uBilling.prototype = {
             async: false
         });
         promise.done(function (response) {
+            //alert('validateToken success');
             console.log('validateToken success');
             deferred.resolve(response);
         });
         promise.fail(function (response, status, errorThrown) {
+            //alert('validateToken failed');
             console.log('validateToken failed', errorThrown, response.responseText);
             deferred.reject(response);
         });

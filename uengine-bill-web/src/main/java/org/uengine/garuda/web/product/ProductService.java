@@ -1,6 +1,5 @@
 package org.uengine.garuda.web.product;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;

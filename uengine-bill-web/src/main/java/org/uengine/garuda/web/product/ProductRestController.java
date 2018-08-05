@@ -1,7 +1,6 @@
 package org.uengine.garuda.web.product;
 
 import com.google.common.io.CharStreams;
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;

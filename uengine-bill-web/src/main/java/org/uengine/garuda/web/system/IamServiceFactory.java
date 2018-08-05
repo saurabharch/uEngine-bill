@@ -1,12 +1,12 @@
 package org.uengine.garuda.web.system;
 
-import org.opencloudengine.garuda.client.IamClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.uengine.iam.client.IamClient;
 
 import java.util.Properties;
 

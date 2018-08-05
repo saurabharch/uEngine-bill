@@ -1,6 +1,5 @@
 package org.uengine.garuda.web.registe;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.common.exception.ServiceException;
 import org.uengine.garuda.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.uengine.garuda.web.system.UserService;
+import org.uengine.iam.client.model.OauthUser;
 
 import java.util.Properties;
 
@@ -33,9 +33,9 @@ public class RegisteServiceImpl implements RegisteService {
 
         OauthUser user = userService.selectByUserName(userName);
         Registe registe = new Registe();
-        registe.setUser_id(user.get_id());
+        registe.setUser_id(user.getUserName());
 
-        String email = user.get("email").toString();
+        String email = user.getMetaData().get("email").toString();
 
         String fromUser = System.getProperty("org.killbill.mail.from");
         String token = new String(Base64.encode(String.valueOf(System.currentTimeMillis()).getBytes()));

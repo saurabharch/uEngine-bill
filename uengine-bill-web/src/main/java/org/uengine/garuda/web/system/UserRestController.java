@@ -16,7 +16,6 @@
  */
 package org.uengine.garuda.web.system;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ import org.uengine.garuda.util.DateUtils;
 import org.uengine.garuda.util.ExceptionUtils;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.configuration.DefaultController;
+import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,7 +109,7 @@ public class UserRestController extends DefaultController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            authInformation.getOauthUser().remove("userPassword");
+            authInformation.getOauthUser().setUserPassword(null);
             return new ResponseEntity<>(authInformation.getOauthUser(), HttpStatus.OK);
 
 

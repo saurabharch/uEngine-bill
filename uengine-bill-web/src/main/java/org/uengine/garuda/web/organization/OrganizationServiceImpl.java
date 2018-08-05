@@ -1,6 +1,5 @@
 package org.uengine.garuda.web.organization;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.uengine.garuda.util.StringUtils;
 import org.uengine.garuda.web.rule.BillingRuleRepository;
 import org.uengine.garuda.web.rule.NotificationConfigRepository;
 import org.uengine.garuda.web.system.UserService;
+import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -89,16 +89,16 @@ public class OrganizationServiceImpl implements OrganizationService {
         //요청자를 ADMIN 으로 Authority 를 생성한다.
         Authority authority = new Authority();
         authority.setOrganization_id(createdOrganization.getId());
-        authority.setUser_id(oauthUser.get_id());
+        authority.setUser_id(oauthUser.getUserName());
         authority.setUser_name(oauthUser.getUserName());
         authority.setRole(OrganizationRole.ADMIN);
         organizationRepository.insertAuthority(authority);
 
         //요청자의 이메일로 OrganizationEmail 을 생성한다.
-        if (oauthUser.containsKey("email")) {
+        if (oauthUser.getMetaData().containsKey("email")) {
             OrganizationEmail organizationEmail = new OrganizationEmail();
             organizationEmail.setOrganization_id(createdOrganization.getId());
-            organizationEmail.setEmail(oauthUser.get("email").toString());
+            organizationEmail.setEmail(oauthUser.getMetaData().get("email").toString());
             organizationEmail.setIs_active("Y");
             organizationEmail.setIs_default("Y");
             organizationRepository.insertOrganizationEmail(organizationEmail);
@@ -325,7 +325,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 orgRole.setOrganization(organization);
             }
 
-            Authority authority = organizationRepository.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), organization_id);
+            Authority authority = organizationRepository.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().getUserName(), organization_id);
             //authority 가 없을 경우 fail
             if (authority == null) {
                 orgRole.setAccept(false);

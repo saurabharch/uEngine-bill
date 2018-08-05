@@ -1,9 +1,9 @@
 package org.uengine.garuda.web.organization;
 
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.model.Authority;
 import org.uengine.garuda.model.Organization;
 import org.uengine.garuda.model.OrganizationEmail;
+import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

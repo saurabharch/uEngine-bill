@@ -17,7 +17,6 @@
 package org.uengine.garuda.web.registe;
 
 import org.apache.commons.codec.binary.Base64;
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.common.rest.Response;
 import org.uengine.garuda.util.DateUtils;
 import org.uengine.garuda.util.EscapeUtils;
@@ -33,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,7 +92,7 @@ public class RegisteController extends DefaultController {
                 ModelAndView mav = new ModelAndView();
                 mav.setViewName("/registe/reaffirm");
                 mav.addObject("responseUserName", userName);
-                mav.addObject("responseEmail", (String) existUser.get("email"));
+                mav.addObject("responseEmail", (String) existUser.getMetaData().get("email"));
                 return mav;
             }
 
@@ -101,7 +101,7 @@ public class RegisteController extends DefaultController {
                 ModelAndView mav = new ModelAndView();
                 mav.setViewName("/registe/exist");
                 mav.addObject("responseUserName", userName);
-                mav.addObject("responseEmail", (String) existUser.get("email"));
+                mav.addObject("responseEmail", (String) existUser.getMetaData().get("email"));
                 return mav;
             }
 
@@ -110,7 +110,7 @@ public class RegisteController extends DefaultController {
             OauthUser user = new OauthUser();
             user.setUserName(userName);
             user.setUserPassword(unescapedPassword);
-            user.put("email", email);
+            user.getMetaData().put("email", email);
 
             userService.createUser(user);
             registeService.sendRegisteMail(userName);

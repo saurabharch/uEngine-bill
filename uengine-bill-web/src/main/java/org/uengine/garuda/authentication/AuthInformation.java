@@ -1,8 +1,8 @@
 package org.uengine.garuda.authentication;
 
-import org.opencloudengine.garuda.client.model.OauthClient;
-import org.opencloudengine.garuda.client.model.OauthUser;
 import org.uengine.garuda.util.StringUtils;
+import org.uengine.iam.client.model.OauthClient;
+import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;

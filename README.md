@@ -1,5 +1,20 @@
 # Install Guide (1.0.2 - Killbill 0.18.7)
 
+**Docker**
+
+```
+docker run -p 8080:8080\
+ -e DB_HOST=cloud.pas-mini.io\
+ -e DB_PORT=13306\
+ -e DB_DATABASE=killbill\
+ -e DB_USER=root\
+ -e DB_PASSWORD=killbill\
+ -e IAM_CLIENT_KEY=my-client-key\
+ -e IAM_CLIENT_SECRET=my-client-secret\
+ -e IAM_HOST=iam.pas-mini.io\
+ -e IAM_PORT=80\
+ sppark/billing:v1
+```
 
 ## First, install the Oauth2.0 authentication server - uengine-iam
 

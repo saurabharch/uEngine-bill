@@ -54,7 +54,7 @@ public class OrganizationRestController {
             if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            List<Organization> organizations = organizationService.selectByUserId(authInformation.getOauthUser().get_id());
+            List<Organization> organizations = organizationService.selectByUserId(authInformation.getOauthUser().getUserName());
             if (organizations.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -78,7 +78,7 @@ public class OrganizationRestController {
             if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), id);
+            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().getUserName(), id);
             if (authority == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
@@ -139,7 +139,7 @@ public class OrganizationRestController {
             if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), id);
+            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().getUserName(), id);
             if (authority == null || !OrganizationRole.ADMIN.equals(authority.getRole())) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
@@ -178,7 +178,7 @@ public class OrganizationRestController {
             if (authInformation.getOauthUser() == null) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().get_id(), id);
+            Authority authority = organizationService.selectAuthorityByUserIdAndOrganizationId(authInformation.getOauthUser().getUserName(), id);
             if (authority == null || !OrganizationRole.ADMIN.equals(authority.getRole())) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
