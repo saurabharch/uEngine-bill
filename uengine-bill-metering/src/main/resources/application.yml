@@ -1,0 +1,43 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+eureka:
+  client:
+    enabled: false
+
+---
+server:
+  port: 9090
+
+spring:
+  profiles: local
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: 52.79.164.208:9092
+      bindings:
+        billing-target:
+          group: commerce-billing-pub
+          destination: billing
+        billing-source:
+          destination: billing
+
+---
+server:
+  port: 8080
+
+spring:
+  profiles: docker
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: 52.79.164.208:9092
+      bindings:
+        billing-target:
+          group: commerce-billing-pub
+          destination: billing
+        billing-source:
+          destination: billing
