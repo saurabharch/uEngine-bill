@@ -20,6 +20,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.uengine.garuda.authentication.AuthInformation;
 import org.uengine.garuda.authentication.AuthenticationService;
 import org.uengine.garuda.mail.MailService;
+import org.uengine.garuda.util.StringUtils;
 import org.uengine.garuda.web.configuration.ConfigurationHelper;
 import org.uengine.garuda.web.registe.Registe;
 import org.uengine.garuda.web.registe.RegisteRepository;
@@ -33,8 +34,7 @@ import org.uengine.iam.client.model.OauthClient;
 import org.uengine.iam.client.model.OauthUser;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Seungpil PARK
@@ -62,12 +62,26 @@ public class UserServiceImpl implements UserService, InitializingBean {
     public void afterPropertiesSet() throws Exception {
 
         //기본 유저 등록
-        if (this.selectByUserName(config.getProperty("system.admin.username")) == null) {
-            OauthUser user = new OauthUser();
-            user.setUserName(config.getProperty("system.admin.username"));
-            user.setUserPassword(config.getProperty("system.admin.password"));
-            user.getMetaData().put("email", config.getProperty("system.admin.email"));
+        String adminName = System.getProperty("system.admin.username");
+        String adminPass = System.getProperty("system.admin.password");
+        if (StringUtils.isEmpty(adminName)) {
+            adminName = config.getProperty("system.admin.username");
+        }
+        if (StringUtils.isEmpty(adminPass)) {
+            adminPass = config.getProperty("system.admin.password");
+        }
 
+
+        if (this.selectByUserName(adminName) == null) {
+            OauthUser user = new OauthUser();
+            user.setUserName(adminName);
+            user.setUserPassword(adminPass);
+            user.setMetaData(new HashMap<String, Object>());
+            user.getMetaData().put("email", adminName);
+            user.getMetaData().put("name", "Administrator");
+            List<String> scopes = new ArrayList<>();
+            scopes.add(configurationHelper.get("authorization.scope"));
+            user.getMetaData().put("scopes", scopes);
             this.createEnableUser(user);
         }
     }

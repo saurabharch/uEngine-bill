@@ -50,7 +50,7 @@ public class BillingProcessor {
     }
 
     @StreamListener
-    public void receiveCounterMessage(@Input(BillingStreams.INPUT) Flux<String> inbound) {
+    public void receiveBillingMessage(@Input(BillingStreams.INPUT) Flux<String> inbound) {
         inbound
                 .log()
                 .subscribeOn(Schedulers.elastic())

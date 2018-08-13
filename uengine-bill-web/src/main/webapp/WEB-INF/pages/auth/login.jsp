@@ -41,7 +41,7 @@
         <p data-i18n="auth.login.loginAction">Login in. To see it in action.</p>
 
         <form id="login_form" class="m-t" role="form">
-            <input type="hidden" name="scope" value="cloud-server">
+            <input type="hidden" name="scope" value="billing">
 
             <div class="form-group">
                 <input type="text" name="username" class="form-control" placeholder="Username" required="">

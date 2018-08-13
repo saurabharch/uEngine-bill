@@ -8,10 +8,16 @@ eureka:
 
 ---
 server:
-  port: 9090
+  port: 9091
 
 spring:
   profiles: local
+  data:
+    elasticsearch:
+      cluster-name: docker-cluster
+      cluster-nodes: docker-cluster
+      host: 13.125.185.128
+      port: 9200
   cloud:
     stream:
       kafka:
@@ -19,17 +25,25 @@ spring:
           brokers: 52.79.164.208:9092
       bindings:
         billing-target:
-          group: commerce-billing-pub
+          group: ${spring.application.name}
           destination: billing
         billing-source:
           destination: billing
-
+        metering-sub:
+          group: ${spring.application.name}
+          destination: metering
 ---
 server:
   port: 8080
 
 spring:
   profiles: docker
+  data:
+    elasticsearch:
+      cluster-name: docker-cluster
+      cluster-nodes: docker-cluster
+      host: 13.125.185.128
+      port: 9200
   cloud:
     stream:
       kafka:
@@ -37,7 +51,10 @@ spring:
           brokers: 52.79.164.208:9092
       bindings:
         billing-target:
-          group: commerce-billing-pub
+          group: ${spring.application.name}
           destination: billing
         billing-source:
           destination: billing
+        metering-sub:
+          group: ${spring.application.name}
+          destination: metering

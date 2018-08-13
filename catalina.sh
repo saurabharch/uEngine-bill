@@ -10,7 +10,7 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 -Dorg.killbill.billing.osgi.dao.user=$DB_USER
 -Dorg.killbill.billing.osgi.dao.password=$DB_PASSWORD
 -Dorg.killbill.osgi.bundle.install.dir=/var/tmp/bundles
--Dorg.killbill.server.test.mode=true
+-Dorg.killbill.server.test.mode=$TEST_MODE
 -Dorg.killbill.notificationq.main.queue.mode=POLLING
 -Dorg.killbill.persistent.bus.external.queue.mode=POLLING
 -Dorg.killbill.persistent.bus.main.queue.mode=POLLING
@@ -36,6 +36,8 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 -Diam.trust.client.secret=$IAM_CLIENT_SECRET
 -Diam.host=$IAM_HOST
 -Diam.port=$IAM_PORT
+-Dsystem.admin.username=$ADMIN_USERNAME
+-Dsystem.admin.password=$ADMIN_PASSWORD
 -Devent.server.host=$EVENT_SERVER_HOST"
 
 #if [ "$AGENT_USE" == "true" ]; then
