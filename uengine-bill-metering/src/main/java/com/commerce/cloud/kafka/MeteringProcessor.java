@@ -1,5 +1,6 @@
 package com.commerce.cloud.kafka;
 
+import com.commerce.cloud.billing.UsageService;
 import com.commerce.cloud.model.MeteringLog;
 import com.commerce.cloud.model.UsageLog;
 import com.commerce.cloud.repository.MeteringRepository;
@@ -22,6 +23,9 @@ public class MeteringProcessor {
 
     @Autowired
     private MeteringRepository meteringRepository;
+
+    @Autowired
+    private UsageService usageService;
 
 //    @Autowired
 //    private UsageRepository usageRepository;
@@ -61,6 +65,10 @@ public class MeteringProcessor {
                                 List<UsageLog> result = new ArrayList<>();
                                 for (int i = 0; i < logs.size(); i++) {
                                     UsageLog log = objectMapper.convertValue(logs.get(i), UsageLog.class);
+
+                                    //for thread-safe, create one more UsageLog
+                                    usageService.addUsageLog(objectMapper.convertValue(logs.get(i), UsageLog.class));
+
                                     result.add(log);
                                 }
                                 meteringRepository.insertUsageLog(result);

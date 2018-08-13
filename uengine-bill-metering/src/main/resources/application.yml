@@ -6,6 +6,10 @@ eureka:
   client:
     enabled: false
 
+billing:
+  url: "http://billing.pas-mini.io"
+  authentication: "Basic YmlsbGluZ0B1ZW5naW5lLm9yZzoxODkyNXVuZw=="
+
 ---
 server:
   port: 9091

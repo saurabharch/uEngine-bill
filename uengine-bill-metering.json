@@ -46,6 +46,8 @@
     "SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS": "52.79.164.208:9092",
     "SPRING_DATA_ELASTICSEARCH_HOST": "13.125.185.128",
     "SPRING_DATA_ELASTICSEARCH_PORT": "9200",
+    "billing_url": "http://billing.pas-mini.io",
+    "billing_authentication": "Basic YmlsbGluZ0B1ZW5naW5lLm9yZzoxODkyNXVuZw==",
     "AGENT_USE": "true",
     "AGENT_PATH": "/pinpoint-agent"
   },

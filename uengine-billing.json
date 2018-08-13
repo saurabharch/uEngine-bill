@@ -44,15 +44,15 @@
     "IAM_CLIENT_SECRET": "my-client-secret",
     "IAM_CLIENT_KEY": "my-client-key",
     "EVENT_SERVER_HOST": "http://marathon-lb-internal.marathon.mesos:21999/event",
-    "DB_DATABASE": "killbill",
     "IAM_HOST": "marathon-lb-internal.marathon.mesos",
+    "IAM_PORT": "10003",
     "DB_HOST": "cloud.pas-mini.io",
-    "IAM_PORT": "10133",
+    "DB_DATABASE": "killbill",
     "DB_USER": "root",
     "DB_PORT": "13306",
     "DB_PASSWORD": "killbill",
     "ADMIN_USERNAME": "billing@uengine.org",
-    "ADMIN_PASSWORD": "gosu23546",
+    "ADMIN_PASSWORD": "18925ung",
     "TEST_MODE": "true"
   },
   "healthChecks": [
