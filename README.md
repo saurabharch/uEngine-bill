@@ -394,8 +394,8 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 | killbill.url                                          | 킬빌 서버 주소 (킬빌과 유엔진빌링이 같은 was 를 사용하기 때문에, http://localhost:<was포트>/<killbill war 콘텍스트> 로 설정하면 된다.) | http://localhost/killbill            |
 | killbill.user                                         | 킬빌 서버 기본 사용자 (admin 고정)                                                                                                     | admin                                |
 | killbill.password                                     | 킬빌 서버 기본 사용자 패스워드 (password 고정)                                                                                         | password                             |
-| iam.trust.client.key                                  | IAM 클라이언트 키                                                                                                                      | e74a9505-a811-407f-b4f6-129b7af1c703 |
-| iam.trust.client.secret                               | IAM 클라이언트 시크릿 키                                                                                                               | 109cf590-ac67-4b8c-912a-913373ada046 |
+| iam.trust.client.key                                  | IAM 클라이언트 키                                                                                                                      | my-client-key |
+| iam.trust.client.secret                               | IAM 클라이언트 시크릿 키                                                                                                               | my-client-secret |
 | iam.host                                              | IAM 도메인                                                                                                                             | iam.essencia.live                    |
 | iam.port                                              | IAM 포트                                                                                                                               | 8080                                 |
 
