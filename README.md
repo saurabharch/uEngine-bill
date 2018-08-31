@@ -517,11 +517,39 @@ $ sh ./seed_reports.sh
 
 # 로그인
 
-IAM 을 브라우저에서 접속합니다. IAM 의 초기 아이디와 패스워드는 admin / admin 입니다.
+1) 먼저, catalina.sh 파일에 다음의 설정을 확인하기 바랍니다. `system.admin.username` 와 `system.admin.password` 은 빌링 포탈 실행시 생성될 초기 로그인 아이디와 패스워드입니다.
 
+```
+-Dsystem.admin.username=myaccount@gmail.com
+-Dsystem.admin.password=mypassword
+```
+
+IAM 을 브라우저에서 접속하여 위 아이디가 생성되었는지 살펴봅니다. IAM 화면의 접속 아이디와 패스워드는 admin / admin 입니다.
 접속하시면, 사용자 목록에 `system.admin.username` 값으로 입력했던 아이디를 볼 수 있습니다.
 
-빌링 포털에서 해당 아이디 및 패스워드 입력시 로그인 할 수 있습니다.
+
+2) 빌링 포털에서 해당 아이디 및 패스워드 입력시 로그인 할 수 있습니다. 만일 로그인이 되지 않는다면, 
+
+IAM 의 application.yml 설정에서 `billing` 스코프가 설정되어 있는지 확인하도록 합니다.
+
+```
+scopes:
+  # If billing service required.  
+  - name: billing
+    description: Enalbe billing service
+```
+
+빌링 플랫폼의 catalish.sh 옵션에서 IAM 의 `application.yml` 에서 설정한 클라이언트 키,시크릿 키,주소,포트가 올바르게 매치되었는지 살펴봅니다.
+
+```
+-Diam.trust.client.key=my-client-key
+-Diam.trust.client.secret=my-client-secret
+-Diam.host=iam.pas-mini.io
+-Diam.port=80
+```
+
+
+
 
 
 
