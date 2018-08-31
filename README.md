@@ -357,7 +357,9 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 -Diam.trust.client.key=e74a9505-a811-407f-b4f6-129b7af1c703
 -Diam.trust.client.secret=109cf590-ac67-4b8c-912a-913373ada046
 -Diam.host=iam.essencia.live
--Diam.port=8080"
+-Diam.port=8080
+-Dsystem.admin.username=myaccount@gmail.com
+-Dsystem.admin.password=mypassword
 ```
 
 각 설정 값들에 대한 설명입니다.
@@ -398,6 +400,8 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 | iam.trust.client.secret                               | IAM 클라이언트 시크릿 키                                                                                                               | my-client-secret |
 | iam.host                                              | IAM 도메인                                                                                                                             | iam.essencia.live                    |
 | iam.port                                              | IAM 포트                                                                                                                               | 8080                                 |
+| system.admin.username                                              | 빌링 포탈 로그인 아이디                                                                                                                               | myaccount@gmail.com                                 |
+| system.admin.password                                              | 빌링 포탈 로그인                                                                                                                                | mypassword                                 |
 
 
 서버 포트 80 변경(옵션)
@@ -510,6 +514,14 @@ seed_reports.sh 를 실행하게 될 경우 통계 분석에 필요한 뷰 테�
 ```
 $ sh ./seed_reports.sh
 ```
+
+# 로그인
+
+IAM 을 브라우저에서 접속합니다. IAM 의 초기 아이디와 패스워드는 admin / admin 입니다.
+
+접속하시면, 사용자 목록에 `system.admin.username` 값으로 입력했던 아이디를 볼 수 있습니다.
+
+빌링 포털에서 해당 아이디 및 패스워드 입력시 로그인 할 수 있습니다.
 
 
 
