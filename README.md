@@ -530,13 +530,19 @@ IAM 을 브라우저에서 접속하여 위 아이디가 생성되었는지 살�
 
 2) 빌링 포털에서 해당 아이디 및 패스워드 입력시 로그인 할 수 있습니다. 만일 로그인이 되지 않는다면, 
 
-IAM 의 application.yml 설정에서 `billing` 스코프가 설정되어 있는지 확인하도록 합니다.
+IAM 의 application.yml 설정에서 `billing` 스코프가 설정되어 있는지 확인하도록 합니다. (client 의 enable-scopes 에도 추가되어야 합니다.)
 
 ```
 scopes:
   # If billing service required.  
   - name: billing
     description: Enalbe billing service
+    
+clients:
+  - name: uEngine-cloud
+    .
+    .
+    enable-scopes: cloud-server,bpm,billing
 ```
 
 빌링 플랫폼의 catalish.sh 옵션에서 IAM 의 `application.yml` 에서 설정한 클라이언트 키,시크릿 키,주소,포트가 올바르게 매치되었는지 살펴봅니다.
