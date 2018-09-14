@@ -357,7 +357,9 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 -Diam.trust.client.key=e74a9505-a811-407f-b4f6-129b7af1c703
 -Diam.trust.client.secret=109cf590-ac67-4b8c-912a-913373ada046
 -Diam.host=iam.essencia.live
--Diam.port=8080"
+-Diam.port=8080
+-Dsystem.admin.username=myaccount@gmail.com
+-Dsystem.admin.password=mypassword
 ```
 
 각 설정 값들에 대한 설명입니다.
@@ -394,10 +396,12 @@ JAVA_OPTS="$JAVA_OPTS -Djdbc.driver=com.mysql.jdbc.Driver
 | killbill.url                                          | 킬빌 서버 주소 (킬빌과 유엔진빌링이 같은 was 를 사용하기 때문에, http://localhost:<was포트>/<killbill war 콘텍스트> 로 설정하면 된다.) | http://localhost/killbill            |
 | killbill.user                                         | 킬빌 서버 기본 사용자 (admin 고정)                                                                                                     | admin                                |
 | killbill.password                                     | 킬빌 서버 기본 사용자 패스워드 (password 고정)                                                                                         | password                             |
-| iam.trust.client.key                                  | IAM 클라이언트 키                                                                                                                      | e74a9505-a811-407f-b4f6-129b7af1c703 |
-| iam.trust.client.secret                               | IAM 클라이언트 시크릿 키                                                                                                               | 109cf590-ac67-4b8c-912a-913373ada046 |
+| iam.trust.client.key                                  | IAM 클라이언트 키                                                                                                                      | my-client-key |
+| iam.trust.client.secret                               | IAM 클라이언트 시크릿 키                                                                                                               | my-client-secret |
 | iam.host                                              | IAM 도메인                                                                                                                             | iam.essencia.live                    |
 | iam.port                                              | IAM 포트                                                                                                                               | 8080                                 |
+| system.admin.username                                              | 빌링 포탈 로그인 아이디                                                                                                                               | myaccount@gmail.com                                 |
+| system.admin.password                                              | 빌링 포탈 로그인                                                                                                                                | mypassword                                 |
 
 
 서버 포트 80 변경(옵션)
@@ -510,6 +514,48 @@ seed_reports.sh 를 실행하게 될 경우 통계 분석에 필요한 뷰 테�
 ```
 $ sh ./seed_reports.sh
 ```
+
+# 로그인
+
+1) 먼저, catalina.sh 파일에 다음의 설정을 확인하기 바랍니다. `system.admin.username` 와 `system.admin.password` 은 빌링 포탈 실행시 생성될 초기 로그인 아이디와 패스워드입니다.
+
+```
+-Dsystem.admin.username=myaccount@gmail.com
+-Dsystem.admin.password=mypassword
+```
+
+IAM 을 브라우저에서 접속하여 위 아이디가 생성되었는지 살펴봅니다. IAM 화면의 접속 아이디와 패스워드는 admin / admin 입니다.
+접속하시면, 사용자 목록에 `system.admin.username` 값으로 입력했던 아이디를 볼 수 있습니다.
+
+
+2) 빌링 포털에서 해당 아이디 및 패스워드 입력시 로그인 할 수 있습니다. 만일 로그인이 되지 않는다면, 
+
+IAM 의 application.yml 설정에서 `billing` 스코프가 설정되어 있는지 확인하도록 합니다. (client 의 enable-scopes 에도 추가되어야 합니다.)
+
+```
+scopes:
+  # If billing service required.  
+  - name: billing
+    description: Enalbe billing service
+    
+clients:
+  - name: uEngine-cloud
+    .
+    .
+    enable-scopes: cloud-server,bpm,billing
+```
+
+빌링 플랫폼의 catalish.sh 옵션에서 IAM 의 `application.yml` 에서 설정한 클라이언트 키,시크릿 키,주소,포트가 올바르게 매치되었는지 살펴봅니다.
+
+```
+-Diam.trust.client.key=my-client-key
+-Diam.trust.client.secret=my-client-secret
+-Diam.host=iam.pas-mini.io
+-Diam.port=80
+```
+
+
+
 
 
 
