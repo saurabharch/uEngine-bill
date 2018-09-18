@@ -185,6 +185,8 @@ FLUSH PRIVILEGES;
 INSERT INTO mysql.user (host,USER,password,ssl_cipher,x509_issuer,x509_subject,authentication_string) value ('%','killbill',password('killbill') ,'', '','',''); 
 GRANT ALL PRIVILEGES ON *.* TO 'killbill'@'%'; FLUSH PRIVILEGES;
 EXIT;
+
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 ```
 
 다운로드 받은 스키마 파일을 killbill 데이터베이스에 임포트합니다.
